@@ -3,21 +3,46 @@ import AnimateWrapper from "../Global/AnimateWrapper";
 import Container from "../Global/Container";
 import DotPattern from "../ui/dot-pattern";
 import AnimatedShinyText from "../ui/animated-shiny-text";
-
 import { RainbowButton } from "../ui/rainbow-button";
 import { ArrowRightIcon, CreditCardIcon, Dot, TimerIcon } from "lucide-react";
+import Side from "./Side";
+import AnimateBadge from "../Global/AnimateBadge";
 
 const Hero = () => {
   return (
-    <Container className=" h-[calc(100vh-64px)]  ">
+    <Container className=" h-[calc(100vh-64px)] relative overflow-hidden  ">
       <DotPattern
         className={cn(
-          "[mask-image:radial-gradient(900px_circle_at_center,white,transparent)] opacity-50 hidden md:block -z-[5]"
+          "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]  hidden md:block -z-[5]"
         )}
       />
-      <div className="bg-primary w-96 aspect-square blur-[15rem] absolute left-1/2 -translate-x-1/2 top-0 -z-10"></div>
-      <AnimateWrapper className="flex justify-center items-center">
-        <section className="text-center flex flex-col items-center justify-center gap-10">
+      <div className="bg-primary w-64 aspect-square blur-[10rem] absolute left-1/2 -translate-x-1/2 top-0 -z-10"></div>
+      <div className="hidden lg:block  w-full  absolute h-full  ">
+        <AnimateBadge
+          reverse
+          className="absolute bottom-24 left-32 xl:left-52 "
+        >
+          <Side content="Backend Developer" />
+        </AnimateBadge>
+
+        <AnimateBadge className="absolute bottom-24 right-80  ">
+          <Side content="Accountant" rotate />
+        </AnimateBadge>
+
+        <AnimateBadge
+          reverse
+          className="absolute bottom-96 -left-11 xl:-left-0"
+        >
+          <Side content="FrontEnd Developer" />
+        </AnimateBadge>
+
+        <AnimateBadge className="absolute bottom-96 right-[10%]">
+          <Side content="Sales Officer" rotate />
+        </AnimateBadge>
+      </div>
+
+      <AnimateWrapper className="mt-12">
+        <section className="text-center flex flex-col items-center justify gap-10">
           <div
             className={cn(
               "group rounded-full hidden sm:block border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
@@ -32,28 +57,25 @@ const Hero = () => {
               </span>
             </AnimatedShinyText>
           </div>
-          <h2 className="pointer-events-none whitespace-pre-wrap  text-center text-4xl md:text-6xl lg:text-7xl font-bold   leading-10">
-            <span className="bg-gradient-to-b from-black to-gray-300 bg-clip-text text-transparent dark:from-white dark:to-slate-900 ">
-              Discover Your Ideal
-            </span>
-            <br />
-            <span className="bg-gradient-to-b from-primary to-gray-300 bg-clip-text text-transparent dark:from-primary dark:to-primary-900 ">
-              Job Opportunity & <br /> Find Top Talent{" "}
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center !leading-tight">
+            <span className="text-transparent bg-gradient-to-b from-neutral-50 to-neutral-500 bg-clip-text font-bold !leading-tight ">
+              Empowering
             </span>{" "}
-            <br />
-            <span className="bg-gradient-to-b from-black to-gray-300 bg-clip-text text-transparent dark:from-white dark:to-slate-900">
-              Faster with JobVerse Today
+            <span className="text-primary">
+              Job Seekers & <br /> Employers
+            </span>{" "}
+            <span className="text-transparent bg-gradient-to-b from-neutral-50 to-neutral-500 bg-clip-text font-bold !leading-tight ">
+              for Mutual Success
             </span>
-          </h2>
-          <p className="max-w-[100ch] text-slate-300 text-center tracking-wider text-pretty text-base">
-            Build your resume, follow companies, and apply with a click, or find
-            top talent with our powerful hiring tools. Whether you&apos;re
-            looking for your next opportunity or the perfect hire,{" "}
-            <span className="text-primary font-semibold"> JobVerse</span> is
-            here for you!
+          </h1>
+
+          <p className=" w-2/3 lg:w-1/2 text-slate-300 text-center tracking-wider text-pretty text-base">
+            Build your resume, follow companies, and apply effortlessly, or
+            discover top talent with our hiring tools. Whether you&apos;re job
+            hunting or hiring, JobVerse has you covered!
           </p>
           <div className="relative">
-            <RainbowButton className="dark:text-black text-white flex gap-2 p-5 ">
+            <RainbowButton className="dark:text-black text-white flex gap-2 p-5  ">
               Start for Free <ArrowRightIcon />
             </RainbowButton>
             <div className=" absolute  min-w-max -left-1/2 flex justify-between text-xs text-muted-foreground mt-5">
