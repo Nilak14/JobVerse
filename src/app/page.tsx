@@ -1,4 +1,10 @@
+import NavBar from "@/components/LandingPage/NavBar";
+
 const LandingPage = () => {
-  return <div>LandingPage</div>;
+  return (
+    <main className="h-[400vh]">
+      <NavBar />
+    </main>
+  );
 };
 export default LandingPage;
