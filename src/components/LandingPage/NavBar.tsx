@@ -19,38 +19,23 @@ import Container from "../Global/Container";
 import { JobVerseLogo } from "../../../public/logo/jobverse";
 import { NavLinks } from "@/lib/data";
 import AnimateWrapper from "../Global/AnimateWrapper";
-import { useEffect, useState } from "react";
+
 import { cn } from "@/lib/utils";
 import { RainbowButton } from "../ui/rainbow-button";
 
 export const NavBar = () => {
-  const [scroll, setScroll] = useState(false);
-  const handleScroll = () => {
-    if (window.scrollY > 8) {
-      setScroll(true);
-    } else {
-      setScroll(false);
-    }
-  };
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
   return (
     <header
       className={cn(
-        "sticky  top-0 inset-x-0 h-20 w-full  select-none",
-        scroll && "border-background/80 bg-background/40 backdrop-blur-md   "
+        "sticky bg-background/40 backdrop-blur-lg border-b border-border  top-0 inset-x-0 h-16 w-full  select-none z-50"
       )}
     >
       <AnimateWrapper reverse>
-        <Container className="flex items-center justify-between lg:justify-normal gap-14  px-7 md:px-10 lg:px-14 ">
-          <NavLogo width="35" height="35" />
+        <Container className="flex items-center justify-between lg:justify-normal gap-3 lg:gap-14  px-7 md:px-10 lg:px-24 ">
+          <NavLogo width="35" height="35" fill="#e9590c" />
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
+              <Button variant="outline" size="icon" className="lg:hidden">
                 <MenuIcon className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
@@ -75,7 +60,7 @@ export const NavBar = () => {
             </SheetContent>
           </Sheet>
 
-          <div className=" w-full hidden md:flex md:justify-between ">
+          <div className=" w-full hidden lg:flex md:justify-between ">
             <NavigationMenu className="">
               <NavigationMenuList>
                 {NavLinks.map((link) => (
@@ -120,7 +105,7 @@ export function AuthButtons({ className }: { className?: string }) {
   return (
     <div className={cn("flex gap-8 items-center", className)}>
       <Button>Log In</Button>
-      <RainbowButton className="text-black flex gap-2 p-5">
+      <RainbowButton className="dark:text-black text-white flex gap-2 p-5">
         Start for Free <ArrowRightIcon />
       </RainbowButton>
     </div>
