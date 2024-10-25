@@ -32,7 +32,7 @@ export const NavBar = () => {
     >
       <AnimateWrapper reverse>
         <Container className="flex items-center justify-between lg:justify-normal gap-3 lg:gap-14  px-7 md:px-10 lg:px-24 ">
-          <NavLogo width="35" height="35" fill="#e9590c" />
+          <Logo width="35" height="35" fill="#e9590c" />
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="lg:hidden">
@@ -42,7 +42,7 @@ export const NavBar = () => {
             </SheetTrigger>
             <SheetContent side="top">
               <SheetTitle>
-                <NavLogo />
+                <Logo />
               </SheetTitle>
 
               <div className="grid gap-2 py-6">
@@ -84,7 +84,7 @@ export const NavBar = () => {
 };
 export default NavBar;
 
-export function NavLogo({
+export function Logo({
   width = "20",
   height = "20",
   fill = "white",
@@ -104,9 +104,13 @@ export function NavLogo({
 export function AuthButtons({ className }: { className?: string }) {
   return (
     <div className={cn("flex gap-8 items-center", className)}>
-      <Button>Log In</Button>
-      <RainbowButton className="dark:text-black text-white flex gap-2 p-5">
-        Start for Free <ArrowRightIcon />
+      <Button asChild>
+        <Link href="/login">Login</Link>
+      </Button>
+      <RainbowButton className="dark:text-black text-white p-5 ">
+        <Link className="flex gap-2 " href="/register">
+          Start for Free <ArrowRightIcon />
+        </Link>
       </RainbowButton>
     </div>
   );

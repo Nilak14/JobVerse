@@ -7,6 +7,7 @@ import { RainbowButton } from "../ui/rainbow-button";
 import { ArrowRightIcon, CreditCardIcon, Dot, TimerIcon } from "lucide-react";
 import Side from "./Side";
 import AnimateBadge from "../Global/AnimateBadge";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -75,8 +76,10 @@ const Hero = () => {
             hunting or hiring, JobVerse has you covered!
           </p>
           <div className="relative">
-            <RainbowButton className="dark:text-black text-white flex gap-2 p-5  ">
-              Start for Free <ArrowRightIcon />
+            <RainbowButton className="dark:text-black text-white p-5 ">
+              <Link className="flex gap-2 " href="/register">
+                Start for Free <ArrowRightIcon />
+              </Link>
             </RainbowButton>
             <div className=" absolute  min-w-max -left-1/2 flex justify-between text-xs text-muted-foreground mt-5">
               <p className="flex items-center gap-2">
