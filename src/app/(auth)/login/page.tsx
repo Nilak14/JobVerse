@@ -1,9 +1,12 @@
 import LoginForm from "@/components/Forms/LoginForm";
-import RegisterForm from "@/components/Forms/RegisterForm";
 import FormSide from "@/components/FormSide";
 import AnimateWrapper from "@/components/Global/AnimateWrapper";
 import BackButton from "@/components/Global/BackButton";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Login",
+};
 const LoginPage = () => {
   return (
     <main className="relative">

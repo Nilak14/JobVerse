@@ -2,7 +2,11 @@ import RegisterForm from "@/components/Forms/RegisterForm";
 import FormSide from "@/components/FormSide";
 import AnimateWrapper from "@/components/Global/AnimateWrapper";
 import BackButton from "@/components/Global/BackButton";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Register",
+};
 const RegisterPage = () => {
   return (
     <main className="relative">
