@@ -7,6 +7,7 @@ import { RainbowButton } from "../ui/rainbow-button";
 import { ArrowRightIcon, CreditCardIcon, Dot, TimerIcon } from "lucide-react";
 import Side from "./Side";
 import AnimateBadge from "../Global/AnimateBadge";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -69,14 +70,16 @@ const Hero = () => {
             </span>
           </h1>
 
-          <p className=" w-2/3 lg:w-1/2 text-slate-300 text-center tracking-wider text-pretty text-base">
+          <p className=" w-[90%] md:w-2/3 lg:w-1/2 text-slate-300 text-center tracking-wider text-pretty text-base">
             Build your resume, follow companies, and apply effortlessly, or
             discover top talent with our hiring tools. Whether you&apos;re job
-            hunting or hiring, JobVerse has you covered!
+            hunting or hiring, JobVerse got you covered!
           </p>
           <div className="relative">
-            <RainbowButton className="dark:text-black text-white flex gap-2 p-5  ">
-              Start for Free <ArrowRightIcon />
+            <RainbowButton className="dark:text-black text-white p-5 ">
+              <Link className="flex gap-2 " href="/register">
+                Start for Free <ArrowRightIcon />
+              </Link>
             </RainbowButton>
             <div className=" absolute  min-w-max -left-1/2 flex justify-between text-xs text-muted-foreground mt-5">
               <p className="flex items-center gap-2">
