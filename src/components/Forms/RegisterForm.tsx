@@ -18,6 +18,7 @@ import { Separator } from "../ui/separator";
 import GoogleButton from "../Global/GoogleButton";
 import Link from "next/link";
 import { PasswordInput } from "../ui/password-input";
+import LoadingButton from "../ui/loading-button";
 
 const RegisterForm = () => {
   const form = useForm<RegisterSchemaType>({
@@ -103,9 +104,13 @@ const RegisterForm = () => {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
+            <LoadingButton
+              type="submit"
+              className="w-full my-6"
+              loading={false}
+            >
               Create Account
-            </Button>
+            </LoadingButton>
           </form>
         </Form>
         <div className="my-6 flex justify-center gap-4 items-center overflow-hidden">

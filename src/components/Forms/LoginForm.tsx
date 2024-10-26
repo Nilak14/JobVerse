@@ -18,6 +18,7 @@ import { Separator } from "../ui/separator";
 import GoogleButton from "../Global/GoogleButton";
 import Link from "next/link";
 import { PasswordInput } from "../ui/password-input";
+import LoadingButton from "../ui/loading-button";
 
 const LoginForm = () => {
   const form = useForm<LoginSchemaType>({
@@ -86,9 +87,14 @@ const LoginForm = () => {
                 <div className="bg-primary w-0  h-[1px] group-hover:w-full transition-all duration-300 ease-in-out  block absolute right-0"></div>
               </Link>
             </div>
-            <Button className="w-full my-6" type="submit">
+
+            <LoadingButton
+              type="submit"
+              className="w-full my-6"
+              loading={false}
+            >
               Login
-            </Button>
+            </LoadingButton>
           </form>
         </Form>
         <div className="my-6 flex justify-center gap-4 items-center overflow-hidden">
