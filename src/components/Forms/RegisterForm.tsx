@@ -17,6 +17,7 @@ import { RegisterSchemaType, RegisterSchema } from "@/schema/RegisterSchema";
 import { Separator } from "../ui/separator";
 import GoogleButton from "../Global/GoogleButton";
 import Link from "next/link";
+import { PasswordInput } from "../ui/password-input";
 
 const RegisterForm = () => {
   const form = useForm<RegisterSchemaType>({
@@ -81,7 +82,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your Password" {...field} />
+                    <PasswordInput placeholder="Password" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -95,7 +96,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Confirm Password" {...field} />
+                    <PasswordInput placeholder="Confirm Password" {...field} />
                   </FormControl>
 
                   <FormMessage />

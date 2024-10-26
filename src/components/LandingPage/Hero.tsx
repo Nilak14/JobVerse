@@ -70,10 +70,10 @@ const Hero = () => {
             </span>
           </h1>
 
-          <p className=" w-2/3 lg:w-1/2 text-slate-300 text-center tracking-wider text-pretty text-base">
+          <p className=" w-[90%] md:w-2/3 lg:w-1/2 text-slate-300 text-center tracking-wider text-pretty text-base">
             Build your resume, follow companies, and apply effortlessly, or
             discover top talent with our hiring tools. Whether you&apos;re job
-            hunting or hiring, JobVerse has you covered!
+            hunting or hiring, JobVerse got you covered!
           </p>
           <div className="relative">
             <RainbowButton className="dark:text-black text-white p-5 ">
