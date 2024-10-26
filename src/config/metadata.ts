@@ -7,12 +7,7 @@ export const METADATA_CONFIG: Metadata = {
   },
   description:
     "JobVerse is a platform that connects job seekers with employers. We provide a platform for job seekers to find jobs and for employers to find the right candidates.",
-  icons: {
-    icon: [
-      {
-        url: "/logo/jobverse_bg_rounded.svg",
-        href: "/logo/jobverse_bg_rounded.svg",
-      },
-    ],
+  twitter: {
+    card: "summary_large_image",
   },
 };
