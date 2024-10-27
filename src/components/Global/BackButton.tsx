@@ -7,12 +7,19 @@ import { useRouter } from "next/navigation";
 
 interface BackButtonProps {
   className?: string;
+  href?: string;
 }
-const BackButton = ({ className }: BackButtonProps) => {
+const BackButton = ({ className, href }: BackButtonProps) => {
   const router = useRouter();
   return (
     <Button
-      onClick={() => router.back()}
+      onClick={() => {
+        if (href) {
+          router.push(href);
+        } else {
+          router.back();
+        }
+      }}
       variant={"secondary"}
       className={cn(className)}
     >

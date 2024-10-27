@@ -43,7 +43,7 @@ const Hero = () => {
       </div>
 
       <AnimateWrapper className="mt-12">
-        <section className="text-center flex flex-col items-center justify gap-10">
+        <section className="text-center flex flex-col items-center justify-center   h-[80%] gap-10">
           <div
             className={cn(
               "group rounded-full hidden sm:block border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
@@ -63,7 +63,7 @@ const Hero = () => {
               Empowering
             </span>{" "}
             <span className="text-primary">
-              Job Seekers & <br /> Employers
+              Job Seekers & <br className="hidden md:block" /> Employers
             </span>{" "}
             <span className="text-transparent bg-gradient-to-b from-neutral-50 to-neutral-500 bg-clip-text font-bold !leading-tight ">
               for Mutual Success
