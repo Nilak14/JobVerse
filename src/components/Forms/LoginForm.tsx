@@ -35,7 +35,7 @@ const LoginForm = () => {
   };
   return (
     <>
-      <article className=" mx-auto max-w-[500px] px-4 pt-16 pb-6">
+      <article className=" mx-auto !max-w-[500px] w-full   px-4 pt-16 pb-6">
         <div className="text-left flex flex-col gap-3 mb-6">
           <h1 className="text-2xl font-bold tracking-wide">Welcome Back!</h1>
           <p className="text-muted-foreground font-medium tracking-wide">
@@ -105,7 +105,7 @@ const LoginForm = () => {
         <GoogleButton className="w-full " />
         <div className="text-center my-10 text-sm">
           <span>New To JobVerse? </span>
-          <Link className="text-primary relative group" href={"/login"}>
+          <Link className="text-primary relative group" href={"/register"}>
             Register Now
             <div className="bg-primary w-0  h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out  block absolute right-0"></div>
           </Link>

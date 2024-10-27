@@ -23,7 +23,7 @@ const LoginPage = () => {
           </AnimateWrapper>
         </section>
         <section className="bg-black min-h-full h-fit flex-1">
-          <AnimateWrapper>
+          <AnimateWrapper className="flex w-full items-center justify-center h-screen">
             <LoginForm />
           </AnimateWrapper>
         </section>
