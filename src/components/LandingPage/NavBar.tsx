@@ -12,7 +12,7 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 
-import { ArrowRightIcon, MenuIcon } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 
 import Container from "../Global/Container";
 import { JobVerseLogo } from "../../../public/logo/jobverse";
@@ -20,7 +20,7 @@ import { NavLinks } from "@/lib/data";
 import AnimateWrapper from "../Global/AnimateWrapper";
 
 import { cn } from "@/lib/utils";
-import { RainbowButton } from "../ui/rainbow-button";
+import GetStartedButton from "../ui/get-started-button";
 
 export const NavBar = () => {
   return (
@@ -106,11 +106,7 @@ export function AuthButtons({ className }: { className?: string }) {
       <Button asChild>
         <Link href="/login">Login</Link>
       </Button>
-      <RainbowButton className="dark:text-black text-white p-5 ">
-        <Link className="flex gap-2 " href="/register">
-          Start for Free <ArrowRightIcon />
-        </Link>
-      </RainbowButton>
+      <GetStartedButton />
     </div>
   );
 }
