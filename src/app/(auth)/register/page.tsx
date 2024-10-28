@@ -3,11 +3,21 @@ import FormSide from "@/components/FormSide";
 import AnimateWrapper from "@/components/Global/AnimateWrapper";
 import BackButton from "@/components/Global/BackButton";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Register",
 };
-const RegisterPage = () => {
+const RegisterPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ type: "job-seeker" | "company" }>;
+}) => {
+  const { type } = await searchParams;
+  if (type !== "job-seeker" && type !== "company") {
+    redirect("/");
+  }
+
   return (
     <main className="relative">
       <div className="absolute top-4 left-4 z-10 lg:top-[7%] lg:left-7">
@@ -24,7 +34,7 @@ const RegisterPage = () => {
         </section>
         <section className="bg-black min-h-full h-fit flex-1">
           <AnimateWrapper className="relative">
-            <RegisterForm />
+            <RegisterForm userType={type} />
           </AnimateWrapper>
         </section>
       </div>
