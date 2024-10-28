@@ -13,6 +13,7 @@ const BackButton = ({ className, href }: BackButtonProps) => {
   const router = useRouter();
   return (
     <Button
+      size={"sm"}
       onClick={() => {
         if (href) {
           router.push(href);

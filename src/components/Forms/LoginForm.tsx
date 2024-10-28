@@ -2,11 +2,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,8 +17,11 @@ import GoogleButton from "../Global/GoogleButton";
 import Link from "next/link";
 import { PasswordInput } from "../ui/password-input";
 import LoadingButton from "../ui/loading-button";
+import { useState } from "react";
+import RegisterModel from "../RegisterModel";
 
 const LoginForm = () => {
+  const [open, setOpen] = useState(false);
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -37,8 +38,10 @@ const LoginForm = () => {
     <>
       <article className=" mx-auto !max-w-[500px] w-full   px-4 pt-16 pb-6">
         <div className="text-left flex flex-col gap-3 mb-6">
-          <h1 className="text-2xl font-bold tracking-wide">Welcome Back!</h1>
-          <p className="text-muted-foreground font-medium tracking-wide">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
+            Welcome Back!
+          </h1>
+          <p className=" text-sm sm:text-base text-muted-foreground font-medium tracking-wide">
             Nice to see you again! Please login to continue
           </p>
         </div>
@@ -58,9 +61,7 @@ const LoginForm = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      Enter your username or email
-                    </FormDescription>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -105,11 +106,15 @@ const LoginForm = () => {
         <GoogleButton className="w-full " />
         <div className="text-center my-10 text-sm">
           <span>New To JobVerse? </span>
-          <Link className="text-primary relative group" href={"/register"}>
+          <span
+            onClick={() => setOpen(!open)}
+            className=" cursor-pointer text-primary relative group"
+          >
             Register Now
             <div className="bg-primary w-0  h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out  block absolute right-0"></div>
-          </Link>
+          </span>
         </div>
+        <RegisterModel showFooter={false} open={open} setOpen={setOpen} />
       </article>
     </>
   );

@@ -1,7 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import {
   Form,
   FormControl,
@@ -18,19 +17,11 @@ import GoogleButton from "../Global/GoogleButton";
 import Link from "next/link";
 import { PasswordInput } from "../ui/password-input";
 import LoadingButton from "../ui/loading-button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-const RegisterForm = () => {
-  const [userType, setUserType] = useState<string | null>(null);
-  const [showError, setShowError] = useState(false);
-
+interface RegisterFormProps {
+  userType: "job-seeker" | "company";
+}
+const RegisterForm = ({ userType }: RegisterFormProps) => {
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -38,6 +29,7 @@ const RegisterForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      userType,
     },
     mode: "onChange",
   });
@@ -46,61 +38,20 @@ const RegisterForm = () => {
     console.log(data);
   };
 
-  const handleFocus = () => {
-    if (!userType) {
-      setShowError(true);
-    }
-  };
-
   return (
     <>
       <article className="mx-auto !max-w-[500px] w-full px-4 pt-16 pb-6">
         <div className="text-left flex flex-col gap-3 mb-6">
-          <h1 className="text-2xl font-bold tracking-wide">Get Started!</h1>
-          <p className="text-muted-foreground font-medium tracking-wide">
-            Please register your details to continue
+          <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
+            Get Started!
+          </h1>
+          <p className="text-muted-foreground font-medium tracking-wide text-sm sm:text-base ">
+            Please register your {userType === "company" && "company"} details
+            to continue
           </p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="absolute right-10 top-5">
-              <FormField
-                control={form.control}
-                name="userType"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setUserType(value);
-                        setShowError(false);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Register as" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="seeker">Job Seeker</SelectItem>
-                          <SelectItem value="company">
-                            Company/Recruiter
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {showError && (
-              <p className="text-red-500 text-sm">
-                Please select a user type before filling out the form.
-              </p>
-            )}
-
             <FormField
               control={form.control}
               name="name"
@@ -117,7 +68,6 @@ const RegisterForm = () => {
                           : "Your Full Name"
                       }
                       {...field}
-                      onFocus={handleFocus}
                     />
                   </FormControl>
                   <FormDescription>
@@ -134,12 +84,17 @@ const RegisterForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>
+                    {userType === "company" ? "Company Email" : "Email"}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Your Email"
+                      placeholder={
+                        userType === "company"
+                          ? "Your Company Email Address"
+                          : "Your Email Address"
+                      }
                       {...field}
-                      onFocus={handleFocus}
                     />
                   </FormControl>
                   <FormMessage />
@@ -153,11 +108,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <PasswordInput
-                      placeholder="Password"
-                      {...field}
-                      onFocus={handleFocus}
-                    />
+                    <PasswordInput placeholder="Password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -170,11 +121,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <PasswordInput
-                      placeholder="Confirm Password"
-                      {...field}
-                      onFocus={handleFocus}
-                    />
+                    <PasswordInput placeholder="Confirm Password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -190,6 +137,17 @@ const RegisterForm = () => {
             </LoadingButton>
           </form>
         </Form>
+        <div className="text-right text-xs mt-2 font-semibold">
+          <Link
+            href={`/register?type=${userType === "company" ? "job-seeker" : "company"}`}
+          >
+            Switch To{" "}
+            <span className=" text-primary font-semibold tracking-wide relative group  mt-2 cursor-pointer">
+              Register as {userType === "company" ? "Job Seeker" : "Company"}
+              <div className="bg-primary w-0 h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out block absolute right-0"></div>
+            </span>
+          </Link>
+        </div>
         <div className="my-6 flex justify-center gap-4 items-center overflow-hidden">
           <Separator />
           <span className="text-muted-foreground">or</span>

@@ -11,7 +11,7 @@ const LoginPage = () => {
   return (
     <main className="relative">
       <div className="absolute top-4 left-4 z-10 lg:top-[7%] lg:left-7">
-        <BackButton className="bg-black border border-gray-700" />
+        <BackButton href="/" className="bg-black border border-gray-700" />
       </div>
       <div className="flex h-screen ">
         <section className="bg-background flex-1 hidden lg:block relative ">
