@@ -9,14 +9,17 @@ import {
   publicApiRoute,
   publicRoutes,
 } from "./routes";
-import { getUserByEmail } from "./data-access/user";
 
 const { auth } = NextAuth(authConfig);
 
-export default auth(async (req) => {
+export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  const user = await getUserByEmail(req.auth?.user?.email!);
+  const session = req.auth;
+  const user = session?.user;
+  console.log(user);
+
+  // const user = await getUserByEmail(req.auth?.user?.email!);
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
@@ -32,15 +35,15 @@ export default auth(async (req) => {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      if (user?.userType === "JOB_SEEKER") {
+      if (user?.type === "JOB_SEEKER") {
         return Response.redirect(
           new URL(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER, nextUrl)
         );
-      } else if (user?.userType === "ADMIN") {
+      } else if (user?.type === "ADMIN") {
         return Response.redirect(
           new URL(DEFAULT_LOGIN_REDIRECT_ADMIN, nextUrl)
         );
-      } else if (user?.userType === "COMPANY") {
+      } else if (user?.type === "COMPANY") {
         return Response.redirect(
           new URL(DEFAULT_LOGIN_REDIRECT_COMPANY, nextUrl)
         );
@@ -55,13 +58,13 @@ export default auth(async (req) => {
     return Response.redirect(new URL("/login", nextUrl));
   }
   if (isLoggedIn && isPublicRoute) {
-    if (user?.userType === "JOB_SEEKER") {
+    if (user?.type === "JOB_SEEKER") {
       return Response.redirect(
         new URL(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER, nextUrl)
       );
-    } else if (user?.userType === "ADMIN") {
+    } else if (user?.type === "ADMIN") {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT_ADMIN, nextUrl));
-    } else if (user?.userType === "COMPANY") {
+    } else if (user?.type === "COMPANY") {
       return Response.redirect(
         new URL(DEFAULT_LOGIN_REDIRECT_COMPANY, nextUrl)
       );
