@@ -29,7 +29,6 @@ const RegisterModel = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Register As</DialogTitle>
-          <DialogDescription></DialogDescription>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0  pt-5">
             <div onClick={() => router.push("/register?type=job-seeker")}>
               <MagicCard

@@ -1,37 +1,45 @@
 import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-// import prisma from "./lib/prisma";
 import authConfig from "./auth.config";
-import { prisma } from "./lib/prisma";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import prisma from "./lib/prisma";
+import { UserType } from "@prisma/client";
+import { getUserById } from "./data-access/user";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/login",
+    error: "/error",
   },
-  adapter: PrismaAdapter(prisma),
 
-  ...authConfig,
+  trustHost: true,
   callbacks: {
-    // session({ session, user }) {
-    //   session.user.type = user.type;
-    //   return session;
-    // },
-    signIn({ user, account, profile }) {
-      if (account) {
-        if (account.provider === "google") {
-          console.log("account");
-
-          console.log(account);
-
-          console.log(account.userType);
-        } else {
-          console.log("no google");
-        }
-      } else {
-        console.log("no account");
+    async jwt({ token }) {
+      if (!token.sub) {
+        return token;
+      }
+      const user = await getUserById(token.sub);
+      if (!user) return token;
+      token.name = user.name;
+      token.email = user.email;
+      token.type = user.userType;
+      token.avatarUrl = user.image;
+      token.isBlocked = user.isBlocked;
+      return token;
+    },
+    async session({ token, session }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
       }
 
-      return true;
+      session.user.type = token.type as UserType;
+      session.user.avatarUrl = token.avatarUrl as string;
+      session.user.isBlocked = token.isBlocked as boolean;
+
+      return session;
     },
   },
+  session: { strategy: "jwt" },
+
+  ...authConfig,
 });

@@ -19,6 +19,9 @@ import { PasswordInput } from "../ui/password-input";
 import LoadingButton from "../ui/loading-button";
 import { useState } from "react";
 import RegisterModel from "../RegisterModel";
+import { useAction } from "next-safe-action/hooks";
+import { login } from "@/actions/auth/login";
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const [open, setOpen] = useState(false);
@@ -31,8 +34,18 @@ const LoginForm = () => {
     mode: "onChange",
   });
 
+  const { execute, status } = useAction(login, {
+    onSuccess: ({ data }) => {
+      if (data?.error) {
+        toast.error(data.error);
+      }
+    },
+    onError: () => {},
+  });
+
   const onSubmit = (data: LoginSchemaType) => {
     console.log(data);
+    execute(data);
   };
   return (
     <>
@@ -53,11 +66,12 @@ const LoginForm = () => {
                 name="identifier"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email or Username</FormLabel>
+                    <FormLabel>Email </FormLabel>
                     <FormControl>
                       <Input
-                        type="text"
-                        placeholder="Your Username or Email"
+                        disabled={status === "executing"}
+                        type="email"
+                        placeholder="Your Email"
                         {...field}
                       />
                     </FormControl>
@@ -74,7 +88,11 @@ const LoginForm = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <PasswordInput placeholder="Password" {...field} />
+                      <PasswordInput
+                        disabled={status === "executing"}
+                        placeholder="Password"
+                        {...field}
+                      />
                     </FormControl>
 
                     <FormMessage />
@@ -92,7 +110,8 @@ const LoginForm = () => {
             <LoadingButton
               type="submit"
               className="w-full my-6"
-              loading={false}
+              loading={status === "executing"}
+              disabled={status === "executing"}
             >
               Login
             </LoadingButton>

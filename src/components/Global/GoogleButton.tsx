@@ -2,28 +2,22 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
+import { UserType } from "@prisma/client";
 interface GoogleButtonProps {
   className?: string;
+  userType?: UserType;
 }
-const GoogleButton = ({ className }: GoogleButtonProps) => {
+const GoogleButton = ({ className, userType }: GoogleButtonProps) => {
   return (
     <>
-      {/* <form
-        action={async () => {
-          "use server";
-          await signIn("google", {
-            callbackUrl: "/company/home",
-            userType: "COMPANY",
-          });
-        }}
-      > */}
       <Button
         type="submit"
         onClick={() => {
-          signIn("google", {
-            callbackUrl: "/company/home",
-            userType: "COMPANY",
-          });
+          userType
+            ? signIn("google", {
+                redirectTo: `/setup?type=${userType}`,
+              })
+            : signIn("google");
         }}
         variant={"secondary"}
         className={cn("flex gap-3 py-6", className)}
@@ -31,7 +25,6 @@ const GoogleButton = ({ className }: GoogleButtonProps) => {
         <FcGoogle />
         Continue With Google
       </Button>
-      {/* </form> */}
     </>
   );
 };

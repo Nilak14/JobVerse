@@ -1,30 +1,18 @@
-// // /lib/prisma.ts
-
-// import { Pool } from "@neondatabase/serverless";
-// import { PrismaNeon } from "@prisma/adapter-neon";
-// import { PrismaClient } from "@prisma/client";
-
-// const prismaClientSingleton = () => {
-//   const connectionString = `${process.env.DATABASE_URL}`;
-//   const pool = new Pool({ connectionString });
-//   const adapter = new PrismaNeon(pool);
-//   const prisma = new PrismaClient({ adapter });
-//   return prisma;
-// };
-
-// declare const globalThis: {
-//   prismaGlobal: ReturnType<typeof prismaClientSingleton>;
-// } & typeof global;
-
-// const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
-
-// export default prisma;
-
-// if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
 import { PrismaClient } from "@prisma/client";
+import { Pool } from "@neondatabase/serverless";
+import { PrismaNeon } from "@prisma/adapter-neon";
+const prismaClientSingleton = () => {
+  const neon = new Pool({
+    connectionString: process.env.POSTGRES_PRISMA_URL,
+  });
+  const adapter = new PrismaNeon(neon);
+  return new PrismaClient({ adapter });
+};
+declare global {
+  var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
+}
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+const prisma = global.prismaGlobal ?? prismaClientSingleton();
+export default prisma;
 
-export const prisma = globalForPrisma.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
