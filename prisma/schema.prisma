@@ -10,18 +10,27 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userType      UserType?    @default(JOB_SEEKER)
+  address       String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  COMPANY       COMPANY[]
+  JOB_SEEKER    JOB_SEEKER[]
 
   @@map("users")
+}
+
+enum UserType {
+  ADMIN
+  JOB_SEEKER
+  COMPANY
 }
 
 model Account {
@@ -43,7 +52,6 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
-  @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
@@ -57,6 +65,24 @@ model Session {
   updatedAt DateTime @updatedAt
 
   @@map("sessions")
+}
+
+model COMPANY {
+  id                 String  @id @default(cuid())
+  companyDescription String?
+  companyWebsite     String?
+  userId             String
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("companies")
+}
+
+model JOB_SEEKER {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("job_seekers")
 }
 
 model VerificationToken {
