@@ -17,8 +17,6 @@ export default auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const user = await getUserByEmail(req.auth?.user?.email!);
-  console.log("user", user);
-
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
@@ -43,8 +41,6 @@ export default auth(async (req) => {
           new URL(DEFAULT_LOGIN_REDIRECT_ADMIN, nextUrl)
         );
       } else if (user?.userType === "COMPANY") {
-        console.log("lolol");
-
         return Response.redirect(
           new URL(DEFAULT_LOGIN_REDIRECT_COMPANY, nextUrl)
         );
@@ -66,8 +62,6 @@ export default auth(async (req) => {
     } else if (user?.userType === "ADMIN") {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT_ADMIN, nextUrl));
     } else if (user?.userType === "COMPANY") {
-      console.log("dofidohuid");
-
       return Response.redirect(
         new URL(DEFAULT_LOGIN_REDIRECT_COMPANY, nextUrl)
       );
