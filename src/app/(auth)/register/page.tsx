@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const RegisterPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ type: "job-seeker" | "company" }>;
+  searchParams: Promise<{ type: "job-seeker" | "company" | "admin" }>;
 }) => {
   const { type } = await searchParams;
   if (type !== "job-seeker" && type !== "company") {
@@ -34,7 +34,9 @@ const RegisterPage = async ({
         </section>
         <section className="bg-black min-h-full h-fit flex-1">
           <AnimateWrapper className="relative">
-            <RegisterForm userType={type} />
+            <RegisterForm
+              userType={type === "company" ? "COMPANY" : "JOB_SEEKER"}
+            />
           </AnimateWrapper>
         </section>
       </div>

@@ -5,21 +5,30 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+enum UserType {
+  ADMIN
+  JOB_SEEKER
+  COMPANY
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String       @unique
   emailVerified DateTime?
   image         String?
+  password      String?
   accounts      Account[]
-  sessions      Session[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userType      UserType?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  COMPANY       COMPANY[]
+  JOB_SEEKER    JOB_SEEKER[]
+  isBlocked     Boolean      @default(false)
 
   @@map("users")
 }
@@ -43,20 +52,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
-  @@unique([provider, providerAccountId])
   @@map("accounts")
-}
-
-model Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("sessions")
 }
 
 model VerificationToken {
@@ -65,6 +61,23 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
-  @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model COMPANY {
+  id                 String  @id @default(cuid())
+  companyDescription String?
+  companyWebsite     String?
+  userId             String
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("companies")
+}
+
+model JOB_SEEKER {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("job_seekers")
 }
