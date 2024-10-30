@@ -49,10 +49,14 @@ export default auth((req) => {
     return Response.redirect(new URL("/redirect", nextUrl));
   }
   if (isLoggedIn) {
-    if (redirectRoute || nextUrl.pathname === "/choose") {
+    if (
+      redirectRoute ||
+      nextUrl.pathname === "/choose" ||
+      nextUrl.pathname === "/setup"
+    ) {
       return;
     }
-    if (req.auth?.user.type) {
+    if (req.auth?.user?.type) {
       if (req.auth?.user.type === "JOB_SEEKER" && !isJobSeekerRoute) {
         return Response.redirect(
           new URL(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER, nextUrl)
