@@ -2,15 +2,14 @@ import { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "./schema/LoginSchema";
-import { getUserByEmail } from "./data-access/user";
+import { getUserByEmail, getUserById } from "./data-access/user";
 import bcryptjs from "bcryptjs";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "./lib/prisma";
 import { UserType } from "@prisma/client";
-import { getUserById } from "./data-access/user";
+
 export default {
   providers: [
     Google,
+
     Credentials({
       async authorize(credentials) {
         const validateFields = LoginSchema.safeParse(credentials);
@@ -29,13 +28,6 @@ export default {
       },
     }),
   ],
-  adapter: PrismaAdapter(prisma),
-  pages: {
-    signIn: "/login",
-    error: "/error",
-  },
-
-  trustHost: true,
   callbacks: {
     async jwt({ token }) {
       if (!token.sub) {
@@ -62,5 +54,4 @@ export default {
       return session;
     },
   },
-  session: { strategy: "jwt" },
 } satisfies NextAuthConfig;

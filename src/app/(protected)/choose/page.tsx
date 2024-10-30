@@ -1,9 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MagicCard } from "@/components/ui/magic-card";
-import { Building, User } from "lucide-react";
 import { JobVerseLogo } from "../../../../public/logo/jobverse";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+
 import { getUserByEmail } from "@/data-access/user";
 import {
   DEFAULT_LOGIN_REDIRECT_ADMIN,
@@ -15,11 +14,9 @@ import { UserType } from "@prisma/client";
 import ChooseCard from "./ChooseCard";
 const Choose = async () => {
   const session = await auth();
-  if (!session || !session.user) {
-    redirect("/login");
-  }
-  const user = session.user;
-  const dbUser = await getUserByEmail(user.email!);
+  const user = session?.user;
+
+  const dbUser = await getUserByEmail(user?.email!);
   if (dbUser?.userType) {
     if (dbUser.userType === "JOB_SEEKER") {
       redirect(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER);

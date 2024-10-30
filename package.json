@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db": "npx prisma db push",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate --no-engine"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
@@ -16,6 +16,7 @@
     "@neondatabase/serverless": "^0.10.1",
     "@prisma/adapter-neon": "^5.21.1",
     "@prisma/client": "^5.21.1",
+    "@prisma/extension-accelerate": "^1.2.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.1.0",

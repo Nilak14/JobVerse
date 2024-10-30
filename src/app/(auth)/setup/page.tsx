@@ -11,12 +11,14 @@ const SetUp = async ({
   searchParams: Promise<{ type: UserType }>;
 }) => {
   const { type } = await searchParams;
+  console.log(type);
+
   if (type !== "JOB_SEEKER" && type !== "COMPANY") {
     redirect("/");
   }
   const session = await auth();
   if (!session || !session.user) {
-    redirect("/login");
+    redirect("/");
   }
   const user = await getUserByEmail(session.user.email!);
   if (!user || user.userType) {
