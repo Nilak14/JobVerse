@@ -14,11 +14,9 @@ import { UserType } from "@prisma/client";
 import ChooseCard from "./ChooseCard";
 const Choose = async () => {
   const session = await auth();
-  if (!session || !session.user) {
-    redirect("/login");
-  }
-  const user = session.user;
-  const dbUser = await getUserByEmail(user.email!);
+  const user = session?.user;
+
+  const dbUser = await getUserByEmail(user?.email!);
   if (dbUser?.userType) {
     if (dbUser.userType === "JOB_SEEKER") {
       redirect(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER);

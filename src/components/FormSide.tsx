@@ -1,7 +1,6 @@
 import { FileUser, MailCheck, UserSearch } from "lucide-react";
 import OrbitingCircles from "./ui/orbiting-circles";
 import Image from "next/image";
-import Ripple from "./ui/ripple";
 
 interface FormSideProps {
   title: string;
@@ -10,7 +9,6 @@ interface FormSideProps {
 const FormSide = ({ description, title }: FormSideProps) => {
   return (
     <div className=" h-full flex justify-center items-center">
-      <Ripple mainCircleSize={500} />
       <OrbitingCircles
         className="size-[50px] border-none bg-transparent"
         duration={20}

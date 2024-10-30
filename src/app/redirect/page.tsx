@@ -9,11 +9,10 @@ import { redirect } from "next/navigation";
 const RedirectPage = async () => {
   const session = await auth();
   const user = session?.user;
+  console.log("redirect", user);
 
   if (!user) {
-    console.log("no user");
-
-    redirect("/login");
+    redirect("/");
   }
   switch (user.type) {
     case "JOB_SEEKER":
@@ -23,7 +22,7 @@ const RedirectPage = async () => {
     case "ADMIN":
       redirect(DEFAULT_LOGIN_REDIRECT_ADMIN);
     default:
-      throw new Error("Invalid user type");
+      redirect("/choose");
   }
 };
 export default RedirectPage;

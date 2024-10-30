@@ -10,8 +10,10 @@ const CompanyHomePage = async () => {
         await signOut();
       }}
     >
+      <h1>Company</h1>
       <button type="submit">Log Out</button>
-      <p>{JSON.stringify(session?.user)}</p>
+      <h2 className="text-2xl">{session?.user.name}</h2>
+      <h2 className="text-2xl">{session?.user.type}</h2>
     </form>
   );
 };

@@ -26,6 +26,7 @@ export default auth((req) => {
   const isCompanyRoute = nextUrl.pathname.startsWith(companyRoutePrefix);
   const isJobSeekerRoute = nextUrl.pathname.startsWith(jobSeekerRoutePrefix);
   const isAdminRoute = nextUrl.pathname.startsWith(adminRoutePrefix);
+  const redirectRoute = nextUrl.pathname === "/redirect";
 
   if (isApiAuthRoute) {
     return;
@@ -48,16 +49,26 @@ export default auth((req) => {
     return Response.redirect(new URL("/redirect", nextUrl));
   }
   if (isLoggedIn) {
-    if (req.auth?.user.type === "JOB_SEEKER" && !isJobSeekerRoute) {
-      return Response.redirect(
-        new URL(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER, nextUrl)
-      );
-    } else if (req.auth?.user.type === "COMPANY" && !isCompanyRoute) {
-      return Response.redirect(
-        new URL(DEFAULT_LOGIN_REDIRECT_COMPANY, nextUrl)
-      );
-    } else if (req.auth?.user.type === "ADMIN" && !isAdminRoute) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT_ADMIN, nextUrl));
+    if (redirectRoute || nextUrl.pathname === "/choose") {
+      return;
+    }
+    if (req.auth?.user.type) {
+      if (req.auth?.user.type === "JOB_SEEKER" && !isJobSeekerRoute) {
+        return Response.redirect(
+          new URL(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER, nextUrl)
+        );
+      } else if (req.auth?.user.type === "COMPANY" && !isCompanyRoute) {
+        return Response.redirect(
+          new URL(DEFAULT_LOGIN_REDIRECT_COMPANY, nextUrl)
+        );
+      } else if (req.auth?.user.type === "ADMIN" && !isAdminRoute) {
+        return Response.redirect(
+          new URL(DEFAULT_LOGIN_REDIRECT_ADMIN, nextUrl)
+        );
+      }
+    } else {
+      console.log(req.auth?.user);
+      return Response.redirect(new URL("/redirect", nextUrl));
     }
   }
 });
