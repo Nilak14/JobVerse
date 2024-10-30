@@ -4,8 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "./schema/LoginSchema";
 import { getUserByEmail } from "./data-access/user";
 import bcryptjs from "bcryptjs";
-import { UserType } from "@prisma/client";
-import { getUserById } from "./data-access/user";
+
 export default {
   providers: [
     Google,
@@ -27,37 +26,4 @@ export default {
       },
     }),
   ],
-  pages: {
-    signIn: "/login",
-    error: "/error",
-  },
-
-  trustHost: true,
-  callbacks: {
-    async jwt({ token }) {
-      if (!token.sub) {
-        return token;
-      }
-      const user = await getUserById(token.sub);
-      if (!user) return token;
-      token.name = user.name;
-      token.email = user.email;
-      token.type = user.userType;
-      token.avatarUrl = user.image;
-      token.isBlocked = user.isBlocked;
-      return token;
-    },
-    async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-
-      session.user.type = token.type as UserType;
-      session.user.avatarUrl = token.avatarUrl as string;
-      session.user.isBlocked = token.isBlocked as boolean;
-
-      return session;
-    },
-  },
-  session: { strategy: "jwt" },
 } satisfies NextAuthConfig;
