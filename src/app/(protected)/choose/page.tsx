@@ -1,9 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MagicCard } from "@/components/ui/magic-card";
-import { Building, User } from "lucide-react";
 import { JobVerseLogo } from "../../../../public/logo/jobverse";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+
 import { getUserByEmail } from "@/data-access/user";
 import {
   DEFAULT_LOGIN_REDIRECT_ADMIN,
