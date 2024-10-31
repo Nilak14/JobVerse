@@ -1,10 +1,9 @@
 "use client";
 import Link from "next/link";
-import { ArrowRightIcon, Building, User } from "lucide-react";
+import { Building, Loader2, User } from "lucide-react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -12,6 +11,9 @@ import {
 import { useRouter } from "next/navigation";
 import { MagicCard } from "./ui/magic-card";
 import { BorderBeam } from "./ui/border-beam";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { DialogDescription } from "@radix-ui/react-dialog";
 interface RegisterModelProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -24,13 +26,35 @@ const RegisterModel = ({
   showFooter = true,
 }: RegisterModelProps) => {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Register As</DialogTitle>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0  pt-5">
-            <div onClick={() => router.push("/register?type=job-seeker")}>
+          <DialogDescription className="sr-only">
+            Please Select the type of account you want to create
+          </DialogDescription>
+          <div
+            className={cn(
+              "flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0  pt-5",
+              loading && "pointer-events-none"
+            )}
+          >
+            <div
+              className="relative"
+              onClick={() => {
+                setLoading(true);
+                console.log(loading);
+
+                router.push("/register?type=job-seeker");
+              }}
+            >
+              {loading && (
+                <div className="bg-black/50 flex items-center justify-center rounded-md absolute inset-0 z-20">
+                  <Loader2 size={30} className="animate-spin" />
+                </div>
+              )}
               <MagicCard
                 gradientColor="gray"
                 className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 text-white flex justify-center flex-col gap-3 px-4"
@@ -51,7 +75,18 @@ const RegisterModel = ({
                 </div>
               </MagicCard>
             </div>
-            <div onClick={() => router.push("/register?type=company")}>
+            <div
+              className="relative"
+              onClick={() => {
+                setLoading(true);
+                router.push("/register?type=company");
+              }}
+            >
+              {loading && (
+                <div className="bg-black/50 flex items-center justify-center rounded-md absolute inset-0 z-20">
+                  <Loader2 size={30} className="animate-spin" />
+                </div>
+              )}
               <MagicCard
                 gradientColor="gray"
                 className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 text-white flex justify-center flex-col gap-3 px-4"

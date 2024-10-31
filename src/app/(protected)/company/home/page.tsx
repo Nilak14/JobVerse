@@ -2,7 +2,6 @@ import { auth, signOut } from "@/auth";
 
 const CompanyHomePage = async () => {
   const session = await auth();
-
   return (
     <form
       action={async () => {
