@@ -42,6 +42,7 @@ export default auth((req) => {
     }
     return;
   }
+
   if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/login", nextUrl));
   }
@@ -49,11 +50,7 @@ export default auth((req) => {
     return Response.redirect(new URL("/redirect", nextUrl));
   }
   if (isLoggedIn) {
-    if (
-      redirectRoute ||
-      nextUrl.pathname === "/choose" ||
-      nextUrl.pathname === "/setup"
-    ) {
+    if (redirectRoute || nextUrl.pathname === "/choose") {
       return;
     }
     if (req.auth?.user?.type) {
@@ -71,7 +68,6 @@ export default auth((req) => {
         );
       }
     } else {
-      console.log(req.auth?.user);
       return Response.redirect(new URL("/redirect", nextUrl));
     }
   }

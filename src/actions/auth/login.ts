@@ -11,6 +11,7 @@ import {
   DEFAULT_LOGIN_REDIRECT_JOB_SEEKER,
 } from "@/routes";
 import { AuthError } from "next-auth";
+import { cookies } from "next/headers";
 const action = createSafeActionClient();
 
 export const login = action
@@ -28,6 +29,9 @@ export const login = action
 
     //todo: check if two factor is on or off and send token according to that
 
+    const cookieStore = await cookies();
+    cookieStore.set("name", "nilak pathak");
+
     let redirectLink;
     if (existingUser.userType === "JOB_SEEKER") {
       redirectLink = DEFAULT_LOGIN_REDIRECT_JOB_SEEKER;
@@ -40,17 +44,16 @@ export const login = action
     }
 
     try {
-      const res = await signIn("credentials", {
+      await signIn("credentials", {
         identifier,
         password,
         redirectTo: redirectLink,
       });
-      console.log(res);
     } catch (error) {
       if (error instanceof AuthError) {
         switch (error.type) {
           case "CredentialsSignin":
-            return { error: "Invalid Credentialsss" };
+            return { error: "Invalid Credentials" };
           default:
             return { error: "Something went wrong" };
         }

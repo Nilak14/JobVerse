@@ -9,7 +9,6 @@ import { redirect } from "next/navigation";
 const RedirectPage = async () => {
   const session = await auth();
   const user = session?.user;
-  console.log("redirect", user);
 
   if (!user) {
     redirect("/");

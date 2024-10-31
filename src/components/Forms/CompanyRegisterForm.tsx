@@ -19,12 +19,9 @@ import { PasswordInput } from "../ui/password-input";
 import LoadingButton from "../ui/loading-button";
 import { useAction } from "next-safe-action/hooks";
 import { register } from "@/actions/auth/register";
-import { useEffect } from "react";
 import { toast } from "sonner";
-interface RegisterFormProps {
-  userType: "JOB_SEEKER" | "COMPANY" | "ADMIN";
-}
-const RegisterForm = ({ userType }: RegisterFormProps) => {
+
+const CompanyRegisterForm = () => {
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -32,15 +29,13 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
       email: "",
       password: "",
       confirmPassword: "",
-      userType,
+      userType: "COMPANY",
     },
     mode: "onChange",
   });
 
   const { execute, status } = useAction(register, {
     onSuccess: ({ data }) => {
-      console.log(data);
-
       if (data?.success) {
         toast.success(data.success, { id: "register" });
         form.reset();
@@ -57,10 +52,6 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
   const onSubmit = (data: RegisterSchemaType) => {
     execute(data);
   };
-  useEffect(() => {
-    form.setValue("userType", userType);
-    localStorage.setItem("userType", userType);
-  }, [userType]);
 
   return (
     <>
@@ -70,8 +61,7 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
             Get Started!
           </h1>
           <p className="text-muted-foreground font-medium tracking-wide text-sm sm:text-base ">
-            Please register your {userType === "COMPANY" && "company"} details
-            to continue
+            Please register your company details to continue
           </p>
         </div>
         <Form {...form}>
@@ -81,24 +71,16 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    {userType === "COMPANY" ? "Company Name" : "Full Name"}
-                  </FormLabel>
+                  <FormLabel>Company Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={status === "executing"}
-                      placeholder={
-                        userType === "COMPANY"
-                          ? "Your Company Name"
-                          : "Your Full Name"
-                      }
+                      placeholder={"Your Company Name"}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    {userType === "COMPANY"
-                      ? "This is your public company name."
-                      : "This is your public display name."}
+                    This is your public display company name.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -109,17 +91,11 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    {userType === "COMPANY" ? "Company Email" : "Email"}
-                  </FormLabel>
+                  <FormLabel>Company Email</FormLabel>
                   <FormControl>
                     <Input
                       disabled={status === "executing"}
-                      placeholder={
-                        userType === "COMPANY"
-                          ? "Your Company Email Address"
-                          : "Your Email Address"
-                      }
+                      placeholder={"Your Company Email Address"}
                       {...field}
                     />
                   </FormControl>
@@ -165,7 +141,7 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
               type="submit"
               className="w-full my-6"
               loading={status === "executing"}
-              disabled={!userType || status === "executing"}
+              disabled={status === "executing"}
             >
               Create Account
             </LoadingButton>
@@ -173,11 +149,9 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
         </Form>
         <div className="text-right text-xs mt-3 font-semibold flex items-center justify-end gap-1">
           <span>Switch To </span>{" "}
-          <Link
-            href={`/register?type=${userType === "COMPANY" ? "job-seeker" : "company"}`}
-          >
+          <Link href={"/register/job_seeker"}>
             <span className=" text-primary font-semibold tracking-wide relative group cursor-pointer">
-              Register as {userType === "COMPANY" ? "Job Seeker" : "Company"}
+              Register as Job Seeker
               <div className="bg-primary w-0 h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out block absolute right-0"></div>
             </span>
           </Link>
@@ -187,7 +161,7 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
           <span className="text-muted-foreground">or</span>
           <Separator />
         </div>
-        <GoogleButton userType={userType} className="w-full" />
+        <GoogleButton userType="COMPANY" className="w-full" />
         <div className="text-center my-10 text-sm">
           <span>Already have an account? </span>
           <Link className="text-primary relative group" href={"/login"}>
@@ -200,4 +174,4 @@ const RegisterForm = ({ userType }: RegisterFormProps) => {
   );
 };
 
-export default RegisterForm;
+export default CompanyRegisterForm;

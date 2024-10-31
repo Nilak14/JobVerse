@@ -44,7 +44,6 @@ const LoginForm = () => {
   });
 
   const onSubmit = (data: LoginSchemaType) => {
-    console.log(data);
     execute(data);
   };
   return (
