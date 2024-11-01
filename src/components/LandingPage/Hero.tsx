@@ -10,39 +10,34 @@ import GetStartedButton from "../ui/get-started-button";
 
 const Hero = () => {
   return (
-    <Container className=" h-[calc(100vh-64px)] relative overflow-hidden  ">
+    <Container className=" pt-10 pb-36 relative overflow-x-hidden  ">
       <DotPattern
         className={cn(
-          "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]  hidden md:block -z-[5]"
+          " [mask-image:radial-gradient(600px_circle_at_center,white,transparent)] hidden md:block  -z-[5]"
         )}
       />
-      <div className="bg-primary w-64 aspect-square blur-[10rem] absolute left-1/2 -translate-x-1/2 top-0 -z-10"></div>
-      <div className="hidden lg:block  w-full  absolute h-full  ">
-        <AnimateBadge
-          reverse
-          className="absolute bottom-24 left-32 xl:left-52 "
-        >
-          <Side content="Backend Developer" />
-        </AnimateBadge>
+      <div className="bg-primary w-56  md:w-64 aspect-square blur-[10rem] absolute left-1/2 -translate-x-1/2 top-0 -z-10"></div>
+      <Container className="hidden lg:flex items-center justify-between   absolute inset-0   ">
+        <div>
+          <AnimateBadge reverse>
+            <Side content="Backend Developer" />
+          </AnimateBadge>
+          <AnimateBadge className="absolute bottom-[20%] left-[20%]" reverse>
+            <Side content="FrontEnd Developer" />
+          </AnimateBadge>
+        </div>
+        <div>
+          <AnimateBadge>
+            <Side content="Accountant" rotate />
+          </AnimateBadge>
 
-        <AnimateBadge className="absolute bottom-24 right-80  ">
-          <Side content="Accountant" rotate />
-        </AnimateBadge>
-
-        <AnimateBadge
-          reverse
-          className="absolute bottom-96 -left-11 xl:-left-0"
-        >
-          <Side content="FrontEnd Developer" />
-        </AnimateBadge>
-
-        <AnimateBadge className="absolute bottom-96 right-[10%]">
-          <Side content="Sales Officer" rotate />
-        </AnimateBadge>
-      </div>
-
+          <AnimateBadge className="absolute bottom-[20%] right-[20%]">
+            <Side content="Sales Officer" rotate />
+          </AnimateBadge>
+        </div>
+      </Container>
       <AnimateWrapper className="mt-12">
-        <section className="text-center flex flex-col items-center justify-center   h-[80%] gap-10">
+        <section className="text-center flex flex-col items-center justify-center h-[80%] gap-10">
           <div
             className={cn(
               "group rounded-full hidden sm:block border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
@@ -57,7 +52,7 @@ const Hero = () => {
               </span>
             </AnimatedShinyText>
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center !leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center text-pretty !leading-tight">
             <span className="text-transparent bg-gradient-to-b from-neutral-50 to-neutral-500 bg-clip-text font-bold !leading-tight ">
               Empowering
             </span>{" "}
@@ -74,9 +69,9 @@ const Hero = () => {
             discover top talent with our hiring tools. Whether you&apos;re job
             hunting or hiring, JobVerse got you covered!
           </p>
-          <div className="relative">
-            <GetStartedButton />
-            <div className=" absolute  min-w-max -left-1/2 flex justify-between text-xs text-muted-foreground mt-5">
+          <GetStartedButton />
+          <div className="relative text-center -mt-6 ">
+            <div className="w-screen flex items-center justify-center gap text-xs text-muted-foreground ">
               <p className="flex items-center gap-2">
                 <TimerIcon size={15} />
                 14 Days Free Trial
