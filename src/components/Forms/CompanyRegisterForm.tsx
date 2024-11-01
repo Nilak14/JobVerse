@@ -20,6 +20,7 @@ import LoadingButton from "../ui/loading-button";
 import { useAction } from "next-safe-action/hooks";
 import { register } from "@/actions/auth/register";
 import { toast } from "sonner";
+import FormHeader from "./FormHeader";
 
 const CompanyRegisterForm = () => {
   const form = useForm<RegisterSchemaType>({
@@ -57,12 +58,10 @@ const CompanyRegisterForm = () => {
     <>
       <article className="mx-auto !max-w-[500px] w-full px-4 pt-16 pb-6">
         <div className="text-left flex flex-col gap-3 mb-6">
-          <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
-            Get Started!
-          </h1>
-          <p className="text-muted-foreground font-medium tracking-wide text-sm sm:text-base ">
-            Please register your company details to continue
-          </p>
+          <FormHeader
+            headingText="  Get Started!"
+            supportingText="Please register your company details to continue"
+          />
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

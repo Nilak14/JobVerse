@@ -1,4 +1,7 @@
 import BackButton from "@/components/Global/BackButton";
+import Light from "@/components/Global/Light";
+import GridPattern from "@/components/ui/animated-grid-pattern";
+import { cn } from "@/lib/utils";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -6,10 +9,14 @@ interface LayoutProps {
 const RegisterLayout = ({ children }: LayoutProps) => {
   return (
     <main className="relative">
-      <div className="absolute top-4 left-4 z-10 lg:top-[7%] lg:left-7">
-        <BackButton href="/" className="bg-black border border-gray-700" />
-      </div>
-      <div className="flex h-screen ">{children}</div>
+      <BackButton
+        href="/"
+        className="bg-black border border-gray-700 absolute top-4 left-5 lg:top-10 lg:left-10 z-20"
+      />
+      <Light className="hidden lg:block z-10 " />
+      <section className="grid grid-cols-1 lg:grid-cols-2  h-dvh ">
+        {children}
+      </section>
     </main>
   );
 };

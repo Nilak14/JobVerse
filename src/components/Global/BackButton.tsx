@@ -22,9 +22,9 @@ const BackButton = ({ className, href }: BackButtonProps) => {
         }
       }}
       variant={"secondary"}
-      className={cn(className)}
+      className={cn("group ", className)}
     >
-      <ChevronLeft />
+      <ChevronLeft className="group-hover:-translate-x-1 transition-transform duration-200 ease-in-out" />
       Back
     </Button>
   );

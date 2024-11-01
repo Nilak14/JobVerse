@@ -22,6 +22,7 @@ import RegisterModel from "../RegisterModel";
 import { useAction } from "next-safe-action/hooks";
 import { login } from "@/actions/auth/login";
 import { toast } from "sonner";
+import FormHeader from "./FormHeader";
 
 const LoginForm = () => {
   const [open, setOpen] = useState(false);
@@ -50,12 +51,10 @@ const LoginForm = () => {
     <>
       <article className=" mx-auto !max-w-[500px] w-full   px-4 pt-16 pb-6">
         <div className="text-left flex flex-col gap-3 mb-6">
-          <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
-            Welcome Back!
-          </h1>
-          <p className=" text-sm sm:text-base text-muted-foreground font-medium tracking-wide">
-            Nice to see you again! Please login to continue
-          </p>
+          <FormHeader
+            headingText="Welcome Back"
+            supportingText="Nice to see you again! Please login to continue"
+          />
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

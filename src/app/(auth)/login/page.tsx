@@ -2,6 +2,7 @@ import LoginForm from "@/components/Forms/LoginForm";
 import FormSide from "@/components/FormSide";
 import AnimateWrapper from "@/components/Global/AnimateWrapper";
 import BackButton from "@/components/Global/BackButton";
+import Light from "@/components/Global/Light";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,24 +11,26 @@ export const metadata: Metadata = {
 const LoginPage = () => {
   return (
     <main className="relative">
-      <div className="absolute top-4 left-4 z-10 lg:top-[7%] lg:left-7">
-        <BackButton href="/" className="bg-black border border-gray-700" />
-      </div>
-      <div className="flex h-screen ">
-        <section className="bg-background flex-1 hidden lg:block relative ">
+      <BackButton
+        href="/"
+        className="bg-black border border-gray-700 absolute top-10 left-10 z-10"
+      />
+      <Light className="hidden lg:block" />
+      <section className="grid grid-cols-1 lg:grid-cols-2  h-dvh ">
+        <article className="relative hidden lg:block">
           <AnimateWrapper reverse>
             <FormSide
               title="Continue Your Journey with JobVerse"
               description="Log in to explore new job opportunities or manage your hiring process with ease."
             />
           </AnimateWrapper>
-        </section>
-        <section className="bg-black min-h-full h-fit flex-1">
-          <AnimateWrapper className="flex w-full items-center justify-center h-screen">
+        </article>
+        <article className="bg-black grid  grid-cols-1  place-content-center">
+          <AnimateWrapper>
             <LoginForm />
           </AnimateWrapper>
-        </section>
-      </div>
+        </article>
+      </section>
     </main>
   );
 };
