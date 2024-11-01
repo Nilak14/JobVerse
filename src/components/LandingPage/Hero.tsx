@@ -7,6 +7,7 @@ import { CreditCardIcon, Dot, TimerIcon } from "lucide-react";
 import Side from "./Side";
 import AnimateBadge from "../Global/AnimateBadge";
 import GetStartedButton from "../ui/get-started-button";
+import Light from "../Global/Light";
 
 const Hero = () => {
   return (
@@ -16,7 +17,8 @@ const Hero = () => {
           " [mask-image:radial-gradient(600px_circle_at_center,white,transparent)] hidden md:block  -z-[5]"
         )}
       />
-      <div className="bg-primary w-56  md:w-64 aspect-square blur-[10rem] absolute left-1/2 -translate-x-1/2 top-0 -z-10"></div>
+
+      <Light className=" left-1/2 -translate-x-1/2 top-0 -z-10" />
       <Container className="hidden lg:flex items-center justify-between   absolute inset-0   ">
         <div>
           <AnimateBadge reverse>
