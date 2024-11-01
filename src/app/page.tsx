@@ -6,6 +6,7 @@ const LandingPage = () => {
     <main>
       <NavBar />
       <Hero />
+      <div>daijfajdfi</div>
     </main>
   );
 };

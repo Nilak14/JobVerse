@@ -12,7 +12,7 @@ const Side = ({ content, rotate }: SideProps) => {
       <MousePointer2
         size={25}
         className={cn(
-          `text-primary fill-primary absolute -top-5 ${rotate ? "-left-5" : "-right-5 rotate-90"}`
+          `text-primary fill-primary absolute -top-5 ${rotate ? "-left-5 -rotate-[10deg]" : "-right-5 rotate-[99deg]"}`
         )}
       />
       <Badge className="py-1 text-[0.6rem] hover:bg-primary">{content}</Badge>
