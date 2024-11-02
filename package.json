@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db": "npx prisma db push",
+    "email": "email dev --dir src/template/emails",
     "postinstall": "prisma generate --no-engine"
   },
   "dependencies": {
@@ -24,6 +25,8 @@
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@react-email/components": "^0.0.26",
+    "@react-email/tailwind": "1.0.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -54,6 +57,7 @@
     "eslint-config-next": "15.0.1",
     "postcss": "^8",
     "prisma": "^5.21.1",
+    "react-email": "3.0.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
