@@ -88,8 +88,8 @@ const VerifyEmailTemplate = ({
               <span className="text-black capitalize">{name}</span>. This
               verification link was sent by{" "}
               <span className="text-black">JobVerse</span> to verify your email
-              If you were not expecting this invitation, you can ignore this
-              email.
+              address If you were not expecting this invitation, you can ignore
+              this email.
             </Text>
           </Container>
         </Body>
