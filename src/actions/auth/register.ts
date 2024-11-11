@@ -4,6 +4,7 @@ import { RegisterSchema } from "@/schema/RegisterSchema";
 import { createSafeActionClient } from "next-safe-action";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
+import { sendEmailVerificationLink } from "@/lib/emails";
 const action = createSafeActionClient();
 export const register = action
   .schema(RegisterSchema)
@@ -32,6 +33,7 @@ export const register = action
           userType,
         },
       });
+      sendEmailVerificationLink({ email, name, token: "token" });
       return { success: "Confirmation Email Sent, Please Check Your Email" };
     }
   );
