@@ -54,6 +54,9 @@ export const login = action
         switch (error.type) {
           case "CredentialsSignin":
             return { error: "Invalid Credentials" };
+          case "AccessDenied":
+            return { error: error.cause?.err?.message };
+
           default:
             return { error: "Something went wrong" };
         }

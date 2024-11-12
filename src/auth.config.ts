@@ -42,6 +42,17 @@ export default {
       token.isBlocked = user.isBlocked;
       return token;
     },
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") {
+        return true;
+      }
+      const existingUser = await getUserById(user.id!);
+      if (!existingUser?.emailVerified) {
+        throw new Error("Your Email is not verified, Please Verify Your Email");
+      }
+
+      return true;
+    },
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
