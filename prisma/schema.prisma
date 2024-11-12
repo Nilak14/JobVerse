@@ -54,13 +54,14 @@ model Account {
   @@map("accounts")
 }
 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
+model EmailVerificationToken {
+  id      String   @id @default(cuid())
+  email   String   @unique
+  token   String   @unique
+  expires DateTime
 
-  @@id([identifier, token])
-  @@map("verification_tokens")
+  @@index([email])
+  @@map("email_verification_tokens")
 }
 
 model COMPANY {
