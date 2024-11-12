@@ -5,6 +5,7 @@ import { createSafeActionClient } from "next-safe-action";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { sendEmailVerificationLink } from "@/lib/emails";
+import { generateEmailVerificationToken } from "@/lib/token";
 const action = createSafeActionClient();
 export const register = action
   .schema(RegisterSchema)
@@ -33,7 +34,18 @@ export const register = action
           userType,
         },
       });
-      sendEmailVerificationLink({ email, name, token: "token" });
+      const token = await generateEmailVerificationToken(email);
+      if (token === null) {
+        return { error: "Error Generating Token" };
+      }
+      console.log("token generated");
+
+      const error = await sendEmailVerificationLink({ email, name, token });
+      if (error) {
+        return { error: "Error Sending Email" };
+      }
+      console.log("email sent");
+
       return { success: "Confirmation Email Sent, Please Check Your Email" };
     }
   );

@@ -13,12 +13,16 @@ export const sendEmailVerificationLink = async ({
   token: string;
   email: string;
 }) => {
-  const emailVerificationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email/${token}`;
+  const emailVerificationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}`;
+  console.log(emailVerificationLink);
+
   const { error } = await resend.emails.send({
     from: "JobVerse@jobverse.me",
     to: email,
     subject: "JobVerse Email Verification",
     react: VerifyEmailTemplate({ name, link: emailVerificationLink }),
   });
+  console.log(error);
+
   return error;
 };

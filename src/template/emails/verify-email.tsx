@@ -18,10 +18,7 @@ interface VerifyEmailTemplateProps {
   name: string;
 }
 
-const VerifyEmailTemplate = ({
-  link = "https://jobverse.medddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-  name = "nilak pathak",
-}: VerifyEmailTemplateProps) => {
+const VerifyEmailTemplate = ({ link, name }: VerifyEmailTemplateProps) => {
   return (
     <Html>
       <Head />

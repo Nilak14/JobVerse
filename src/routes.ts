@@ -5,6 +5,7 @@ export const authRoutes = [
   "/register/company",
   "/register/job_seeker",
   "/error",
+  "/verify-email",
 ];
 
 export const apiAuthPrefix = "/api/auth";
