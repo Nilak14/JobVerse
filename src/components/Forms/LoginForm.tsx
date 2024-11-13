@@ -10,6 +10,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
 import { LoginSchemaType, LoginSchema } from "@/schema/LoginSchema";
 import { Separator } from "../ui/separator";
@@ -17,15 +26,26 @@ import GoogleButton from "../Global/GoogleButton";
 import Link from "next/link";
 import { PasswordInput } from "../ui/password-input";
 import LoadingButton from "../ui/loading-button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RegisterModel from "../RegisterModel";
 import { useAction } from "next-safe-action/hooks";
 import { login } from "@/actions/auth/login";
 import { toast } from "sonner";
 import FormHeader from "./FormHeader";
+import { useRouter } from "next/navigation";
+import { set } from "zod";
+import { Button } from "../ui/button";
+import { sendEmailVerificationLink } from "@/actions/auth/sendEmailVerification";
+import SendEmailVerificationModel from "../Global/SendEmailVerificationModel";
 
-const LoginForm = () => {
+interface LoginFormProps {
+  error: string;
+}
+const LoginForm = ({ error }: LoginFormProps) => {
   const [open, setOpen] = useState(false);
+  const [openEmailDialog, setOpenEmailDialog] = useState(false);
+  const router = useRouter();
+
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -35,10 +55,28 @@ const LoginForm = () => {
     mode: "onChange",
   });
 
+  useEffect(() => {
+    if (error === "OAuthAccountNotLinked") {
+      toast.error("Another account already exists with same e-mail address", {
+        id: "login-error",
+      });
+      router.replace("/login", undefined);
+    }
+  }, [error, router]);
+
   const { execute, status } = useAction(login, {
     onSuccess: ({ data }) => {
       if (data?.error) {
-        toast.error(data.error);
+        if (data.error === "e") {
+          toast.error("Your Email is not verified, Please Verify Your Email", {
+            id: "login-error",
+          });
+          setOpenEmailDialog(true);
+        } else {
+          toast.error(data.error, {
+            id: "login-error",
+          });
+        }
       }
     },
     onError: () => {},
@@ -133,6 +171,12 @@ const LoginForm = () => {
         </div>
         <RegisterModel showFooter={false} open={open} setOpen={setOpen} />
       </article>
+
+      <SendEmailVerificationModel
+        open={openEmailDialog}
+        setOpen={setOpenEmailDialog}
+        userEmail={form.getValues("identifier")}
+      />
     </>
   );
 };

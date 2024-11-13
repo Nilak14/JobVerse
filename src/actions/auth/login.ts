@@ -21,11 +21,19 @@ export const login = action
     if (!existingUser || !existingUser.email || !existingUser.password) {
       return { error: "Invalid Credentials" };
     }
-    const isPasswordValid = bcrypt.compare(password, existingUser.password);
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+
     if (!isPasswordValid) {
       return { error: "Invalid Credentials" };
     }
     //todo: check for email verified or not and send email verification link
+    const isEmailVerified = existingUser.emailVerified;
+    if (!isEmailVerified) {
+      return { error: "e" };
+    }
 
     //todo: check if two factor is on or off and send token according to that
 
@@ -51,6 +59,8 @@ export const login = action
       });
     } catch (error) {
       if (error instanceof AuthError) {
+        console.log(error);
+
         switch (error.type) {
           case "CredentialsSignin":
             return { error: "Invalid Credentials" };

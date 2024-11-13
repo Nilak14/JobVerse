@@ -4,11 +4,18 @@ import AnimateWrapper from "@/components/Global/AnimateWrapper";
 import BackButton from "@/components/Global/BackButton";
 import Light from "@/components/Global/Light";
 import { Metadata } from "next";
+import { toast } from "sonner";
 
 export const metadata: Metadata = {
   title: "Login",
 };
-const LoginPage = () => {
+const LoginPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
+  const { error } = await searchParams;
+
   return (
     <main className="relative">
       <BackButton
@@ -27,7 +34,7 @@ const LoginPage = () => {
         </article>
         <article className="bg-black grid  grid-cols-1  place-content-center">
           <AnimateWrapper>
-            <LoginForm />
+            <LoginForm error={error as string} />
           </AnimateWrapper>
         </article>
       </section>
