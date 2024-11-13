@@ -37,6 +37,7 @@ export const emailVerification = async (token: string) => {
         },
       });
     }
+    console.log("after runs");
   });
 
   return { success: "Email Verified" };
