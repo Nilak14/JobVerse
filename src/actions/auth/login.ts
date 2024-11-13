@@ -21,7 +21,11 @@ export const login = action
     if (!existingUser || !existingUser.email || !existingUser.password) {
       return { error: "Invalid Credentials" };
     }
-    const isPasswordValid = bcrypt.compare(password, existingUser.password);
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+
     if (!isPasswordValid) {
       return { error: "Invalid Credentials" };
     }
