@@ -33,9 +33,7 @@ import { login } from "@/actions/auth/login";
 import { toast } from "sonner";
 import FormHeader from "./FormHeader";
 import { useRouter } from "next/navigation";
-import { set } from "zod";
-import { Button } from "../ui/button";
-import { sendEmailVerificationLink } from "@/actions/auth/sendEmailVerification";
+
 import SendEmailVerificationModel from "../Global/SendEmailVerificationModel";
 
 interface LoginFormProps {
@@ -137,7 +135,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
               />
             </div>
             <div className="text-right text-primary text-xs mt-2  ">
-              <Link className="group relative " href="/forgot-password">
+              <Link className="group relative " href="/password-reset">
                 Forgot Password?
                 <div className="bg-primary w-0  h-[1px] group-hover:w-full transition-all duration-300 ease-in-out  block absolute right-0"></div>
               </Link>
