@@ -2,7 +2,6 @@
 
 import { getUserByEmail } from "@/data-access/user";
 import { sendEmailVerificationLink as sendEmail } from "@/lib/emails";
-import prisma from "@/lib/prisma";
 import { generateEmailVerificationToken } from "@/lib/token";
 
 export const sendEmailVerificationLink = async (
