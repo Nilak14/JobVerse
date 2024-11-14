@@ -7,8 +7,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 interface CardWrapperProps {
   children: React.ReactNode;
   headerLabel: string;
-  backButtonLabel: string;
-  backButtonHref: string;
+  backButtonLabel?: string;
+  backButtonHref?: string;
   showFooter?: boolean;
 }
 const CardWrapper = ({
@@ -34,7 +34,7 @@ const CardWrapper = ({
             className="font-normal w-full text-white"
             asChild
           >
-            <Link href={backButtonHref}>{backButtonLabel}</Link>
+            <Link href={backButtonHref!}>{backButtonLabel!}</Link>
           </Button>
         </CardFooter>
       )}

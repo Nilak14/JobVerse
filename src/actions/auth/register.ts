@@ -34,6 +34,10 @@ export const register = action
         },
       });
       const res = await sendEmailVerificationLink(email, name);
-      return res;
+      if (res.success) {
+        return { success: res.success };
+      } else {
+        return { error: res.error };
+      }
     }
   );
