@@ -6,6 +6,8 @@ export const authRoutes = [
   "/register/job_seeker",
   "/error",
   "/verify-email",
+  "/password-reset",
+  "/forget-password",
 ];
 
 export const apiAuthPrefix = "/api/auth";
