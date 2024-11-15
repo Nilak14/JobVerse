@@ -25,6 +25,7 @@
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-tooltip": "^1.1.4",
     "@react-email/components": "^0.0.26",
     "@react-email/tailwind": "1.0.0",
     "bcryptjs": "^2.4.3",
