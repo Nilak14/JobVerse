@@ -1,11 +1,13 @@
 import BackButton from "@/components/Global/BackButton";
 import Light from "@/components/Global/Light";
-import GridPattern from "@/components/ui/animated-grid-pattern";
-import { cn } from "@/lib/utils";
+import { Metadata } from "next";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
+export const metadata: Metadata = {
+  title: "Register",
+};
 const RegisterLayout = ({ children }: LayoutProps) => {
   return (
     <main className="relative">
