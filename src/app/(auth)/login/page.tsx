@@ -4,7 +4,6 @@ import AnimateWrapper from "@/components/Global/AnimateWrapper";
 import BackButton from "@/components/Global/BackButton";
 import Light from "@/components/Global/Light";
 import { Metadata } from "next";
-import { toast } from "sonner";
 
 export const metadata: Metadata = {
   title: "Login",

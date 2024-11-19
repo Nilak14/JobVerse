@@ -1,5 +1,10 @@
 import EmailVerificationForm from "@/components/Forms/EmailVerificationForm";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Verify Email",
+};
 
 const VerifyEmailPage = async ({
   searchParams,
