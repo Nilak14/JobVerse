@@ -40,6 +40,7 @@ export default {
       token.type = user.userType;
       token.avatarUrl = user.image;
       token.isBlocked = user.isBlocked;
+      token.isOnBoarded = user.isOnBoarded;
       return token;
     },
     async signIn({ user, account }) {
@@ -57,10 +58,10 @@ export default {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
-
       session.user.type = token.type as UserType;
       session.user.avatarUrl = token.avatarUrl as string;
       session.user.isBlocked = token.isBlocked as boolean;
+      session.user.isOnBoarded = token.isOnBoarded as boolean;
 
       return session;
     },

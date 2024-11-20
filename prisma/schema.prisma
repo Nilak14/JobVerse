@@ -27,6 +27,7 @@ model User {
   updatedAt     DateTime     @updatedAt
   COMPANY       COMPANY[]
   JOB_SEEKER    JOB_SEEKER[]
+  isOnBoarded   Boolean      @default(false)
   isBlocked     Boolean      @default(false)
 
   @@map("users")
@@ -71,7 +72,7 @@ model ResetPasswordToken {
   expires DateTime
 
   @@index([email])
-  @@map("reset_passowrd_tokens")
+  @@map("reset_password_tokens")
 }
 
 model COMPANY {
