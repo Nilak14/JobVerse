@@ -53,6 +53,7 @@ export const login = action
         password,
         redirectTo: redirectLink,
       });
+      return { success: "Logged In Successfully" };
     } catch (error) {
       if (error instanceof AuthError) {
         switch (error.type) {
@@ -60,7 +61,6 @@ export const login = action
             return { error: "Invalid Credentials" };
           case "AccessDenied":
             return { error: error.cause?.err?.message };
-
           default:
             return { error: "Something went wrong" };
         }

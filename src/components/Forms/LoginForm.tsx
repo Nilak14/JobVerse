@@ -10,14 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
 import { LoginSchemaType, LoginSchema } from "@/schema/LoginSchema";
@@ -67,14 +59,16 @@ const LoginForm = ({ error }: LoginFormProps) => {
       if (data?.error) {
         if (data.error === "e") {
           toast.error("Your Email is not verified, Please Verify Your Email", {
-            id: "login-error",
+            id: "login",
           });
           setOpenEmailDialog(true);
         } else {
           toast.error(data.error, {
-            id: "login-error",
+            id: "login",
           });
         }
+      } else if (data?.success) {
+        toast.success(data.success, { id: "login" });
       }
     },
     onError: () => {},
