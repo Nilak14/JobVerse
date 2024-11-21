@@ -35,6 +35,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
   const [open, setOpen] = useState(false);
   const [openEmailDialog, setOpenEmailDialog] = useState(false);
   const router = useRouter();
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
@@ -53,25 +54,29 @@ const LoginForm = ({ error }: LoginFormProps) => {
       router.replace("/login", undefined);
     }
   }, [error, router]);
+  useEffect(() => {
+    if (authError) {
+      toast.error(authError, { id: "login-error" });
+    }
+  }, [authError]);
 
   const { execute, status } = useAction(login, {
     onSuccess: ({ data }) => {
       if (data?.error) {
         if (data.error === "e") {
-          toast.error("Your Email is not verified, Please Verify Your Email", {
-            id: "login",
-          });
+          setAuthError("Your Email is not verified, Please Verify Your Email");
           setOpenEmailDialog(true);
         } else {
-          toast.error(data.error, {
-            id: "login",
-          });
+          setAuthError(data.error);
         }
       } else if (data?.success) {
         toast.success(data.success, { id: "login" });
+        setAuthError(null);
       }
     },
-    onError: () => {},
+    onError: () => {
+      setAuthError("Something went wrong, Please try again later");
+    },
   });
 
   const onSubmit = (data: LoginSchemaType) => {
