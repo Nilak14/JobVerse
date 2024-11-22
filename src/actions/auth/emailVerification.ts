@@ -31,9 +31,6 @@ export const emailVerification = async (token: string) => {
     });
 
     if (updatedUser) {
-      console.log("hi");
-      console.log(existingToken.id);
-
       await prisma.emailVerificationToken.delete({
         where: {
           id: existingToken.id,
@@ -42,7 +39,6 @@ export const emailVerification = async (token: string) => {
     }
 
     after(async () => {
-      console.log("after runs email verification");
       await prisma.emailVerificationToken.deleteMany({
         where: {
           email: existingToken.email,

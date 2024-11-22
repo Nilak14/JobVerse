@@ -44,7 +44,6 @@ export const resetPassword = action
 
       // delete token in after
       after(async () => {
-        console.log("after runs reset password");
         await prisma.resetPasswordToken.deleteMany({
           where: { email: existingToken.email },
         });
