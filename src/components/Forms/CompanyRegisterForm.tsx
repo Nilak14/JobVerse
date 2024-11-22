@@ -44,9 +44,8 @@ const CompanyRegisterForm = () => {
         toast.error(data.error, { id: "register" });
       }
     },
-    onError(error) {
-      console.log("error");
-      console.log(error);
+    onError() {
+      toast.error("Something went wrong", { id: "register" });
     },
   });
 
@@ -59,7 +58,7 @@ const CompanyRegisterForm = () => {
       <article className="mx-auto !max-w-[500px] w-full px-4 pt-16 pb-6">
         <div className="text-left flex flex-col gap-3 mb-6">
           <FormHeader
-            headingText="  Get Started!"
+            headingText="Get Started!"
             supportingText="Please register your company details to continue"
           />
         </div>
