@@ -1,5 +1,5 @@
-import { signOut } from "@/auth";
 import { Metadata } from "next";
+import Onboarding from "./Onboarding";
 
 export const metadata: Metadata = {
   title: "Onboarding (JobSeeker)",
@@ -7,9 +7,8 @@ export const metadata: Metadata = {
 
 const JobSeekerOnBoardingPage = () => {
   return (
-    <section className="flex h-dvh w-dvw">
-      <article className="hidden lg:block flex-1 bg-primary"></article>
-      <article className=" flex-1"></article>
+    <section className="grid grid-cols-1 lg:grid-cols-2 h-dvh w-dvw">
+      <Onboarding />
     </section>
   );
 };
