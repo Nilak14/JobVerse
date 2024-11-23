@@ -7,6 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { OnBoardingStep } from "@/lib/types";
+import React from "react";
 
 interface BreadCrumbProps {
   steps: OnBoardingStep[];
@@ -19,21 +20,29 @@ const BreadCrumb = ({
   setCurrentStep,
 }: BreadCrumbProps) => {
   return (
-    <section>
+    <section className="flex justify-center px-8">
       <Breadcrumb>
-        <BreadcrumbList>
-          {}
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-          </BreadcrumbItem>
+        <BreadcrumbList className="flex items-center justify-center ">
+          {steps.map((step) => (
+            <React.Fragment key={step.key}>
+              <BreadcrumbItem className="tracking-wider">
+                {step.key === currentStep ? (
+                  <BreadcrumbPage>
+                    <span className="text-primary cursor-pointer">
+                      {step.title}
+                    </span>
+                  </BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <button onClick={() => setCurrentStep(step.key)}>
+                      {step.title}
+                    </button>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="last:hidden" />
+            </React.Fragment>
+          ))}
         </BreadcrumbList>
       </Breadcrumb>
     </section>
