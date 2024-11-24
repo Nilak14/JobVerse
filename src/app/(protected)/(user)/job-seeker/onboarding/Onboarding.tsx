@@ -8,8 +8,10 @@ import { useState } from "react";
 import { Logo } from "@/components/LandingPage/NavBar";
 import Particles from "@/components/ui/particles";
 import Image from "next/image";
+import UseCurrentSession from "@/hooks/use-session";
 
 const Onboarding = () => {
+  UseCurrentSession(); // get the session for client side component
   const searchParams = useSearchParams();
   const [onBoardingData, setOnBoardingData] =
     useState<JobSeekerOnboardingSchema>({
