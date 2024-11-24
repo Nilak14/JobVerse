@@ -5,6 +5,11 @@ import { METADATA_CONFIG } from "@/config/metadata";
 import ThemeProvider from "@/context/ThemeProvider";
 import Toaster from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { fileRouter } from "./api/uploadthing/core";
+import { connection } from "next/server";
+import { Suspense } from "react";
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = METADATA_CONFIG;
@@ -14,6 +19,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  async function UTSSR() {
+    await connection();
+    return <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />;
+  }
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <link
@@ -32,7 +41,15 @@ export default function RootLayout({
       <meta name="apple-mobile-web-app-title" content="JobVerse" />
       <link rel="manifest" href="/favicon/site.webmanifest" />
       <body className={`${font.className} antialiased`}>
-        <ThemeProvider>
+        <Suspense>
+          <UTSSR />
+        </Suspense>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <NextTopLoader height={5} color="#e9590c" />
           {children}
           <Toaster />

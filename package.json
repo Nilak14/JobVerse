@@ -31,6 +31,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@react-email/components": "^0.0.26",
     "@react-email/tailwind": "1.0.0",
+    "@uploadthing/react": "^7.1.1",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -56,6 +57,7 @@
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^7.3.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
