@@ -87,15 +87,23 @@ export function Logo({
   width = "20",
   height = "20",
   fill = "white",
+  classname,
+  textSize = "text-xl",
 }: {
   width?: string;
   height?: string;
   fill?: string;
+  classname?: string;
+  textSize?: string;
 }) {
   return (
-    <Link href="#" className="flex items-center gap-2 " prefetch={false}>
+    <Link
+      href="#"
+      className={cn("flex items-center gap-2 ", classname)}
+      prefetch={false}
+    >
       <JobVerseLogo width={width + "px"} height={height + "px"} fill={fill} />
-      <span className=" text-xl tracking-wide">JobVerse</span>
+      <span className={` ${textSize} tracking-wide`}>JobVerse</span>
     </Link>
   );
 }

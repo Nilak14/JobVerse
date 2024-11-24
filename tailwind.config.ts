@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-
+import { withUt } from "uploadthing/tw";
 const config: Config = {
   darkMode: ["class"],
   content: [
@@ -55,6 +55,16 @@ const config: Config = {
         "color-3": "hsl(var(--color-3))",
         "color-4": "hsl(var(--color-4))",
         "color-5": "hsl(var(--color-5))",
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -71,8 +81,12 @@ const config: Config = {
       },
       keyframes: {
         shine: {
-          from: { backgroundPosition: "200% 0" },
-          to: { backgroundPosition: "-200% 0" },
+          from: {
+            backgroundPosition: "200% 0",
+          },
+          to: {
+            backgroundPosition: "-200% 0",
+          },
         },
         rainbow: {
           "0%": {
@@ -118,4 +132,4 @@ const config: Config = {
   },
   plugins: [require("tailwindcss-animate")],
 };
-export default config;
+export default withUt(config);

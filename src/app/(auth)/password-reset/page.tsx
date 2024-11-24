@@ -1,6 +1,11 @@
 import PasswordResetForm from "@/components/Forms/PasswordResetForm";
 import { Logo } from "@/components/LandingPage/NavBar";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Password Reset",
+};
 
 const PasswordResetPage = async ({
   searchParams,

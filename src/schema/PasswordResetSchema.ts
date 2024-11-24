@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Forget Password Schema
 export const ForgetPasswordSchema = z.object({
-  email: z.string().email().min(1, { message: "Email is required" }),
+  email: z.string().trim().email().min(1, { message: "Email is required" }),
 });
 export type ForgetPasswordSchemaType = z.infer<typeof ForgetPasswordSchema>;
 
@@ -10,9 +10,13 @@ export type ForgetPasswordSchemaType = z.infer<typeof ForgetPasswordSchema>;
 export const ResetPasswordSchema = z
   .object({
     token: z.string(),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z
+      .string()
+      .trim()
+      .min(6, "Password must be at least 6 characters"),
     confirmPassword: z
       .string()
+      .trim()
       .min(6, "Password must be at least 6 characters"),
   })
   .refine((data) => data.password === data.confirmPassword, {
