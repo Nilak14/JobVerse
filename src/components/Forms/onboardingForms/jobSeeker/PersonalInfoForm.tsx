@@ -45,7 +45,7 @@ const PersonalInfoForm = ({
     });
     return unsubscribe;
   }, [form, jobSeekerFormData, setJobSeekerFormData]);
-
+  //
   return (
     <div className="flex items-center justify-center h-full">
       <CardWrapper
