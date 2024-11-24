@@ -8,8 +8,6 @@ import NextTopLoader from "nextjs-toploader";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "./api/uploadthing/core";
-import { connection } from "next/server";
-import { Suspense } from "react";
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = METADATA_CONFIG;
@@ -19,10 +17,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  async function UTSSR() {
-    await connection();
-    return <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />;
-  }
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <link
@@ -41,9 +35,7 @@ export default function RootLayout({
       <meta name="apple-mobile-web-app-title" content="JobVerse" />
       <link rel="manifest" href="/favicon/site.webmanifest" />
       <body className={`${font.className} antialiased`}>
-        <Suspense>
-          <UTSSR />
-        </Suspense>
+        <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
