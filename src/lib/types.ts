@@ -2,7 +2,7 @@ import { JobSeekerOnboardingSchema } from "@/schema/JobSeekerOnboardingSchema";
 
 export interface OnBoardingStep {
   title: string;
-  component: React.ComponentType<JobSeekerOnboardingFormProps>;
+  component: React.ComponentType<{ setCurrentStep: (step: string) => void }>;
   key: string;
 }
 

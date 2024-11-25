@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Onboarding from "./Onboarding";
+import Container from "@/components/Global/Container";
 
 export const metadata: Metadata = {
   title: "Onboarding (JobSeeker)",
@@ -7,8 +8,10 @@ export const metadata: Metadata = {
 
 const JobSeekerOnBoardingPage = () => {
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-2 h-dvh w-dvw">
-      <Onboarding />
+    <section className="grid relative place-content-center pb-32 overflow-hidden  ">
+      <Container>
+        <Onboarding />
+      </Container>
     </section>
   );
 };
