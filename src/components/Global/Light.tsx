@@ -7,7 +7,7 @@ const Light = ({ className }: LightProps) => {
   return (
     <div
       className={cn(
-        "bg-primary w-56 absolute  md:w-64 aspect-square blur-[10rem] ",
+        "bg-primary hidden dark:block w-56 absolute  md:w-64 aspect-square blur-[10rem] ",
         className
       )}
     ></div>

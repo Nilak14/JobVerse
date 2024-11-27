@@ -72,6 +72,7 @@ const CompanyRegisterForm = () => {
                   <FormLabel>Company Name</FormLabel>
                   <FormControl>
                     <Input
+                      className="bg-white dark:bg-transparent"
                       disabled={status === "executing"}
                       placeholder={"Your Company Name"}
                       {...field}
@@ -92,6 +93,7 @@ const CompanyRegisterForm = () => {
                   <FormLabel>Company Email</FormLabel>
                   <FormControl>
                     <Input
+                      className="bg-white dark:bg-transparent"
                       disabled={status === "executing"}
                       placeholder={"Your Company Email Address"}
                       {...field}
@@ -109,6 +111,7 @@ const CompanyRegisterForm = () => {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <PasswordInput
+                      className="bg-white dark:bg-transparent"
                       disabled={status === "executing"}
                       placeholder="Password"
                       {...field}
@@ -126,6 +129,7 @@ const CompanyRegisterForm = () => {
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
                     <PasswordInput
+                      className="bg-white dark:bg-transparent"
                       disabled={status === "executing"}
                       placeholder="Confirm Password"
                       {...field}
@@ -155,9 +159,9 @@ const CompanyRegisterForm = () => {
           </Link>
         </div>
         <div className="my-6 flex justify-center gap-4 items-center overflow-hidden">
-          <Separator />
+          <Separator className="bg-black dark:bg-border" />
           <span className="text-muted-foreground">or</span>
-          <Separator />
+          <Separator className="bg-black dark:bg-border" />
         </div>
         <GoogleButton userType="COMPANY" className="w-full" />
         <div className="text-center my-10 text-sm">

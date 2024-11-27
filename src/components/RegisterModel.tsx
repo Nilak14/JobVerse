@@ -13,6 +13,7 @@ import { BorderBeam } from "./ui/border-beam";
 import { cn } from "@/lib/utils";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import RegisterLinks from "./RegisterLinks";
+import { useTheme } from "next-themes";
 interface RegisterModelProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -24,6 +25,7 @@ const RegisterModel = ({
   setOpen,
   showFooter = true,
 }: RegisterModelProps) => {
+  const { theme } = useTheme();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -39,8 +41,8 @@ const RegisterModel = ({
           >
             <RegisterLinks href="/register/job_seeker" className="relative ">
               <MagicCard
-                gradientColor="gray"
-                className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 text-white flex justify-center flex-col gap-3 px-4"
+                gradientColor={theme === "dark" ? "gray" : "#d9d9d9"}
+                className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 dark:text-white text-black flex justify-center flex-col gap-3 px-4"
               >
                 <div className="flex gap-2 ">
                   <User className=" size-6 sm:size-9 " />
@@ -52,7 +54,7 @@ const RegisterModel = ({
                   <span className="text-lg font-semibold hidden sm:block mt-2">
                     Job Seeker
                   </span>
-                  <span className="text-xs mt-2 break-all whitespace-nowrap text-slate-100">
+                  <span className="text-xs mt-2 break-all whitespace-nowrap text-muted-foreground dark:text-slate-100">
                     Search Job / Follow Company
                   </span>
                 </div>
@@ -60,8 +62,8 @@ const RegisterModel = ({
             </RegisterLinks>
             <RegisterLinks href="/register/company" className="relative">
               <MagicCard
-                gradientColor="gray"
-                className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 text-white flex justify-center flex-col gap-3 px-4"
+                gradientColor={theme === "dark" ? "gray" : "#d9d9d9"}
+                className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 dark:text-white text-black flex justify-center flex-col gap-3 px-4"
               >
                 <div className="flex gap-2 ">
                   <Building className=" size-6 sm:size-9 " />
@@ -73,7 +75,7 @@ const RegisterModel = ({
                   <span className="text-lg hidden sm:block font-semibold mt-2">
                     Company
                   </span>
-                  <span className="text-xs mt-2 text-slate-100">
+                  <span className="text-xs mt-2 break-all whitespace-nowrap text-muted-foreground dark:text-slate-100">
                     Post Job / Hire Talents
                   </span>
                 </div>

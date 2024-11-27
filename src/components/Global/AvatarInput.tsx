@@ -7,8 +7,13 @@ import Resizer from "react-image-file-resizer";
 interface AvatarInputProps {
   src: string | StaticImageData;
   onImageCropped: (blob: Blob | null) => void;
+  size?: string;
 }
-const AvatarInput = ({ onImageCropped, src }: AvatarInputProps) => {
+const AvatarInput = ({
+  onImageCropped,
+  src,
+  size = "size-32",
+}: AvatarInputProps) => {
   const [imageToCrop, setImageToCrop] = useState<File>();
   const avatarFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,7 +51,7 @@ const AvatarInput = ({ onImageCropped, src }: AvatarInputProps) => {
           alt="Avatar Preview"
           width={150}
           height={150}
-          className="rounded-full size-32 object-cover flex-none"
+          className={`rounded-full object-cover flex-none ${size}`}
         />
         <span className="absolute inset-0 m-auto flex size-12 items-center justify-center bg-black bg-opacity-40 text-white transition-colors duration-200 group-hover:bg-opacity-25 rounded-full">
           <Camera size={24} />

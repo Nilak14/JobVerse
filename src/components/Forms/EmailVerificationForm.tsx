@@ -36,6 +36,7 @@ const EmailVerificationForm = ({ token }: props) => {
 
   return (
     <CardWrapper
+      classname="bg-white dark:bg-black"
       backButtonHref="/login"
       backButtonLabel="Back To Login"
       headerLabel="Verifying your Email"

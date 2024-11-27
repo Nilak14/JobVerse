@@ -20,6 +20,8 @@ export const sendEmailVerificationLink = async (
       return { error: "Error Generating Token" };
     }
     const error = await sendEmail({ email, name: fullName, token });
+    console.log(error);
+
     if (error) {
       return { error: "Error Sending Email" };
     } else {
