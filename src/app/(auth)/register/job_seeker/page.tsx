@@ -13,7 +13,7 @@ const JobSeekerRegisterPage = () => {
           />
         </AnimateWrapper>
       </article>
-      <article className="bg-black grid  grid-cols-1  place-content-center">
+      <article className="dark:bg-black bg-primary/30 grid  grid-cols-1  place-content-center">
         <AnimateWrapper className="relative">
           <JobSeekerRegisterForm />
         </AnimateWrapper>

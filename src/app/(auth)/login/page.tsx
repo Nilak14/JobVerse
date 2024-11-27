@@ -19,11 +19,11 @@ const LoginPage = async ({
     <main className="relative">
       <BackButton
         href="/"
-        className="bg-black border border-gray-700 absolute top-10 left-10 z-10"
+        className="bg-primary dark:bg-black dark:border hover:bg-primary/80 dark:border-gray-700 absolute text-white hover:dark:bg-black/80 top-10 left-10 z-10"
       />
-      <Light className="hidden lg:block" />
+      <Light className="invisible lg:visible" />
       <section className="grid grid-cols-1 lg:grid-cols-2  h-dvh ">
-        <article className="relative hidden lg:block">
+        <article className="relative hidden lg:block  ">
           <AnimateWrapper reverse>
             <FormSide
               title="Continue Your Journey with JobVerse"
@@ -31,7 +31,7 @@ const LoginPage = async ({
             />
           </AnimateWrapper>
         </article>
-        <article className="bg-black grid  grid-cols-1  place-content-center">
+        <article className="dark:bg-black bg-primary/30 grid  grid-cols-1  place-content-center">
           <AnimateWrapper>
             <LoginForm error={error as string} />
           </AnimateWrapper>

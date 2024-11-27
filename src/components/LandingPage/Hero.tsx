@@ -18,7 +18,7 @@ const Hero = () => {
         )}
       />
 
-      <Light className=" left-1/2 -translate-x-1/2 top-0 -z-10" />
+      <Light className="left-1/2 -translate-x-1/2 top-0 -z-10" />
       <Container className="hidden lg:flex items-center justify-between   absolute inset-0   ">
         <div>
           <AnimateBadge reverse>
@@ -55,18 +55,18 @@ const Hero = () => {
             </AnimatedShinyText>
           </div>
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center text-pretty !leading-tight">
-            <span className="text-transparent bg-gradient-to-b from-neutral-50 to-neutral-500 bg-clip-text font-bold !leading-tight ">
+            <span className="text-transparent bg-gradient-to-b from-black to-gray-300/80 dark:bg-gradient-to-b dark:from-neutral-50 dark:to-neutral-500 bg-clip-text font-bold !leading-tight  ">
               Empowering
             </span>{" "}
             <span className="text-primary">
               Job Seekers & <br className="hidden md:block" /> Employers
             </span>{" "}
-            <span className="text-transparent bg-gradient-to-b from-neutral-50 to-neutral-500 bg-clip-text font-bold !leading-tight ">
+            <span className="text-transparent bg-gradient-to-b from-black to-gray-300/80 dark:bg-gradient-to-b dark:from-neutral-50 dark:to-neutral-500 bg-clip-text font-bold !leading-tight  ">
               for Mutual Success
             </span>
           </h1>
 
-          <p className=" w-[90%] md:w-2/3 lg:w-1/2 text-slate-300 text-center tracking-wider text-pretty text-base">
+          <p className=" w-[90%] md:w-2/3 lg:w-1/2 text-muted-foreground text-center tracking-wider text-pretty text-base">
             Build your resume, follow companies, and apply effortlessly, or
             discover top talent with our hiring tools. Whether you&apos;re job
             hunting or hiring, JobVerse got you covered!
