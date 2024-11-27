@@ -54,6 +54,7 @@ const PasswordResetForm = ({ token }: { token: string }) => {
   return (
     <section>
       <CardWrapper
+        classname="bg-white dark:bg-black"
         backButtonHref="/login"
         backButtonLabel="Back To Login"
         headerLabel={"Reset Your Password "}

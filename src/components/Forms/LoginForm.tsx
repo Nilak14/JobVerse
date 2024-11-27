@@ -102,6 +102,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
                     <FormLabel>Email </FormLabel>
                     <FormControl>
                       <Input
+                        className="bg-white dark:bg-transparent"
                         disabled={status === "executing"}
                         type="email"
                         placeholder="Your Email"
@@ -122,6 +123,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <PasswordInput
+                        className="bg-white dark:bg-transparent"
                         disabled={status === "executing"}
                         placeholder="Password"
                         {...field}
@@ -151,9 +153,9 @@ const LoginForm = ({ error }: LoginFormProps) => {
           </form>
         </Form>
         <div className="my-6 flex justify-center gap-4 items-center overflow-hidden">
-          <Separator />
+          <Separator className="bg-black dark:bg-border" />
           <span className="text-muted-foreground">or</span>
-          <Separator />
+          <Separator className="bg-black dark:bg-border" />
         </div>
         <GoogleButton className="w-full " />
         <div className="text-center my-10 text-sm">

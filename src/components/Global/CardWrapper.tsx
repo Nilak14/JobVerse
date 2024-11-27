@@ -41,7 +41,7 @@ const CardWrapper = ({
           <Button
             variant={"link"}
             size={"sm"}
-            className="font-normal w-full text-white"
+            className="font-normal w-full dark:text-white text-black"
             asChild
           >
             <Link href={backButtonHref!}>{backButtonLabel!}</Link>

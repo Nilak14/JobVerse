@@ -170,9 +170,7 @@ const PersonalInfoForm = ({
                         type="date"
                       />
                     </FormControl>
-                    <FormDescription>
-                      Your age must be greater then 16
-                    </FormDescription>
+                    <FormDescription>You can't change it later</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

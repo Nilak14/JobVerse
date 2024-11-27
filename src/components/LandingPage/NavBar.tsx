@@ -40,8 +40,8 @@ export const NavBar = () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="top">
-              <SheetTitle>
-                <Logo />
+              <SheetTitle className="w-fit">
+                <Logo width="35" height="35" fill="#e9590c" />
               </SheetTitle>
 
               <div className="grid gap-2 py-6">
@@ -66,7 +66,9 @@ export const NavBar = () => {
                   <NavigationMenuLink key={link.name} asChild>
                     <Link
                       href={link.href}
-                      className="group inline-flex h-9 w-max items-center justify-center rounded-md  px-4 py-2 text-muted-foreground hover:text-primary-foreground hover:bg-primary-background transition-colors duration-200"
+                      className="group inline-flex h-9 w-max items-center justify-center rounded-md  px-4 py-2 text-muted-foreground 
+                      hover:dark:text-primary-foreground hover:text-black
+                     hover:bg-primary-background transition-colors duration-200"
                     >
                       {link.name}
                     </Link>
