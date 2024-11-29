@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         hostname: "utfs.io",
         pathname: `/a/${process.env.UPLOADTHING_APP_ID}/`,
       },
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+        port: "",
+        pathname: "**",
+      },
     ],
   },
 };
