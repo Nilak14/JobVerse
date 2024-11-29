@@ -27,7 +27,6 @@ model User {
   updatedAt     DateTime     @updatedAt
   COMPANY       COMPANY[]
   JOB_SEEKER    JOB_SEEKER[]
-  isOnBoarded   Boolean      @default(false)
   isBlocked     Boolean      @default(false)
 
   @@map("users")
