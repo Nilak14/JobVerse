@@ -1,6 +1,6 @@
 import PersonalInfoForm from "@/components/Forms/onboardingForms/jobSeeker/PersonalInfoForm";
 import { OnBoardingStep } from "./types";
-import EducationalForm from "@/components/Forms/onboardingForms/jobSeeker/EducationalForm";
+import WorkExperienceForm from "@/components/Forms/onboardingForms/jobSeeker/WorkExperienceForm";
 
 export const job_seeker_onboarding_steps: OnBoardingStep[] = [
   {
@@ -9,14 +9,9 @@ export const job_seeker_onboarding_steps: OnBoardingStep[] = [
     component: PersonalInfoForm,
   },
   {
-    title: "Educational Background",
-    key: "educational-background",
-    component: EducationalForm,
-  },
-  {
     title: "Work Experience ",
     key: "work-experience",
-    component: PersonalInfoForm,
+    component: WorkExperienceForm,
   },
   {
     title: "Job Preferences ",
