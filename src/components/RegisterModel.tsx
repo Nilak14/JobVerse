@@ -2,16 +2,16 @@
 import Link from "next/link";
 import { Building, User } from "lucide-react";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalDescription,
+  ResponsiveModalFooter,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "@/components/ui/responsive-dailog";
 import { MagicCard } from "./ui/magic-card";
 import { BorderBeam } from "./ui/border-beam";
 import { cn } from "@/lib/utils";
-import { DialogDescription } from "@radix-ui/react-dialog";
 import RegisterLinks from "./RegisterLinks";
 import { useTheme } from "next-themes";
 interface RegisterModelProps {
@@ -27,13 +27,13 @@ const RegisterModel = ({
 }: RegisterModelProps) => {
   const { theme } = useTheme();
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Register As</DialogTitle>
-          <DialogDescription className="sr-only">
+    <ResponsiveModal open={open} onOpenChange={setOpen}>
+      <ResponsiveModalContent className="overflow-hidden lg:m-0 m-[2px]">
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>Register As</ResponsiveModalTitle>
+          <ResponsiveModalDescription className="sr-only">
             Please Select the type of account you want to create
-          </DialogDescription>
+          </ResponsiveModalDescription>
           <div
             className={cn(
               "flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0  pt-5"
@@ -82,10 +82,10 @@ const RegisterModel = ({
               </MagicCard>
             </RegisterLinks>
           </div>
-        </DialogHeader>
+        </ResponsiveModalHeader>
         <BorderBeam />
         {showFooter && (
-          <DialogFooter>
+          <ResponsiveModalFooter className="md:mt-0 mt-4">
             <div className="text-center  text-sm">
               <span>Already have an account? </span>
               <Link className="text-primary relative group" href={"/login"}>
@@ -93,10 +93,10 @@ const RegisterModel = ({
                 <div className="bg-primary w-0 h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out block absolute right-0"></div>
               </Link>
             </div>
-          </DialogFooter>
+          </ResponsiveModalFooter>
         )}
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
   );
 };
 export default RegisterModel;
