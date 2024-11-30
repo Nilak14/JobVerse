@@ -15,14 +15,18 @@ import { SidebarUser } from "./SidebarUser";
 import { JobSeekerSideBarLinks } from "@/lib/data";
 import { ExtendedUser } from "@/next-auth";
 
-export default function JobSeekerSidebar({ user }: { user: ExtendedUser }) {
+export default function JobSeekerSidebar({
+  user,
+}: {
+  user: ExtendedUser | undefined;
+}) {
   const sidebarLinks = JobSeekerSideBarLinks;
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarTop
-          userName={user.name as string}
+          userName={user?.name as string}
           isLoading={!user}
           userSubType="Pro"
         />
