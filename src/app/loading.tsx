@@ -1,5 +1,4 @@
-import "server-only";
-const Loading = () => {
+const GlobalLoading = () => {
   return (
     <main className="flex items-center justify-center h-dvh">
       <svg
@@ -33,4 +32,4 @@ const Loading = () => {
     </main>
   );
 };
-export default Loading;
+export default GlobalLoading;
