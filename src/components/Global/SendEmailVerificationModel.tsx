@@ -1,10 +1,12 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalDescription,
+  ResponsiveModalFooter,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "@/components/ui/responsive-dailog";
+
 import LoadingButton from "../ui/loading-button";
 import { sendEmailVerificationLink } from "@/actions/auth/sendEmailVerification";
 import { toast } from "sonner";
@@ -21,17 +23,25 @@ const SendEmailVerificationModel = ({
 }: SendEmailVerificationModelProps) => {
   const [loading, setLoading] = useState(false);
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Email Not Verified</DialogTitle>
-          <DialogDescription>
+    <ResponsiveModal open={open} onOpenChange={setOpen}>
+      <ResponsiveModalContent>
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>Email Not Verified</ResponsiveModalTitle>
+          <ResponsiveModalDescription>
             Click on the button below to send a verification link to your email
-          </DialogDescription>
-        </DialogHeader>
+          </ResponsiveModalDescription>
+        </ResponsiveModalHeader>
         <LoadingButton
+          className="w-full md:w-1/2 m-auto mt-4 md:mt-0"
           loading={loading}
           onClick={async () => {
+            if (!userEmail) {
+              toast.error("Email not found", {
+                id: "login-error",
+              });
+              setOpen(false);
+              return;
+            }
             setLoading(true);
             const res = await sendEmailVerificationLink(userEmail, null);
             setLoading(false);
@@ -50,8 +60,8 @@ const SendEmailVerificationModel = ({
         >
           Send Verification Link
         </LoadingButton>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
   );
 };
 export default SendEmailVerificationModel;

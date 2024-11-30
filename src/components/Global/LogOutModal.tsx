@@ -1,15 +1,15 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import LoadingButton from "../ui/loading-button";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalDescription,
+  ResponsiveModalFooter,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "@/components/ui/responsive-dailog";
 
 interface LogOutModalProps {
   open: boolean;
@@ -25,17 +25,19 @@ const LogOutModal = ({ open, setOpen }: LogOutModalProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are You Sure You Want to Log Out?</DialogTitle>
-          <DialogDescription>
+    <ResponsiveModal open={open} onOpenChange={setOpen}>
+      <ResponsiveModalContent>
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>
+            Are You Sure You Want to Log Out?
+          </ResponsiveModalTitle>
+          <ResponsiveModalDescription>
             You are about to log out of your account. Are you sure you want to
             leave? If you're done, click Log Out, otherwise click Cancel to stay
             logged in.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
+          </ResponsiveModalDescription>
+        </ResponsiveModalHeader>
+        <ResponsiveModalFooter className="mt-5">
           <div className="flex w-full justify-between">
             <Button onClick={() => setOpen(false)} variant={"outline"}>
               Cancel
@@ -45,9 +47,9 @@ const LogOutModal = ({ open, setOpen }: LogOutModalProps) => {
               Log Out
             </LoadingButton>
           </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </ResponsiveModalFooter>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
   );
 };
 export default LogOutModal;
