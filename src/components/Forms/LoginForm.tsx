@@ -64,7 +64,11 @@ const LoginForm = ({ error }: LoginFormProps) => {
     onSuccess: ({ data }) => {
       if (data?.error) {
         if (data.error === "e") {
-          setAuthError("Your Email is not verified, Please Verify Your Email");
+          toast.error("Your Email is not verified, Please Verify Your Email", {
+            id: "login-error",
+            position: "top-center",
+          });
+
           setOpenEmailDialog(true);
         } else {
           setAuthError(data.error);
