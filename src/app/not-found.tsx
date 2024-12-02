@@ -1,4 +1,3 @@
-"use client";
 import Lottie404 from "@/components/Lottie/404";
 import { Button } from "@/components/ui/button";
 import Particles from "@/components/ui/particles";

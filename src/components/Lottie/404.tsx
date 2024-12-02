@@ -1,3 +1,4 @@
+"use client";
 import Lottie from "lottie-react";
 import Lottie404Data from "../../../public/lottie/Lottie404.json";
 const Lottie404 = () => {
