@@ -31,6 +31,8 @@ export const login = action
     //todo: check for email verified or not and send email verification link
     const isEmailVerified = existingUser.emailVerified;
     if (!isEmailVerified) {
+      console.log("email not verified");
+
       return { error: "e" };
     }
 
