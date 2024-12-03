@@ -5,9 +5,11 @@ import { cn } from "@/lib/utils";
 import { UserType } from "@prisma/client";
 import { Building, Loader2, User } from "lucide-react";
 import { useState } from "react";
+export const dynamic = "force-dynamic";
 interface ChooseCardProps {
   updateUserType: (type: UserType) => Promise<void>;
 }
+
 const ChooseCard = ({ updateUserType }: ChooseCardProps) => {
   const [loading, setLoading] = useState(false);
   return (

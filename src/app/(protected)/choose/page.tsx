@@ -11,7 +11,9 @@ import {
 } from "@/routes";
 import prisma from "@/lib/prisma";
 import { UserType } from "@prisma/client";
+import dynamic from "next/dynamic";
 import ChooseCard from "./ChooseCard";
+
 const Choose = async () => {
   const session = await auth();
   const user = session?.user;
