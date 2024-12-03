@@ -1,12 +1,9 @@
 "use client";
 import Lottie404 from "@/components/Lottie/404";
 import { Button } from "@/components/ui/button";
-import dynamic from "next/dynamic";
+import Particles from "@/components/ui/particles";
 import Link from "next/link";
-
-const Particles = dynamic(() => import("@/components/ui/particles"), {
-  ssr: false,
-});
+export const dynamic = "force-dynamic";
 
 const NotFoundPage = () => {
   return (
