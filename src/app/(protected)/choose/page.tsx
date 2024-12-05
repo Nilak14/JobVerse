@@ -17,6 +17,7 @@ const Choose = async () => {
   const user = session?.user;
 
   const dbUser = await getUserByEmail(user?.email!);
+
   if (dbUser?.userType) {
     if (dbUser.userType === "JOB_SEEKER") {
       redirect(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER);

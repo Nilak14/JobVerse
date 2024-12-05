@@ -6,6 +6,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { redirect } from "next/navigation";
 
 const SidebarLayout = async ({
   children,
@@ -14,6 +15,9 @@ const SidebarLayout = async ({
 }) => {
   const session = await auth();
   const user = session?.user;
+  if (!user) {
+    redirect("/login");
+  }
   return (
     <SidebarProvider>
       <div className="flex  h-screen w-full">
