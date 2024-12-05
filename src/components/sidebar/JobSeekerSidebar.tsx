@@ -15,11 +15,7 @@ import { SidebarUser } from "./SidebarUser";
 import { JobSeekerSideBarLinks } from "@/lib/data";
 import { ExtendedUser } from "@/next-auth";
 
-export default function JobSeekerSidebar({
-  user,
-}: {
-  user: ExtendedUser | undefined;
-}) {
+export default function JobSeekerSidebar({ user }: { user: ExtendedUser }) {
   const sidebarLinks = JobSeekerSideBarLinks;
 
   return (

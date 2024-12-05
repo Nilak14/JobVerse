@@ -72,6 +72,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
           setOpenEmailDialog(true);
         } else {
           setAuthError(data.error);
+          setOpenEmailDialog(false);
         }
       } else if (data?.success) {
         toast.success(data.success, { id: "login" });
