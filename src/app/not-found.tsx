@@ -1,5 +1,6 @@
 "use client";
 
+import NotFoundLOttie from "@/components/Lottie/NotFound";
 import { Button } from "@/components/ui/button";
 import Particles from "@/components/ui/particles";
 import Link from "next/link";
@@ -13,6 +14,7 @@ const NotFoundPage = () => {
         ease={80}
         refresh
       />
+      <NotFoundLOttie />
       <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold text-center">
         Not Found
       </h1>
