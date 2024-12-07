@@ -1,4 +1,10 @@
-import { Briefcase, LayoutDashboard, Video, FileUser } from "lucide-react";
+import {
+  Briefcase,
+  LayoutDashboard,
+  Video,
+  FileUser,
+  Globe,
+} from "lucide-react";
 import { LandingPageNavLinks, SidebarNavLinks } from "./types";
 
 // NavLinks for landing page
@@ -33,6 +39,28 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
         title: "Create CV",
         url: "/job-seeker/design-studio/create-cv",
         icon: FileUser,
+      },
+    ],
+  },
+];
+
+// Sidebar NavLinks for Company
+
+export const CompanySideBarLinks: SidebarNavLinks[] = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    url: "/company/dashboard",
+  },
+  {
+    title: "Design Studio",
+    icon: Video,
+    url: "/company/design-studio",
+    items: [
+      {
+        title: "Create Website",
+        url: "/company/design-studio/create-website",
+        icon: Globe,
       },
     ],
   },

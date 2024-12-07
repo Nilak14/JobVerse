@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 
-const SidebarLayout = async ({
+const JObSeekerSidebarLayout = async ({
   children,
 }: {
   children: React.ReactElement;
@@ -39,4 +39,4 @@ const SidebarLayout = async ({
     </SidebarProvider>
   );
 };
-export default SidebarLayout;
+export default JObSeekerSidebarLayout;

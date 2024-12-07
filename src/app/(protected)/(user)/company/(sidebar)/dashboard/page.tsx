@@ -1,6 +1,11 @@
 import { auth, signOut } from "@/auth";
+import { Metadata } from "next";
 
-const CompanyHomePage = async () => {
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Dashboard For Company",
+};
+const CompanyDashboardPage = async () => {
   const session = await auth();
   return (
     <form
@@ -16,4 +21,4 @@ const CompanyHomePage = async () => {
     </form>
   );
 };
-export default CompanyHomePage;
+export default CompanyDashboardPage;

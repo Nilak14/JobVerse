@@ -9,7 +9,6 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,13 +29,18 @@ import { ExtendedUser } from "@/next-auth";
 import LogOutModal from "../Global/LogOutModal";
 import React from "react";
 import UserAvatar from "../Global/Useravatar";
+import CompanyUserMenu from "../Global/CompanyUserMenu";
+import JobSeekerUserMenu from "../Global/JobSeekerUserMenu";
+import AdminUserMenu from "../Global/AdminUserMenu";
 
 export function SidebarUser({
   isLoading,
   user,
+  isNav = false,
 }: {
   user: ExtendedUser;
   isLoading: boolean;
+  isNav?: boolean;
 }) {
   const { isMobile } = useSidebar();
   const [open, setOpen] = React.useState(false);
@@ -52,27 +56,29 @@ export function SidebarUser({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <UserAvatar imageUrl={user?.avatarUrl} userName={user?.name!} />
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  {isLoading ? (
-                    <>
-                      <Skeleton className="w-[70%] mb-2 h-2 bg-gray-400" />
-                      <Skeleton className="w-full h-2 bg-gray-400" />
-                    </>
-                  ) : (
-                    <>
-                      <span className="truncate font-semibold">
-                        {user?.name}
-                      </span>
-                      <span className="truncate text-xs">{user?.email}</span>
-                    </>
-                  )}
-                </div>
-                <ChevronsUpDown className="ml-auto size-4" />
+                {isNav || (
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    {isLoading ? (
+                      <>
+                        <Skeleton className="w-[70%] mb-2 h-2 bg-gray-400" />
+                        <Skeleton className="w-full h-2 bg-gray-400" />
+                      </>
+                    ) : (
+                      <>
+                        <span className="truncate font-semibold">
+                          {user?.name}
+                        </span>
+                        <span className="truncate text-xs">{user?.email}</span>
+                      </>
+                    )}
+                  </div>
+                )}
+                {isNav || <ChevronsUpDown className="ml-auto size-4" />}
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-              side={isMobile ? "bottom" : "right"}
+              side={isMobile ? "bottom" : isNav ? "bottom" : "right"}
               align="end"
               sideOffset={4}
             >
@@ -89,27 +95,9 @@ export function SidebarUser({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Sparkles />
-                  Upgrade to Pro
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <BadgeCheck />
-                  Account
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CreditCard />
-                  Billing
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Bell />
-                  Notifications
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
+              {user.type === "COMPANY" && <CompanyUserMenu />}
+              {user.type === "JOB_SEEKER" && <JobSeekerUserMenu />}
+              {user.type === "ADMIN" && <AdminUserMenu />}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setOpen(true)}>
                 <LogOut />

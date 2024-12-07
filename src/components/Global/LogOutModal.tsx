@@ -39,7 +39,11 @@ const LogOutModal = ({ open, setOpen }: LogOutModalProps) => {
         </ResponsiveModalHeader>
         <ResponsiveModalFooter className="mt-5">
           <div className="flex w-full justify-between">
-            <Button onClick={() => setOpen(false)} variant={"outline"}>
+            <Button
+              disabled={isLoading}
+              onClick={() => setOpen(false)}
+              variant={"outline"}
+            >
               Cancel
             </Button>
 
