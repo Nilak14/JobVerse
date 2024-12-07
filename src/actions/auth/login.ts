@@ -17,6 +17,7 @@ export const login = action
   .schema(LoginSchema)
   .action(async ({ parsedInput: { identifier, password } }) => {
     const existingUser = await getUserByEmail(identifier);
+
     if (!existingUser || !existingUser.email || !existingUser.password) {
       return { error: "Invalid Credentials" };
     }

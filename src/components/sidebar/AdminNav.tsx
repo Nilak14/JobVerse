@@ -4,7 +4,7 @@ import { Logo } from "../LandingPage/NavBar";
 import { SidebarUser } from "./SidebarUser";
 import { UserNavProps } from "@/lib/types";
 
-const CompanyNav = ({ hasSidebar = false, user }: UserNavProps) => {
+const AdminNav = ({ hasSidebar = false, user }: UserNavProps) => {
   return (
     <header>
       <Container className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 bg-sidebar shadow-sm shadow-muted-foreground">
@@ -27,4 +27,4 @@ const CompanyNav = ({ hasSidebar = false, user }: UserNavProps) => {
     </header>
   );
 };
-export default CompanyNav;
+export default AdminNav;

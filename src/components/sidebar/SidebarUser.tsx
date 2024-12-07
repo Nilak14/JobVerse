@@ -32,6 +32,7 @@ import UserAvatar from "../Global/Useravatar";
 import CompanyUserMenu from "../Global/CompanyUserMenu";
 import JobSeekerUserMenu from "../Global/JobSeekerUserMenu";
 import AdminUserMenu from "../Global/AdminUserMenu";
+import ThemeSelect from "../Global/ThemeSelect";
 
 export function SidebarUser({
   isLoading,
@@ -98,6 +99,8 @@ export function SidebarUser({
               {user.type === "COMPANY" && <CompanyUserMenu />}
               {user.type === "JOB_SEEKER" && <JobSeekerUserMenu />}
               {user.type === "ADMIN" && <AdminUserMenu />}
+              <DropdownMenuSeparator />
+              <ThemeSelect />
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setOpen(true)}>
                 <LogOut />
