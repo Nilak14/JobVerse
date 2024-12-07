@@ -91,12 +91,14 @@ export function Logo({
   fill = "white",
   classname,
   textSize = "text-xl",
+  showText = true,
 }: {
   width?: string;
   height?: string;
   fill?: string;
   classname?: string;
   textSize?: string;
+  showText?: boolean;
 }) {
   return (
     <Link
@@ -105,7 +107,9 @@ export function Logo({
       prefetch={false}
     >
       <JobVerseLogo width={width + "px"} height={height + "px"} fill={fill} />
-      <span className={` ${textSize} tracking-wide`}>JobVerse</span>
+      {showText && (
+        <span className={` ${textSize} tracking-wide`}>JobVerse</span>
+      )}
     </Link>
   );
 }

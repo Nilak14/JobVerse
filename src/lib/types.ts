@@ -1,3 +1,4 @@
+import { ExtendedUser } from "@/next-auth";
 import { LucideIcon } from "lucide-react";
 
 export interface LandingPageNavLinks {
@@ -14,4 +15,9 @@ export interface SidebarNavLinks {
     url: string;
     icon?: LucideIcon;
   }[];
+}
+
+export interface UserNavProps {
+  hasSidebar?: boolean;
+  user: ExtendedUser;
 }

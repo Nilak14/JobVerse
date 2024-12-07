@@ -21,6 +21,7 @@ import { useAction } from "next-safe-action/hooks";
 import { register } from "@/actions/auth/register";
 import { toast } from "sonner";
 import FormHeader from "./FormHeader";
+import { cn } from "@/lib/utils";
 
 const JobSeekerRegisterForm = () => {
   const form = useForm<RegisterSchemaType>({
@@ -151,7 +152,10 @@ const JobSeekerRegisterForm = () => {
         </Form>
         <div className="text-right text-xs mt-3 font-semibold flex items-center justify-end gap-1">
           <span>Switch To </span>{" "}
-          <Link href={"/register/company"}>
+          <Link
+            className={cn(status === "executing" && "pointer-events-none")}
+            href={"/register/company"}
+          >
             <span className=" text-primary font-semibold tracking-wide relative group cursor-pointer">
               Register as Company
               <div className="bg-primary w-0 h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out block absolute right-0"></div>
@@ -163,10 +167,20 @@ const JobSeekerRegisterForm = () => {
           <span className="text-muted-foreground">or</span>
           <Separator className="bg-black dark:bg-border" />
         </div>
-        <GoogleButton userType="JOB_SEEKER" className="w-full" />
+        <GoogleButton
+          isDisabled={status === "executing"}
+          userType="JOB_SEEKER"
+          className="w-full"
+        />
         <div className="text-center my-10 text-sm">
           <span>Already have an account? </span>
-          <Link className="text-primary relative group" href={"/login"}>
+          <Link
+            className={cn(
+              "text-primary relative group",
+              status === "executing" && "pointer-events-none"
+            )}
+            href={"/login"}
+          >
             Sign In
             <div className="bg-primary w-0 h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out block absolute right-0"></div>
           </Link>

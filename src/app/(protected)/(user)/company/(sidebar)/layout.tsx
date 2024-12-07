@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
-import ThemeSelect from "@/components/Global/ThemeSelect";
-import JobSeekerNav from "@/components/sidebar/JobSeekerNav";
-import JobSeekerSidebar from "@/components/sidebar/JobSeekerSidebar";
+import CompanyNav from "@/components/sidebar/CompanyNav";
+import CompanySidebar from "@/components/sidebar/CompanySidebar";
 import {
   SidebarInset,
   SidebarProvider,
@@ -9,10 +8,10 @@ import {
 } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 
-const JObSeekerSidebarLayout = async ({
+const CompanySidebarLayout = async ({
   children,
 }: {
-  children: React.ReactElement;
+  children: React.ReactNode;
 }) => {
   const session = await auth();
   const user = session?.user;
@@ -21,12 +20,12 @@ const JObSeekerSidebarLayout = async ({
   }
   return (
     <SidebarProvider>
-      <div className="flex  h-screen w-full">
-        <JobSeekerSidebar user={user} />
+      <div className="flex w-full h-screen">
+        <CompanySidebar user={user} />
         <SidebarInset>
           <div className="relative">
             <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2" />
-            <JobSeekerNav user={user} hasSidebar />
+            <CompanyNav user={user} hasSidebar />
           </div>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">{children}</div>
         </SidebarInset>
@@ -34,4 +33,4 @@ const JObSeekerSidebarLayout = async ({
     </SidebarProvider>
   );
 };
-export default JObSeekerSidebarLayout;
+export default CompanySidebarLayout;

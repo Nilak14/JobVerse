@@ -13,6 +13,7 @@ const NotFoundPage = () => {
         refresh
       />
       <DotLottieReact
+        className="w-1/2 mx-auto"
         src="https://lottie.host/ded198d1-1a3c-4a73-ad24-670ff21550c1/JhgEh4vjrI.lottie"
         loop
         autoplay

@@ -7,11 +7,17 @@ import { setCookie } from "cookies-next";
 interface GoogleButtonProps {
   className?: string;
   userType?: UserType;
+  isDisabled: boolean;
 }
-const GoogleButton = ({ className, userType }: GoogleButtonProps) => {
+const GoogleButton = ({
+  className,
+  userType,
+  isDisabled,
+}: GoogleButtonProps) => {
   return (
     <>
       <Button
+        disabled={isDisabled}
         onClick={async () => {
           if (userType) {
             setCookie("type", userType);
