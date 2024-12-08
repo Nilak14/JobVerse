@@ -27,6 +27,7 @@ import FormHeader from "./FormHeader";
 import { useRouter } from "next/navigation";
 
 import SendEmailVerificationModel from "../Global/SendEmailVerificationModel";
+import { cn } from "@/lib/utils";
 
 interface LoginFormProps {
   error: string;
@@ -141,7 +142,13 @@ const LoginForm = ({ error }: LoginFormProps) => {
               />
             </div>
             <div className="text-right text-primary text-xs mt-2  ">
-              <Link className="group relative " href="/forget-password">
+              <Link
+                className={cn(
+                  "group relative",
+                  status === "executing" && "pointer-events-none"
+                )}
+                href="/forget-password"
+              >
                 Forgot Password?
                 <div className="bg-primary w-0  h-[1px] group-hover:w-full transition-all duration-300 ease-in-out  block absolute right-0"></div>
               </Link>
@@ -162,12 +169,15 @@ const LoginForm = ({ error }: LoginFormProps) => {
           <span className="text-muted-foreground">or</span>
           <Separator className="bg-black dark:bg-border" />
         </div>
-        <GoogleButton className="w-full " />
+        <GoogleButton isDisabled={status === "executing"} className="w-full " />
         <div className="text-center my-10 text-sm">
           <span>New To JobVerse? </span>
           <span
             onClick={() => setOpen(!open)}
-            className=" cursor-pointer text-primary relative group"
+            className={cn(
+              " cursor-pointer text-primary relative group",
+              status === "executing" && "pointer-events-none"
+            )}
           >
             Register Now
             <div className="bg-primary w-0  h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out  block absolute right-0"></div>
