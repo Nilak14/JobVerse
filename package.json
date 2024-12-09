@@ -9,6 +9,7 @@
     "lint": "next lint",
     "db:push": "npx prisma db push",
     "db:reset": "npx prisma migrate reset",
+    "db:view": "npx prisma studio",
     "email": "email dev --dir src/template/emails",
     "postinstall": "prisma generate --no-engine"
   },
