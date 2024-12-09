@@ -1,6 +1,6 @@
 "use client";
 
-import { CompanySideBarLinks } from "@/lib/data";
+import { EmployerSideBarLinks } from "@/lib/data";
 import { ExtendedUser } from "@/next-auth";
 import {
   Sidebar,
@@ -12,8 +12,8 @@ import { SidebarTop } from "./SidebarTop";
 import { SidebarMainNav } from "./SidebarMainNav";
 import { SidebarUser } from "./SidebarUser";
 
-const CompanySidebar = ({ user }: { user: ExtendedUser }) => {
-  const sidebarLinks = CompanySideBarLinks;
+const EmployerSidebar = ({ user }: { user: ExtendedUser }) => {
+  const sidebarLinks = EmployerSideBarLinks;
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -32,4 +32,4 @@ const CompanySidebar = ({ user }: { user: ExtendedUser }) => {
     </Sidebar>
   );
 };
-export default CompanySidebar;
+export default EmployerSidebar;

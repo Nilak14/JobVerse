@@ -44,22 +44,22 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
   },
 ];
 
-// Sidebar NavLinks for Company
+// Sidebar NavLinks for Employer
 
-export const CompanySideBarLinks: SidebarNavLinks[] = [
+export const EmployerSideBarLinks: SidebarNavLinks[] = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
-    url: "/company/dashboard",
+    url: "/employer/dashboard",
   },
   {
     title: "Design Studio",
     icon: Video,
-    url: "/company/design-studio",
+    url: "/employer/design-studio",
     items: [
       {
         title: "Create Website",
-        url: "/company/design-studio/create-website",
+        url: "/employer/design-studio/create-website",
         icon: Globe,
       },
     ],

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db": "npx prisma db push",
+    "db:push": "npx prisma db push",
+    "db:reset": "npx prisma migrate reset",
     "email": "email dev --dir src/template/emails",
     "postinstall": "prisma generate --no-engine"
   },

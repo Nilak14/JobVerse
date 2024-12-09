@@ -5,7 +5,7 @@ import {
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 
-const CompanyUserMenu = () => {
+const EmployerUserMenu = () => {
   return (
     <>
       <DropdownMenuGroup>
@@ -18,7 +18,7 @@ const CompanyUserMenu = () => {
       <DropdownMenuGroup>
         <DropdownMenuItem>
           <BadgeCheck />
-          Account (Company)
+          Account (Employer)
         </DropdownMenuItem>
         <DropdownMenuItem>
           <CreditCard />
@@ -32,4 +32,4 @@ const CompanyUserMenu = () => {
     </>
   );
 };
-export default CompanyUserMenu;
+export default EmployerUserMenu;

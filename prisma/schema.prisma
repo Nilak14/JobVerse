@@ -11,23 +11,23 @@ datasource db {
 enum UserType {
   ADMIN
   JOB_SEEKER
-  COMPANY
+  EMPLOYER
 }
 
 model User {
-  id            String       @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String       @unique
+  email         String      @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
   userType      UserType?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  COMPANY       COMPANY[]
-  JOB_SEEKER    JOB_SEEKER[]
-  isBlocked     Boolean      @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  EMPLOYER      Employer?
+  JOB_SEEKER    JOB_SEEKER?
+  isBlocked     Boolean     @default(false)
 
   @@map("users")
 }
@@ -74,20 +74,31 @@ model ResetPasswordToken {
   @@map("reset_password_tokens")
 }
 
-model COMPANY {
-  id                 String  @id @default(cuid())
-  companyDescription String?
-  companyWebsite     String?
-  userId             String
-  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Employer {
+  id            String         @id @default(cuid())
+  userId        String         @unique
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizations Organization[] @relation("EmployerOrganizations")
 
-  @@map("companies")
+  @@map("employers")
 }
 
 model JOB_SEEKER {
   id     String @id @default(cuid())
-  userId String
+  userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("job_seekers")
+}
+
+model Organization {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  website     String?
+  Employer    Employer[] @relation("EmployerOrganizations")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("organizations")
 }

@@ -4,12 +4,14 @@ import { MagicCard } from "@/components/ui/magic-card";
 import { cn } from "@/lib/utils";
 import { UserType } from "@prisma/client";
 import { Building, Loader2, User } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useState } from "react";
 interface ChooseCardProps {
   updateUserType: (type: UserType) => Promise<void>;
 }
 const ChooseCard = ({ updateUserType }: ChooseCardProps) => {
   const [loading, setLoading] = useState(false);
+  const { theme } = useTheme();
   return (
     <>
       <div
@@ -32,8 +34,8 @@ const ChooseCard = ({ updateUserType }: ChooseCardProps) => {
             </div>
           )}
           <MagicCard
-            gradientColor="gray"
-            className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 text-white flex justify-center flex-col gap-3 px-4"
+            gradientColor={theme === "dark" ? "gray" : "#d9d9d9"}
+            className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 dark:text-white text-black flex justify-center flex-col gap-3 px-4"
           >
             <div className="flex gap-2 ">
               <User className=" size-6 sm:size-9 " />
@@ -55,7 +57,7 @@ const ChooseCard = ({ updateUserType }: ChooseCardProps) => {
           className="relative z-10"
           onClick={async () => {
             setLoading(true);
-            await updateUserType("COMPANY");
+            await updateUserType("EMPLOYER");
             setLoading(false);
           }}
         >
@@ -65,18 +67,18 @@ const ChooseCard = ({ updateUserType }: ChooseCardProps) => {
             </div>
           )}
           <MagicCard
-            gradientColor="gray"
-            className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 text-white flex justify-center flex-col gap-3 px-4"
+            gradientColor={theme === "dark" ? "gray" : "#d9d9d9"}
+            className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 dark:text-white text-black flex justify-center flex-col gap-3 px-4"
           >
             <div className="flex gap-2 ">
               <Building className=" size-6 sm:size-9 " />
               <span className="text-lg font-semibold block sm:hidden">
-                Company
+                Employer
               </span>
             </div>
             <div>
               <span className="text-lg hidden sm:block font-semibold mt-2">
-                Company
+                Employer
               </span>
               <span className="text-xs mt-2 text-slate-100">
                 Post Job / Hire Talents

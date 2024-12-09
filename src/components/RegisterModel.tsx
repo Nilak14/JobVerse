@@ -60,7 +60,7 @@ const RegisterModel = ({
                 </div>
               </MagicCard>
             </RegisterLinks>
-            <RegisterLinks href="/register/company" className="relative">
+            <RegisterLinks href="/register/employer" className="relative">
               <MagicCard
                 gradientColor={theme === "dark" ? "gray" : "#d9d9d9"}
                 className=" cursor-pointer w-52 sm:w-56 h-28 sm:h-40 bg-background rounded-md border-input border-2 dark:text-white text-black flex justify-center flex-col gap-3 px-4"
@@ -68,12 +68,12 @@ const RegisterModel = ({
                 <div className="flex gap-2 ">
                   <Building className=" size-6 sm:size-9 " />
                   <span className="text-lg font-semibold block sm:hidden">
-                    Company
+                    Employer
                   </span>
                 </div>
                 <div>
                   <span className="text-lg hidden sm:block font-semibold mt-2">
-                    Company
+                    Employer
                   </span>
                   <span className="text-xs mt-2 break-all whitespace-nowrap text-muted-foreground dark:text-slate-100">
                     Post Job / Hire Talents

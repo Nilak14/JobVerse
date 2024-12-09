@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { getUserByEmail } from "@/data-access/user";
 import {
   DEFAULT_LOGIN_REDIRECT_ADMIN,
-  DEFAULT_LOGIN_REDIRECT_COMPANY,
+  DEFAULT_LOGIN_REDIRECT_EMPLOYER,
   DEFAULT_LOGIN_REDIRECT_JOB_SEEKER,
 } from "@/routes";
 import prisma from "@/lib/prisma";
@@ -21,8 +21,8 @@ const Choose = async () => {
   if (dbUser?.userType) {
     if (dbUser.userType === "JOB_SEEKER") {
       redirect(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER);
-    } else if (dbUser.userType === "COMPANY") {
-      redirect(DEFAULT_LOGIN_REDIRECT_COMPANY);
+    } else if (dbUser.userType === "EMPLOYER") {
+      redirect(DEFAULT_LOGIN_REDIRECT_EMPLOYER);
     } else if (dbUser.userType === "ADMIN") {
       redirect(DEFAULT_LOGIN_REDIRECT_ADMIN);
     }
@@ -39,8 +39,8 @@ const Choose = async () => {
     });
     if (type === "JOB_SEEKER") {
       redirect(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER);
-    } else if (type === "COMPANY") {
-      redirect(DEFAULT_LOGIN_REDIRECT_COMPANY);
+    } else if (type === "EMPLOYER") {
+      redirect(DEFAULT_LOGIN_REDIRECT_EMPLOYER);
     } else if (type === "ADMIN") {
       redirect(DEFAULT_LOGIN_REDIRECT_ADMIN);
     }
