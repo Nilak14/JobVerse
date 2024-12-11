@@ -25,6 +25,7 @@ export default auth((req) => {
   const isPublicApiRoute = publicApiRoute.includes(nextUrl.pathname);
   const isEmployerRoute = nextUrl.pathname.startsWith(employerRoutePrefix);
   const isJobSeekerRoute = nextUrl.pathname.startsWith(jobSeekerRoutePrefix);
+  const isOnboardingRoute = nextUrl.pathname.startsWith("/onboarding");
   const isAdminRoute = nextUrl.pathname.startsWith(adminRoutePrefix);
   const redirectRoute = nextUrl.pathname === "/redirect";
 
@@ -50,7 +51,7 @@ export default auth((req) => {
     return Response.redirect(new URL("/redirect", nextUrl));
   }
   if (isLoggedIn) {
-    if (redirectRoute || nextUrl.pathname === "/choose") {
+    if (redirectRoute || nextUrl.pathname === "/choose" || isOnboardingRoute) {
       return;
     }
     if (req.auth?.user?.type) {
