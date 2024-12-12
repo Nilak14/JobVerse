@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -8,18 +8,21 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   if (!user || user.type !== "EMPLOYER") {
     redirect("/login");
   }
-  const isInOrganization = await prisma.user.findUnique({
+  const employer = await prisma.user.findUnique({
     where: { id: user.id },
     include: {
       EMPLOYER: {
         include: {
-          organizations: true,
+          companies: true,
         },
       },
     },
   });
-  console.log(isInOrganization);
 
+  const isOnCompany = employer?.EMPLOYER?.companies.length;
+  if (!isOnCompany) {
+    redirect("/onboarding/employer");
+  }
   return <>{children}</>;
 };
 export default layout;

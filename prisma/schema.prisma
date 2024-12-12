@@ -14,6 +14,12 @@ enum UserType {
   EMPLOYER
 }
 
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 model User {
   id            String      @id @default(cuid())
   name          String?
@@ -74,15 +80,6 @@ model ResetPasswordToken {
   @@map("reset_password_tokens")
 }
 
-model Employer {
-  id            String         @id @default(cuid())
-  userId        String         @unique
-  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organizations Organization[] @relation("EmployerOrganizations")
-
-  @@map("employers")
-}
-
 model JOB_SEEKER {
   id     String @id @default(cuid())
   userId String @unique
@@ -91,14 +88,47 @@ model JOB_SEEKER {
   @@map("job_seekers")
 }
 
-model Organization {
-  id          String     @id @default(cuid())
-  name        String
-  description String?
-  website     String?
-  Employer    Employer[] @relation("EmployerOrganizations")
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+model Employer {
+  id                  String        @id @default(cuid())
+  userId              String        @unique
+  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companies           Company[]     @relation("EmployerCompanies") // Many-to-Many Relation
+  sentInvitations     Invitations[] @relation("InviterToInvitations") // Invitations sent by the employer
+  receivedInvitations Invitations[] @relation("InviteeToInvitations") // Invitations received by the employer
+  adminCompanies      Company[]     @relation("AdminEmployer") // Companies created by this employer
+  activeCompanyId     String? // ID of the company the employer is currently active in
 
-  @@map("organizations")
+  @@map("employers")
+}
+
+model Company {
+  id              String        @id @default(cuid())
+  logoUrl         String?
+  name            String
+  description     String?
+  website         String?
+  adminEmployerId String // ID of the employer who created this company
+  adminEmployer   Employer      @relation("AdminEmployer", fields: [adminEmployerId], references: [id], onDelete: Cascade) // Relation to the admin employer
+  employers       Employer[]    @relation("EmployerCompanies") // Many-to-Many Relation
+  invitations     Invitations[] // Invitations related to the company
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("companies")
+}
+
+model Invitations {
+  id        String   @id @default(cuid())
+  inviterId String // The employer who is sending the invitation
+  inviteeId String // The employer being invited
+  companyId String // The company for which the invitation is being sent
+  status    String   @default("PENDING") // Status of the invitation (PENDING, ACCEPTED, REJECTED)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inviter Employer @relation("InviterToInvitations", fields: [inviterId], references: [id], onDelete: Cascade)
+  invitee Employer @relation("InviteeToInvitations", fields: [inviteeId], references: [id], onDelete: Cascade)
+  company Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("invitations")
 }

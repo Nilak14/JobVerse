@@ -36,6 +36,9 @@ export default auth((req) => {
   if (isPublicApiRoute) {
     return;
   }
+  if (nextUrl.pathname.startsWith("/api")) {
+    return;
+  }
 
   if (isAuthRoute) {
     if (isLoggedIn) {

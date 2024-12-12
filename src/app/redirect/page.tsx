@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import {
   DEFAULT_LOGIN_REDIRECT_ADMIN,
   DEFAULT_LOGIN_REDIRECT_EMPLOYER,

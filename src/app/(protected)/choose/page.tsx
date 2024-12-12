@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { JobVerseLogo } from "../../../../public/logo/jobverse";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 import { getUserByEmail } from "@/data-access/user";

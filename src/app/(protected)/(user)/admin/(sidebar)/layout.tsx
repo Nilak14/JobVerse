@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import AdminNav from "@/components/sidebar/AdminNav";
 import AdminSidebar from "@/components/sidebar/AdminSidebar";
 import {

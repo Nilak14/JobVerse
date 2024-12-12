@@ -8,20 +8,35 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "../ui/sidebar";
-import { SidebarTop } from "./SidebarTop";
 import { SidebarMainNav } from "./SidebarMainNav";
 import { SidebarUser } from "./SidebarUser";
+import { CompanySwitcher } from "./CompanySwitcher";
+import { useQueryAllCompanies } from "@/hooks/query-hooks/getEmployeeCompany";
+import { EmployerCompanies } from "@/lib/prismaTypes";
+import { Skeleton } from "../ui/skeleton";
 
-const EmployerSidebar = ({ user }: { user: ExtendedUser }) => {
+const EmployerSidebar = ({
+  user,
+  activeCompanyId,
+}: {
+  user: ExtendedUser;
+  activeCompanyId?: string | null;
+}) => {
   const sidebarLinks = EmployerSideBarLinks;
+  const { data, isLoading } = useQueryAllCompanies();
+  const companies: EmployerCompanies["companies"] = data?.data.companies;
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarTop
-          userName={user.name as string}
-          isLoading={!user}
-          userSubType="Pro"
-        />
+        {isLoading ? (
+          <Skeleton className="w-full h-12 flex items-center"></Skeleton>
+        ) : (
+          <CompanySwitcher
+            activeCompanyId={activeCompanyId}
+            user={user}
+            companies={companies}
+          />
+        )}
       </SidebarHeader>
       <SidebarContent>
         <SidebarMainNav items={sidebarLinks} />

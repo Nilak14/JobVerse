@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import EmployerNav from "@/components/sidebar/EmployerNav";
 import EmployerSidebar from "@/components/sidebar/EmployerSidebar";
 import {
@@ -18,10 +18,16 @@ const EmployerSidebarLayout = async ({
   if (!user || user.type !== "EMPLOYER") {
     redirect("/login");
   }
+
+  console.log(session);
+
   return (
     <SidebarProvider>
       <div className="flex w-full h-screen">
-        <EmployerSidebar user={user} />
+        <EmployerSidebar
+          activeCompanyId={session.activeCompanyId}
+          user={user}
+        />
         <SidebarInset>
           <div className="relative">
             <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2" />

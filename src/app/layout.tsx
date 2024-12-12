@@ -8,6 +8,7 @@ import NextTopLoader from "nextjs-toploader";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "./api/uploadthing/core";
+import ReactQueryProvider from "@/context/ReactQueryProvider";
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = METADATA_CONFIG;
@@ -36,16 +37,18 @@ export default function RootLayout({
       <link rel="manifest" href="/favicon/site.webmanifest" />
       <body className={`${font.className} antialiased`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextTopLoader height={5} color="#e9590c" />
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <ReactQueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NextTopLoader height={5} color="#e9590c" />
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
