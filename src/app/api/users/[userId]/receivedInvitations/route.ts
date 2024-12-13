@@ -4,8 +4,9 @@ import { NextRequest } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  { params: { userId } }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) => {
+  const { userId } = await params;
   try {
     const session = await auth();
 
