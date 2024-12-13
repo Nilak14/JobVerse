@@ -25,6 +25,7 @@ import { useAction } from "next-safe-action/hooks";
 import { switchCompany } from "@/actions/SwitchCompany";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import CompanySwitchDialog from "../CompanySwitchDialog";
 
 export function CompanySwitcher({
   companies,
@@ -36,9 +37,12 @@ export function CompanySwitcher({
   activeCompanyId?: string | null;
 }) {
   const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = useState(companies[0]);
+  const [activeCompany, setActiveCompany] = useState(companies[0]);
+  const [selectedCompany, setSelectedCompany] =
+    useState<EmployerCompanies["companies"][0]>();
   const [openCreateCompanyModal, setOpenCreateCompanyModal] = useState(false);
-  const router = useRouter();
+  const [openCompanySwitcherDialog, setOpenCompanySwitcherDialog] =
+    useState(false);
 
   useEffect(() => {
     if (activeCompanyId) {
@@ -46,28 +50,13 @@ export function CompanySwitcher({
         (company) => company.id === activeCompanyId
       );
       if (activeCompany) {
-        setActiveTeam(activeCompany);
+        setActiveCompany(activeCompany);
       } else {
-        setActiveTeam(companies[0]);
+        setActiveCompany(companies[0]);
       }
     }
   }, [activeCompanyId]);
 
-  const { execute, status } = useAction(switchCompany, {
-    onSuccess: ({ data }) => {
-      if (data?.success) {
-        toast.success("Company switched successfully", {
-          id: "switch-company",
-        });
-        router.refresh();
-      } else if (data?.error) {
-        toast.error(data.error, { id: "switch-company" });
-      }
-    },
-    onError: () => {
-      toast.error("Error switching company", { id: "switch-company" });
-    },
-  });
   return (
     <>
       <SidebarMenu>
@@ -80,8 +69,8 @@ export function CompanySwitcher({
               >
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <UserAvatar
-                    imageUrl={activeTeam.logoUrl!}
-                    userName={activeTeam.name}
+                    imageUrl={activeCompany.logoUrl!}
+                    userName={activeCompany.name}
                   />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -90,7 +79,7 @@ export function CompanySwitcher({
                     <span className=" text-amber-400 text-xs absolute ml-1 top-[5.1px] z-[99999] ">{`${"Pro"}`}</span>
                   </span>
                   <span className="truncate text-xs relative">
-                    {activeTeam.name}
+                    {activeCompany.name}
                   </span>
                 </div>
                 <ChevronsUpDown className="ml-auto" />
@@ -105,13 +94,12 @@ export function CompanySwitcher({
               <DropdownMenuLabel className="text-xs text-muted-foreground">
                 Switch Company
               </DropdownMenuLabel>
-              {companies.map((company, index) => (
+              {companies.map((company) => (
                 <DropdownMenuItem
-                  disabled={status === "executing"}
                   key={company.name}
                   onClick={() => {
-                    setActiveTeam(company);
-                    execute({ companyId: company.id });
+                    setSelectedCompany(company);
+                    setOpenCompanySwitcherDialog(true);
                   }}
                   className="gap-5 p-2"
                 >
@@ -145,6 +133,14 @@ export function CompanySwitcher({
           user={user}
           open={openCreateCompanyModal}
           setOpen={setOpenCreateCompanyModal}
+        />
+      )}
+      {selectedCompany && openCompanySwitcherDialog && (
+        <CompanySwitchDialog
+          open={openCompanySwitcherDialog}
+          setOpen={setOpenCompanySwitcherDialog}
+          company={selectedCompany}
+          setActiveCompany={setActiveCompany}
         />
       )}
     </>

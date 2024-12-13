@@ -14,6 +14,7 @@ interface InvitationsModalProps {
   user: ExtendedUser;
 }
 
+//todo Add responsive dialog modal
 const InvitationsModal = ({ open, setOpen, user }: InvitationsModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>

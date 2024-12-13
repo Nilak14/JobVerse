@@ -1,12 +1,12 @@
 "use client";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalDescription,
+  ResponsiveModalFooter,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "@/components/ui/responsive-dailog";
 import { ExtendedUser } from "@/next-auth";
 import AvatarInput from "./Global/AvatarInput";
 import { useState } from "react";
@@ -75,14 +75,14 @@ const CreateCompanyModal = ({
     execute(data);
   };
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create Company</DialogTitle>
-        </DialogHeader>
-        <DialogDescription className="sr-only">
+    <ResponsiveModal open={open} onOpenChange={setOpen}>
+      <ResponsiveModalContent>
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>Create Company</ResponsiveModalTitle>
+        </ResponsiveModalHeader>
+        <ResponsiveModalDescription className="sr-only">
           Enter your company details
-        </DialogDescription>
+        </ResponsiveModalDescription>
         <div className="space-y-1.5">
           <Label>Avatar</Label>
           <AvatarInput
@@ -138,15 +138,15 @@ const CreateCompanyModal = ({
                 </FormItem>
               )}
             />
-            <DialogFooter>
+            <ResponsiveModalFooter>
               <LoadingButton type="submit" loading={status === "executing"}>
                 Create Company
               </LoadingButton>
-            </DialogFooter>
+            </ResponsiveModalFooter>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
   );
 };
 export default CreateCompanyModal;
