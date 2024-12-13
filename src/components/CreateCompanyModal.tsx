@@ -89,7 +89,7 @@ const CreateCompanyModal = ({
             src={
               croppedAvatar
                 ? URL.createObjectURL(croppedAvatar)
-                : user.avatarUrl || "/avatar-placeholder.png"
+                : "/avatar-placeholder.png"
             }
             onImageCropped={setCroppedAvatar}
           />
