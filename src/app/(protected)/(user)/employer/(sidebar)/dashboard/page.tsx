@@ -3,9 +3,9 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Dashboard",
-  description: "Dashboard For Company",
+  description: "Dashboard For Employer",
 };
-const CompanyDashboardPage = async () => {
+const EmployerDashboardPage = async () => {
   const session = await auth();
   return (
     <form
@@ -14,11 +14,11 @@ const CompanyDashboardPage = async () => {
         await signOut();
       }}
     >
-      <h1 className="">Company</h1>
+      <h1 className="">Employer</h1>
       <button type="submit">Log Out</button>
       <h2 className="text-2xl">{session?.user.name}</h2>
       <h2 className="text-2xl">{session?.user.type}</h2>
     </form>
   );
 };
-export default CompanyDashboardPage;
+export default EmployerDashboardPage;

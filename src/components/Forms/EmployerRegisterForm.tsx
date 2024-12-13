@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import FormHeader from "./FormHeader";
 import { cn } from "@/lib/utils";
 
-const CompanyRegisterForm = () => {
+const EmployerRegisterForm = () => {
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -31,7 +31,7 @@ const CompanyRegisterForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      userType: "COMPANY",
+      userType: "EMPLOYER",
     },
     mode: "onChange",
   });
@@ -60,7 +60,7 @@ const CompanyRegisterForm = () => {
         <div className="text-left flex flex-col gap-3 mb-6">
           <FormHeader
             headingText="Get Started!"
-            supportingText="Please register your company details to continue"
+            supportingText="Please register your details to continue"
           />
         </div>
         <Form {...form}>
@@ -70,17 +70,17 @@ const CompanyRegisterForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Company Name</FormLabel>
+                  <FormLabel>Your Name</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-white dark:bg-transparent"
                       disabled={status === "executing"}
-                      placeholder={"Your Company Name"}
+                      placeholder={"Your Full Name"}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    This is your public display company name.
+                    This is your public display name.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -91,12 +91,12 @@ const CompanyRegisterForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Company Email</FormLabel>
+                  <FormLabel>Your Email</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-white dark:bg-transparent"
                       disabled={status === "executing"}
-                      placeholder={"Your Company Email Address"}
+                      placeholder={"Your Email Address"}
                       {...field}
                     />
                   </FormControl>
@@ -171,7 +171,7 @@ const CompanyRegisterForm = () => {
         </div>
         <GoogleButton
           isDisabled={status === "executing"}
-          userType="COMPANY"
+          userType="EMPLOYER"
           className="w-full"
         />
         <div className="text-center my-10 text-sm">
@@ -192,4 +192,4 @@ const CompanyRegisterForm = () => {
   );
 };
 
-export default CompanyRegisterForm;
+export default EmployerRegisterForm;

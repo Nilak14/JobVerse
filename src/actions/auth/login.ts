@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 import { signIn } from "@/auth";
 import {
   DEFAULT_LOGIN_REDIRECT_ADMIN,
-  DEFAULT_LOGIN_REDIRECT_COMPANY,
+  DEFAULT_LOGIN_REDIRECT_EMPLOYER,
   DEFAULT_LOGIN_REDIRECT_JOB_SEEKER,
 } from "@/routes";
 import { AuthError } from "next-auth";
@@ -40,8 +40,8 @@ export const login = action
     let redirectLink;
     if (existingUser.userType === "JOB_SEEKER") {
       redirectLink = DEFAULT_LOGIN_REDIRECT_JOB_SEEKER;
-    } else if (existingUser.userType === "COMPANY") {
-      redirectLink = DEFAULT_LOGIN_REDIRECT_COMPANY;
+    } else if (existingUser.userType === "EMPLOYER") {
+      redirectLink = DEFAULT_LOGIN_REDIRECT_EMPLOYER;
     } else if (existingUser.userType === "ADMIN") {
       redirectLink = DEFAULT_LOGIN_REDIRECT_ADMIN;
     } else {

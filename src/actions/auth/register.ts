@@ -25,19 +25,41 @@ export const register = action
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      await prisma.user.create({
-        data: {
-          email,
-          name,
-          password: hashedPassword,
-          userType,
-        },
-      });
-      const res = await sendEmailVerificationLink(email, name);
-      if (res.success) {
-        return { success: res.success };
-      } else {
-        return { error: res.error };
+      try {
+        await prisma.$transaction(async (prisma) => {
+          const newUser = await prisma.user.create({
+            data: {
+              email,
+              name,
+              password: hashedPassword,
+              userType,
+            },
+          });
+
+          if (userType === "JOB_SEEKER") {
+            await prisma.jOB_SEEKER.create({
+              data: {
+                userId: newUser.id,
+              },
+            });
+          } else if (userType === "EMPLOYER") {
+            await prisma.employer.create({
+              data: {
+                userId: newUser.id,
+              },
+            });
+          }
+        });
+        const res = await sendEmailVerificationLink(email, name);
+        if (res.success) {
+          return { success: res.success };
+        } else {
+          return { error: res.error };
+        }
+      } catch (error) {
+        return {
+          error: "Couldn't register you at a moment, please try again later",
+        };
       }
     }
   );

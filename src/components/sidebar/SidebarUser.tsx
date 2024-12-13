@@ -1,18 +1,10 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, LogOut } from "lucide-react";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -29,7 +21,7 @@ import { ExtendedUser } from "@/next-auth";
 import LogOutModal from "../Global/LogOutModal";
 import React from "react";
 import UserAvatar from "../Global/Useravatar";
-import CompanyUserMenu from "../Global/CompanyUserMenu";
+import EmployerUserMenu from "../Global/EmployerUserMenu";
 import JobSeekerUserMenu from "../Global/JobSeekerUserMenu";
 import AdminUserMenu from "../Global/AdminUserMenu";
 import ThemeSelect from "../Global/ThemeSelect";
@@ -96,7 +88,7 @@ export function SidebarUser({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {user.type === "COMPANY" && <CompanyUserMenu />}
+              {user.type === "EMPLOYER" && <EmployerUserMenu />}
               {user.type === "JOB_SEEKER" && <JobSeekerUserMenu />}
               {user.type === "ADMIN" && <AdminUserMenu />}
               <DropdownMenuSeparator />

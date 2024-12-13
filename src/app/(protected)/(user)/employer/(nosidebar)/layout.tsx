@@ -1,5 +1,5 @@
-import { auth } from "@/auth";
-import CompanyNav from "@/components/sidebar/CompanyNav";
+import { auth } from "@/lib/auth";
+import EmployerNav from "@/components/sidebar/EmployerNav";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 
@@ -13,7 +13,7 @@ const NoSidebarLayout = async ({ children }: { children: React.ReactNode }) => {
     <>
       <SidebarProvider>
         <SidebarInset>
-          <CompanyNav user={user} />
+          <EmployerNav user={user} />
           {children}
         </SidebarInset>
       </SidebarProvider>

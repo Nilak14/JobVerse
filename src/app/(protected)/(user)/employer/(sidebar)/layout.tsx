@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
-import CompanyNav from "@/components/sidebar/CompanyNav";
-import CompanySidebar from "@/components/sidebar/CompanySidebar";
+import { auth } from "@/lib/auth";
+import EmployerNav from "@/components/sidebar/EmployerNav";
+import EmployerSidebar from "@/components/sidebar/EmployerSidebar";
 import {
   SidebarInset,
   SidebarProvider,
@@ -8,24 +8,30 @@ import {
 } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 
-const CompanySidebarLayout = async ({
+const EmployerSidebarLayout = async ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
   const session = await auth();
   const user = session?.user;
-  if (!user) {
+  if (!user || user.type !== "EMPLOYER") {
     redirect("/login");
   }
+
+  console.log(session);
+
   return (
     <SidebarProvider>
       <div className="flex w-full h-screen">
-        <CompanySidebar user={user} />
+        <EmployerSidebar
+          activeCompanyId={session.activeCompanyId}
+          user={user}
+        />
         <SidebarInset>
           <div className="relative">
             <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2" />
-            <CompanyNav user={user} hasSidebar />
+            <EmployerNav user={user} hasSidebar />
           </div>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">{children}</div>
         </SidebarInset>
@@ -33,4 +39,4 @@ const CompanySidebarLayout = async ({
     </SidebarProvider>
   );
 };
-export default CompanySidebarLayout;
+export default EmployerSidebarLayout;

@@ -37,16 +37,19 @@ const CropImageDialog = ({
         <DialogHeader>
           <DialogTitle>Adjust Image</DialogTitle>
         </DialogHeader>
-        <Cropper
-          src={src}
-          aspectRatio={cropAspectRatio}
-          guides={false}
-          zoomable={false}
-          ref={cropperRef}
-          className="mx-auto size-fit"
-        />
+        <div className="overflow-y-auto max-h-[400px] overflow-x-hidden grid place-items-center">
+          <Cropper
+            src={src}
+            aspectRatio={cropAspectRatio}
+            guides={false}
+            zoomable={false}
+            ref={cropperRef}
+            className="mx-auto size-fit"
+          />
+        </div>
+
         <DialogFooter>
-          <div className="flex justify-between w-full">
+          <div className="flex  justify-between w-full">
             <Button variant={"secondary"} onClick={onClose}>
               Cancel
             </Button>

@@ -7,7 +7,7 @@ export const RegisterSchema = z
       .string()
       .trim()
       .min(6, "Password must be at least 6 characters"),
-    userType: z.enum(["JOB_SEEKER", "COMPANY", "ADMIN"]),
+    userType: z.enum(["JOB_SEEKER", "EMPLOYER", "ADMIN"]),
 
     confirmPassword: z
       .string()

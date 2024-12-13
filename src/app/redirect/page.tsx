@@ -1,7 +1,7 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import {
   DEFAULT_LOGIN_REDIRECT_ADMIN,
-  DEFAULT_LOGIN_REDIRECT_COMPANY,
+  DEFAULT_LOGIN_REDIRECT_EMPLOYER,
   DEFAULT_LOGIN_REDIRECT_JOB_SEEKER,
 } from "@/routes";
 import { redirect } from "next/navigation";
@@ -16,8 +16,8 @@ const RedirectPage = async () => {
   switch (user.type) {
     case "JOB_SEEKER":
       redirect(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER);
-    case "COMPANY":
-      redirect(DEFAULT_LOGIN_REDIRECT_COMPANY);
+    case "EMPLOYER":
+      redirect(DEFAULT_LOGIN_REDIRECT_EMPLOYER);
     case "ADMIN":
       redirect(DEFAULT_LOGIN_REDIRECT_ADMIN);
     default:
