@@ -1,0 +1,11 @@
+import { z } from "zod";
+
+export const CompanySchema = z.object({
+  name: z.string().min(1, { message: "Company name is required" }),
+  description: z
+    .string()
+    .min(1, { message: "Company description is required" }),
+  websiteURl: z.optional(z.string().url({ message: "Invalid URL" })),
+});
+
+export type CompanySchemaType = z.infer<typeof CompanySchema>;

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Dashboard",
   description: "Dashboard For Admin",
 };
-const CompanyDashboardPage = async () => {
+const AdminDashboardPage = async () => {
   const session = await auth();
   return (
     <form
@@ -21,4 +21,4 @@ const CompanyDashboardPage = async () => {
     </form>
   );
 };
-export default CompanyDashboardPage;
+export default AdminDashboardPage;

@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import ThemeSelect from "@/components/Global/ThemeSelect";
 import JobSeekerNav from "@/components/sidebar/JobSeekerNav";
 import JobSeekerSidebar from "@/components/sidebar/JobSeekerSidebar";

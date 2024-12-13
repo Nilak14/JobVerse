@@ -1,8 +1,8 @@
-import CompanyRegisterForm from "@/components/Forms/CompanyRegisterForm";
+import EmployerRegisterForm from "@/components/Forms/EmployerRegisterForm";
 import FormSide from "@/components/FormSide";
 import AnimateWrapper from "@/components/Global/AnimateWrapper";
 
-const CompanyRegisterPage = () => {
+const EmployerRegisterPage = () => {
   return (
     <>
       <article className="relative h-[700px] hidden lg:block ">
@@ -15,10 +15,10 @@ const CompanyRegisterPage = () => {
       </article>
       <article className="dark:bg-black bg-primary/30 grid  grid-cols-1  place-content-center">
         <AnimateWrapper className="relative">
-          <CompanyRegisterForm />
+          <EmployerRegisterForm />
         </AnimateWrapper>
       </article>
     </>
   );
 };
-export default CompanyRegisterPage;
+export default EmployerRegisterPage;

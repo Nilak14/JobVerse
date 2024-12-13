@@ -154,10 +154,10 @@ const JobSeekerRegisterForm = () => {
           <span>Switch To </span>{" "}
           <Link
             className={cn(status === "executing" && "pointer-events-none")}
-            href={"/register/company"}
+            href={"/register/employer"}
           >
             <span className=" text-primary font-semibold tracking-wide relative group cursor-pointer">
-              Register as Company
+              Register as Employer
               <div className="bg-primary w-0 h-[1.5px] group-hover:w-full transition-all duration-300 ease-in-out block absolute right-0"></div>
             </span>
           </Link>

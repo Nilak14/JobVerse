@@ -24,7 +24,9 @@ const CardWrapper = ({
   showFooter,
 }: CardWrapperProps) => {
   return (
-    <Card className={cn("w-[400px] shadow-md bg-black", classname)}>
+    <Card
+      className={cn("w-[400px] shadow-md bg-white dark:bg-black", classname)}
+    >
       <CardHeader>
         <div className="w-full flex flex-col items-center justify-center gap-y-4">
           <h1 className="font-semibold">{headerLabel}</h1>

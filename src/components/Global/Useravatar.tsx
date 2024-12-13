@@ -16,7 +16,7 @@ const UserAvatar = ({ imageUrl, userName, classname }: UserAvatarProps) => {
         height={32}
         className="object-cover"
       />
-      <AvatarFallback className="rounded-lg bg-primary">
+      <AvatarFallback className="rounded-lg bg-primary text-white">
         {userName.charAt(0)}
       </AvatarFallback>
     </Avatar>
