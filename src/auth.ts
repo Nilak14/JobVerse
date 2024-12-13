@@ -15,13 +15,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const cookieStore = await cookies();
       const cookie = cookieStore.get("type");
       const userType = cookie?.value as UserType;
-      const updatedUser = await prisma.user.update({
-        where: { id: user.id },
-        data: { emailVerified: new Date(), userType },
+
+      await prisma.$transaction(async (prisma) => {
+        const updatedUser = await prisma.user.update({
+          where: { id: user.id },
+          data: { emailVerified: new Date(), userType },
+        });
+        console.log(updatedUser);
+        console.log(userType);
+
+        if (userType === "JOB_SEEKER") {
+          await prisma.jOB_SEEKER.create({
+            data: {
+              userId: updatedUser.id,
+            },
+          });
+        } else if (userType === "EMPLOYER") {
+          await prisma.employer.create({
+            data: {
+              userId: updatedUser.id,
+            },
+          });
+        }
       });
-      if (updatedUser) {
-        cookieStore.delete("type");
-      }
+      cookieStore.delete("type");
     },
   },
   trustHost: true,

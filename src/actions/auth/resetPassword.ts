@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 import { ResetPasswordSchema } from "@/schema/PasswordResetSchema";
 import bcrypt from "bcryptjs";
 import { createSafeActionClient } from "next-safe-action";
-import { unstable_after as after } from "next/server";
+import { after } from "next/server";
 
 const action = createSafeActionClient();
 

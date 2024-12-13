@@ -47,7 +47,7 @@ const ChooseCard = ({ updateUserType }: ChooseCardProps) => {
               <span className="text-lg font-semibold hidden sm:block mt-2">
                 Job Seeker
               </span>
-              <span className="text-xs mt-2 break-all whitespace-nowrap text-slate-100">
+              <span className="text-xs mt-2 break-all whitespace-nowrap text-black dark:text-slate-100">
                 Search Job / Follow Company
               </span>
             </div>
@@ -80,7 +80,7 @@ const ChooseCard = ({ updateUserType }: ChooseCardProps) => {
               <span className="text-lg hidden sm:block font-semibold mt-2">
                 Employer
               </span>
-              <span className="text-xs mt-2 text-slate-100">
+              <span className="text-xs mt-2 break-all whitespace-nowrap text-black dark:text-slate-100">
                 Post Job / Hire Talents
               </span>
             </div>

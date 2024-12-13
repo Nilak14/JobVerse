@@ -29,7 +29,7 @@ const Choose = async () => {
   }
   const updateUserType = async (type: UserType) => {
     "use server";
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: {
         email: dbUser?.email,
       },
@@ -38,8 +38,18 @@ const Choose = async () => {
       },
     });
     if (type === "JOB_SEEKER") {
+      await prisma.jOB_SEEKER.create({
+        data: {
+          userId: updatedUser.id,
+        },
+      });
       redirect(DEFAULT_LOGIN_REDIRECT_JOB_SEEKER);
     } else if (type === "EMPLOYER") {
+      await prisma.employer.create({
+        data: {
+          userId: updatedUser.id,
+        },
+      });
       redirect(DEFAULT_LOGIN_REDIRECT_EMPLOYER);
     } else if (type === "ADMIN") {
       redirect(DEFAULT_LOGIN_REDIRECT_ADMIN);

@@ -3,8 +3,7 @@
 import { getEmailVerificationTokenByToken } from "@/data-access/tokens/emailVerificationToken";
 import { getUserByEmail } from "@/data-access/user";
 import prisma from "@/lib/prisma";
-import { unstable_after as after } from "next/server";
-
+import { after } from "next/server";
 export const emailVerification = async (token: string) => {
   try {
     const existingToken = await getEmailVerificationTokenByToken(token);

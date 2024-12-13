@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { CompanySchema } from "@/schema/CompanySchema";
 import { createSafeActionClient } from "next-safe-action";
+import { log } from "node:console";
 
 const action = createSafeActionClient();
 
@@ -20,8 +21,9 @@ export const createCompany = action
       // Check if the user is an employer
       const employer = await prisma.employer.findUnique({
         where: { userId: user.id },
-        select: { activeCompanyId: true, id: true },
+        // select: { activeCompanyId: true, id: true },
       });
+      console.log(employer);
 
       if (!employer) {
         throw new Error("Only employers can create companies");
