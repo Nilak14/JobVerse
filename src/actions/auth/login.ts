@@ -52,9 +52,9 @@ export const login = action
       await signIn("credentials", {
         identifier,
         password,
-        redirectTo: redirectLink,
+        redirect: false, // Disable automatic redirection
       });
-      return { success: "Logged In Successfully" };
+      return { redirectLink };
     } catch (error) {
       if (error instanceof AuthError) {
         switch (error.type) {

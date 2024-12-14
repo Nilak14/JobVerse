@@ -21,10 +21,6 @@ import UserAvatar from "../Global/Useravatar";
 import { EmployerCompanies } from "@/lib/prismaTypes";
 import { ExtendedUser } from "@/next-auth";
 import CreateCompanyModal from "../CreateCompanyModal";
-import { useAction } from "next-safe-action/hooks";
-import { switchCompany } from "@/actions/SwitchCompany";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import CompanySwitchDialog from "../CompanySwitchDialog";
 
 export function CompanySwitcher({

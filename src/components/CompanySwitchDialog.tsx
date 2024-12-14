@@ -55,7 +55,11 @@ const CompanySwitchDialog = ({
   });
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent>
+      <ResponsiveModalContent
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+      >
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>Switch Company?</ResponsiveModalTitle>
           <ResponsiveModalDescription className="sr-only">

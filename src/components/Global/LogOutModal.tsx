@@ -25,8 +25,12 @@ const LogOutModal = ({ open, setOpen }: LogOutModalProps) => {
   };
 
   return (
-    <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent>
+    <ResponsiveModal modal={!isLoading} open={open} onOpenChange={setOpen}>
+      <ResponsiveModalContent
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+      >
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>
             Are You Sure You Want to Log Out?

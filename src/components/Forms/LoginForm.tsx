@@ -75,8 +75,8 @@ const LoginForm = ({ error }: LoginFormProps) => {
           setAuthError(data.error);
           setOpenEmailDialog(false);
         }
-      } else if (data?.success) {
-        toast.success(data.success, { id: "login" });
+      } else if (data?.redirectLink) {
+        router.push(data.redirectLink);
         setAuthError(null);
       }
     },
