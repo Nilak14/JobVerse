@@ -25,7 +25,7 @@ const LogOutModal = ({ open, setOpen }: LogOutModalProps) => {
   };
 
   return (
-    <ResponsiveModal modal={!isLoading} open={open} onOpenChange={setOpen}>
+    <ResponsiveModal open={open} onOpenChange={setOpen}>
       <ResponsiveModalContent
         onInteractOutside={(e) => {
           e.preventDefault();

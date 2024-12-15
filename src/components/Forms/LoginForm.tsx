@@ -61,7 +61,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
     }
   }, [authError]);
 
-  const { execute, status } = useAction(login, {
+  const { execute, status, isTransitioning } = useAction(login, {
     onSuccess: ({ data }) => {
       if (data?.error) {
         if (data.error === "e") {
@@ -76,7 +76,8 @@ const LoginForm = ({ error }: LoginFormProps) => {
           setOpenEmailDialog(false);
         }
       } else if (data?.redirectLink) {
-        router.push(data.redirectLink);
+        router.replace(data.redirectLink);
+
         setAuthError(null);
       }
     },
@@ -109,7 +110,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
                     <FormControl>
                       <Input
                         className="bg-white dark:bg-transparent"
-                        disabled={status === "executing"}
+                        disabled={status === "executing" || isTransitioning}
                         type="email"
                         placeholder="Your Email"
                         {...field}
@@ -130,7 +131,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
                     <FormControl>
                       <PasswordInput
                         className="bg-white dark:bg-transparent"
-                        disabled={status === "executing"}
+                        disabled={status === "executing" || isTransitioning}
                         placeholder="Password"
                         {...field}
                       />
@@ -145,7 +146,8 @@ const LoginForm = ({ error }: LoginFormProps) => {
               <Link
                 className={cn(
                   "group relative",
-                  status === "executing" && "pointer-events-none"
+                  status === "executing" ||
+                    (isTransitioning && "pointer-events-none")
                 )}
                 href="/forget-password"
               >
@@ -157,8 +159,8 @@ const LoginForm = ({ error }: LoginFormProps) => {
             <LoadingButton
               type="submit"
               className="w-full my-6"
-              loading={status === "executing"}
-              disabled={status === "executing"}
+              loading={status === "executing" || isTransitioning}
+              disabled={status === "executing" || isTransitioning}
             >
               Login
             </LoadingButton>
@@ -169,14 +171,18 @@ const LoginForm = ({ error }: LoginFormProps) => {
           <span className="text-muted-foreground">or</span>
           <Separator className="bg-black dark:bg-border" />
         </div>
-        <GoogleButton isDisabled={status === "executing"} className="w-full " />
+        <GoogleButton
+          isDisabled={status === "executing" || isTransitioning}
+          className="w-full "
+        />
         <div className="text-center my-10 text-sm">
           <span>New To JobVerse? </span>
           <span
             onClick={() => setOpen(!open)}
             className={cn(
               " cursor-pointer text-primary relative group",
-              status === "executing" && "pointer-events-none"
+              status === "executing" ||
+                (isTransitioning && "pointer-events-none")
             )}
           >
             Register Now
