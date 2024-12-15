@@ -1,6 +1,6 @@
 # JobVerse - Find, Apply & Succeed
 
-## Business Rules For JobVerse
+## Business Rules For JobVerse (Need to Upgrade as Change in Logic)
 
 ### 1. User Registration and Roles
 
