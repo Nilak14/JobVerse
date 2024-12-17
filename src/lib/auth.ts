@@ -17,3 +17,5 @@ export const auth = async () => {
     activeCompanyId: employer?.activeCompanyId || null,
   };
 };
+
+//! after updating the auth function, update the useClientSession hook also.

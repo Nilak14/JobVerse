@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import {
   EmployerCompaniesResponse,
   getEmployerCompanies,
-} from "@/lib/prismaTypes";
+} from "@/lib/prisma-types/Employers";
 import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
@@ -33,6 +33,7 @@ export const GET = async (req: NextRequest) => {
     const data: EmployerCompaniesResponse = {
       success: true,
       data: { companies: employer.companies },
+      message: "Companies fetched successfully",
     };
     return Response.json(data, { status: 200 });
   } catch (error) {

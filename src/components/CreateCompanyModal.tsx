@@ -57,7 +57,7 @@ const CreateCompanyModal = ({
     onSuccess: ({ data }) => {
       if (data?.success) {
         toast.success(data.message, { id: "create-company" });
-        router.push("/employer/dashboard");
+        router.refresh();
         queryClient.invalidateQueries({ queryKey: ["companies"] });
         setOpen(false);
       } else {

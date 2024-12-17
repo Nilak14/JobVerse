@@ -5,7 +5,7 @@ import InvitationsModal from "@/components/InvitationsModal";
 import { Button } from "@/components/ui/button";
 import { ExtendedUser } from "@/next-auth";
 import { useEffect, useState } from "react";
-
+import { motion } from "framer-motion";
 interface OnBoardingCardProps {
   user: ExtendedUser;
 }
@@ -27,25 +27,34 @@ const OnBoardingCard = ({ user }: OnBoardingCardProps) => {
   // }, []);
   return (
     <>
-      <CardWrapper classname="mt-20 w-full">
-        <div className="flex flex-col items-center gap-4">
-          <h2 className="font-bold text-xl text-pretty">
-            Looks Like You do not have a company in your{" "}
-            <br className="hidden sm:block" /> account{" "}
-          </h2>
-          <Button
-            onClick={() => setOpenCreateCompanyModal(true)}
-            className="w-full"
-          >
-            Create a Company
-          </Button>
-        </div>
-        <div className="w-full flex items-center justify-center mt-5">
-          <Button onClick={() => setOpenInvitationModal(true)} variant={"link"}>
-            View Invitations (Join Company)
-          </Button>
-        </div>
-      </CardWrapper>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <CardWrapper classname="mt-20 w-full">
+          <div className="flex flex-col items-center gap-4">
+            <h2 className="font-bold text-xl text-pretty">
+              Looks Like You do not have a company in your{" "}
+              <br className="hidden sm:block" /> account{" "}
+            </h2>
+            <Button
+              onClick={() => setOpenCreateCompanyModal(true)}
+              className="w-full"
+            >
+              Create a Company
+            </Button>
+          </div>
+          <div className="w-full flex items-center justify-center mt-5">
+            <Button
+              onClick={() => setOpenInvitationModal(true)}
+              variant={"link"}
+            >
+              View Invitations (Join Company)
+            </Button>
+          </div>
+        </CardWrapper>
+      </motion.div>
       {openInvitationModal && (
         <InvitationsModal
           user={user}

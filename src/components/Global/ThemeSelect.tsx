@@ -4,7 +4,6 @@ import * as React from "react";
 import { Check, Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -13,11 +12,9 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import UseCurrentSession from "@/hooks/use-session";
 
 const ThemeSelect = () => {
   const { setTheme, theme } = useTheme();
-  UseCurrentSession();
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
