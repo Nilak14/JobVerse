@@ -39,6 +39,7 @@ export const GET = async (req: NextRequest) => {
           {
             OR: [
               { name: { contains: searchParam, mode: "insensitive" } },
+              // { name: { contains: searchParam, mode: "insensitive" } },
               { email: { contains: searchParam, mode: "insensitive" } },
             ],
           },

@@ -89,7 +89,7 @@ export function SidebarUser({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {user.type === "EMPLOYER" && <EmployerUserMenu />}
+              {user.type === "EMPLOYER" && <EmployerUserMenu user={user} />}
               {user.type === "JOB_SEEKER" && <JobSeekerUserMenu />}
               {user.type === "ADMIN" && <AdminUserMenu />}
               <DropdownMenuSeparator />

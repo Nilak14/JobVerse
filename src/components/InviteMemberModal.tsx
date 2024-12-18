@@ -25,8 +25,8 @@ import { useAction } from "next-safe-action/hooks";
 // import { createInvitation } from "@/actions/createCompanyInvitation";
 import { toast } from "sonner";
 import { createInvitation } from "@/actions/createCompanyInvitation";
-import { animate, motion } from "framer-motion";
-import BoxReveal from "./ui/box-reveal";
+import { motion } from "framer-motion";
+import { AnimatedList } from "./ui/animated-list";
 interface InviteMemberModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -80,51 +80,45 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
             searchedEmployee.data.employers.length >= 1 &&
             searchedEmployee.data.employers.map((employee: EmployerSearch) => {
               return (
-                <>
+                <AnimatedList key={employee.id} delay={0.5}>
                   <div
                     className="border-input border w-full p-4 rounded-lg  flex items-center justify-between"
                     key={employee.id}
                   >
-                    <BoxReveal boxColor="gray" duration={0.5}>
-                      {/* <div
-                        className="border-input border w-full p-4 rounded-lg  flex items-center justify-between"
-                        key={employee.id}
-                      > */}
-                      <div className="flex items-center gap-5 w-full truncate ">
-                        <UserAvatar
-                          imageUrl={employee.image || ""}
-                          userName={employee.name!}
-                        />
-                        <div className="max-w-[250px] ">
-                          <p className="truncate">{employee.name}</p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {employee.email}
-                          </p>
-                        </div>
+                    <div className="flex items-center gap-5 w-full truncate ">
+                      <UserAvatar
+                        imageUrl={employee.image || ""}
+                        userName={employee.name!}
+                      />
+                      <div className="max-w-[250px] ">
+                        <p className="truncate">{employee.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {employee.email}
+                        </p>
                       </div>
-                      <LoadingButton
-                        onClick={() => {
-                          if (status === "loading") {
-                            return;
-                          }
-                          execute({
-                            companyId: activeCompany.id,
-                            inviteeId: employee.EMPLOYER?.id!,
-                            userId: session?.user.id!,
-                          });
-                        }}
-                        showIconOnly
-                        className="group"
-                        variant={"secondary"}
-                        loading={isTransitioning}
-                      >
-                        <Send className="  group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-200" />
-                        <span className="hidden md:block">Invite</span>
-                      </LoadingButton>
-                      {/* </div> */}
-                    </BoxReveal>
+                    </div>
+                    <LoadingButton
+                      onClick={() => {
+                        if (status === "loading") {
+                          return;
+                        }
+                        execute({
+                          companyId: activeCompany.id,
+                          inviteeId: employee.EMPLOYER?.id!,
+                          userId: session?.user.id!,
+                        });
+                      }}
+                      showIconOnly
+                      className="group"
+                      variant={"secondary"}
+                      loading={isTransitioning}
+                    >
+                      <Send className="  group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-200" />
+                      <span className="hidden md:block">Invite</span>
+                    </LoadingButton>
+                    {/* </div> */}
                   </div>
-                </>
+                </AnimatedList>
               );
             })}
           {!isLoading &&
@@ -140,11 +134,11 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
               </motion.p>
             )}
           {isLoading && (
-            <>
+            <AnimatedList delay={0.5}>
               <EmployerSearchSkeleton />
+
               <EmployerSearchSkeleton />
-              <EmployerSearchSkeleton />
-            </>
+            </AnimatedList>
           )}
         </section>
         <ResponsiveModalFooter>

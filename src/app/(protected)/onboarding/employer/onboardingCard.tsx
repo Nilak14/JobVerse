@@ -4,14 +4,15 @@ import CardWrapper from "@/components/Global/CardWrapper";
 import InvitationsModal from "@/components/InvitationsModal";
 import { Button } from "@/components/ui/button";
 import { ExtendedUser } from "@/next-auth";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
+import { useInvitationModal } from "@/store/useInvitaionModal";
 interface OnBoardingCardProps {
   user: ExtendedUser;
 }
 const OnBoardingCard = ({ user }: OnBoardingCardProps) => {
-  const [openInvitationModal, setOpenInvitationModal] = useState(false);
   const [openCreateCompanyModal, setOpenCreateCompanyModal] = useState(false);
+  const { openInvitationModal, setOpenInvitationModal } = useInvitationModal();
   // const [data, setData] = useState(null);
   // useEffect(() => {
   //   console.log("hello");
@@ -55,13 +56,7 @@ const OnBoardingCard = ({ user }: OnBoardingCardProps) => {
           </div>
         </CardWrapper>
       </motion.div>
-      {openInvitationModal && (
-        <InvitationsModal
-          user={user}
-          open={openInvitationModal}
-          setOpen={setOpenInvitationModal}
-        />
-      )}
+      {openInvitationModal && <InvitationsModal user={user} />}
       {openCreateCompanyModal && (
         <CreateCompanyModal
           user={user}

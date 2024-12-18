@@ -7,17 +7,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ExtendedUser } from "@/next-auth";
+import { useInvitationModal } from "@/store/useInvitaionModal";
 
 interface InvitationsModalProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   user: ExtendedUser;
 }
 
 //todo Add responsive dialog modal
-const InvitationsModal = ({ open, setOpen, user }: InvitationsModalProps) => {
+const InvitationsModal = ({ user }: InvitationsModalProps) => {
+  const { openInvitationModal, setOpenInvitationModal } = useInvitationModal();
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={openInvitationModal} onOpenChange={setOpenInvitationModal}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Invitations</DialogTitle>
