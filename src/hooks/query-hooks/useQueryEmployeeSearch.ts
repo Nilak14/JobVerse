@@ -1,12 +1,17 @@
 import { JVRequest } from "@/lib/JVRequest";
 import { useQuery } from "react-query";
 
-export const useQueryEmployeeSearch = (searchQuery: string) => {
+export const useQueryEmployeeSearch = (
+  searchQuery: string,
+  companyId: string
+) => {
   return useQuery({
-    queryKey: ["employee-search", searchQuery],
+    queryKey: ["employee-search", searchQuery, companyId],
     queryFn: async () =>
-      await JVRequest.get(`/api/users/search-employee?search=${searchQuery}`),
-    enabled: !!searchQuery && searchQuery.length > 1,
+      await JVRequest.get(
+        `/api/users/search-employee?search=${searchQuery}&CID=${companyId}`
+      ),
+    enabled: !!searchQuery && searchQuery.length > 1 && !!companyId,
     staleTime: 1 * 60 * 1000, // 1 minutes
     cacheTime: 2 * 60 * 1000, // 2 minutes
   });

@@ -35,9 +35,31 @@ export const createInvitation = action
           where: {
             id: inviteeId,
           },
+          include: {
+            companies: true,
+          },
         });
         if (!inviteeEmployer) {
           throw new Error("Employer not found");
+        }
+
+        inviteeEmployer.companies.find((company) => {
+          if (company.id === companyId) {
+            throw new Error("Employer is already a member of this company");
+          }
+        });
+
+        const existingInvitation = await prisma.invitations.findFirst({
+          where: {
+            companyId,
+            inviteeId,
+            inviterId: employer.id,
+          },
+        });
+        if (existingInvitation) {
+          throw new Error(
+            "You have already sent an invitation to this employer"
+          );
         }
 
         const invitation = await prisma.invitations.create({

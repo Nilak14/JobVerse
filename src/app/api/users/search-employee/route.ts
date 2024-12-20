@@ -23,12 +23,36 @@ export const GET = async (req: NextRequest) => {
       );
     }
     const searchParam = req.nextUrl.searchParams.get("search");
+    const companyId = req.nextUrl.searchParams.get("CID");
+
     if (!searchParam) {
       return Response.json(
         { success: false, message: "Search parameter is required" },
         { status: 400 }
       );
     }
+    if (!companyId) {
+      return Response.json(
+        { success: false, message: "Company Id is required" },
+        { status: 400 }
+      );
+    }
+
+    const company = await prisma.company.findUnique({
+      where: {
+        id: companyId,
+      },
+      include: {
+        employers: true,
+      },
+    });
+    if (!company) {
+      return Response.json(
+        { success: false, message: "Company not found" },
+        { status: 404 }
+      );
+    }
+
     const user = await prisma.user.findMany({
       where: {
         NOT: {
@@ -39,12 +63,37 @@ export const GET = async (req: NextRequest) => {
           {
             OR: [
               { name: { contains: searchParam, mode: "insensitive" } },
-              // { name: { contains: searchParam, mode: "insensitive" } },
               { email: { contains: searchParam, mode: "insensitive" } },
             ],
           },
+          {
+            EMPLOYER: {
+              AND: [
+                {
+                  companies: {
+                    none: {
+                      id: companyId,
+                    },
+                  },
+                  receivedInvitations: {
+                    none: {
+                      AND: [
+                        { companyId: companyId },
+                        {
+                          status: {
+                            in: ["PENDING", "ACCEPTED"],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
         ],
       },
+
       select: getEmployerSearch(),
     });
 

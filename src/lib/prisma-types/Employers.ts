@@ -38,6 +38,7 @@ export function getEmployerSearch() {
     EMPLOYER: {
       select: {
         id: true,
+        companies: true,
       },
     },
   } satisfies Prisma.UserSelect;

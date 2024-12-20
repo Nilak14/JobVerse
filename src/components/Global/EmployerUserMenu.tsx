@@ -14,6 +14,7 @@ interface EmployerUserMenuProps {
 
 const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
   const { openInvitationModal, setOpenInvitationModal } = useInvitationModal();
+
   return (
     <>
       <DropdownMenuGroup>
@@ -33,7 +34,7 @@ const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
           Billing
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={(e) => {
+          onClick={() => {
             setOpenInvitationModal(true);
           }}
         >
@@ -41,7 +42,6 @@ const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
           View Invitations
         </DropdownMenuItem>
       </DropdownMenuGroup>
-      {openInvitationModal && <InvitationsModal user={user} />}
     </>
   );
 };

@@ -20,4 +20,5 @@ export interface SidebarNavLinks {
 export interface UserNavProps {
   hasSidebar?: boolean;
   user: ExtendedUser;
+  activeCompanyId?: string | null;
 }

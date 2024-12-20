@@ -13,20 +13,17 @@ import LinkButtonAnimated from "./ui/animated-button-link";
 import { useDebounceText } from "@/hooks/use-debounce-text";
 import { useState } from "react";
 import { useQueryEmployeeSearch } from "@/hooks/query-hooks/useQueryEmployeeSearch";
-
 import UserAvatar from "./Global/Useravatar";
-
 import LoadingButton from "./ui/loading-button";
 import { EmployerSearch } from "@/lib/prisma-types/Employers";
 import EmployerSearchSkeleton from "./skeletons/EmployerSearchSkeleton";
-import { InvitationSchemaType } from "@/schema/InvitationSchema";
 import { getClientSession } from "@/store/getClientSession";
 import { useAction } from "next-safe-action/hooks";
-// import { createInvitation } from "@/actions/createCompanyInvitation";
-import { toast } from "sonner";
 import { createInvitation } from "@/actions/createCompanyInvitation";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { AnimatedList } from "./ui/animated-list";
+
 interface InviteMemberModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,20 +33,49 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
   const { activeCompany } = useActiveCompany();
   const { session, status } = getClientSession();
   const [searchQuery, setSearchQuery] = useState("");
+  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
+    {}
+  );
   const debouncedSearchValue = useDebounceText(searchQuery);
 
-  const { execute, isTransitioning } = useAction(createInvitation, {
-    onSuccess: ({ data }) => {
+  const {
+    data: searchedEmployee,
+    isLoading,
+    refetch,
+  } = useQueryEmployeeSearch(debouncedSearchValue.trim(), activeCompany.id);
+
+  const { execute } = useAction(createInvitation, {
+    onSuccess: ({ data, input }) => {
+      // Clear loading state for this specific user
+      setLoadingStates((prev) => ({
+        ...prev,
+        [input.inviteeId]: false,
+      }));
+
       if (data?.success) {
         toast.success(data.message);
+        refetch();
       } else {
         toast.error(data?.message);
       }
     },
   });
-  const { data: searchedEmployee, isLoading } = useQueryEmployeeSearch(
-    debouncedSearchValue.trim()
-  );
+
+  const handleInvite = async (employerId: string) => {
+    if (status === "loading") return;
+
+    // Set loading state for this specific user
+    setLoadingStates((prev) => ({
+      ...prev,
+      [employerId]: true,
+    }));
+
+    execute({
+      companyId: activeCompany.id,
+      inviteeId: employerId,
+      userId: session?.user.id!,
+    });
+  };
 
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
@@ -79,10 +105,11 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
             searchedEmployee?.data.employers &&
             searchedEmployee.data.employers.length >= 1 &&
             searchedEmployee.data.employers.map((employee: EmployerSearch) => {
+              const employerId = employee.EMPLOYER?.id!;
               return (
                 <AnimatedList key={employee.id} delay={0.5}>
                   <div
-                    className="border-input border w-full p-4 rounded-lg  flex items-center justify-between"
+                    className="border-input border w-full p-4 rounded-lg flex items-center justify-between"
                     key={employee.id}
                   >
                     <div className="flex items-center gap-5 w-full truncate ">
@@ -98,25 +125,15 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
                       </div>
                     </div>
                     <LoadingButton
-                      onClick={() => {
-                        if (status === "loading") {
-                          return;
-                        }
-                        execute({
-                          companyId: activeCompany.id,
-                          inviteeId: employee.EMPLOYER?.id!,
-                          userId: session?.user.id!,
-                        });
-                      }}
+                      onClick={() => handleInvite(employerId)}
                       showIconOnly
                       className="group"
                       variant={"secondary"}
-                      loading={isTransitioning}
+                      loading={loadingStates[employerId] || false}
                     >
-                      <Send className="  group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-200" />
+                      <Send className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-200" />
                       <span className="hidden md:block">Invite</span>
                     </LoadingButton>
-                    {/* </div> */}
                   </div>
                 </AnimatedList>
               );
@@ -136,7 +153,6 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
           {isLoading && (
             <AnimatedList delay={0.5}>
               <EmployerSearchSkeleton />
-
               <EmployerSearchSkeleton />
             </AnimatedList>
           )}
@@ -154,4 +170,5 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
     </ResponsiveModal>
   );
 };
+
 export default InviteMemberModal;

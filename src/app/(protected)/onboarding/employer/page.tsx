@@ -36,7 +36,7 @@ const EmployerOnboardingPage = async () => {
   return (
     <SidebarProvider>
       <SidebarInset className="h-dvh">
-        <EmployerNav user={user} />
+        <EmployerNav activeCompanyId={session.activeCompanyId} user={user} />
         <Container>
           <main className="flex flex-col items-center justify-center h-full">
             <div>
