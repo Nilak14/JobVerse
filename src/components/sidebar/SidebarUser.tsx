@@ -25,6 +25,7 @@ import EmployerUserMenu from "../Global/EmployerUserMenu";
 import JobSeekerUserMenu from "../Global/JobSeekerUserMenu";
 import AdminUserMenu from "../Global/AdminUserMenu";
 import ThemeSelect from "../Global/ThemeSelect";
+import UseCurrentSession from "@/hooks/use-session";
 
 export function SidebarUser({
   isLoading,
@@ -37,7 +38,7 @@ export function SidebarUser({
 }) {
   const { isMobile } = useSidebar();
   const [open, setOpen] = React.useState(false);
-
+  UseCurrentSession();
   return (
     <>
       <SidebarMenu>
@@ -88,7 +89,7 @@ export function SidebarUser({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {user.type === "EMPLOYER" && <EmployerUserMenu />}
+              {user.type === "EMPLOYER" && <EmployerUserMenu user={user} />}
               {user.type === "JOB_SEEKER" && <JobSeekerUserMenu />}
               {user.type === "ADMIN" && <AdminUserMenu />}
               <DropdownMenuSeparator />

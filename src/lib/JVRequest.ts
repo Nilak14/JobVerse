@@ -1,4 +1,5 @@
 import axios from "axios";
+import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 export class JVRequest {
   static get = async (url: string) => {
@@ -11,12 +12,13 @@ export class JVRequest {
           return { data: res.data.data, err: null, status: res.status };
         }
       })
-      .catch((e) => {
+      .catch(async (e) => {
         const data = e.response.data;
         if (e.response.status === 401) {
           toast.error(data.message);
         } else if (e.response.status === 403) {
           toast.error(data.message);
+          await signOut();
         } else {
           toast.error("Something went wrong");
         }

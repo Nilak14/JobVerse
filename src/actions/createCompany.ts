@@ -4,7 +4,6 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { CompanySchema } from "@/schema/CompanySchema";
 import { createSafeActionClient } from "next-safe-action";
-import { log } from "node:console";
 
 const action = createSafeActionClient();
 
@@ -35,9 +34,9 @@ export const createCompany = action
           name,
           description,
           website: websiteURl,
-          adminEmployerId: employer.id, // Add the admin employer to the company
+          adminEmployerId: employer.id,
           employers: {
-            connect: { id: employer.id }, // Add the admin employer to the company
+            connect: { id: employer.id },
           },
         },
       });

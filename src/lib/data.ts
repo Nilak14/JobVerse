@@ -4,6 +4,8 @@ import {
   Video,
   FileUser,
   Globe,
+  Building,
+  UsersRound,
 } from "lucide-react";
 import { LandingPageNavLinks, SidebarNavLinks } from "./types";
 
@@ -51,6 +53,18 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
     title: "Dashboard",
     icon: LayoutDashboard,
     url: "/employer/dashboard",
+  },
+  {
+    title: "Manage Company",
+    icon: Building,
+    url: "#",
+    items: [
+      {
+        title: "Company Members",
+        url: "/employer/company/members",
+        icon: UsersRound,
+      },
+    ],
   },
   {
     title: "Design Studio",

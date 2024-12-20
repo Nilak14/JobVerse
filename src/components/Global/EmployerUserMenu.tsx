@@ -1,11 +1,20 @@
-import { BadgeCheck, Bell, CreditCard, Sparkles } from "lucide-react";
+import { BadgeCheck, CreditCard, Mail, Sparkles } from "lucide-react";
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
+import InvitationsModal from "../InvitationsModal";
+import { ExtendedUser } from "@/next-auth";
+import { useInvitationModal } from "@/store/useInvitaionModal";
 
-const EmployerUserMenu = () => {
+interface EmployerUserMenuProps {
+  user: ExtendedUser;
+}
+
+const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
+  const { openInvitationModal, setOpenInvitationModal } = useInvitationModal();
+
   return (
     <>
       <DropdownMenuGroup>
@@ -24,9 +33,13 @@ const EmployerUserMenu = () => {
           <CreditCard />
           Billing
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Bell />
-          Notifications
+        <DropdownMenuItem
+          onClick={() => {
+            setOpenInvitationModal(true);
+          }}
+        >
+          <Mail />
+          View Invitations
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </>

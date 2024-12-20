@@ -19,8 +19,6 @@ const EmployerSidebarLayout = async ({
     redirect("/login");
   }
 
-  console.log(session);
-
   return (
     <SidebarProvider>
       <div className="flex w-full h-screen">
@@ -31,7 +29,11 @@ const EmployerSidebarLayout = async ({
         <SidebarInset>
           <div className="relative">
             <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2" />
-            <EmployerNav user={user} hasSidebar />
+            <EmployerNav
+              activeCompanyId={session.activeCompanyId}
+              user={user}
+              hasSidebar
+            />
           </div>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">{children}</div>
         </SidebarInset>

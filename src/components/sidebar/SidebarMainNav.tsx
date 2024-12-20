@@ -27,7 +27,7 @@ export function SidebarMainNav({ items }: { items: SidebarNavLinks[] }) {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      {/* <SidebarGroupLabel>General</SidebarGroupLabel> */}
       <SidebarMenu>
         {items.map((item) => {
           const isActive = pathname === item.url; // Check if the current route matches
@@ -55,11 +55,19 @@ export function SidebarMainNav({ items }: { items: SidebarNavLinks[] }) {
                               <Link
                                 href={subItem.url}
                                 className={cn(
-                                  "block w-full px-3 py-2 rounded-md",
-                                  isSubItemActive && "bg-primary text-white"
+                                  "block w-full px-3 py-2 rounded-md ",
+                                  isSubItemActive &&
+                                    "bg-primary text-white group/icon"
                                 )}
                               >
-                                {subItem.icon && <subItem.icon />}
+                                {subItem.icon && (
+                                  <subItem.icon
+                                    className={cn(
+                                      isSubItemActive &&
+                                        "stroke-white group-hover/icon:stroke-black dark:group-hover/icon:stroke-white "
+                                    )}
+                                  />
+                                )}
                                 <span>{subItem.title}</span>
                               </Link>
                             </SidebarMenuSubButton>
