@@ -4,17 +4,17 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
-import InvitationsModal from "../InvitationsModal";
 import { ExtendedUser } from "@/next-auth";
 import { useInvitationModal } from "@/store/useInvitaionModal";
+import { usePendingInvitationsCount } from "@/store/usePendingInvitationsCount";
 
 interface EmployerUserMenuProps {
   user: ExtendedUser;
 }
 
 const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
-  const { openInvitationModal, setOpenInvitationModal } = useInvitationModal();
-
+  const { setOpenInvitationModal } = useInvitationModal();
+  const { pendingInvitationsCount } = usePendingInvitationsCount();
   return (
     <>
       <DropdownMenuGroup>
@@ -39,7 +39,14 @@ const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
           }}
         >
           <Mail />
-          View Invitations
+          <p className="relative">
+            {pendingInvitationsCount > 0 && (
+              <span className="absolute -right-6 -top-3 rounded-full bg-primary text-white px-1 text-xs font-medium tabular-nums">
+                {pendingInvitationsCount}
+              </span>
+            )}
+            View Pending Invitations
+          </p>
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </>
