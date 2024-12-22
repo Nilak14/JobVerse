@@ -17,7 +17,7 @@ import {
 } from "@/lib/prisma-types/Invitations";
 import { AnimatedList } from "./ui/animated-list";
 import UserAvatar from "./Global/Useravatar";
-import { Check, RefreshCcw, X } from "lucide-react";
+import { Building, Check, RefreshCcw, X } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -26,16 +26,16 @@ import {
 } from "./ui/tooltip";
 import EmployerSearchSkeleton from "./skeletons/EmployerSearchSkeleton";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
 import { motion } from "framer-motion";
 import { usePendingInvitationsCount } from "@/store/usePendingInvitationsCount";
 import { useEffect, useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { rejectInvitaion } from "@/actions/invitations/rejectInvitation";
 import { toast } from "sonner";
-import { signOut } from "next-auth/react";
 import LoadingButton from "./ui/loading-button";
 import { QueryKey, useQueryClient } from "react-query";
+import { acceptInvitation } from "@/actions/invitations/acceptInvitation";
+import { signOut } from "next-auth/react";
 interface InvitationsModalProps {
   user: ExtendedUser;
 }
@@ -45,55 +45,106 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
   const queryClient = useQueryClient();
   const { data, refetch, isLoading, isRefetching } =
     useQueryEmployerPendingInvitations();
-  const [loadingDeleteInvitaionButtonId, setLoadingDeleteInvitaionButtonId] =
+  const [loadingRejectInvitaionButtonId, setLoadingRejectInvitaionButtonId] =
+    useState<string | null>(null);
+  const [loadingAcceptInvitaionButtonId, setLoadingAcceptInvitaionButtonId] =
     useState<string | null>(null);
   const { setPendingInvitationsCount, pendingInvitationsCount } =
     usePendingInvitationsCount();
-  const { execute, status } = useAction(rejectInvitaion, {
-    onSuccess: async ({ data }) => {
-      if (data?.success) {
-        const queryFilter: QueryKey = ["employer-pending-invitations"];
-        queryClient.cancelQueries(queryFilter);
-        queryClient.setQueryData<EmployerPendingInvitationsResponse>(
-          queryFilter,
-          (oldData) => {
-            if (!oldData) return oldData!;
-            return {
-              ...oldData,
-              data: {
-                ...oldData.data,
-                invitations:
-                  oldData.data.invitations.filter(
-                    (invitation) => invitation.id !== data.data?.id
-                  ) ?? [],
-              },
-            };
+
+  // ------------------------------ Reject Invitation ------------------------------
+  const { execute: executeRejectInvitation, status: rejectInvitationStatus } =
+    useAction(rejectInvitaion, {
+      onSuccess: async ({ data }) => {
+        if (data?.success) {
+          const queryFilter: QueryKey = ["employer-pending-invitations"];
+          queryClient.cancelQueries(queryFilter);
+          queryClient.setQueryData<EmployerPendingInvitationsResponse>(
+            queryFilter,
+            (oldData) => {
+              if (!oldData) return oldData!;
+              return {
+                ...oldData,
+                data: {
+                  ...oldData.data,
+                  invitations:
+                    oldData.data.invitations.filter(
+                      (invitation) => invitation.id !== data.data?.id
+                    ) ?? [],
+                },
+              };
+            }
+          );
+          if (pendingInvitationsCount > 0) {
+            setPendingInvitationsCount(pendingInvitationsCount - 1);
+          } else {
+            setPendingInvitationsCount(0);
           }
-        );
-        if (pendingInvitationsCount > 0) {
-          setPendingInvitationsCount(pendingInvitationsCount - 1);
+          setLoadingRejectInvitaionButtonId(null);
+
+          toast.success(data.message);
         } else {
-          setPendingInvitationsCount(0);
+          if (data?.status === 403) {
+            await signOut();
+          }
+          setLoadingRejectInvitaionButtonId(null);
+          toast.error(data?.message);
         }
-        setLoadingDeleteInvitaionButtonId(null);
+      },
+      onExecute: ({ input }) => {
+        setLoadingRejectInvitaionButtonId(input.invitationId);
+      },
+      onError: () => {
+        setLoadingRejectInvitaionButtonId(null);
+      },
+    });
 
-        toast.success(data.message);
-      } else {
-        toast.error(data?.message);
-        if (data?.status === 403) {
-          await signOut();
+  // ------------------------------ Accept Invitation ------------------------------
+  const { execute: executeAcceptInvitation, status: acceptInvitationStatus } =
+    useAction(acceptInvitation, {
+      onSuccess: async ({ data, input }) => {
+        if (data?.success) {
+          const queryFilter: QueryKey = ["employer-pending-invitations"];
+          queryClient.cancelQueries(queryFilter);
+          queryClient.setQueryData<EmployerPendingInvitationsResponse>(
+            queryFilter,
+            (oldData) => {
+              if (!oldData) return oldData!;
+              return {
+                ...oldData,
+                data: {
+                  ...oldData.data,
+                  invitations:
+                    oldData.data.invitations.filter(
+                      (invitation) => invitation.id !== input.invitationId
+                    ) ?? [],
+                },
+              };
+            }
+          );
+          if (pendingInvitationsCount > 0) {
+            setPendingInvitationsCount(pendingInvitationsCount - 1);
+          } else {
+            setPendingInvitationsCount(0);
+          }
+          setLoadingAcceptInvitaionButtonId(null);
+          queryClient.invalidateQueries({ queryKey: ["companies"] });
+          toast.success(data.message, { icon: <Building /> });
+        } else {
+          if (data?.status === 403) {
+            await signOut();
+          }
+          setLoadingAcceptInvitaionButtonId(null);
+          toast.error(data?.message);
         }
-      }
-
-      setLoadingDeleteInvitaionButtonId(null);
-    },
-    onExecute: ({ input }) => {
-      setLoadingDeleteInvitaionButtonId(input.invitationId);
-    },
-    onError: () => {
-      setLoadingDeleteInvitaionButtonId(null);
-    },
-  });
+      },
+      onExecute: ({ input }) => {
+        setLoadingAcceptInvitaionButtonId(input.invitationId);
+      },
+      onError: () => {
+        setLoadingAcceptInvitaionButtonId(null);
+      },
+    });
 
   useEffect(() => {
     if (data?.data.invitations.length) {
@@ -102,7 +153,10 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
   }, [data?.data.invitations.length]);
 
   const rejectInvitaionHandler = (invitationId: string) => {
-    execute({ invitationId });
+    executeRejectInvitation({ invitationId });
+  };
+  const acceptInvitationHandler = (invitationId: string) => {
+    executeAcceptInvitation({ invitationId });
   };
 
   return (
@@ -129,7 +183,9 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
                   }}
                   className={cn(
                     "relative  h-9 w-9 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center gap-2  active:scale-95 transition-transform duration-300 whitespace-nowrap rounded-md text-sm font-medium  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 self-end cursor-pointer",
-                    status === "executing" && "pointer-events-none opacity-50"
+                    (rejectInvitationStatus === "executing" ||
+                      acceptInvitationStatus === "executing") &&
+                      "pointer-events-none opacity-50"
                   )}
                 >
                   <RefreshCcw
@@ -177,9 +233,17 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
                       </div>
                       <div className="flex items-center gap-4 justify-end">
                         <LoadingButton
-                          loading={false}
+                          onClick={() => {
+                            acceptInvitationHandler(invitations.id);
+                          }}
+                          loading={
+                            loadingAcceptInvitaionButtonId === invitations.id
+                          }
                           showIconOnly
-                          disabled={status === "executing"}
+                          disabled={
+                            rejectInvitationStatus === "executing" ||
+                            acceptInvitationStatus === "executing"
+                          }
                           className="bg-green-600 border-green-600
                           outline-green-600 hover:bg-green-700
                           active:outline-green-600"
@@ -190,10 +254,13 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
                           </span>
                         </LoadingButton>
                         <LoadingButton
-                          disabled={status === "executing"}
+                          disabled={
+                            rejectInvitationStatus === "executing" ||
+                            acceptInvitationStatus === "executing"
+                          }
                           showIconOnly
                           loading={
-                            loadingDeleteInvitaionButtonId === invitations.id
+                            loadingRejectInvitaionButtonId === invitations.id
                           }
                           onClick={() => {
                             rejectInvitaionHandler(invitations.id);

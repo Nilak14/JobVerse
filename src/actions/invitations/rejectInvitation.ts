@@ -24,9 +24,12 @@ export const rejectInvitaion = action
         };
       }
 
-      const invitation = await prisma.invitations.delete({
+      const invitation = await prisma.invitations.update({
         where: {
           id: invitationId,
+        },
+        data: {
+          status: "REJECTED",
         },
       });
       if (!invitation) {
@@ -39,6 +42,8 @@ export const rejectInvitaion = action
         data: invitation,
       };
     } catch (error) {
+      console.log(error);
+
       return { success: false, message: "Something went wrong", status: 500 };
     }
   });
