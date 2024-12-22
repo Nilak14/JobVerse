@@ -29,6 +29,7 @@ export const GET = async (req: NextRequest) => {
         const employerPendingInvitations = await prisma.invitations.findMany({
           where: {
             inviteeId: employer.id,
+            status: "PENDING",
           },
           include: getEmployerPendingInvitations(),
         });

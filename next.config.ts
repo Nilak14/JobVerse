@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
       dynamic: 30, // cache dynamic route for 30 sec in client side navigation
       static: 180, // cache static route for 180 sec in client side navigation
     },
+    // ppr: true,
+    // dynamicIO: true,
   },
   images: {
     remotePatterns: [

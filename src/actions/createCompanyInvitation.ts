@@ -54,6 +54,9 @@ export const createInvitation = action
             companyId,
             inviteeId,
             inviterId: employer.id,
+            status: {
+              not: "REJECTED",
+            },
           },
         });
         if (existingInvitation) {

@@ -56,12 +56,15 @@ export const GET = async (req: NextRequest) => {
     const user = await prisma.user.findMany({
       where: {
         NOT: {
+          // do not include the user itself
           id: session.user.id,
         },
         AND: [
+          // get only the user with type employer
           { userType: "EMPLOYER" },
           {
             OR: [
+              // match with email or name
               { name: { contains: searchParam, mode: "insensitive" } },
               { email: { contains: searchParam, mode: "insensitive" } },
             ],
@@ -72,10 +75,12 @@ export const GET = async (req: NextRequest) => {
                 {
                   companies: {
                     none: {
+                      // exclude the employer who already are already in that company
                       id: companyId,
                     },
                   },
                   receivedInvitations: {
+                    // exclude the employer who already have pending or accepted invitation for that company
                     none: {
                       AND: [
                         { companyId: companyId },
