@@ -18,10 +18,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import UserAvatar from "../Global/Useravatar";
-import { EmployerCompanies } from "@/lib/prismaTypes";
+import { EmployerCompanies } from "@/lib/prisma-types/Employers";
 import { ExtendedUser } from "@/next-auth";
 import CreateCompanyModal from "../CreateCompanyModal";
 import CompanySwitchDialog from "../CompanySwitchDialog";
+import { useActiveCompany } from "@/store/useActiveCompany";
 
 export function CompanySwitcher({
   companies,
@@ -33,22 +34,27 @@ export function CompanySwitcher({
   activeCompanyId?: string | null;
 }) {
   const { isMobile } = useSidebar();
+  const { setActiveCompany: setActiveCompanyStore } = useActiveCompany();
   const [activeCompany, setActiveCompany] = useState(companies[0]);
   const [selectedCompany, setSelectedCompany] =
     useState<EmployerCompanies["companies"][0]>();
+
   const [openCreateCompanyModal, setOpenCreateCompanyModal] = useState(false);
   const [openCompanySwitcherDialog, setOpenCompanySwitcherDialog] =
     useState(false);
 
   useEffect(() => {
+    setActiveCompanyStore(companies[0]);
     if (activeCompanyId) {
       const activeCompany = companies.find(
         (company) => company.id === activeCompanyId
       );
       if (activeCompany) {
         setActiveCompany(activeCompany);
+        setActiveCompanyStore(activeCompany);
       } else {
         setActiveCompany(companies[0]);
+        setActiveCompanyStore(companies[0]);
       }
     }
   }, [activeCompanyId]);

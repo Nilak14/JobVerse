@@ -1,3 +1,4 @@
+import InvitationsModal from "@/components/InvitationsModal";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -23,6 +24,11 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   if (!isOnCompany) {
     redirect("/onboarding/employer");
   }
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <InvitationsModal user={user} />
+    </>
+  );
 };
 export default layout;

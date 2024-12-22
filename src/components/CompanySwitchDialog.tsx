@@ -7,13 +7,14 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
-import { EmployerCompanies } from "@/lib/prismaTypes";
+import { EmployerCompanies } from "@/lib/prisma-types/Employers";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import LoadingButton from "./ui/loading-button";
+import { useActiveCompany } from "@/store/useActiveCompany";
 
 interface CompanySwitchDialogProps {
   open: boolean;
@@ -36,6 +37,7 @@ const CompanySwitchDialog = ({
   setActiveCompany,
 }: CompanySwitchDialogProps) => {
   const router = useRouter();
+  const { setActiveCompany: setActiveCompanyStore } = useActiveCompany();
   const { execute, status } = useAction(switchCompany, {
     onSuccess: ({ data }) => {
       if (data?.success) {
@@ -43,6 +45,7 @@ const CompanySwitchDialog = ({
           id: "switch-company",
         });
         setActiveCompany(company);
+        setActiveCompanyStore(company);
         router.refresh();
         setOpen(false);
       } else if (data?.error) {

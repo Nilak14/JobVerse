@@ -21,8 +21,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { id: user.id },
           data: { emailVerified: new Date(), userType },
         });
-        console.log(updatedUser);
-        console.log(userType);
 
         if (userType === "JOB_SEEKER") {
           await prisma.jOB_SEEKER.create({
