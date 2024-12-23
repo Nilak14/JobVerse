@@ -36,6 +36,7 @@ import LoadingButton from "./ui/loading-button";
 import { QueryKey, useQueryClient } from "react-query";
 import { acceptInvitation } from "@/actions/invitations/acceptInvitation";
 import { signOut } from "next-auth/react";
+import { pusherClient } from "@/lib/pusher/client";
 interface InvitationsModalProps {
   user: ExtendedUser;
 }
@@ -151,6 +152,36 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
       setPendingInvitationsCount(data?.data.invitations.length);
     }
   }, [data?.data.invitations.length]);
+
+  useEffect(() => {
+    if (!user.id) {
+      console.log("User id not found");
+      return;
+    }
+    pusherClient.subscribe(user.id);
+
+    pusherClient.bind("invitation", (data: EmployerPendingInvitations) => {
+      const queryFilter: QueryKey = ["employer-pending-invitations"];
+      queryClient.cancelQueries(queryFilter);
+      queryClient.setQueryData<EmployerPendingInvitationsResponse>(
+        queryFilter,
+        (oldData) => {
+          if (!oldData) return oldData!;
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              invitations: [data, ...oldData.data.invitations],
+            },
+          };
+        }
+      );
+    });
+
+    return () => {
+      pusherClient.unsubscribe(user.id!);
+    };
+  }, [user.id]);
 
   const rejectInvitaionHandler = (invitationId: string) => {
     executeRejectInvitation({ invitationId });
