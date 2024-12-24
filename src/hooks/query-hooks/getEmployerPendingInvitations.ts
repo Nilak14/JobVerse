@@ -5,5 +5,6 @@ export const useQueryEmployerPendingInvitations = () => {
   return useQuery({
     queryKey: ["employer-pending-invitations"],
     queryFn: async () => await JVRequest.get("/api/invitations"),
+    refetchOnWindowFocus: false,
   });
 };
