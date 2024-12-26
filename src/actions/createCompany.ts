@@ -22,7 +22,6 @@ export const createCompany = action
         where: { userId: user.id },
         // select: { activeCompanyId: true, id: true },
       });
-      console.log(employer);
 
       if (!employer) {
         throw new Error("Only employers can create companies");
@@ -38,6 +37,13 @@ export const createCompany = action
           employers: {
             connect: { id: employer.id },
           },
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          website: true,
+          logoUrl: true,
         },
       });
       if (employer.activeCompanyId === null) {

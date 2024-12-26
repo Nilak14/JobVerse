@@ -6,6 +6,7 @@ export const CompanySchema = z.object({
     .string()
     .min(1, { message: "Company description is required" }),
   websiteURl: z.optional(z.string().url({ message: "Invalid URL" })),
+  logo: z.instanceof(File).optional(),
 });
 
 export type CompanySchemaType = z.infer<typeof CompanySchema>;
