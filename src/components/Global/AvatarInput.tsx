@@ -1,9 +1,10 @@
 "use client";
-import { Camera } from "lucide-react";
+import { Camera, X } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import { useRef, useState } from "react";
 import CropImageDialog from "./CropImageDialog";
 import Resizer from "react-image-file-resizer";
+import { toast } from "sonner";
 interface AvatarInputProps {
   src: string | StaticImageData;
   onImageCropped: (blob: Blob | null) => void;
@@ -19,6 +20,7 @@ const AvatarInput = ({
 
   const onImageSelected = (image: File | undefined) => {
     if (!image) return;
+
     // show crop dialog
     Resizer.imageFileResizer(
       image,
@@ -56,6 +58,17 @@ const AvatarInput = ({
         <span className="absolute inset-0 m-auto flex size-12 items-center justify-center bg-black bg-opacity-40 text-white transition-colors duration-200 group-hover:bg-opacity-25 rounded-full">
           <Camera size={24} />
         </span>
+        {src !== "/avatar-placeholder.png" && (
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              onImageCropped(null);
+            }}
+            className="absolute top-0 right-2   rounded-full bg-destructive p-1 text-white"
+          >
+            <X size={15} />
+          </span>
+        )}
       </button>
       {imageToCrop && (
         <CropImageDialog

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/responsive-dailog";
 import { ExtendedUser } from "@/next-auth";
 import AvatarInput from "./Global/AvatarInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "./ui/label";
 import {
   Form,
@@ -24,11 +24,7 @@ import { CompanySchema, CompanySchemaType } from "@/schema/CompanySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import LoadingButton from "./ui/loading-button";
-import { useAction } from "next-safe-action/hooks";
-import { createCompany } from "@/actions/createCompany";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "react-query";
+import useCreateCompanyAction from "@/hooks/use-actions/useCreateCompanyAction";
 interface CreateCompanyModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,39 +37,53 @@ const CreateCompanyModal = ({
   user,
 }: CreateCompanyModalProps) => {
   const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
-  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const form = useForm<CompanySchemaType>({
     defaultValues: {
       name: "",
       description: "",
       websiteURl: undefined,
+      logo: undefined,
     },
     resolver: zodResolver(CompanySchema),
     mode: "onChange",
   });
-  const router = useRouter();
 
-  const { execute, status } = useAction(createCompany, {
-    onSuccess: ({ data }) => {
-      if (data?.success) {
-        toast.success(data.message, { id: "create-company" });
-        router.refresh();
-        queryClient.invalidateQueries({ queryKey: ["companies"] });
-        setOpen(false);
-      } else {
-        toast.error(data?.message, { id: "create-company" });
-      }
-    },
-    onError: () => {
-      toast.error("Could not create company at this moment, Please try again", {
-        id: "create-company",
-      });
-    },
+  const { execute, status } = useCreateCompanyAction({
+    setLoading,
   });
 
+  useEffect(() => {
+    if (croppedAvatar) {
+      setError(null);
+    }
+  }, [croppedAvatar]);
+
   const onSubmit = (data: CompanySchemaType) => {
-    execute(data);
+    if (!croppedAvatar) {
+      setError("Please upload a logo for your company");
+      return;
+    }
+    const companyLogo = croppedAvatar
+      ? new File([croppedAvatar], `logo_avatar_${data.name}.webp`)
+      : undefined;
+    setLoading(true);
+    execute({
+      name: data.name,
+      description: data.description,
+      websiteURl: data.websiteURl,
+      logo: companyLogo,
+    });
   };
+  useEffect(() => {
+    if (status === "idle") return;
+    if (!loading) {
+      setOpen(false);
+      setCroppedAvatar(null);
+    }
+  }, [loading, status]);
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
       <ResponsiveModalContent>
@@ -84,7 +94,7 @@ const CreateCompanyModal = ({
           Enter your company details
         </ResponsiveModalDescription>
         <div className="space-y-1.5">
-          <Label>Avatar</Label>
+          <Label>Logo</Label>
           <AvatarInput
             src={
               croppedAvatar
@@ -93,7 +103,13 @@ const CreateCompanyModal = ({
             }
             onImageCropped={setCroppedAvatar}
           />
+          {error && <p className="text-destructive text-sm">{error}</p>}
         </div>
+        {form.formState.errors.logo && (
+          <p className="text-destructive text-sm">
+            {form.formState.errors.logo.message}
+          </p>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
@@ -103,7 +119,11 @@ const CreateCompanyModal = ({
                 <FormItem>
                   <FormLabel>Company Name</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter Company Name" />
+                    <Input
+                      disabled={loading}
+                      {...field}
+                      placeholder="Enter Company Name"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -118,6 +138,7 @@ const CreateCompanyModal = ({
                   <FormControl>
                     <Input
                       {...field}
+                      disabled={loading}
                       placeholder="Say Something about Your Company"
                     />
                   </FormControl>
@@ -132,14 +153,18 @@ const CreateCompanyModal = ({
                 <FormItem>
                   <FormLabel>Website Url</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Company Website URL" />
+                    <Input
+                      disabled={loading}
+                      {...field}
+                      placeholder="Company Website URL"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <ResponsiveModalFooter>
-              <LoadingButton type="submit" loading={status === "executing"}>
+              <LoadingButton type="submit" loading={loading}>
                 Create Company
               </LoadingButton>
             </ResponsiveModalFooter>
