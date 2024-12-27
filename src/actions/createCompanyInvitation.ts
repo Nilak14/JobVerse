@@ -102,7 +102,6 @@ export const createInvitation = action
           message: error.message || "Something went wrong",
         };
       } else {
-        console.log("error", String(error));
         return {
           success: false,
           message: String(error || "Something Went Wrong"),

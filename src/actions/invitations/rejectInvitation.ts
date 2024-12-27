@@ -42,8 +42,6 @@ export const rejectInvitaion = action
         data: invitation,
       };
     } catch (error) {
-      console.log(error);
-
       return { success: false, message: "Something went wrong", status: 500 };
     }
   });
