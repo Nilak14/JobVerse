@@ -13,19 +13,7 @@ interface OnBoardingCardProps {
 const OnBoardingCard = ({ user }: OnBoardingCardProps) => {
   const [openCreateCompanyModal, setOpenCreateCompanyModal] = useState(false);
   const { openInvitationModal, setOpenInvitationModal } = useInvitationModal();
-  // const [data, setData] = useState(null);
-  // useEffect(() => {
-  //   console.log("hello");
 
-  //   const fetchInvitations = async () => {
-  //     const response = await fetch(`/api/users/${user.id}/receivedInvitations`);
-  //     console.log("response", response);
-  //     const data = await response.json();
-  //     setData(data);
-  //   };
-  //   fetchInvitations();
-  //   console.log(data);
-  // }, []);
   return (
     <>
       <motion.div
