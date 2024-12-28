@@ -37,6 +37,7 @@ import { QueryKey, useQueryClient } from "react-query";
 import { acceptInvitation } from "@/actions/invitations/acceptInvitation";
 import { signOut } from "next-auth/react";
 import { pusherClient } from "@/lib/pusher/client";
+import { useRouter } from "next/navigation";
 interface InvitationsModalProps {
   user: ExtendedUser;
 }
@@ -52,6 +53,7 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
     useState<string | null>(null);
   const { setPendingInvitationsCount, pendingInvitationsCount } =
     usePendingInvitationsCount();
+  const router = useRouter();
 
   // ------------------------------ Reject Invitation ------------------------------
   const { execute: executeRejectInvitation, status: rejectInvitationStatus } =
@@ -130,6 +132,8 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
           }
           setLoadingAcceptInvitaionButtonId(null);
           queryClient.invalidateQueries({ queryKey: ["companies"] });
+          router.refresh();
+          setOpenInvitationModal(false);
           toast.success(data.message, { icon: <Building /> });
         } else {
           if (data?.status === 403) {
@@ -167,6 +171,14 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
         queryFilter,
         (oldData) => {
           if (!oldData) return oldData!;
+          const existingInvitation = oldData.data.invitations.some(
+            (invitation) => {
+              if (invitation.id === data.id) {
+                return true;
+              }
+            }
+          );
+          if (existingInvitation) return oldData;
           return {
             ...oldData,
             data: {

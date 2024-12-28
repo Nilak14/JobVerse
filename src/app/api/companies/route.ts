@@ -26,7 +26,7 @@ export const GET = async (req: NextRequest) => {
     if (!employer) {
       return Response.json(
         { message: "No employer record found for the user." },
-        { status: 404 }
+        { status: 403 }
       );
     }
 

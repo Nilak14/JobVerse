@@ -19,6 +19,8 @@ export class JVRequest {
         } else if (e.response.status === 403) {
           toast.error(data.message);
           await signOut();
+        } else if (e.response.status === 404) {
+          toast.error("Not found");
         } else {
           toast.error("Something went wrong");
         }
