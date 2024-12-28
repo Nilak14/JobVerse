@@ -37,6 +37,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@react-email/components": "^0.0.26",
     "@react-email/tailwind": "1.0.0",
+    "@tanstack/react-table": "^8.20.6",
     "@uploadthing/react": "^7.1.1",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",

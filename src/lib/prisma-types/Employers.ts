@@ -55,3 +55,21 @@ export type EmployerSearchResponse = {
     employers: EmployerSearch[];
   };
 };
+
+// get Company All Employer
+
+export function getCompanyEmployerInclude() {
+  return {
+    user: {
+      select: {
+        name: true,
+        email: true,
+        image: true,
+      },
+    },
+  } satisfies Prisma.EmployerInclude;
+}
+
+export type CompanyEmployer = Prisma.EmployerGetPayload<{
+  include: ReturnType<typeof getCompanyEmployerInclude>;
+}>;
