@@ -23,20 +23,32 @@ import {
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { TablePagination } from "./PaginationTable";
-interface JVTableProps<TData, TValue> {
+import { Button } from "../ui/button";
+import { RefreshCcw } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+interface JVTableClientProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   showPagination?: boolean;
   searchColumn?: string;
   searchPlaceholder?: string;
+  onRefresh?: () => void;
 }
-const JVTable = <TData, TValue>({
+const JVTableClient = <TData, TValue>({
   columns,
   data,
   showPagination = true,
   searchColumn,
   searchPlaceholder = "Search",
-}: JVTableProps<TData, TValue>) => {
+  onRefresh,
+}: JVTableClientProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -45,6 +57,7 @@ const JVTable = <TData, TValue>({
   });
   const table = useReactTable({
     columns,
+
     data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -63,7 +76,7 @@ const JVTable = <TData, TValue>({
       pagination,
     },
   });
-
+  const router = useRouter();
   return (
     <div>
       <div className="flex items-center py-4">
@@ -79,10 +92,29 @@ const JVTable = <TData, TValue>({
             className="max-w-sm"
           />
         )}
+        {/* 
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={() => {
+                  router.refresh();
+                }}
+                variant={"outline"}
+                size={"icon"}
+              >
+                <RefreshCcw />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top" sideOffset={10}>
+              <p>Refresh Table</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider> */}
       </div>
-      <div className="rounded-md border overflow-hidden">
+      <div className="rounded-md  border overflow-hidden">
         <Table>
-          <TableHeader>
+          <TableHeader className="relative">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {/* <TableHead className="bg-primary text-white w-24 pl-4 ">
@@ -146,4 +178,4 @@ const JVTable = <TData, TValue>({
     </div>
   );
 };
-export default JVTable;
+export default JVTableClient;

@@ -80,6 +80,17 @@ export const acceptInvitation = action
         },
       });
 
+      if (inviteeEmployer.activeCompanyId === null) {
+        await prisma.employer.update({
+          where: {
+            id: inviteeEmployer.id,
+          },
+          data: {
+            activeCompanyId: invitation.companyId,
+          },
+        });
+      }
+
       after(async () => {
         await prisma.invitations.update({
           where: {

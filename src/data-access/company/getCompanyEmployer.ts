@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { cache } from "react";
 import { signOut } from "@/auth";
-import { toast } from "sonner";
+
 import { getCompanyEmployerInclude } from "@/lib/prisma-types/Employers";
 
 export const getCompanyEmployer = cache(async () => {
@@ -21,7 +21,6 @@ export const getCompanyEmployer = cache(async () => {
     return [];
   }
   if (!session.activeCompanyId) {
-    toast.error("Company Id is required");
     return [];
   }
 
