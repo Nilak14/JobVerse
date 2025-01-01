@@ -67,7 +67,7 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
       },
       {
         title: "Company Settings",
-        url: "/employer/company/settings",
+        url: "/employer/company/setting",
         icon: Settings,
       },
     ],
