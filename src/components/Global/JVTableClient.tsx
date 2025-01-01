@@ -23,16 +23,6 @@ import {
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { TablePagination } from "./PaginationTable";
-import { Button } from "../ui/button";
-import { RefreshCcw } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 interface JVTableClientProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -47,7 +37,6 @@ const JVTableClient = <TData, TValue>({
   showPagination = true,
   searchColumn,
   searchPlaceholder = "Search",
-  onRefresh,
 }: JVTableClientProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -55,9 +44,9 @@ const JVTableClient = <TData, TValue>({
     pageIndex: 0,
     pageSize: 5,
   });
+
   const table = useReactTable({
     columns,
-
     data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -76,7 +65,6 @@ const JVTableClient = <TData, TValue>({
       pagination,
     },
   });
-  const router = useRouter();
   return (
     <div>
       <div className="flex items-center py-4">

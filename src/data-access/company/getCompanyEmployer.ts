@@ -24,7 +24,7 @@ export const getCompanyEmployer = cache(async () => {
     return [];
   }
 
-  return await prisma.employer.findMany({
+  const data = await prisma.employer.findMany({
     where: {
       companies: {
         some: {
@@ -32,6 +32,28 @@ export const getCompanyEmployer = cache(async () => {
         },
       },
     },
-    include: getCompanyEmployerInclude(),
+    include: getCompanyEmployerInclude(session.activeCompanyId),
   });
+  const transformedData = data.map((entry) => ({
+    user: {
+      email: entry.user.email,
+      name: entry.user.name,
+      image: entry.user.image,
+    },
+    invitedBy:
+      entry.receivedInvitations.length > 0
+        ? {
+            name: entry.receivedInvitations[0].inviter.user.name,
+            image: entry.receivedInvitations[0].inviter.user.image,
+          }
+        : {
+            name: "Admin",
+            image: "",
+          }, // If no invitations exist and user is in that company then user is admin of the company
+  }));
+  return transformedData;
 });
+
+export type CompanyEmployerTableData = Awaited<
+  ReturnType<typeof getCompanyEmployer>
+>;
