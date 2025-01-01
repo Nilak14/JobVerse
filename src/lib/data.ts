@@ -6,6 +6,7 @@ import {
   Globe,
   Building,
   UsersRound,
+  Settings,
 } from "lucide-react";
 import { LandingPageNavLinks, SidebarNavLinks } from "./types";
 
@@ -63,6 +64,11 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
         title: "Company Members",
         url: "/employer/company/members",
         icon: UsersRound,
+      },
+      {
+        title: "Company Settings",
+        url: "/employer/company/setting",
+        icon: Settings,
       },
     ],
   },
