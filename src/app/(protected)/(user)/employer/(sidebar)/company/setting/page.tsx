@@ -19,7 +19,7 @@ import { LogOut, Trash, UserMinus } from "lucide-react";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
-export const getActiveCompany = cache(
+ const getActiveCompany = cache(
   async (companyId: string, userId: string) => {
     const activeCompany = await prisma.company.findUnique({
       where: {
