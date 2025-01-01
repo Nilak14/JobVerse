@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -15,21 +14,19 @@ import { Separator } from "@/components/ui/separator";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getCompanyInclude } from "@/lib/prisma-types/Company";
-import { LogOut, Trash, UserMinus } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
- const getActiveCompany = cache(
-  async (companyId: string, userId: string) => {
-    const activeCompany = await prisma.company.findUnique({
-      where: {
-        id: companyId,
-      },
-      include: getCompanyInclude(companyId, userId),
-    });
-    return activeCompany;
-  }
-);
+const getActiveCompany = cache(async (companyId: string, userId: string) => {
+  const activeCompany = await prisma.company.findUnique({
+    where: {
+      id: companyId,
+    },
+    include: getCompanyInclude(companyId, userId),
+  });
+  return activeCompany;
+});
 
 export const generateMetadata = async () => {
   const session = await auth();
