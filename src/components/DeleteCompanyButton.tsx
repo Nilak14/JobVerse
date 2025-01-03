@@ -13,11 +13,7 @@ const DeleteCompanyButton = ({ activeCompany }: DeleteCompanyButtonProps) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button
-        onClick={() => setOpen(true)}
-        variant="secondary"
-        className="text-destructive font-semibold w-full"
-      >
+      <Button onClick={() => setOpen(true)} variant="destructive">
         <span>
           <Trash />
         </span>
