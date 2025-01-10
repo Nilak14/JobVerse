@@ -16,17 +16,20 @@ import { AnimatedList } from "./ui/animated-list";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useEffect, useState } from "react";
 import EmployerSearchSkeleton from "./skeletons/EmployerSearchSkeleton";
+import { ExtendedUser } from "@/next-auth";
 
 interface RemoveCompanyMemberModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeCompany: CompanyInclude;
+  user: ExtendedUser;
 }
 
 const RemoveCompanyMemberModal = ({
   open,
   setOpen,
   activeCompany,
+  user,
 }: RemoveCompanyMemberModalProps) => {
   const [employer, setEmployer] = useState<CompanyInclude["employers"]>(
     activeCompany.employers
@@ -55,7 +58,7 @@ const RemoveCompanyMemberModal = ({
 
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent className="space-y-5 md:space-y-0">
+      <ResponsiveModalContent>
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>
             Remove Members From {activeCompany.name}
