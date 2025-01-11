@@ -87,7 +87,7 @@ export const GET = async (req: NextRequest) => {
                         { companyId: companyId },
                         {
                           status: {
-                            in: ["PENDING", "ACCEPTED"],
+                            in: ["PENDING"],
                           },
                         },
                       ],

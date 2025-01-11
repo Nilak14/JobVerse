@@ -10,7 +10,7 @@ export type ExtendedUser = DefaultSession["user"] & {
 declare module "next-auth" {
   interface Session {
     user: ExtendedUser;
-    activeCompanyId?: string;
-    employerId?: string;
+    activeCompanyId?: string | null;
+    employerId?: string | null;
   }
 }

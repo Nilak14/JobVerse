@@ -4,21 +4,25 @@ import { Button } from "./ui/button";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useState } from "react";
 import RemoveCompanyMemberModal from "./RemoveCompanyMemberModal";
-import { ExtendedUser } from "@/next-auth";
+import { Session } from "next-auth";
 
 interface RemoveCompanyMembersButtonProps {
   activeCompany: CompanyInclude;
-  user: ExtendedUser;
+  session: Session;
 }
 
 const RemoveCompanyMembersButton = ({
   activeCompany,
-  user,
+  session,
 }: RemoveCompanyMembersButtonProps) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} variant="destructive">
+      <Button
+        className="w-full"
+        onClick={() => setOpen(true)}
+        variant="destructive"
+      >
         <span>
           <UserMinus />
         </span>
@@ -26,7 +30,7 @@ const RemoveCompanyMembersButton = ({
       </Button>
       {open && (
         <RemoveCompanyMemberModal
-          user={user}
+          session={session}
           open={open}
           setOpen={setOpen}
           activeCompany={activeCompany}

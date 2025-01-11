@@ -16,6 +16,7 @@ export function getCompanyInclude(employerId: string) {
       select: {
         employer: {
           select: {
+            id: true,
             user: {
               select: {
                 image: true,

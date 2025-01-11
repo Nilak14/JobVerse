@@ -1,19 +1,28 @@
 "use client";
-import { Trash, UserMinus } from "lucide-react";
+import { Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useState } from "react";
 import DeleteCompanyModal from "./DeleteCompanyModal";
+import { Session } from "next-auth";
 
 interface DeleteCompanyButtonProps {
   activeCompany: CompanyInclude;
+  session: Session;
 }
 
-const DeleteCompanyButton = ({ activeCompany }: DeleteCompanyButtonProps) => {
+const DeleteCompanyButton = ({
+  activeCompany,
+  session,
+}: DeleteCompanyButtonProps) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} variant="destructive">
+      <Button
+        className="w-full"
+        onClick={() => setOpen(true)}
+        variant="destructive"
+      >
         <span>
           <Trash />
         </span>
@@ -21,6 +30,7 @@ const DeleteCompanyButton = ({ activeCompany }: DeleteCompanyButtonProps) => {
       </Button>
       {open && (
         <DeleteCompanyModal
+          session={session}
           open={open}
           setOpen={setOpen}
           activeCompany={activeCompany}

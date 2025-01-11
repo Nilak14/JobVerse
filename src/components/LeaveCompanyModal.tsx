@@ -7,59 +7,59 @@ import {
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
-import { ExtendedUser } from "@/next-auth";
 import { Button } from "./ui/button";
 import { useAction } from "next-safe-action/hooks";
-// import { leaveCompany } from "@/actions/companies/leaveCompany";
+import { leaveCompany } from "@/actions/companies/leaveCompany";
 import { toast } from "sonner";
 import { Building } from "lucide-react";
 import { useRouter } from "next/navigation";
 import LoadingButton from "./ui/loading-button";
+import { Session } from "next-auth";
 
 interface LeaveCompanyModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeCompany: CompanyInclude;
-  user: ExtendedUser;
+  session: Session;
 }
 
 const LeaveCompanyModal = ({
   open,
   setOpen,
   activeCompany,
-  user,
+  session,
 }: LeaveCompanyModalProps) => {
   const router = useRouter();
-  //   const { execute, isExecuting } = useAction(leaveCompany, {
-  //     onSuccess: ({ data }) => {
-  //       setOpen(false);
-  //       if (data?.success) {
-  //         toast.success(data.message, {
-  //           id: "leave-company",
-  //           icon: <Building />,
-  //         });
-  //         router.refresh();
-  //       } else {
-  //         toast.error(data?.message || "Failed to leave the company", {
-  //           id: "leave-company",
-  //           icon: <Building />,
-  //         });
-  //       }
-  //     },
-  //     onError: () => {
-  //       setOpen(false);
-  //       toast.error("Failed to leave the company", {
-  //         id: "leave-company",
-  //         icon: <Building />,
-  //       });
-  //     },
-  //   });
+  const { execute, isExecuting } = useAction(leaveCompany, {
+    onSuccess: ({ data }) => {
+      setOpen(false);
+      if (data?.success) {
+        toast.success(data.message, {
+          id: "leave-company",
+          icon: <Building />,
+        });
+        router.refresh();
+      } else {
+        toast.error(data?.message || "Failed to leave the company", {
+          id: "leave-company",
+          icon: <Building />,
+        });
+      }
+    },
+    onError: () => {
+      setOpen(false);
+      toast.error("Failed to leave the company", {
+        id: "leave-company",
+        icon: <Building />,
+      });
+    },
+  });
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
       <ResponsiveModalContent
-        // onInteractOutside={(e) => {
-        //   isExecuting && e.preventDefault();
-        // }}
+        onInteractOutside={(e) => {
+          isExecuting && e.preventDefault();
+        }}
         className="space-y-5 md:space-y-0"
       >
         <ResponsiveModalHeader>
@@ -73,20 +73,22 @@ const LeaveCompanyModal = ({
         </ResponsiveModalDescription>
         <div className="w-full flex justify-between">
           <Button
-            // disabled={isExecuting}
+            disabled={isExecuting}
             onClick={() => setOpen(false)}
             variant={"outline"}
           >
             Cancel
           </Button>
           <LoadingButton
-            loading={false}
-            // loading={isExecuting}
+            loading={isExecuting}
             showIconOnly
-            // disabled={isExecuting}
-            // onClick={() => {
-            //   execute({ companyId: activeCompany.id, userId: user.id! });
-            // }}
+            disabled={isExecuting}
+            onClick={() => {
+              execute({
+                companyId: activeCompany.id,
+                employerId: session.employerId!,
+              });
+            }}
             variant={"destructive"}
           >
             Leave

@@ -8,22 +8,56 @@ import {
 } from "@/components/ui/responsive-dailog";
 import { Input } from "./ui/input";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { Session } from "next-auth";
+import { useAction } from "next-safe-action/hooks";
+import { deleteCompany } from "@/actions/companies/deleteCompany";
+import { toast } from "sonner";
+import { Building } from "lucide-react";
+import { useRouter } from "next/navigation";
+import LoadingButton from "./ui/loading-button";
 
 interface DeleteCompanyModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeCompany: CompanyInclude;
+  session: Session;
 }
 
 const DeleteCompanyModal = ({
   open,
   setOpen,
   activeCompany,
+  session,
 }: DeleteCompanyModalProps) => {
   const [makeButtonDisabled, setMakeButtonDisabled] = useState(true);
   const [value, setValue] = useState("");
+  const router = useRouter();
+  const { execute, isExecuting } = useAction(deleteCompany, {
+    onSuccess: ({ data }) => {
+      if (data?.success) {
+        setOpen(false);
+        toast.success(data.message, {
+          id: "delete-company",
+          icon: <Building />,
+        });
+
+        router.refresh();
+      } else {
+        toast.error(data?.message, {
+          id: "delete-company",
+          icon: <Building />,
+        });
+      }
+    },
+    onError: () => {
+      toast.error("Failed to delete the company", {
+        id: "delete-company",
+        icon: <Building />,
+      });
+    },
+  });
 
   useEffect(() => {
     if (value === `Delete ${activeCompany.name}`) {
@@ -35,7 +69,12 @@ const DeleteCompanyModal = ({
 
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent className="space-y-5 md:space-y-0">
+      <ResponsiveModalContent
+        onInteractOutside={(e) => {
+          isExecuting && e.preventDefault();
+        }}
+        className="space-y-5 md:space-y-0"
+      >
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>
             Are you sure, You want to Delete {activeCompany.name} ?
@@ -55,13 +94,29 @@ const DeleteCompanyModal = ({
           />
         </div>
         <ResponsiveModalFooter>
-          <Button
-            className="w-full"
-            variant={"destructive"}
-            disabled={makeButtonDisabled}
-          >
-            Delete This Company
-          </Button>
+          {makeButtonDisabled ? (
+            <Button
+              className="w-full"
+              variant={"destructive"}
+              disabled={makeButtonDisabled}
+            >
+              Delete This Company
+            </Button>
+          ) : (
+            <LoadingButton
+              loading={isExecuting}
+              onClick={() =>
+                execute({
+                  companyId: activeCompany.id,
+                  employerId: session.employerId!,
+                })
+              }
+              className="w-full"
+              variant={"destructive"}
+            >
+              Delete This Company
+            </LoadingButton>
+          )}
         </ResponsiveModalFooter>
       </ResponsiveModalContent>
     </ResponsiveModal>
