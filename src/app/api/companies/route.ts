@@ -1,9 +1,7 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import {
-  EmployerCompaniesResponse,
-  getEmployerCompanies,
-} from "@/lib/prisma-types/Employers";
+import { EmployerCompaniesResponse } from "@/lib/prisma-types/Employers";
+
 import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
@@ -17,10 +15,8 @@ export const GET = async (req: NextRequest) => {
       return Response.json({ message: "Blocked" }, { status: 403 });
     }
 
-    // Fetch the employer record associated with the current user
     const employer = await prisma.employer.findUnique({
       where: { userId: session.user.id },
-      include: getEmployerCompanies(),
     });
 
     if (!employer) {
@@ -30,12 +26,26 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
-    const data: EmployerCompaniesResponse = {
+    const EmployerCompanies = await prisma.company.findMany({
+      where: {
+        members: {
+          some: {
+            employer: {
+              id: employer.id,
+            },
+          },
+        },
+      },
+    });
+
+    const responseData: EmployerCompaniesResponse = {
       success: true,
-      data: { companies: employer.companies },
       message: "Companies fetched successfully",
+      data: {
+        companies: EmployerCompanies,
+      },
     };
-    return Response.json(data, { status: 200 });
+    return Response.json(responseData, { status: 200 });
   } catch (error) {
     console.error("Error fetching companies:", error);
     return Response.json(

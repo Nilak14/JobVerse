@@ -1,29 +1,21 @@
 import { Prisma } from "@prisma/client";
 
 // get Employer Companies-----------------------------------------------------------
-export function getEmployerCompanies() {
-  return {
-    companies: {
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        website: true,
-        logoUrl: true,
-      },
-    },
-  } satisfies Prisma.EmployerInclude;
-}
+// export function getEmployerCompanies() {
+//   return {
+//     members:{
 
-export type EmployerCompanies = Prisma.EmployerGetPayload<{
-  include: ReturnType<typeof getEmployerCompanies>;
-}>;
+//     }
+//   } satisfies Prisma.CompanyInclude;
+// }
+
+export type EmployerCompany = Prisma.CompanyGetPayload<{}>;
 
 export type EmployerCompaniesResponse = {
   success: boolean;
   message: string;
   data: {
-    companies: EmployerCompanies["companies"];
+    companies: EmployerCompany[];
   };
 };
 
@@ -38,7 +30,7 @@ export function getEmployerSearch() {
     EMPLOYER: {
       select: {
         id: true,
-        companies: true,
+        companyMemberships: true,
       },
     },
   } satisfies Prisma.UserSelect;
@@ -56,40 +48,40 @@ export type EmployerSearchResponse = {
   };
 };
 
-// get Company All Employer
+// // get Company All Employer
 
-export function getCompanyEmployerInclude(companyId: string) {
-  return {
-    user: {
-      select: {
-        name: true,
-        email: true,
-        image: true,
-      },
-    },
+// export function getCompanyEmployerInclude(companyId: string) {
+//   return {
+//     user: {
+//       select: {
+//         name: true,
+//         email: true,
+//         image: true,
+//       },
+//     },
 
-    receivedInvitations: {
-      where: {
-        status: "ACCEPTED",
-        companyId: companyId,
-      },
-      take: 1,
-      select: {
-        inviter: {
-          select: {
-            user: {
-              select: {
-                name: true,
-                image: true,
-              },
-            },
-          },
-        },
-      },
-    },
-  } satisfies Prisma.EmployerInclude;
-}
+//     receivedInvitations: {
+//       where: {
+//         status: "ACCEPTED",
+//         companyId: companyId,
+//       },
+//       take: 1,
+//       select: {
+//         inviter: {
+//           select: {
+//             user: {
+//               select: {
+//                 name: true,
+//                 image: true,
+//               },
+//             },
+//           },
+//         },
+//       },
+//     },
+//   } satisfies Prisma.EmployerInclude;
+// }
 
-export type CompanyEmployer = Prisma.EmployerGetPayload<{
-  include: ReturnType<typeof getCompanyEmployerInclude>;
-}>;
+// export type CompanyEmployer = Prisma.EmployerGetPayload<{
+//   include: ReturnType<typeof getCompanyEmployerInclude>;
+// }>;

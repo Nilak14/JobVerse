@@ -34,8 +34,11 @@ export const createCompany = action
           description,
           website: websiteURl,
           adminEmployerId: employer.id,
-          employers: {
-            connect: { id: employer.id },
+          members: {
+            create: {
+              employerId: employer.id,
+              role: "ADMIN",
+            },
           },
         },
         select: {

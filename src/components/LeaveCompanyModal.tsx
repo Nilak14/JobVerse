@@ -10,7 +10,7 @@ import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { ExtendedUser } from "@/next-auth";
 import { Button } from "./ui/button";
 import { useAction } from "next-safe-action/hooks";
-import { leaveCompany } from "@/actions/companies/leaveCompany";
+// import { leaveCompany } from "@/actions/companies/leaveCompany";
 import { toast } from "sonner";
 import { Building } from "lucide-react";
 import { useRouter } from "next/navigation";

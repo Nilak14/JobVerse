@@ -9,18 +9,29 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   if (!user || user.type !== "EMPLOYER") {
     redirect("/login");
   }
-  const employer = await prisma.user.findUnique({
+  // const employer = await prisma.user.findUnique({
+  //   where: { id: user.id },
+  //   include: {
+  //     EMPLOYER: {
+  //       include: {
+  //         companies: true,
+  //       },
+  //     },
+  //   },
+  // });
+
+  const userE = await prisma.user.findFirst({
     where: { id: user.id },
     include: {
       EMPLOYER: {
         include: {
-          companies: true,
+          companyMemberships: true,
         },
       },
     },
   });
 
-  const isOnCompany = employer?.EMPLOYER?.companies.length;
+  const isOnCompany = userE?.EMPLOYER?.companyMemberships.length;
   if (!isOnCompany) {
     redirect("/onboarding/employer");
   }

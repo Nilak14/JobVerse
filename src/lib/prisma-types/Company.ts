@@ -1,26 +1,29 @@
 import { Prisma } from "@prisma/client";
 
-export function getCompanyInclude(companyId: string, userId: string) {
+export function getCompanyInclude(employerId: string) {
   return {
     adminEmployer: {
       select: {
         userId: true,
       },
     },
-    employers: {
+    members: {
       where: {
         NOT: {
-          userId,
+          employerId,
         },
       },
       select: {
-        id: true,
-        user: {
+        employer: {
           select: {
-            image: true,
-            name: true,
-            email: true,
-            id: true,
+            user: {
+              select: {
+                image: true,
+                name: true,
+                email: true,
+                id: true,
+              },
+            },
           },
         },
       },

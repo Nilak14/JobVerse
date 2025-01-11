@@ -18,22 +18,24 @@ import { getCompanyInclude } from "@/lib/prisma-types/Company";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
-const getActiveCompany = cache(async (companyId: string, userId: string) => {
-  const activeCompany = await prisma.company.findUnique({
-    where: {
-      id: companyId,
-    },
-    include: getCompanyInclude(companyId, userId),
-  });
-  return activeCompany;
-});
+const getActiveCompany = cache(
+  async (companyId: string, employerId: string) => {
+    const activeCompany = await prisma.company.findUnique({
+      where: {
+        id: companyId,
+      },
+      include: getCompanyInclude(employerId),
+    });
+    return activeCompany;
+  }
+);
 
 export const generateMetadata = async () => {
   const session = await auth();
   if (!session || !session.user || !session.activeCompanyId) return {};
   const activeCompany = await getActiveCompany(
     session.activeCompanyId,
-    session.user.id!
+    session.employerId!
   );
   return {
     title: `${activeCompany?.name} Settings` || "",
@@ -47,7 +49,7 @@ const CompanySettingsPage = async () => {
   }
   const activeCompany = await getActiveCompany(
     session.activeCompanyId,
-    session.user.id!
+    session.employerId!
   );
   if (!activeCompany) {
     signOut();

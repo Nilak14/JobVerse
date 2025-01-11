@@ -7,7 +7,7 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
-import { EmployerCompanies } from "@/lib/prisma-types/Employers";
+import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
@@ -19,16 +19,8 @@ import { useActiveCompany } from "@/store/useActiveCompany";
 interface CompanySwitchDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  company: EmployerCompanies["companies"][0];
-  setActiveCompany: Dispatch<
-    SetStateAction<{
-      id: string;
-      logoUrl: string | null;
-      name: string;
-      description: string | null;
-      website: string | null;
-    }>
-  >;
+  company: EmployerCompany;
+  setActiveCompany: Dispatch<SetStateAction<EmployerCompany>>;
 }
 const CompanySwitchDialog = ({
   company,

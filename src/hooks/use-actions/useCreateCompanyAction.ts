@@ -1,8 +1,9 @@
 import { createCompany } from "@/actions/createCompany";
 import {
-  EmployerCompanies,
+  EmployerCompany,
   EmployerCompaniesResponse,
-} from "@/lib/prismaTypes";
+} from "@/lib/prisma-types/Employers";
+
 import { useUploadThing } from "@/lib/uploadthing";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
@@ -48,6 +49,7 @@ const useCreateCompanyAction = ({
                   companies: [],
                 },
                 success: false,
+                message: "Could not fetch companies",
               };
             }
             data.data.company.logoUrl = newAvatarUrl!;
@@ -55,10 +57,11 @@ const useCreateCompanyAction = ({
               data: {
                 companies: [
                   ...oldData.data.companies,
-                  data.data.company as EmployerCompanies["companies"][0],
+                  data.data.company as EmployerCompany,
                 ],
               },
               success: oldData.success,
+              message: oldData.message,
             };
           }
         );

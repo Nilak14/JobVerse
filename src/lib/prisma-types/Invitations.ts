@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 
+// all pending invitations of an employer
 export function getEmployerPendingInvitations() {
   return {
     company: {
