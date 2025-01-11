@@ -7,7 +7,7 @@ import { SidebarUser } from "./SidebarUser";
 import { UserNavProps } from "@/lib/types";
 import { useQueryAllCompanies } from "@/hooks/query-hooks/getEmployeeCompany";
 import { useEffect } from "react";
-import { EmployerCompanies } from "@/lib/prismaTypes";
+import { EmployerCompany } from "@/lib/prisma-types/Employers";
 
 const EmployerNav = ({
   hasSidebar = false,
@@ -23,8 +23,7 @@ const EmployerNav = ({
     if (activeCompanyId) {
       if (data) {
         const activeCompany = data.data.companies.find(
-          (company: EmployerCompanies["companies"][0]) =>
-            company.id === activeCompanyId
+          (company: EmployerCompany) => company.id === activeCompanyId
         );
 
         setActiveCompany(activeCompany);

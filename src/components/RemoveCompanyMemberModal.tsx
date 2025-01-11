@@ -16,20 +16,23 @@ import { AnimatedList } from "./ui/animated-list";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useEffect, useState } from "react";
 import EmployerSearchSkeleton from "./skeletons/EmployerSearchSkeleton";
+import { ExtendedUser } from "@/next-auth";
 
 interface RemoveCompanyMemberModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeCompany: CompanyInclude;
+  user: ExtendedUser;
 }
 
 const RemoveCompanyMemberModal = ({
   open,
   setOpen,
   activeCompany,
+  user,
 }: RemoveCompanyMemberModalProps) => {
-  const [employer, setEmployer] = useState<CompanyInclude["employers"]>(
-    activeCompany.employers
+  const [members, setMember] = useState<CompanyInclude["members"]>(
+    activeCompany.members
   );
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,25 +40,27 @@ const RemoveCompanyMemberModal = ({
   useEffect(() => {
     setLoading(true);
     if (searchQuery) {
-      const filteredEmployers = activeCompany.employers.filter((employer) => {
+      const filteredMembers = activeCompany.members.filter((member) => {
         return (
-          employer.user.name
+          member.employer.user.name
             ?.toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
-          employer.user.email.toLowerCase().includes(searchQuery.toLowerCase())
+          member.employer.user.email
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
         );
       });
-      setEmployer(filteredEmployers);
+      setMember(filteredMembers);
       setLoading(false);
     } else {
-      setEmployer(activeCompany.employers);
+      setMember(activeCompany.members);
       setLoading(false);
     }
   }, [searchQuery]);
 
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent className="space-y-5 md:space-y-0">
+      <ResponsiveModalContent>
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>
             Remove Members From {activeCompany.name}
@@ -77,23 +82,23 @@ const RemoveCompanyMemberModal = ({
           </p>
         </div>
         <section className="space-y-3 max-h-[246px] over-x-hidden overflow-y-auto">
-          {employer.length >= 1 ? (
-            employer.map((employee) => {
+          {members.length >= 1 ? (
+            members.map((member) => {
               return (
-                <AnimatedList key={employee.id} delay={0.5}>
+                <AnimatedList key={member.employer.user.id} delay={0.5}>
                   <div
                     className="border-input border w-full p-4 rounded-lg flex items-center justify-between"
-                    key={employee.id}
+                    key={member.employer.user.id}
                   >
                     <div className="flex items-center gap-5 w-full truncate ">
                       <UserAvatar
-                        imageUrl={employee.user.image || ""}
-                        userName={employee.user.name!}
+                        imageUrl={member.employer.user.image || ""}
+                        userName={member.employer.user.name!}
                       />
                       <div className="max-w-[250px] ">
-                        <p className="truncate">{employee.user.name}</p>
+                        <p className="truncate">{member.employer.user.name}</p>
                         <p className="text-xs text-muted-foreground truncate">
-                          {employee.user.email}
+                          {member.employer.user.email}
                         </p>
                       </div>
                     </div>
@@ -122,14 +127,14 @@ const RemoveCompanyMemberModal = ({
               {!searchQuery && "No members to remove"}
             </motion.p>
           )}
-          {searchQuery && employer.length === 0 && (
+          {searchQuery && members.length === 0 && (
             <motion.p
               initial={{ scale: 0.5 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.2 }}
               className="text-muted-foreground text-sm text-center"
             >
-              No results found for "{searchQuery + "ddd"}"
+              No results found for "{searchQuery}"
             </motion.p>
           )}
           {loading && (

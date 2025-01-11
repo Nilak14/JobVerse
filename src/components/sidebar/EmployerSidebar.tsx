@@ -12,7 +12,7 @@ import { SidebarMainNav } from "./SidebarMainNav";
 import { SidebarUser } from "./SidebarUser";
 import { CompanySwitcher } from "./CompanySwitcher";
 import { useQueryAllCompanies } from "@/hooks/query-hooks/getEmployeeCompany";
-import { EmployerCompanies } from "@/lib/prisma-types/Employers";
+import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { Skeleton } from "../ui/skeleton";
 
 const EmployerSidebar = ({
@@ -24,7 +24,7 @@ const EmployerSidebar = ({
 }) => {
   const sidebarLinks = EmployerSideBarLinks;
   const { data, isLoading } = useQueryAllCompanies();
-  const companies: EmployerCompanies["companies"] = data?.data.companies;
+  const companies: EmployerCompany[] = data?.data.companies;
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>

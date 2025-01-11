@@ -11,5 +11,6 @@ declare module "next-auth" {
   interface Session {
     user: ExtendedUser;
     activeCompanyId?: string;
+    employerId?: string;
   }
 }

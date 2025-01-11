@@ -18,7 +18,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import UserAvatar from "../Global/Useravatar";
-import { EmployerCompanies } from "@/lib/prisma-types/Employers";
+import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { ExtendedUser } from "@/next-auth";
 import CreateCompanyModal from "../CreateCompanyModal";
 import CompanySwitchDialog from "../CompanySwitchDialog";
@@ -29,15 +29,14 @@ export function CompanySwitcher({
   activeCompanyId,
   user,
 }: {
-  companies: EmployerCompanies["companies"];
+  companies: EmployerCompany[];
   user: ExtendedUser;
   activeCompanyId?: string | null;
 }) {
   const { isMobile } = useSidebar();
   const { setActiveCompany: setActiveCompanyStore } = useActiveCompany();
   const [activeCompany, setActiveCompany] = useState(companies[0]);
-  const [selectedCompany, setSelectedCompany] =
-    useState<EmployerCompanies["companies"][0]>();
+  const [selectedCompany, setSelectedCompany] = useState<EmployerCompany>();
 
   const [openCreateCompanyModal, setOpenCreateCompanyModal] = useState(false);
   const [openCompanySwitcherDialog, setOpenCompanySwitcherDialog] =

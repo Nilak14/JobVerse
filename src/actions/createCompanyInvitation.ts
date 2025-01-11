@@ -39,14 +39,14 @@ export const createInvitation = action
               id: inviteeId,
             },
             include: {
-              companies: true,
+              companyMemberships: true,
             },
           });
           if (!inviteeEmployer) {
             throw new Error("Employer not found");
           }
 
-          inviteeEmployer.companies.find((company) => {
+          inviteeEmployer.companyMemberships.find((company) => {
             if (company.id === companyId) {
               throw new Error("Employer is already a member of this company");
             }

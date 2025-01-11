@@ -74,8 +74,11 @@ export const acceptInvitation = action
           id: invitation.companyId,
         },
         data: {
-          employers: {
-            connect: { id: inviteeEmployer.id },
+          members: {
+            create: {
+              employerId: inviteeEmployer.id,
+              role: "MEMBER",
+            },
           },
         },
       });

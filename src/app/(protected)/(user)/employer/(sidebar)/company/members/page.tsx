@@ -2,10 +2,8 @@ import { companyEmployerColumns } from "@/columns/company-user-column";
 import JVTableClient from "@/components/Global/JVTableClient";
 import SidebarContainer from "@/components/Global/SidebarContainer";
 import InviteNewMemberButton from "@/components/InviteNewMemberButton";
-import {
-  CompanyEmployerTableData,
-  getCompanyEmployer,
-} from "@/data-access/company/getCompanyEmployer";
+import { getCompanyMembers } from "@/data-access/company/getCompanyMembers";
+import { CompanyMemberType } from "@/lib/prisma-types/CompanyMember";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +11,8 @@ export const metadata: Metadata = {
 };
 
 const CompanyMemberPage = async () => {
-  const data: CompanyEmployerTableData = await getCompanyEmployer();
+  const data: CompanyMemberType = await getCompanyMembers();
+  console.log(data);
 
   return (
     <SidebarContainer>

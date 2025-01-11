@@ -19,21 +19,25 @@ export const switchCompany = action
       if (!session || !session.user) {
         throw new Error("Unauthorized");
       }
-
       // check if user belongs to that company or not
-      const employer = await prisma.employer.findUnique({
-        where: { userId: session.user.id },
-        include: { companies: { where: { id: companyId } } },
+      const employerCompany = await prisma.companyMember.findFirst({
+        where: {
+          company: {
+            id: companyId,
+          },
+          employer: {
+            userId: session.user.id,
+          },
+        },
       });
-
-      if (!employer || employer.companies.length === 0) {
+      if (!employerCompany) {
         return {
           error: "Company Not Found or You are not part of this company",
         };
       }
 
       await prisma.employer.update({
-        where: { id: employer.id },
+        where: { id: employerCompany.employerId },
         data: { activeCompanyId: companyId },
       });
 

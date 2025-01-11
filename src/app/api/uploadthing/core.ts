@@ -20,10 +20,7 @@ export const fileRouter = {
       return { user };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      const newAvatarUrl = file.url.replace(
-        "/f/",
-        `/a/${process.env.UPLOADTHING_APP_ID}/`
-      );
+      const newAvatarUrl = file.url;
       await prisma.user.update({
         where: {
           id: metadata.user.id,
@@ -34,6 +31,7 @@ export const fileRouter = {
       });
       return { avatarUrl: newAvatarUrl };
     }),
+  // company logo upload end point
   companyLogo: f({
     image: { maxFileSize: "512KB" },
   })
@@ -61,15 +59,12 @@ export const fileRouter = {
       }
       if (oldLogo && oldLogo.logoUrl) {
         const key = oldLogo.logoUrl.split(
-          `/a/${process.env.UPLOADTHING_APP_ID}/`
+          `/${process.env.UPLOADTHING_APP_ID}/f/`
         )[1];
         await new UTApi().deleteFiles(key);
       }
 
-      const logoUrl = file.url.replace(
-        "/f/",
-        `/a/${process.env.UPLOADTHING_APP_ID}/`
-      );
+      const logoUrl = file.url;
       await prisma.company.update({
         where: {
           id: companyId,

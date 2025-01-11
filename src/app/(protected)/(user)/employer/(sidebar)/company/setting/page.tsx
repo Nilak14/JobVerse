@@ -1,6 +1,7 @@
 import { signOut } from "@/auth";
 import DeleteCompanyButton from "@/components/DeleteCompanyButton";
 import SidebarContainer from "@/components/Global/SidebarContainer";
+import LeaveCompanyButton from "@/components/LeaveCompanyButton";
 import RemoveCompanyMembersButton from "@/components/RemoveCompanyMembersButton";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,26 +15,27 @@ import { Separator } from "@/components/ui/separator";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getCompanyInclude } from "@/lib/prisma-types/Company";
-import { LogOut } from "lucide-react";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
-const getActiveCompany = cache(async (companyId: string, userId: string) => {
-  const activeCompany = await prisma.company.findUnique({
-    where: {
-      id: companyId,
-    },
-    include: getCompanyInclude(companyId, userId),
-  });
-  return activeCompany;
-});
+const getActiveCompany = cache(
+  async (companyId: string, employerId: string) => {
+    const activeCompany = await prisma.company.findUnique({
+      where: {
+        id: companyId,
+      },
+      include: getCompanyInclude(employerId),
+    });
+    return activeCompany;
+  }
+);
 
 export const generateMetadata = async () => {
   const session = await auth();
   if (!session || !session.user || !session.activeCompanyId) return {};
   const activeCompany = await getActiveCompany(
     session.activeCompanyId,
-    session.user.id!
+    session.employerId!
   );
   return {
     title: `${activeCompany?.name} Settings` || "",
@@ -47,7 +49,7 @@ const CompanySettingsPage = async () => {
   }
   const activeCompany = await getActiveCompany(
     session.activeCompanyId,
-    session.user.id!
+    session.employerId!
   );
   if (!activeCompany) {
     signOut();
@@ -79,7 +81,10 @@ const CompanySettingsPage = async () => {
                     </p>
                   </div>
                   <div className="w-full lg:w-auto">
-                    <RemoveCompanyMembersButton activeCompany={activeCompany} />
+                    <RemoveCompanyMembersButton
+                      user={session.user}
+                      activeCompany={activeCompany}
+                    />
                   </div>
                 </div>
                 <Separator className="border-2" />
@@ -115,12 +120,10 @@ const CompanySettingsPage = async () => {
                   </p>
                 </div>
                 <div className="w-full lg:w-auto">
-                  <Button className="w-full" variant="destructive">
-                    <span>
-                      <LogOut />
-                    </span>
-                    <span>Leave Company</span>
-                  </Button>
+                  <LeaveCompanyButton
+                    activeCompany={activeCompany}
+                    user={session.user}
+                  />
                 </div>
               </div>
             )}
