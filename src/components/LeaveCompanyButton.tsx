@@ -3,17 +3,17 @@ import { LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useState } from "react";
-import { ExtendedUser } from "@/next-auth";
 import LeaveCompanyModal from "./LeaveCompanyModal";
+import { Session } from "next-auth";
 
 interface LeaveCompanyButtonProps {
   activeCompany: CompanyInclude;
-  user: ExtendedUser;
+  session: Session;
 }
 
 const LeaveCompanyButton = ({
   activeCompany,
-  user,
+  session,
 }: LeaveCompanyButtonProps) => {
   const [open, setOpen] = useState(false);
   return (
@@ -30,7 +30,7 @@ const LeaveCompanyButton = ({
       </Button>
       {open && (
         <LeaveCompanyModal
-          user={user}
+          session={session}
           open={open}
           setOpen={setOpen}
           activeCompany={activeCompany}

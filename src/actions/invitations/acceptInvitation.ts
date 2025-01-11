@@ -3,6 +3,7 @@
 import { auth, signOut } from "@/auth";
 import prisma from "@/lib/prisma";
 import { createSafeActionClient } from "next-safe-action";
+import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { z } from "zod";
 
@@ -104,7 +105,7 @@ export const acceptInvitation = action
           },
         });
       });
-
+      revalidatePath(`/employer/company/members`);
       return {
         success: true,
         message: ` You have successfully joined ${invitation.company.name}`,

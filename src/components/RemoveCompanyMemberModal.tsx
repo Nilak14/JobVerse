@@ -16,25 +16,27 @@ import { AnimatedList } from "./ui/animated-list";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useEffect, useState } from "react";
 import EmployerSearchSkeleton from "./skeletons/EmployerSearchSkeleton";
-import { ExtendedUser } from "@/next-auth";
+import { Session } from "next-auth";
+import RemoveCompanyMemberPopover from "./RemoveCompanyMemberPopover";
 
 interface RemoveCompanyMemberModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeCompany: CompanyInclude;
-  user: ExtendedUser;
+  session: Session;
 }
 
 const RemoveCompanyMemberModal = ({
   open,
   setOpen,
   activeCompany,
-  user,
+  session,
 }: RemoveCompanyMemberModalProps) => {
   const [members, setMember] = useState<CompanyInclude["members"]>(
     activeCompany.members
   );
   const [loading, setLoading] = useState(false);
+  const [removeLoading, setRemoveLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -60,7 +62,11 @@ const RemoveCompanyMemberModal = ({
 
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent>
+      <ResponsiveModalContent
+        onInteractOutside={(e) => {
+          removeLoading && e.preventDefault();
+        }}
+      >
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>
             Remove Members From {activeCompany.name}
@@ -102,7 +108,13 @@ const RemoveCompanyMemberModal = ({
                         </p>
                       </div>
                     </div>
-                    <LoadingButton
+                    <RemoveCompanyMemberPopover
+                      activeCompany={activeCompany}
+                      setLoading={setRemoveLoading}
+                      setDialogOpen={setOpen}
+                      member={member}
+                    />
+                    {/* <LoadingButton
                       //   onClick={() => handleInvite(employerId)}
                       showIconOnly
                       className="group"
@@ -112,7 +124,7 @@ const RemoveCompanyMemberModal = ({
                     >
                       <UserX />
                       <span className="hidden md:block">Remove</span>
-                    </LoadingButton>
+                    </LoadingButton> */}
                   </div>
                 </AnimatedList>
               );

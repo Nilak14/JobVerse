@@ -3,7 +3,6 @@ import DeleteCompanyButton from "@/components/DeleteCompanyButton";
 import SidebarContainer from "@/components/Global/SidebarContainer";
 import LeaveCompanyButton from "@/components/LeaveCompanyButton";
 import RemoveCompanyMembersButton from "@/components/RemoveCompanyMembersButton";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -44,7 +43,12 @@ export const generateMetadata = async () => {
 };
 const CompanySettingsPage = async () => {
   const session = await auth();
-  if (!session || !session.user || !session.activeCompanyId) {
+  if (
+    !session ||
+    !session.user ||
+    !session.activeCompanyId ||
+    !session.employerId
+  ) {
     redirect("/");
   }
   const activeCompany = await getActiveCompany(
@@ -82,7 +86,7 @@ const CompanySettingsPage = async () => {
                   </div>
                   <div className="w-full lg:w-auto">
                     <RemoveCompanyMembersButton
-                      user={session.user}
+                      session={session}
                       activeCompany={activeCompany}
                     />
                   </div>
@@ -102,7 +106,10 @@ const CompanySettingsPage = async () => {
                     </p>
                   </div>
                   <div className="w-full lg:w-auto">
-                    <DeleteCompanyButton activeCompany={activeCompany} />
+                    <DeleteCompanyButton
+                      session={session}
+                      activeCompany={activeCompany}
+                    />
                   </div>
                 </div>
               </>
@@ -122,7 +129,7 @@ const CompanySettingsPage = async () => {
                 <div className="w-full lg:w-auto">
                   <LeaveCompanyButton
                     activeCompany={activeCompany}
-                    user={session.user}
+                    session={session}
                   />
                 </div>
               </div>
