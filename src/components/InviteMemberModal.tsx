@@ -19,7 +19,7 @@ import { EmployerSearch } from "@/lib/prisma-types/Employers";
 import EmployerSearchSkeleton from "./skeletons/EmployerSearchSkeleton";
 import { getClientSession } from "@/store/getClientSession";
 import { useAction } from "next-safe-action/hooks";
-import { createInvitation } from "@/actions/createCompanyInvitation";
+import { createInvitation } from "@/actions/invitations/createCompanyInvitation";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { AnimatedList } from "./ui/animated-list";

@@ -1,4 +1,4 @@
-import { switchCompany } from "@/actions/SwitchCompany";
+import { switchCompany } from "@/actions/companies/SwitchCompany";
 import {
   ResponsiveModal,
   ResponsiveModalContent,

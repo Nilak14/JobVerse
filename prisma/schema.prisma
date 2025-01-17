@@ -116,8 +116,10 @@ model Company {
   adminEmployer   Employer        @relation("AdminEmployer", fields: [adminEmployerId], references: [id], onDelete: Cascade)
   members         CompanyMember[] // Relationship through the join table
   invitations     Invitations[]
+  isDeleted       Boolean         @default(false)
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  deletedAt       DateTime?
 
   @@map("companies")
 }
@@ -129,9 +131,10 @@ model CompanyMember {
   role       CompanyRole @default(MEMBER)
   joinedAt   DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
-
-  employer Employer @relation(fields: [employerId], references: [id], onDelete: Cascade)
-  company  Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  deletedAt  DateTime?
+  isDeleted  Boolean     @default(false)
+  employer   Employer    @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  company    Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([employerId, companyId])
   @@map("company_members")

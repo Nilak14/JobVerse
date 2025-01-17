@@ -1,9 +1,13 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { EmployerCompaniesResponse } from "@/lib/prisma-types/Employers";
+import {
+  EmployerCompaniesResponse,
+  OmitEmployerCompanies,
+} from "@/lib/prisma-types/Employers";
 
 import { NextRequest } from "next/server";
 
+// route to get all companies of the employer
 export const GET = async (req: NextRequest) => {
   try {
     const session = await auth();
@@ -28,6 +32,7 @@ export const GET = async (req: NextRequest) => {
 
     const EmployerCompanies = await prisma.company.findMany({
       where: {
+        isDeleted: false,
         members: {
           some: {
             employer: {
@@ -36,6 +41,7 @@ export const GET = async (req: NextRequest) => {
           },
         },
       },
+      omit: OmitEmployerCompanies(),
     });
 
     const responseData: EmployerCompaniesResponse = {

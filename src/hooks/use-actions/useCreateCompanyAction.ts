@@ -1,4 +1,4 @@
-import { createCompany } from "@/actions/createCompany";
+import { createCompany } from "@/actions/companies/createCompany";
 import {
   EmployerCompany,
   EmployerCompaniesResponse,
