@@ -108,7 +108,7 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
       onSuccess: async ({ data, input }) => {
         if (data?.success) {
           const queryFilter: QueryKey = ["employer-pending-invitations"];
-          queryClient.cancelQueries(queryFilter);
+          // queryClient.cancelQueries(queryFilter);
           queryClient.setQueryData<EmployerPendingInvitationsResponse>(
             queryFilter,
             (oldData) => {

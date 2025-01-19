@@ -85,8 +85,7 @@ const LeaveCompanyModal = ({
             disabled={isExecuting}
             onClick={() => {
               execute({
-                companyId: activeCompany.id,
-                employerId: session.employerId!,
+                isAdminAction: false,
               });
             }}
             variant={"destructive"}

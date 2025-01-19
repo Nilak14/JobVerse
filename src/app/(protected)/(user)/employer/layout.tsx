@@ -1,3 +1,4 @@
+import { setActiveCompany } from "@/actions/companies/setActiveCompany";
 import InvitationsModal from "@/components/InvitationsModal";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
@@ -9,23 +10,17 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   if (!user || user.type !== "EMPLOYER") {
     redirect("/login");
   }
-  // const employer = await prisma.user.findUnique({
-  //   where: { id: user.id },
-  //   include: {
-  //     EMPLOYER: {
-  //       include: {
-  //         companies: true,
-  //       },
-  //     },
-  //   },
-  // });
 
   const userE = await prisma.user.findFirst({
     where: { id: user.id },
     include: {
       EMPLOYER: {
         include: {
-          companyMemberships: true,
+          companyMemberships: {
+            where: {
+              isDeleted: false,
+            },
+          },
         },
       },
     },
@@ -35,6 +30,11 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   if (!isOnCompany) {
     redirect("/onboarding/employer");
   }
+
+  if (!session.activeCompanyId) {
+    await setActiveCompany();
+  }
+
   return (
     <>
       {children}

@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 
 const CompanyMemberPage = async () => {
   const data: CompanyMemberType = await getCompanyMembers();
-  console.log(data);
 
   return (
     <SidebarContainer>

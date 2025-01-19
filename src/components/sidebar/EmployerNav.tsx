@@ -14,7 +14,7 @@ const EmployerNav = ({
   user,
   activeCompanyId,
 }: UserNavProps) => {
-  const { setActiveCompany } = useActiveCompany();
+  const { setActiveCompany, activeCompany } = useActiveCompany();
   const { data, isLoading } = useQueryAllCompanies();
 
   //todo: add one client component to this component and fetch companies and set active company there. make this nav server component as much as possible

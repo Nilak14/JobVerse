@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { handleError } from "@/lib/utils";
 import { CompanySchema } from "@/schema/CompanySchema";
 import { createSafeActionClient } from "next-safe-action";
 
@@ -62,7 +63,6 @@ export const createCompany = action
         data: { company: newCompany },
       };
     } catch (error) {
-      console.error("Error creating company:", error);
-      return { error: "Something went wrong" };
+      return handleError({ error, errorIn: "Create Company Action" });
     }
   });

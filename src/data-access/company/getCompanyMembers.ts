@@ -20,6 +20,7 @@ export const getCompanyMembers = cache(async () => {
     signOut();
     return [];
   }
+
   if (!session.activeCompanyId) {
     return [];
   }
@@ -27,11 +28,13 @@ export const getCompanyMembers = cache(async () => {
   const members = await prisma.companyMember.findMany({
     where: {
       companyId: session.activeCompanyId,
+      isDeleted: false,
     },
     include: getCompanyMemberInclude(),
     orderBy: {
       role: "asc", // To get Admin role first
     },
   });
+
   return members;
 });
