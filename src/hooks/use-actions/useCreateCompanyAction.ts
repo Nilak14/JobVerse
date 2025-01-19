@@ -36,7 +36,7 @@ const useCreateCompanyAction = ({
           : undefined;
 
         const uploadResult = logo && (await startUpload([logo]));
-        const newAvatarUrl = uploadResult?.[0].serverData.logoUrl;
+        const newAvatarUrl = uploadResult?.[0].serverData.cdnFileUrl;
         //todo: update the company logo to all the company job post cache
         const queryKey = ["companies"];
         await queryClient.cancelQueries(queryKey);
