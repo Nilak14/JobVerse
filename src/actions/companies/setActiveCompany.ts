@@ -33,12 +33,6 @@ export const setActiveCompany = async () => {
       return { success: false, message: "You are not part of any company" };
     }
 
-    console.log("start");
-
-    console.log(session);
-    console.log(userCompany);
-    console.log("end");
-
     await prisma.employer.updateMany({
       where: {
         id: session.employerId!,
