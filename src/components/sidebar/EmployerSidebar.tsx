@@ -14,6 +14,7 @@ import { CompanySwitcher } from "./CompanySwitcher";
 import { useQueryAllCompanies } from "@/hooks/query-hooks/getEmployeeCompany";
 import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { Skeleton } from "../ui/skeleton";
+import { useRouter } from "next/navigation";
 
 const EmployerSidebar = ({
   user,
@@ -24,7 +25,13 @@ const EmployerSidebar = ({
 }) => {
   const sidebarLinks = EmployerSideBarLinks;
   const { data, isLoading } = useQueryAllCompanies();
+  const router = useRouter();
   const companies: EmployerCompany[] = data?.data.companies;
+
+  if (!isLoading && companies.length === 0) {
+    router.push("/onboarding/employer");
+  }
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>

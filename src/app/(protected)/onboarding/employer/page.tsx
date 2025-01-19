@@ -23,7 +23,11 @@ const EmployerOnboardingPage = async () => {
     include: {
       EMPLOYER: {
         include: {
-          companyMemberships: true,
+          companyMemberships: {
+            where: {
+              isDeleted: false,
+            },
+          },
         },
       },
     },

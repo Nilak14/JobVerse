@@ -2,6 +2,7 @@
 
 import { auth, signOut } from "@/auth";
 import prisma from "@/lib/prisma";
+import { handleError } from "@/lib/utils";
 import { createSafeActionClient } from "next-safe-action";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
@@ -40,12 +41,21 @@ export const acceptInvitation = action
             invitee: true,
           },
         }),
+
         prisma.employer.findUnique({
           where: {
             userId: session.user.id,
           },
         }),
       ]);
+
+      if (invitation?.company.isDeleted) {
+        return {
+          success: false,
+          message: "The Company does not Exist",
+          status: 404,
+        };
+      }
 
       // Check if the invitation exists
       if (!invitation) {
@@ -70,19 +80,46 @@ export const acceptInvitation = action
         };
       }
 
-      await prisma.company.update({
+      const memberExistAlready = await prisma.companyMember.findUnique({
         where: {
-          id: invitation.companyId,
-        },
-        data: {
-          members: {
-            create: {
-              employerId: inviteeEmployer.id,
-              role: "MEMBER",
-            },
+          employerId_companyId: {
+            employerId: inviteeEmployer.id,
+            companyId: invitation.companyId,
           },
+          isDeleted: true,
         },
       });
+
+      if (memberExistAlready) {
+        await prisma.companyMember.update({
+          where: {
+            employerId_companyId: {
+              employerId: inviteeEmployer.id,
+              companyId: invitation.companyId,
+            },
+            isDeleted: true,
+          },
+          data: {
+            isDeleted: false,
+            deletedAt: null,
+          },
+        });
+      } else {
+        await prisma.company.update({
+          where: {
+            id: invitation.companyId,
+            isDeleted: false,
+          },
+          data: {
+            members: {
+              create: {
+                employerId: inviteeEmployer.id,
+                role: "MEMBER",
+              },
+            },
+          },
+        });
+      }
 
       if (inviteeEmployer.activeCompanyId === null) {
         await prisma.employer.update({
@@ -112,6 +149,9 @@ export const acceptInvitation = action
         status: 200,
       };
     } catch (error) {
-      return { success: false, message: "Something went wrong", status: 500 };
+      return {
+        ...handleError({ error, errorIn: "Accept Invitation Action" }),
+        status: 500,
+      };
     }
   });

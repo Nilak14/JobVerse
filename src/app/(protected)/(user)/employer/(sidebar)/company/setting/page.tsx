@@ -22,6 +22,7 @@ const getActiveCompany = cache(
     const activeCompany = await prisma.company.findUnique({
       where: {
         id: companyId,
+        isDeleted: false,
       },
       include: getCompanyInclude(employerId),
     });
@@ -43,6 +44,7 @@ export const generateMetadata = async () => {
 };
 const CompanySettingsPage = async () => {
   const session = await auth();
+
   if (
     !session ||
     !session.user ||

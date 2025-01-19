@@ -83,6 +83,7 @@ const DeleteCompanyModal = ({
         <ResponsiveModalDescription className="sr-only">
           Remove Members From {activeCompany.name}
         </ResponsiveModalDescription>
+
         <div className="flex items-center flex-col">
           <p className="text-sm  mb-2 self-start">
             To Confirm, type "Delete {activeCompany.name}" in the box below
@@ -104,6 +105,7 @@ const DeleteCompanyModal = ({
             </Button>
           ) : (
             <LoadingButton
+              type="submit"
               loading={isExecuting}
               onClick={() =>
                 execute({

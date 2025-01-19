@@ -96,7 +96,7 @@ const RemoveCompanyMemberPopover = ({
               onClick={() => {
                 execute({
                   employerId: member.employer.id,
-                  companyId: activeCompany.id,
+                  isAdminAction: true,
                 });
               }}
               loading={isExecuting}

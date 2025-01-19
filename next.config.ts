@@ -16,11 +16,11 @@ const nextConfig: NextConfig = {
         hostname: `${process.env.UPLOADTHING_APP_ID}.ufs.sh`,
         pathname: "/f/*",
       },
-      {
-        protocol: "https",
-        hostname: "utfs.io",
-        pathname: `/a/${process.env.UPLOADTHING_APP_ID}/*`,
-      },
+      // {
+      //   protocol: "https",
+      //   hostname: "utfs.io",
+      //   pathname: `/a/${process.env.UPLOADTHING_APP_ID}/*`,
+      // },
       {
         protocol: "https",
         hostname: "*.googleusercontent.com",

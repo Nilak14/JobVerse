@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import LoadingButton from "./ui/loading-button";
 import { useActiveCompany } from "@/store/useActiveCompany";
+import { useQueryClient } from "react-query";
 
 interface CompanySwitchDialogProps {
   open: boolean;
@@ -29,6 +30,7 @@ const CompanySwitchDialog = ({
   setActiveCompany,
 }: CompanySwitchDialogProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { setActiveCompany: setActiveCompanyStore } = useActiveCompany();
   const { execute, status } = useAction(switchCompany, {
     onSuccess: ({ data }) => {
@@ -40,8 +42,11 @@ const CompanySwitchDialog = ({
         setActiveCompanyStore(company);
         router.refresh();
         setOpen(false);
-      } else if (data?.error) {
-        toast.error(data.error, { id: "switch-company" });
+      } else {
+        toast.error(data?.message, { id: "switch-company" });
+        queryClient.invalidateQueries({ queryKey: ["companies"] });
+        router.refresh();
+        setOpen(false);
       }
     },
     onError: () => {

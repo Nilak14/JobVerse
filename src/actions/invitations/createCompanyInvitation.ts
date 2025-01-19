@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { getEmployerPendingInvitations } from "@/lib/prisma-types/Invitations";
 import { getPusherInstance } from "@/lib/pusher/server";
+import { handleError } from "@/lib/utils";
 import { InvitationSchema } from "@/schema/InvitationSchema";
 import { createSafeActionClient } from "next-safe-action";
 
@@ -95,17 +96,6 @@ export const createInvitation = action
         throw new Error("Something went wrong");
       }
     } catch (error) {
-      if (error instanceof Error) {
-        console.log("error", error.message);
-        return {
-          success: false,
-          message: error.message || "Something went wrong",
-        };
-      } else {
-        return {
-          success: false,
-          message: String(error || "Something Went Wrong"),
-        };
-      }
+      return handleError({ error, errorIn: "Create Company Invitation" });
     }
   });

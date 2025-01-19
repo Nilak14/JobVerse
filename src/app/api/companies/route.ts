@@ -11,6 +11,7 @@ import { NextRequest } from "next/server";
 export const GET = async (req: NextRequest) => {
   try {
     const session = await auth();
+
     if (!session || !session.user) {
       return Response.json({ message: "Unauthorized" }, { status: 401 });
     }
@@ -35,6 +36,7 @@ export const GET = async (req: NextRequest) => {
         isDeleted: false,
         members: {
           some: {
+            isDeleted: false,
             employer: {
               id: employer.id,
             },

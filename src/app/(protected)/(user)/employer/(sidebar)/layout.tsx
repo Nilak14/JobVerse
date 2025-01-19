@@ -18,6 +18,7 @@ const EmployerSidebarLayout = async ({
   if (!user || user.type !== "EMPLOYER") {
     redirect("/login");
   }
+  console.log("hi");
 
   return (
     <SidebarProvider>

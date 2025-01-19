@@ -6,6 +6,7 @@ import {
 } from "@/lib/prisma-types/Invitations";
 import { NextRequest } from "next/server";
 
+// get all the pending invitation of the user
 export const GET = async (req: NextRequest) => {
   try {
     const session = await auth();

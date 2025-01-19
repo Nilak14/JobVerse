@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { handleError } from "@/lib/utils";
 import { createSafeActionClient } from "next-safe-action";
 import { z } from "zod";
 
@@ -22,8 +23,10 @@ export const switchCompany = action
       // check if user belongs to that company or not
       const employerCompany = await prisma.companyMember.findFirst({
         where: {
+          isDeleted: false,
           company: {
             id: companyId,
+            isDeleted: false,
           },
           employer: {
             userId: session.user.id,
@@ -32,7 +35,8 @@ export const switchCompany = action
       });
       if (!employerCompany) {
         return {
-          error: "Company Not Found or You are not part of this company",
+          success: false,
+          message: "Company Not Found or You are not part of this company",
         };
       }
 
@@ -41,8 +45,8 @@ export const switchCompany = action
         data: { activeCompanyId: companyId },
       });
 
-      return { success: "Company switched successfully" };
+      return { success: true, message: "Company switched successfully " };
     } catch (error) {
-      return { error: "Something went wrong, while switching the company" };
+      return handleError({ error, errorIn: "Switch Company Action" });
     }
   });

@@ -11,3 +11,23 @@ export function cn(...inputs: ClassValue[]) {
 export const getTimeDistance = (from: Date) => {
   return formatDistanceToNowStrict(from);
 };
+
+type HandleError = {
+  error: unknown;
+  defaultMessage?: string;
+  errorIn: string;
+};
+
+export const handleError = ({
+  error,
+  defaultMessage = "Internal Server Error",
+  errorIn,
+}: HandleError): { success: false; message: string } => {
+  console.error(errorIn, error);
+
+  if (error instanceof Error) {
+    return { success: false, message: error.message };
+  }
+
+  return { success: false, message: defaultMessage };
+};
