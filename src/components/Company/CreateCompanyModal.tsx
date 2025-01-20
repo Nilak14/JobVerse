@@ -8,9 +8,12 @@ import {
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
 import { ExtendedUser } from "@/next-auth";
-import AvatarInput from "./Global/AvatarInput";
 import { useEffect, useState } from "react";
-import { Label } from "./ui/label";
+import { CompanySchema, CompanySchemaType } from "@/schema/CompanySchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import useCreateCompanyAction from "@/hooks/use-actions/useCreateCompanyAction";
+import { Label } from "../ui/label";
+import AvatarInput from "@/components/Global/AvatarInput";
 import {
   Form,
   FormControl,
@@ -18,13 +21,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import LoadingButton from "@/components/ui/loading-button";
 import { useForm } from "react-hook-form";
-import { CompanySchema, CompanySchemaType } from "@/schema/CompanySchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "./ui/input";
-import LoadingButton from "./ui/loading-button";
-import useCreateCompanyAction from "@/hooks/use-actions/useCreateCompanyAction";
 interface CreateCompanyModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;

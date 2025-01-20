@@ -12,8 +12,8 @@ import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
-import { Button } from "./ui/button";
-import LoadingButton from "./ui/loading-button";
+import { Button } from "../ui/button";
+import LoadingButton from "../ui/loading-button";
 import { useActiveCompany } from "@/store/useActiveCompany";
 import { useQueryClient } from "react-query";
 

@@ -20,8 +20,8 @@ import {
 import UserAvatar from "../Global/Useravatar";
 import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { ExtendedUser } from "@/next-auth";
-import CreateCompanyModal from "../CreateCompanyModal";
-import CompanySwitchDialog from "../CompanySwitchDialog";
+import CreateCompanyModal from "@/components/Company/CreateCompanyModal";
+import CompanySwitchDialog from "@/components/Company/CompanySwitchDialog";
 import { useActiveCompany } from "@/store/useActiveCompany";
 
 export function CompanySwitcher({

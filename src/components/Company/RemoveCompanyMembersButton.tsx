@@ -1,35 +1,35 @@
 "use client";
-import { LogOut } from "lucide-react";
-import { Button } from "./ui/button";
+import { UserMinus } from "lucide-react";
+import { Button } from "../ui/button";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useState } from "react";
-import LeaveCompanyModal from "./LeaveCompanyModal";
+import RemoveCompanyMemberModal from "./RemoveCompanyMemberModal";
 import { Session } from "next-auth";
 
-interface LeaveCompanyButtonProps {
+interface RemoveCompanyMembersButtonProps {
   activeCompany: CompanyInclude;
   session: Session;
 }
 
-const LeaveCompanyButton = ({
+const RemoveCompanyMembersButton = ({
   activeCompany,
   session,
-}: LeaveCompanyButtonProps) => {
+}: RemoveCompanyMembersButtonProps) => {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Button
-        onClick={() => setOpen(true)}
         className="w-full"
+        onClick={() => setOpen(true)}
         variant="destructive"
       >
         <span>
-          <LogOut />
+          <UserMinus />
         </span>
-        <span>Leave Company</span>
+        <span>Remove Members</span>
       </Button>
       {open && (
-        <LeaveCompanyModal
+        <RemoveCompanyMemberModal
           session={session}
           open={open}
           setOpen={setOpen}
@@ -39,4 +39,4 @@ const LeaveCompanyButton = ({
     </>
   );
 };
-export default LeaveCompanyButton;
+export default RemoveCompanyMembersButton;

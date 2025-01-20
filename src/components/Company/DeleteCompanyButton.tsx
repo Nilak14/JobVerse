@@ -1,9 +1,9 @@
 "use client";
 import { Trash } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useState } from "react";
-import DeleteCompanyModal from "./DeleteCompanyModal";
+import DeleteCompanyModal from "@/components/Company/DeleteCompanyModal";
 import { Session } from "next-auth";
 
 interface DeleteCompanyButtonProps {

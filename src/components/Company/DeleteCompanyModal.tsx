@@ -6,17 +6,17 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
-import { Input } from "./ui/input";
+import { Input } from "@/components/ui/input";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Session } from "next-auth";
 import { useAction } from "next-safe-action/hooks";
 import { deleteCompany } from "@/actions/companies/deleteCompany";
 import { toast } from "sonner";
 import { Building } from "lucide-react";
 import { useRouter } from "next/navigation";
-import LoadingButton from "./ui/loading-button";
+import LoadingButton from "@/components/ui/loading-button";
 
 interface DeleteCompanyModalProps {
   open: boolean;
