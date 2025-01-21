@@ -7,13 +7,13 @@ import {
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useAction } from "next-safe-action/hooks";
 import { leaveCompany } from "@/actions/companies/leaveCompany";
 import { toast } from "sonner";
 import { Building } from "lucide-react";
 import { useRouter } from "next/navigation";
-import LoadingButton from "./ui/loading-button";
+import LoadingButton from "../ui/loading-button";
 import { Session } from "next-auth";
 
 interface LeaveCompanyModalProps {

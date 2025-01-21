@@ -7,6 +7,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
+import SidebarPageTransition from "@/context/SidebarPageTransition";
 
 const EmployerSidebarLayout = async ({
   children,
@@ -35,7 +36,7 @@ const EmployerSidebarLayout = async ({
               hasSidebar
             />
           </div>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">{children}</div>
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
         </SidebarInset>
       </div>
     </SidebarProvider>

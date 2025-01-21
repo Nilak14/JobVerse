@@ -4,15 +4,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Building, UserX } from "lucide-react";
 import { useState } from "react";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
-import { Session } from "next-auth";
 import { useAction } from "next-safe-action/hooks";
 import { leaveCompany } from "@/actions/companies/leaveCompany";
 import { toast } from "sonner";
-import LoadingButton from "./ui/loading-button";
+import LoadingButton from "@/components/ui/loading-button";
 import { useRouter } from "next/navigation";
 
 interface RemoveCompanyMemberPopoverProps {

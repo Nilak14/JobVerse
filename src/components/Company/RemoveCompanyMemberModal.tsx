@@ -5,19 +5,18 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
-import { Input } from "./ui/input";
-import { Search, UserX } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
-import UserAvatar from "./Global/Useravatar";
-import LoadingButton from "./ui/loading-button";
+import UserAvatar from "@/components/Global/Useravatar";
 
 import { motion } from "framer-motion";
-import { AnimatedList } from "./ui/animated-list";
+import { AnimatedList } from "@/components/ui/animated-list";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { useEffect, useState } from "react";
-import EmployerSearchSkeleton from "./skeletons/EmployerSearchSkeleton";
+import EmployerSearchSkeleton from "@/components/skeletons/EmployerSearchSkeleton";
 import { Session } from "next-auth";
-import RemoveCompanyMemberPopover from "./RemoveCompanyMemberPopover";
+import RemoveCompanyMemberPopover from "@/components/Company/RemoveCompanyMemberPopover";
 
 interface RemoveCompanyMemberModalProps {
   open: boolean;
