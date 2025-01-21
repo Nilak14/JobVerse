@@ -1,27 +1,28 @@
 import { Loader2 } from "lucide-react";
+import { TextShimmerWave } from "./wave-text";
 
 interface BlockLoaderProps {
   isLoading?: boolean;
   loaderSize?: number;
-  loaderColor?: string;
+  textSize?: "xs" | "sm" | "md" | "xl" | "2xl";
+  textContent?: string;
 }
 
 const BlockLoader = ({
+  textContent = "Loading",
   isLoading = true,
-  loaderSize = 50,
-  loaderColor = "white",
+  textSize = "xl",
 }: BlockLoaderProps) => {
   if (!isLoading) return null;
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center">
       <div
-        className={`absolute inset-0 bg-black/45 backdrop-blur-[1px]  rounded-lg`}
+        className={`absolute inset-0 bg-gray-400/45 dark:bg-black/50 backdrop-blur-[1px]  rounded-lg`}
       />
-      <Loader2
-        size={loaderSize}
-        className={`animate-spin text-${loaderColor} relative`}
-      />
+      <TextShimmerWave className={`text-${textSize}`} duration={1}>
+        {`${textContent}...`}
+      </TextShimmerWave>
     </div>
   );
 };

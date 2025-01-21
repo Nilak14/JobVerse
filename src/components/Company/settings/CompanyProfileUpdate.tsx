@@ -10,7 +10,6 @@ import {
 import { CompanyInclude } from "@/lib/prisma-types/Company";
 import { Session } from "next-auth";
 import CompanySettingsHeader from "@/components/Company/settings/CompanySettingsHeader";
-import Image from "next/image";
 import {
   Form,
   FormControl,
@@ -21,7 +20,6 @@ import {
 } from "@/components/ui/form";
 import { CompanySchema, CompanySchemaType } from "@/schema/CompanySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@/components/ui/label";
 import AvatarInput from "@/components/Global/AvatarInput";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -61,51 +59,54 @@ const CompanyProfileUpdate = ({
         description="Update Your Company Basic Profile"
       />
       <Card className="relative">
-        <BlockLoader isLoading />
+        <BlockLoader isLoading={loading} textContent="Updating" />
         <CardHeader className="sr-only">
           <CardTitle>Company Profile</CardTitle>
           <CardDescription>Update Your Company Basic Profile</CardDescription>
         </CardHeader>
         <CardContent className="py-5">
-          <div className="space-y-1.5">
-            <Label>Company Logo</Label>
-            <div className="flex items-center gap-10">
-              <AvatarInput
-                src={
-                  croppedAvatar
-                    ? URL.createObjectURL(croppedAvatar)
-                    : activeCompany.logoUrl!
-                }
-                onImageCropped={setCroppedAvatar}
-              />
-            </div>
-            {error && <p className="text-destructive text-sm">{error}</p>}
-          </div>
-          {form.formState.errors.logo && (
-            <p className="text-destructive text-sm">
-              {form.formState.errors.logo.message}
-            </p>
-          )}
           <Form {...form}>
             <form className="space-y-5">
               {/* <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5"> */}
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        {...field}
-                        placeholder="Enter Company Name"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-2 flex gap-10 items-center w-full">
+                <div className="flex items-center gap-10">
+                  <AvatarInput
+                    src={
+                      croppedAvatar
+                        ? URL.createObjectURL(croppedAvatar)
+                        : activeCompany.logoUrl!
+                    }
+                    onImageCropped={setCroppedAvatar}
+                  />
+                </div>
+                {error && <p className="text-destructive text-sm">{error}</p>}
+                <div className="w-full">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="w-full"
+                            disabled={loading}
+                            {...field}
+                            placeholder="Enter Company Name"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              {form.formState.errors.logo && (
+                <p className="text-destructive text-sm">
+                  {form.formState.errors.logo.message}
+                </p>
+              )}
+
               <FormField
                 control={form.control}
                 name="description"
