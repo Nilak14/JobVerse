@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
 import { toast } from "sonner";
 
-const useCreateCompanyAction = ({
+const useUpdateCompanyAction = ({
   setLoading,
 }: {
   setLoading: (state: boolean) => void;
@@ -16,6 +16,7 @@ const useCreateCompanyAction = ({
   const { startUpload } = useUploadThing("companyLogo");
   const updateCompanyAction = useAction(updateCompany, {
     onExecute: () => {
+      setLoading(true);
       toast.loading("Updating Details....", { id: "update-company" });
     },
     onError: () => {
@@ -23,13 +24,15 @@ const useCreateCompanyAction = ({
       setLoading(false);
     },
     onSuccess: async ({ data, input }) => {
-      setLoading(true);
+      let newAvatarUrl: string | null | undefined = null;
       if (data?.success && data.data?.company) {
-        const logo = input.logo
-          ? new File([input.logo], `logo_avatar_${data.data.company.id}.webp`)
-          : undefined;
-        const uploadResult = logo && (await startUpload([logo]));
-        const newAvatarUrl = uploadResult?.[0].serverData.cdnFileUrl;
+        if (input.logo) {
+          const logo = input.logo
+            ? new File([input.logo], `logo_avatar_${data.data.company.id}.webp`)
+            : undefined;
+          const uploadResult = logo && (await startUpload([logo]));
+          newAvatarUrl = uploadResult?.[0].serverData.cdnFileUrl;
+        }
 
         const queryKey = ["companies"];
         await queryClient.cancelQueries(queryKey);
@@ -45,7 +48,8 @@ const useCreateCompanyAction = ({
                 message: "Error in updating Company",
               };
             }
-            data.data.company.logoUrl = newAvatarUrl!;
+            data.data.company.logoUrl =
+              newAvatarUrl || data.data.company.logoUrl;
             return {
               data: {
                 companies: oldData.data.companies.map((c) => {
@@ -63,6 +67,8 @@ const useCreateCompanyAction = ({
             };
           }
         );
+        setLoading(false);
+        toast.success(data.message, { id: "update-company" });
       } else {
         setLoading(false);
         toast.error(data?.message || "Something Went Wrong", {
@@ -75,4 +81,4 @@ const useCreateCompanyAction = ({
   return updateCompanyAction;
 };
 
-export default updateCompany;
+export default useUpdateCompanyAction;

@@ -1,19 +1,19 @@
 "use server";
 
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { handleError } from "@/lib/utils";
 import { CompanySchema } from "@/schema/CompanySchema";
 import { createSafeActionClient } from "next-safe-action";
+import { revalidatePath } from "next/cache";
 
 const action = createSafeActionClient();
 
 export const updateCompany = action
   .schema(CompanySchema)
-  .action(async ({ parsedInput: { description, name, logo, websiteURl } }) => {
+  .action(async ({ parsedInput: { description, name, websiteURl } }) => {
     try {
       const session = await auth();
-
       if (
         !session ||
         !session.user ||
@@ -68,7 +68,7 @@ export const updateCompany = action
           website: websiteURl,
         },
       });
-
+      revalidatePath("/employer/company/setting");
       return {
         success: true,
         message: "Company Details Updated Successfully",

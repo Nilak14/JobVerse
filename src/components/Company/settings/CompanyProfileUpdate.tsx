@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import { useForm } from "react-hook-form";
 import BlockLoader from "@/components/ui/block-loader";
+import useUpdateCompanyAction from "@/hooks/use-actions/useUpdateCompanyAction";
 interface CompanyProfileUpdateProps {
   activeCompany: CompanyInclude;
   session: Session;
@@ -52,6 +53,29 @@ const CompanyProfileUpdate = ({
       setError(null);
     }
   }, [croppedAvatar]);
+
+  const { execute, status } = useUpdateCompanyAction({ setLoading });
+
+  const onSubmit = (data: CompanySchemaType) => {
+    if (croppedAvatar) {
+      const companyLogo = croppedAvatar
+        ? new File([croppedAvatar], `logo_avatar_${data.name}.webp`)
+        : undefined;
+      execute({
+        name: data.name,
+        description: data.description,
+        websiteURl: data.websiteURl,
+        logo: companyLogo,
+      });
+    } else {
+      execute({
+        name: data.name,
+        description: data.description,
+        websiteURl: data.websiteURl,
+      });
+    }
+  };
+
   return (
     <div>
       <CompanySettingsHeader
@@ -64,12 +88,14 @@ const CompanyProfileUpdate = ({
           <CardTitle>Company Profile</CardTitle>
           <CardDescription>Update Your Company Basic Profile</CardDescription>
         </CardHeader>
-        <CardContent className="py-5">
-          <Form {...form}>
-            <form className="space-y-5">
-              {/* <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5"> */}
-              <div className="space-y-2 flex gap-10 items-center w-full">
-                <div className="flex items-center gap-10">
+        <Form {...form}>
+          {error && (
+            <p className="text-destructive text-sm text-center mt-3">{error}</p>
+          )}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <CardContent className="py-5 space-y-5">
+              <div className="space-y-2 flex gap-10 items-center w-full  flex-col sm:flex-row ">
+                <div className="flex items-center gap-10 ">
                   <AvatarInput
                     src={
                       croppedAvatar
@@ -79,8 +105,7 @@ const CompanyProfileUpdate = ({
                     onImageCropped={setCroppedAvatar}
                   />
                 </div>
-                {error && <p className="text-destructive text-sm">{error}</p>}
-                <div className="w-full">
+                <div className="flex-1 w-full">
                   <FormField
                     control={form.control}
                     name="name"
@@ -141,14 +166,19 @@ const CompanyProfileUpdate = ({
                   </FormItem>
                 )}
               />
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter>
-          <LoadingButton type="submit" loading={loading}>
-            Update Changes
-          </LoadingButton>
-        </CardFooter>
+            </CardContent>
+            <CardFooter>
+              <LoadingButton
+                disabled={!form.formState.isDirty && croppedAvatar === null}
+                className="w-full sm:w-auto"
+                type="submit"
+                loading={loading}
+              >
+                Update Changes
+              </LoadingButton>
+            </CardFooter>
+          </form>
+        </Form>
       </Card>
     </div>
   );

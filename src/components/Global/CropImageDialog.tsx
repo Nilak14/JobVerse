@@ -9,6 +9,7 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import "cropperjs/dist/cropper.css";
+import { DialogDescription } from "@radix-ui/react-dialog";
 interface CropImageDialogProps {
   src: string;
   cropAspectRatio: number;
@@ -36,6 +37,9 @@ const CropImageDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Adjust Image</DialogTitle>
+          <DialogDescription className="sr-only">
+            Crop Your Image
+          </DialogDescription>
         </DialogHeader>
         <div className="overflow-y-auto max-h-[400px] overflow-x-hidden grid place-items-center">
           <Cropper
