@@ -1,29 +1,25 @@
 import { Prisma } from "@prisma/client";
 
-// get Employer Companies-----------------------------------------------------------
-export function getEmployerCompanies() {
+// get Employer Companies--------------------------------------------------------
+
+export function OmitEmployerCompanies() {
   return {
-    companies: {
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        website: true,
-        logoUrl: true,
-      },
-    },
-  } satisfies Prisma.EmployerInclude;
+    isDeleted: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  } satisfies Prisma.CompanyOmit;
 }
 
-export type EmployerCompanies = Prisma.EmployerGetPayload<{
-  include: ReturnType<typeof getEmployerCompanies>;
+export type EmployerCompany = Prisma.CompanyGetPayload<{
+  omit: ReturnType<typeof OmitEmployerCompanies>;
 }>;
 
 export type EmployerCompaniesResponse = {
   success: boolean;
   message: string;
   data: {
-    companies: EmployerCompanies["companies"];
+    companies: EmployerCompany[];
   };
 };
 
@@ -38,7 +34,7 @@ export function getEmployerSearch() {
     EMPLOYER: {
       select: {
         id: true,
-        companies: true,
+        companyMemberships: true,
       },
     },
   } satisfies Prisma.UserSelect;

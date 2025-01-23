@@ -38,12 +38,13 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
+    // check company exist or not at first
     const company = await prisma.company.findUnique({
       where: {
         id: companyId,
       },
       include: {
-        employers: true,
+        members: true,
       },
     });
     if (!company) {
@@ -73,7 +74,7 @@ export const GET = async (req: NextRequest) => {
             EMPLOYER: {
               AND: [
                 {
-                  companies: {
+                  companyMemberships: {
                     none: {
                       // exclude the employer who already are already in that company
                       id: companyId,
@@ -86,7 +87,7 @@ export const GET = async (req: NextRequest) => {
                         { companyId: companyId },
                         {
                           status: {
-                            in: ["PENDING", "ACCEPTED"],
+                            in: ["PENDING"],
                           },
                         },
                       ],

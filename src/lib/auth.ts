@@ -9,13 +9,14 @@ export const auth = async () => {
   // Fetch activeCompanyId for the employer
   const employer = await prisma.employer.findFirst({
     where: { userId: session.user.id },
-    select: { activeCompanyId: true },
+    select: { activeCompanyId: true, id: true },
   });
 
   return {
     ...session,
     activeCompanyId: employer?.activeCompanyId || null,
+    employerId: employer?.id || null,
   };
 };
 
-//! after updating the auth function, update the useClientSession hook also.
+//! after updating the auth function, update the useClientSession hook also. (use-session folder)

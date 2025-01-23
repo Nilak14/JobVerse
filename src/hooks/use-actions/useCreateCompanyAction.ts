@@ -1,8 +1,9 @@
-import { createCompany } from "@/actions/createCompany";
+import { createCompany } from "@/actions/companies/createCompany";
 import {
-  EmployerCompanies,
+  EmployerCompany,
   EmployerCompaniesResponse,
-} from "@/lib/prismaTypes";
+} from "@/lib/prisma-types/Employers";
+
 import { useUploadThing } from "@/lib/uploadthing";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
@@ -35,7 +36,7 @@ const useCreateCompanyAction = ({
           : undefined;
 
         const uploadResult = logo && (await startUpload([logo]));
-        const newAvatarUrl = uploadResult?.[0].serverData.logoUrl;
+        const newAvatarUrl = uploadResult?.[0].serverData.cdnFileUrl;
         //todo: update the company logo to all the company job post cache
         const queryKey = ["companies"];
         await queryClient.cancelQueries(queryKey);
@@ -48,6 +49,7 @@ const useCreateCompanyAction = ({
                   companies: [],
                 },
                 success: false,
+                message: "Could not fetch companies",
               };
             }
             data.data.company.logoUrl = newAvatarUrl!;
@@ -55,10 +57,11 @@ const useCreateCompanyAction = ({
               data: {
                 companies: [
                   ...oldData.data.companies,
-                  data.data.company as EmployerCompanies["companies"][0],
+                  data.data.company as EmployerCompany,
                 ],
               },
               success: oldData.success,
+              message: oldData.message,
             };
           }
         );

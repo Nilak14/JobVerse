@@ -7,14 +7,14 @@ import { SidebarUser } from "./SidebarUser";
 import { UserNavProps } from "@/lib/types";
 import { useQueryAllCompanies } from "@/hooks/query-hooks/getEmployeeCompany";
 import { useEffect } from "react";
-import { EmployerCompanies } from "@/lib/prismaTypes";
+import { EmployerCompany } from "@/lib/prisma-types/Employers";
 
 const EmployerNav = ({
   hasSidebar = false,
   user,
   activeCompanyId,
 }: UserNavProps) => {
-  const { setActiveCompany } = useActiveCompany();
+  const { setActiveCompany, activeCompany } = useActiveCompany();
   const { data, isLoading } = useQueryAllCompanies();
 
   //todo: add one client component to this component and fetch companies and set active company there. make this nav server component as much as possible
@@ -23,8 +23,7 @@ const EmployerNav = ({
     if (activeCompanyId) {
       if (data) {
         const activeCompany = data.data.companies.find(
-          (company: EmployerCompanies["companies"][0]) =>
-            company.id === activeCompanyId
+          (company: EmployerCompany) => company.id === activeCompanyId
         );
 
         setActiveCompany(activeCompany);

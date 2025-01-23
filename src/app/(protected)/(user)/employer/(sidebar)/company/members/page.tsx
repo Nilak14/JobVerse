@@ -1,17 +1,31 @@
+import { companyEmployerColumns } from "@/columns/company-user-column";
+import JVTableClient from "@/components/Global/JVTableClient";
 import SidebarContainer from "@/components/Global/SidebarContainer";
 import InviteNewMemberButton from "@/components/InviteNewMemberButton";
+import { getCompanyMembers } from "@/data-access/company/getCompanyMembers";
+import { CompanyMemberType } from "@/lib/prisma-types/CompanyMember";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Company Members",
 };
 
-const CompanyMemberPage = () => {
+const CompanyMemberPage = async () => {
+  const data: CompanyMemberType = await getCompanyMembers();
+
   return (
     <SidebarContainer>
-      <div className="w-full flex justify-end items-end">
-        <InviteNewMemberButton />
-      </div>
+      <section className="flex flex-col w-full gap-10">
+        <div className="w-full flex justify-end items-end">
+          <InviteNewMemberButton />
+        </div>
+        <JVTableClient
+          searchColumn={"name"}
+          searchPlaceholder="Search User..."
+          columns={companyEmployerColumns}
+          data={data || []}
+        />
+      </section>
     </SidebarContainer>
   );
 };

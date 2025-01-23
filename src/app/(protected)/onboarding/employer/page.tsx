@@ -23,13 +23,17 @@ const EmployerOnboardingPage = async () => {
     include: {
       EMPLOYER: {
         include: {
-          companies: true,
+          companyMemberships: {
+            where: {
+              isDeleted: false,
+            },
+          },
         },
       },
     },
   });
 
-  const isOnCompany = employer?.EMPLOYER?.companies.length;
+  const isOnCompany = employer?.EMPLOYER?.companyMemberships.length;
   if (isOnCompany) {
     redirect("/employer/dashboard");
   }

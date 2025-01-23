@@ -1,5 +1,5 @@
 "use client";
-import CreateCompanyModal from "@/components/CreateCompanyModal";
+import CreateCompanyModal from "@/components/Company/CreateCompanyModal";
 import CardWrapper from "@/components/Global/CardWrapper";
 import InvitationsModal from "@/components/InvitationsModal";
 import { Button } from "@/components/ui/button";

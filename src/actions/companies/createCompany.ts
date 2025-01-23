@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { handleError } from "@/lib/utils";
 import { CompanySchema } from "@/schema/CompanySchema";
 import { createSafeActionClient } from "next-safe-action";
 
@@ -20,7 +21,6 @@ export const createCompany = action
       // Check if the user is an employer
       const employer = await prisma.employer.findUnique({
         where: { userId: user.id },
-        // select: { activeCompanyId: true, id: true },
       });
 
       if (!employer) {
@@ -34,8 +34,11 @@ export const createCompany = action
           description,
           website: websiteURl,
           adminEmployerId: employer.id,
-          employers: {
-            connect: { id: employer.id },
+          members: {
+            create: {
+              employerId: employer.id,
+              role: "ADMIN",
+            },
           },
         },
         select: {
@@ -59,7 +62,6 @@ export const createCompany = action
         data: { company: newCompany },
       };
     } catch (error) {
-      console.error("Error creating company:", error);
-      return { error: "Something went wrong" };
+      return handleError({ error, errorIn: "Create Company Action" });
     }
   });

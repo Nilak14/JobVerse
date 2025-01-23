@@ -1,6 +1,5 @@
 "use client";
 
-import { AdminSideBarLinks } from "@/lib/data";
 import { ExtendedUser } from "@/next-auth";
 import {
   Sidebar,
@@ -11,6 +10,7 @@ import {
 import { SidebarTop } from "./SidebarTop";
 import { SidebarMainNav } from "./SidebarMainNav";
 import { SidebarUser } from "./SidebarUser";
+import { AdminSideBarLinks } from "@/lib/routes/AdminRoute";
 
 const AdminSidebar = ({ user }: { user: ExtendedUser }) => {
   const sidebarLinks = AdminSideBarLinks;

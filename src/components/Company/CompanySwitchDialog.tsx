@@ -1,4 +1,4 @@
-import { switchCompany } from "@/actions/SwitchCompany";
+import { switchCompany } from "@/actions/companies/SwitchCompany";
 import {
   ResponsiveModal,
   ResponsiveModalContent,
@@ -7,28 +7,21 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
-import { EmployerCompanies } from "@/lib/prisma-types/Employers";
+import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
-import { Button } from "./ui/button";
-import LoadingButton from "./ui/loading-button";
+import { Button } from "../ui/button";
+import LoadingButton from "../ui/loading-button";
 import { useActiveCompany } from "@/store/useActiveCompany";
+import { useQueryClient } from "react-query";
 
 interface CompanySwitchDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  company: EmployerCompanies["companies"][0];
-  setActiveCompany: Dispatch<
-    SetStateAction<{
-      id: string;
-      logoUrl: string | null;
-      name: string;
-      description: string | null;
-      website: string | null;
-    }>
-  >;
+  company: EmployerCompany;
+  setActiveCompany: Dispatch<SetStateAction<EmployerCompany>>;
 }
 const CompanySwitchDialog = ({
   company,
@@ -37,6 +30,7 @@ const CompanySwitchDialog = ({
   setActiveCompany,
 }: CompanySwitchDialogProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { setActiveCompany: setActiveCompanyStore } = useActiveCompany();
   const { execute, status } = useAction(switchCompany, {
     onSuccess: ({ data }) => {
@@ -48,8 +42,11 @@ const CompanySwitchDialog = ({
         setActiveCompanyStore(company);
         router.refresh();
         setOpen(false);
-      } else if (data?.error) {
-        toast.error(data.error, { id: "switch-company" });
+      } else {
+        toast.error(data?.message, { id: "switch-company" });
+        queryClient.invalidateQueries({ queryKey: ["companies"] });
+        router.refresh();
+        setOpen(false);
       }
     },
     onError: () => {

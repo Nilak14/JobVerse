@@ -20,6 +20,11 @@ enum InvitationStatus {
   REJECTED
 }
 
+enum CompanyRole {
+  ADMIN
+  MEMBER
+}
+
 model User {
   id            String      @id @default(cuid())
   name          String?
@@ -89,32 +94,50 @@ model JOB_SEEKER {
 }
 
 model Employer {
-  id                  String        @id @default(cuid())
-  userId              String        @unique
-  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  companies           Company[]     @relation("EmployerCompanies") // Many-to-Many Relation
-  sentInvitations     Invitations[] @relation("InviterToInvitations") // Invitations sent by the employer
-  receivedInvitations Invitations[] @relation("InviteeToInvitations") // Invitations received by the employer
-  adminCompanies      Company[]     @relation("AdminEmployer") // Companies created by this employer
+  id                  String          @id @default(cuid())
+  userId              String          @unique
+  user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyMemberships  CompanyMember[] // Relationship through the join table
+  sentInvitations     Invitations[]   @relation("InviterToInvitations")
+  receivedInvitations Invitations[]   @relation("InviteeToInvitations")
+  adminCompanies      Company[]       @relation("AdminEmployer")
   activeCompanyId     String? // ID of the company the employer is currently active in
 
   @@map("employers")
 }
 
 model Company {
-  id              String        @id @default(cuid())
+  id              String          @id @default(cuid())
   logoUrl         String?
   name            String
   description     String?
   website         String?
   adminEmployerId String // ID of the employer who created this company
-  adminEmployer   Employer      @relation("AdminEmployer", fields: [adminEmployerId], references: [id], onDelete: Cascade) // Relation to the admin employer
-  employers       Employer[]    @relation("EmployerCompanies") // Many-to-Many Relation
-  invitations     Invitations[] // Invitations related to the company
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  adminEmployer   Employer        @relation("AdminEmployer", fields: [adminEmployerId], references: [id], onDelete: Cascade)
+  members         CompanyMember[] // Relationship through the join table
+  invitations     Invitations[]
+  isDeleted       Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  deletedAt       DateTime?
 
   @@map("companies")
+}
+
+model CompanyMember {
+  id         String      @id @default(cuid())
+  employerId String
+  companyId  String
+  role       CompanyRole @default(MEMBER)
+  joinedAt   DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  deletedAt  DateTime?
+  isDeleted  Boolean     @default(false)
+  employer   Employer    @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  company    Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([employerId, companyId])
+  @@map("company_members")
 }
 
 model Invitations {
