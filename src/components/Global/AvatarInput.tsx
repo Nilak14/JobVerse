@@ -43,7 +43,7 @@ const AvatarInput = ({
       <button
         type="button"
         onClick={() => avatarFileInputRef.current?.click()}
-        className="group relative block"
+        className="group relative block aspect-square"
       >
         <Image
           src={src}

@@ -21,7 +21,6 @@ export const createCompany = action
       // Check if the user is an employer
       const employer = await prisma.employer.findUnique({
         where: { userId: user.id },
-        // select: { activeCompanyId: true, id: true },
       });
 
       if (!employer) {
