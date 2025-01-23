@@ -1,6 +1,5 @@
 "use client";
 
-import { EmployerSideBarLinks } from "@/lib/data";
 import { ExtendedUser } from "@/next-auth";
 import {
   Sidebar,
@@ -15,6 +14,7 @@ import { useQueryAllCompanies } from "@/hooks/query-hooks/getEmployeeCompany";
 import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { Skeleton } from "../ui/skeleton";
 import { useRouter } from "next/navigation";
+import { EmployerSideBarLinks } from "@/lib/routes/EmployerRoute";
 
 const EmployerSidebar = ({
   user,
