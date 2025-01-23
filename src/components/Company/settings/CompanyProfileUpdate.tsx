@@ -154,7 +154,7 @@ const CompanyProfileUpdate = ({
                 name="websiteURl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Website Url</FormLabel>
+                    <FormLabel>Website URL</FormLabel>
                     <FormControl>
                       <Input
                         disabled={loading}
