@@ -41,6 +41,7 @@ const CompanySwitchDialog = ({
         setActiveCompany(company);
         setActiveCompanyStore(company);
         router.refresh();
+        // window.location.reload();
         setOpen(false);
       } else {
         toast.error(data?.message, { id: "switch-company" });

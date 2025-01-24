@@ -27,6 +27,10 @@ import LoadingButton from "@/components/ui/loading-button";
 import { useForm } from "react-hook-form";
 import BlockLoader from "@/components/ui/block-loader";
 import useUpdateCompanyAction from "@/hooks/use-actions/useUpdateCompanyAction";
+import CompanyDescriptionTiptap from "@/components/tiptap/CompanyDescriptionTipTap";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+
 interface CompanyProfileUpdateProps {
   activeCompany: CompanyInclude;
   session: Session;
@@ -36,6 +40,11 @@ const CompanyProfileUpdate = ({
   session,
 }: CompanyProfileUpdateProps) => {
   const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
+
+  const [companyAvatar, setCompanyAvatar] = useState<string | null>(
+    activeCompany.logoUrl
+  );
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const form = useForm<CompanySchemaType>({
@@ -54,8 +63,16 @@ const CompanyProfileUpdate = ({
     }
   }, [croppedAvatar]);
 
-  const { execute, status } = useUpdateCompanyAction({ setLoading });
-
+  const { execute, status } = useUpdateCompanyAction({
+    setLoading,
+    setCompanyAvatar,
+  });
+  useEffect(() => {
+    setCompanyAvatar(activeCompany.logoUrl);
+    form.setValue("name", activeCompany.name);
+    form.setValue("description", activeCompany.description || "");
+    form.setValue("websiteURl", activeCompany.website || "");
+  }, [activeCompany]);
   const onSubmit = (data: CompanySchemaType) => {
     if (croppedAvatar) {
       const companyLogo = croppedAvatar
@@ -75,6 +92,13 @@ const CompanyProfileUpdate = ({
       });
     }
   };
+
+  useEffect(() => {
+    if (croppedAvatar && status === "hasSucceeded" && !loading) {
+      setCroppedAvatar(null);
+    }
+    return;
+  }, [status]);
 
   return (
     <div>
@@ -100,7 +124,7 @@ const CompanyProfileUpdate = ({
                     src={
                       croppedAvatar
                         ? URL.createObjectURL(croppedAvatar)
-                        : activeCompany.logoUrl!
+                        : companyAvatar!
                     }
                     onImageCropped={setCroppedAvatar}
                   />
@@ -131,24 +155,44 @@ const CompanyProfileUpdate = ({
                   {form.formState.errors.logo.message}
                 </p>
               )}
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-lg font-semibold text-muted-foreground">
+                          Description
+                        </FormLabel>
+                        <FormControl>
+                          <div className="border border-input rounded-md p-4 bg-muted/10 shadow-sm">
+                            <CompanyDescriptionTiptap
+                              key={activeCompany.id}
+                              value={field.value}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div>
+                  <Label className="block text-lg font-semibold text-muted-foreground mb-2">
+                    Description Preview
+                  </Label>
+                  <div className="min-h-[120px] p-4 bg-background border border-input rounded-lg shadow-sm overflow-y-auto">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: form.watch("description"),
+                      }}
+                      className="prose max-w-full prose-sm text-muted-foreground"
+                    />
+                  </div>
+                </div>
+              </div>
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={loading}
-                        placeholder="Say Something about Your Company"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="websiteURl"
@@ -169,7 +213,10 @@ const CompanyProfileUpdate = ({
             </CardContent>
             <CardFooter>
               <LoadingButton
-                disabled={!form.formState.isDirty && croppedAvatar === null}
+                disabled={
+                  (!form.formState.isDirty || !form.formState.isValid) &&
+                  croppedAvatar === null
+                }
                 className="w-full sm:w-auto"
                 type="submit"
                 loading={loading}
