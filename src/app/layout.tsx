@@ -33,6 +33,10 @@ export default function RootLayout({
         sizes="180x180"
         href="/favicon/apple-touch-icon.png"
       />
+      <meta
+        name="google-site-verification"
+        content="XMUC6CCDKCNsy6UZamxuVqmwZqoFwG0Go3AKrEY_MuQ"
+      />
       <meta name="apple-mobile-web-app-title" content="JobVerse" />
       <link rel="manifest" href="/favicon/site.webmanifest" />
       <body className={`${font.className} antialiased`}>
