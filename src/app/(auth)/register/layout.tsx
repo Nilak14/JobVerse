@@ -7,6 +7,8 @@ interface LayoutProps {
 }
 export const metadata: Metadata = {
   title: "Register",
+  description:
+    "Register to JobVerse and explore new job opportunities or manage your hiring process with ease.",
 };
 const RegisterLayout = ({ children }: LayoutProps) => {
   return (

@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { cache } from "react";
 import DangerZone from "@/components/Company/settings/DangerZone";
 import CompanyProfileUpdate from "@/components/Company/settings/CompanyProfileUpdate";
+import { Metadata } from "next";
 
 const getActiveCompany = cache(
   async (companyId: string, employerId: string) => {
@@ -21,7 +22,7 @@ const getActiveCompany = cache(
   }
 );
 
-export const generateMetadata = async () => {
+export const generateMetadata = async (): Promise<Metadata> => {
   const session = await auth();
   if (!session || !session.user || !session.activeCompanyId) return {};
   const activeCompany = await getActiveCompany(
@@ -31,6 +32,9 @@ export const generateMetadata = async () => {
   return {
     title: `${activeCompany?.name} Settings` || "",
     description: "Company Settings",
+    openGraph: {
+      images: [{ url: activeCompany?.logoUrl || "" }],
+    },
   };
 };
 const CompanySettingsPage = async () => {

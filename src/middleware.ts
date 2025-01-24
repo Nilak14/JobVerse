@@ -11,6 +11,7 @@ import {
   jobSeekerRoutePrefix,
   publicApiRoute,
   publicRoutes,
+  publicSEORoute,
 } from "./routes";
 
 const { auth } = NextAuth(authConfig);
@@ -23,12 +24,16 @@ export default auth((req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isPublicApiRoute = publicApiRoute.includes(nextUrl.pathname);
+  const isPublicSEORoute = publicSEORoute.includes(nextUrl.pathname);
   const isEmployerRoute = nextUrl.pathname.startsWith(employerRoutePrefix);
   const isJobSeekerRoute = nextUrl.pathname.startsWith(jobSeekerRoutePrefix);
   const isOnboardingRoute = nextUrl.pathname.startsWith("/onboarding");
   const isAdminRoute = nextUrl.pathname.startsWith(adminRoutePrefix);
   const redirectRoute = nextUrl.pathname === "/redirect";
 
+  if (isPublicSEORoute) {
+    return;
+  }
   if (isApiAuthRoute) {
     return;
   }
@@ -36,6 +41,7 @@ export default auth((req) => {
   if (isPublicApiRoute) {
     return;
   }
+
   if (nextUrl.pathname.startsWith("/api")) {
     return;
   }
