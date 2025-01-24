@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Password Reset",
+  description: "Reset your password easily and securely.",
 };
 
 const PasswordResetPage = async ({

@@ -4,6 +4,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Forget Password",
+  description:
+    "Reset your password easily and securely on our Forget Password page. Enter your email to receive password reset instructions.",
 };
 const ForgetPasswordPage = () => {
   return (

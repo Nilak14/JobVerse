@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Verify Email",
+  description: "Verify your email address to continue using JobVerse.",
 };
 
 const VerifyEmailPage = async ({
