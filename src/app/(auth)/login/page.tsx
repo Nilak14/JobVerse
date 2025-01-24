@@ -7,6 +7,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Login",
+  description:
+    "Log in to JobVerse and explore new job opportunities or manage your hiring process with ease.",
 };
 const LoginPage = async ({
   searchParams,
