@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import { useForm } from "react-hook-form";
+import CompanyDescriptionTiptap from "../tiptap/CompanyDescriptionTipTap";
 interface CreateCompanyModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,7 +45,7 @@ const CreateCompanyModal = ({
     defaultValues: {
       name: "",
       description: "",
-      websiteURl: undefined,
+      websiteURl: "",
       logo: undefined,
     },
     resolver: zodResolver(CompanySchema),
@@ -111,7 +112,10 @@ const CreateCompanyModal = ({
           </p>
         )}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-5 mt-5"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -129,23 +133,40 @@ const CreateCompanyModal = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={loading}
-                      placeholder="Say Something about Your Company"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-semibold text-muted-foreground">
+                        Description
+                      </FormLabel>
+                      <FormControl>
+                        <div className="border border-input rounded-md p-4 bg-muted/10 shadow-sm">
+                          <CompanyDescriptionTiptap value={field.value} />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
+                <Label className="block text-lg font-semibold text-muted-foreground mb-2">
+                  Description Preview
+                </Label>
+                <div className="min-h-[120px] p-4 bg-background border border-input rounded-lg shadow-sm overflow-y-auto">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: form.watch("description"),
+                    }}
+                    className="prose max-w-full prose-sm text-muted-foreground"
+                  />
+                </div>
+              </div>
+            </div>
             <FormField
               control={form.control}
               name="websiteURl"

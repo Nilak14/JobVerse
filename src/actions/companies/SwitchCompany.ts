@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { handleError } from "@/lib/utils";
 import { createSafeActionClient } from "next-safe-action";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const action = createSafeActionClient();
@@ -44,6 +45,7 @@ export const switchCompany = action
         where: { id: employerCompany.employerId },
         data: { activeCompanyId: companyId },
       });
+      revalidatePath("/employer/setting");
 
       return { success: true, message: "Company switched successfully " };
     } catch (error) {
