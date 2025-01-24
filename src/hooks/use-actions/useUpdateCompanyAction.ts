@@ -5,11 +5,14 @@ import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
 import { toast } from "sonner";
+import React from "react";
 
 const useUpdateCompanyAction = ({
   setLoading,
+  setCompanyAvatar,
 }: {
   setLoading: (state: boolean) => void;
+  setCompanyAvatar: (url: string | null) => void;
 }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -32,8 +35,8 @@ const useUpdateCompanyAction = ({
             : undefined;
           const uploadResult = logo && (await startUpload([logo]));
           newAvatarUrl = uploadResult?.[0].serverData.cdnFileUrl;
+          setCompanyAvatar(newAvatarUrl!);
         }
-
         const queryKey = ["companies"];
         await queryClient.cancelQueries(queryKey);
         queryClient.setQueryData<EmployerCompaniesResponse>(
@@ -68,6 +71,7 @@ const useUpdateCompanyAction = ({
           }
         );
         setLoading(false);
+        router.refresh();
         toast.success(data.message, { id: "update-company" });
       } else {
         setLoading(false);
