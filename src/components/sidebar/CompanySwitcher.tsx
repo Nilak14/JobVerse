@@ -74,10 +74,10 @@ export function CompanySwitcher({
                     userName={activeCompany.name}
                   />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
+                <div className="grid flex-1 text-left text-sm leading-tight relative">
                   <span className="truncate font-semibold">
                     JobVerse
-                    <span className=" text-amber-400 text-xs absolute ml-1 top-[5.1px] z-[99999] ">{`${"Pro"}`}</span>
+                    <span className=" text-amber-400 text-xs absolute ml-1 -top-[6px]  ">{`${"Pro"}`}</span>
                   </span>
                   <span className="truncate text-xs relative">
                     {activeCompany.name}
