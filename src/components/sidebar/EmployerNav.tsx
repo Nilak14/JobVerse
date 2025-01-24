@@ -35,7 +35,7 @@ const EmployerNav = ({
 
   return (
     <header>
-      <Container className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 bg-sidebar shadow-sm shadow-muted-foreground">
+      <Container className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 bg-sidebar shadow-sm shadow-muted-foreground/30 ">
         <section className="flex-1  h-full flex items-center">
           {hasSidebar || (
             <Logo showText={false} fill="#e9590c" height="40" width="40" />
