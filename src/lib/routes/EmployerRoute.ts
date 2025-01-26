@@ -1,9 +1,12 @@
 // Sidebar NavLinks for Employer
 
 import {
+  BriefcaseBusiness,
+  BriefcaseMedical,
   Building,
   Globe,
   LayoutDashboard,
+  List,
   Settings,
   UsersRound,
   Video,
@@ -33,6 +36,24 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
       },
     ],
   },
+  {
+    title: "Job Studio",
+    icon: BriefcaseBusiness,
+    url: "#",
+    items: [
+      {
+        title: "View Jobs",
+        url: "/employer/job",
+        icon: List,
+      },
+      {
+        title: "Post Job",
+        url: "/employer/job/create",
+        icon: BriefcaseMedical,
+      },
+    ],
+  },
+
   {
     title: "Design Studio",
     icon: Video,

@@ -14,15 +14,23 @@ enum UserType {
   EMPLOYER
 }
 
-enum InvitationStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-}
-
 enum CompanyRole {
   ADMIN
   MEMBER
+}
+
+enum JobStatus {
+  ACCEPTED
+  REJECTED
+  PENDING
+  INDRAFT
+}
+
+enum SalaryType {
+  RANGE
+  STARTING
+  MAXIMUM
+  EXACT
 }
 
 model User {
@@ -102,6 +110,7 @@ model Employer {
   receivedInvitations Invitations[]   @relation("InviteeToInvitations")
   adminCompanies      Company[]       @relation("AdminEmployer")
   activeCompanyId     String? // ID of the company the employer is currently active in
+  createdJobs         Job[]
 
   @@map("employers")
 }
@@ -120,6 +129,7 @@ model Company {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   deletedAt       DateTime?
+  jobPosted       Job[]
 
   @@map("companies")
 }
@@ -140,6 +150,12 @@ model CompanyMember {
   @@map("company_members")
 }
 
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 model Invitations {
   id        String           @id @default(cuid())
   inviterId String // The employer who is sending the invitation
@@ -154,4 +170,42 @@ model Invitations {
   company Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("invitations")
+}
+
+// Job Post
+model Job {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  location    String
+  companyId   String
+  status      JobStatus @default(INDRAFT)
+  company     Company   @relation(fields: [companyId], references: [id])
+  createdBy   String
+  creator     Employer  @relation(fields: [createdBy], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  isDeleted   Boolean   @default(false)
+  Salary      Salary[]
+}
+
+model Salary {
+  id          String     @id @default(cuid())
+  type        SalaryType
+  minSalary   Float?
+  maxSalary   Float?
+  exactSalary Float?
+  currency    String
+  rate        Rate
+  job         Job        @relation(fields: [jobId], references: [id])
+  jobId       String
+}
+
+enum Rate {
+  PER_HOUR
+  PER_DAY
+  PER_WEEK
+  PER_MONTH
+  PER_YEAR
 }
