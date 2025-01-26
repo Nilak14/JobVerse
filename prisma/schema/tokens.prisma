@@ -1,0 +1,19 @@
+model EmailVerificationToken {
+    id      String   @id @default(cuid())
+    email   String   @unique
+    token   String   @unique
+    expires DateTime
+
+    @@index([email])
+    @@map("email_verification_tokens")
+}
+
+model ResetPasswordToken {
+    id      String   @id @default(cuid())
+    email   String   @unique
+    token   String   @unique
+    expires DateTime
+
+    @@index([email])
+    @@map("reset_password_tokens")
+}

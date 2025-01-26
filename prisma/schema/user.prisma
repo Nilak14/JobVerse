@@ -1,0 +1,67 @@
+enum UserType {
+    ADMIN
+    JOB_SEEKER
+    EMPLOYER
+}
+
+model User {
+    id            String      @id @default(cuid())
+    name          String?
+    email         String      @unique
+    emailVerified DateTime?
+    image         String?
+    password      String?
+    accounts      Account[]
+    userType      UserType?
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    EMPLOYER      Employer?
+    JOB_SEEKER    JOB_SEEKER?
+    isBlocked     Boolean     @default(false)
+
+    @@map("users")
+}
+
+model Account {
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String?
+    access_token      String?
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String?
+    session_state     String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@id([provider, providerAccountId])
+    @@map("accounts")
+}
+
+model JOB_SEEKER {
+    id     String @id @default(cuid())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("job_seekers")
+}
+
+model Employer {
+    id                  String          @id @default(cuid())
+    userId              String          @unique
+    user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    companyMemberships  CompanyMember[] // Relationship through the join table
+    sentInvitations     Invitations[]   @relation("InviterToInvitations")
+    receivedInvitations Invitations[]   @relation("InviteeToInvitations")
+    adminCompanies      Company[]       @relation("AdminEmployer")
+    activeCompanyId     String? // ID of the company the employer is currently active in
+    createdJobs         Job[]
+
+    @@map("employers")
+}
