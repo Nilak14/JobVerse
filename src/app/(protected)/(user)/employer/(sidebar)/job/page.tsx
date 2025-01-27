@@ -1,4 +1,6 @@
 import SidebarContainer from "@/components/Global/SidebarContainer";
+import PostJobButton from "@/components/Job/PostJobButton";
+import { Metadata } from "next";
 
 /**
  *
@@ -7,7 +9,28 @@ import SidebarContainer from "@/components/Global/SidebarContainer";
  * range: Rs. 20000 - Rs. 40000
  * exact: Rs. 20000
  */
+
+export const metadata: Metadata = {
+  title: "Job Studio",
+  description:
+    "This page shows all the members who the jobs posted in your company",
+};
+
 const JobListPage = () => {
-  return <SidebarContainer>JobListPage</SidebarContainer>;
+  return (
+    <SidebarContainer>
+      <section className="flex flex-col w-full gap-10">
+        <div className="w-full flex justify-end items-end">
+          <PostJobButton />
+        </div>
+        {/* <JVTableClient
+          searchColumn={"name"}
+          searchPlaceholder="Search User..."
+          columns={companyEmployerColumns}
+          data={data || []}
+        /> */}
+      </section>
+    </SidebarContainer>
+  );
 };
 export default JobListPage;

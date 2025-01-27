@@ -46,11 +46,6 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
         url: "/employer/job",
         icon: List,
       },
-      {
-        title: "Post Job",
-        url: "/employer/job/create",
-        icon: BriefcaseMedical,
-      },
     ],
   },
 

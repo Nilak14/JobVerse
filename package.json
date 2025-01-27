@@ -10,6 +10,7 @@
     "db:push": "npx prisma db push",
     "db:reset": "npx prisma migrate reset",
     "db:view": "npx prisma studio",
+    "db:migrate": "npx prisma migrate dev --name",
     "email": "email dev --dir src/template/emails",
     "postinstall": "prisma generate --no-engine"
   },
