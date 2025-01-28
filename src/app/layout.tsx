@@ -39,6 +39,7 @@ export default function RootLayout({
         name="google-site-verification"
         content="XMUC6CCDKCNsy6UZamxuVqmwZqoFwG0Go3AKrEY_MuQ"
       />
+      <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
       <meta name="apple-mobile-web-app-title" content="JobVerse" />
       <link rel="manifest" href="/favicon/site.webmanifest" />
       <body className={`${font.className} antialiased`}>

@@ -65,6 +65,7 @@ const ResponsiveModalContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(ResponsiveModalVariants({ side }), className)}
+      // onInteractOutside={(e) => {}
       {...props}
     >
       {children}

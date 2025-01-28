@@ -23,9 +23,11 @@ enum SalaryType {
 model Job {
     id          String    @id @default(cuid())
     title       String
-    description String
-    location    String
+    description String?
+    latitude    String?
+    longitude   String?
     companyId   String
+    totalHead   Int?
     status      JobStatus @default(INDRAFT)
     company     Company   @relation(fields: [companyId], references: [id])
     createdBy   String

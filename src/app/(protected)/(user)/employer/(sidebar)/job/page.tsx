@@ -1,6 +1,8 @@
 import SidebarContainer from "@/components/Global/SidebarContainer";
-import PostJobButton from "@/components/Job/PostJobButton";
+import { Button } from "@/components/ui/button";
+import { BriefcaseMedical } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
 
 /**
  *
@@ -21,7 +23,12 @@ const JobListPage = () => {
     <SidebarContainer>
       <section className="flex flex-col w-full gap-10">
         <div className="w-full flex justify-end items-end">
-          <PostJobButton />
+          <Button asChild>
+            <Link href={"/employer/create-job"}>
+              <BriefcaseMedical />
+              Post New Job
+            </Link>
+          </Button>
         </div>
         {/* <JVTableClient
           searchColumn={"name"}

@@ -30,5 +30,6 @@ export const METADATA_CONFIG: Metadata = {
     "Job Website",
     "Job Platform",
     "Job Marketplace",
+    "Job Verse",
   ],
 };
