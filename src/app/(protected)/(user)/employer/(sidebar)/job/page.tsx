@@ -24,7 +24,7 @@ const JobListPage = () => {
       <section className="flex flex-col w-full gap-10">
         <div className="w-full flex justify-end items-end">
           <Button asChild>
-            <Link href={"/employer/create-job"}>
+            <Link href={"/employer/job-studio"}>
               <BriefcaseMedical />
               Post New Job
             </Link>

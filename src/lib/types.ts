@@ -1,4 +1,5 @@
 import { ExtendedUser } from "@/next-auth";
+import { JobSchemaType } from "@/schema/CreateJobSchema";
 import { LucideIcon } from "lucide-react";
 
 export interface LandingPageNavLinks {
@@ -21,4 +22,10 @@ export interface UserNavProps {
   hasSidebar?: boolean;
   user: ExtendedUser;
   activeCompanyId?: string | null;
+}
+
+export interface JobEditorFormProps {
+  jobData: JobSchemaType;
+  setJobData: (data: JobSchemaType) => void;
+  currentStep: string;
 }

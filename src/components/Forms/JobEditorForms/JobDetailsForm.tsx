@@ -20,17 +20,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { InputTags } from "@/components/ui/tag-input";
-const JobDetailsForm = () => {
+import { JobEditorFormProps } from "@/lib/types";
+import { useEffect } from "react";
+import { useFormTriggersStore } from "@/store/useFormTriggersStore";
+
+const JobDetailsForm = ({
+  jobData,
+  setJobData,
+  currentStep,
+}: JobEditorFormProps) => {
+  const { setTrigger } = useFormTriggersStore();
+
   const form = useForm<JobDetailsSchemaType>({
     defaultValues: {
-      jobType: "",
-      experienceLevel: "",
+      experienceLevel: jobData.experienceLevel || "",
     },
     resolver: zodResolver(JobDetailsSchema),
     mode: "onChange",
   });
+
+  useEffect(() => {
+    setTrigger(currentStep, form.trigger);
+  }, [form.trigger, setTrigger]);
+
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      setJobData({ ...jobData, ...values });
+    });
+    return unsubscribe;
+  }, [form, jobData, setJobData]);
+
   return (
     <div className="max-w-xl mx-auto space-y-6">
       <div className="space-y-1.5 text-center">
@@ -41,35 +60,7 @@ const JobDetailsForm = () => {
       </div>
       <Form {...form}>
         <form className="space-y-5">
-          <div className="grid grid-cols-2 gap-3">
-            <FormField
-              control={form.control}
-              name="jobType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Job Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Job Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Full-Time">Full Time</SelectItem>
-                      <SelectItem value="Part-Time">Part Time</SelectItem>
-                      <SelectItem value="Contract">Contract</SelectItem>
-                      <SelectItem value="Temporary">Temporary</SelectItem>
-                      <SelectItem value="Internship">Internship</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <FormField
               control={form.control}
               name="experienceLevel"
