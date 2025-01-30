@@ -12,13 +12,7 @@ import { useState } from "react";
 const JobEditorPage = () => {
   const searchParams = useSearchParams();
   const { triggerForm } = useFormTriggersStore();
-  const [JobData, setJobData] = useState<JobSchemaType>({
-    title: "",
-    totalHeads: "1",
-    jobType: "",
-    experienceLevel: "",
-    workMode: "",
-  });
+  const [JobData, setJobData] = useState<JobSchemaType>({} as JobSchemaType);
 
   const currentStep = searchParams.get("step") || JobEditorFormSteps[0].key;
 
@@ -63,7 +57,7 @@ const JobEditorPage = () => {
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="w-full md:w-1/2 p-3 overflow-y-auto space-y-6"
+            className="w-full md:w-1/2 p-3 overflow-y-auto space-y-6 relative"
           >
             {/* <Breadcrumbs currentStep={currentStep} setCurrentStep={setStep} /> */}
             {FormComponent && (

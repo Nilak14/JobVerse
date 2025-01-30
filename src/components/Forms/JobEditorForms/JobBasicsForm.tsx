@@ -1,7 +1,6 @@
 import { jobBasicsSchema, jobBasicsSchemaType } from "@/schema/CreateJobSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 import { motion } from "framer-motion";
 import {
   Form,
@@ -23,11 +22,9 @@ import { JobEditorFormProps } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { jobTypes, workMode } from "@/lib/enums/CreateJobEnums";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Building, Building2, Home } from "lucide-react";
-import { SelectItemIndicator } from "@radix-ui/react-select";
 const JobBasicsForm = ({
   jobData,
   setJobData,
@@ -151,11 +148,11 @@ const JobBasicsForm = ({
                             whileTap={{ scale: 0.98 }}
                             className={cn(
                               "w-full p-4 rounded-xl border-2 transition-colors duration-200",
-                              "hover:border-orange-500/50",
-                              "focus:outline-none focus:ring-2 focus:ring-orange-500/20",
+                              "hover:border-primary/50",
+                              "focus:outline-none focus:ring-2 focus:ring-primary/20",
                               "relative overflow-hidden",
                               isSelected
-                                ? "border-orange-500"
+                                ? "border-primary"
                                 : "border-muted-foreground/20"
                             )}
                             onClick={() => {
@@ -175,7 +172,7 @@ const JobBasicsForm = ({
                             {isSelected && (
                               <motion.div
                                 layoutId="highlight"
-                                className="absolute inset-0 bg-orange-500/10 dark:bg-orange-500/20"
+                                className="absolute inset-0 bg-primary/10 dark:bg-primary/20"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 0.2 }}
@@ -187,7 +184,7 @@ const JobBasicsForm = ({
                                 className={cn(
                                   "p-3 rounded-lg",
                                   isSelected
-                                    ? "text-orange-500 bg-orange-500/20"
+                                    ? "text-primary bg-primary/20"
                                     : "text-muted-foreground bg-muted/30"
                                 )}
                                 initial={{ rotate: 0 }}
@@ -201,7 +198,7 @@ const JobBasicsForm = ({
                                 className={cn(
                                   "font-medium cursor-pointer",
                                   isSelected
-                                    ? "text-orange-500"
+                                    ? "text-primary"
                                     : "text-muted-foreground"
                                 )}
                               >

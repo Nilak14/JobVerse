@@ -5,8 +5,8 @@ import { LucideIcon } from "lucide-react";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  startIcon?: LucideIcon;
-  endIcon?: LucideIcon;
+  startIcon?: LucideIcon | React.ElementType;
+  endIcon?: LucideIcon | React.ElementType;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
