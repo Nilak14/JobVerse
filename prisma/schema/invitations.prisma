@@ -1,0 +1,21 @@
+enum InvitationStatus {
+    PENDING
+    ACCEPTED
+    REJECTED
+}
+
+model Invitations {
+    id        String           @id @default(cuid())
+    inviterId String // The employer who is sending the invitation
+    inviteeId String // The employer being invited
+    companyId String // The company for which the invitation is being sent
+    status    InvitationStatus @default(PENDING) // Status of the invitation (PENDING, ACCEPTED, REJECTED)
+    createdAt DateTime         @default(now())
+    updatedAt DateTime         @updatedAt
+
+    inviter Employer @relation("InviterToInvitations", fields: [inviterId], references: [id], onDelete: Cascade)
+    invitee Employer @relation("InviteeToInvitations", fields: [inviteeId], references: [id], onDelete: Cascade)
+    company Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+    @@map("invitations")
+}

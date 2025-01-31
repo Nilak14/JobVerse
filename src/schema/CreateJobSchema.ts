@@ -1,0 +1,171 @@
+import {
+  jobTypes,
+  SalaryRate,
+  SalaryType,
+  workMode,
+} from "@/lib/enums/CreateJobEnums";
+import { z } from "zod";
+
+// Job Basic Schema
+export const workModeSchema = z
+  .object({
+    workMode: z
+      .string()
+      .min(1, "Select Atleast One Work Mode")
+      .refine((val) => workMode.includes(val), "Invalid Work Mode"),
+    location: z.string().trim().max(100).optional(),
+  })
+  .refine((data) => data.workMode === "Remote" || !!data.location, {
+    message: "Location is required for this work mode",
+    path: ["location"],
+  });
+
+export const jobBasicsSchema = z
+  .object({
+    title: z
+      .string()
+      .trim()
+      .min(3, { message: "Title is required" })
+      .max(50, { message: "Title should be less than 50 characters" }),
+
+    jobType: z
+      .string()
+      .min(1, { message: "Job Type is required" })
+      .refine((value) => jobTypes.includes(value), {
+        message: "Invalid Job Type",
+      }),
+  })
+  .and(workModeSchema);
+
+export type jobBasicsSchemaType = z.infer<typeof jobBasicsSchema>;
+
+// Job Details Schema
+export const JobDetailsSchema = z.object({
+  category: z.string().min(1, { message: "Category is required" }),
+  subCategory: z.string().min(1, { message: "Sub Category is required" }),
+  experienceLevel: z
+    .string()
+    .min(1, { message: "Experience Level is required" }),
+  totalHeads: z.string().min(1, { message: "Total Openings is required" }),
+});
+export type JobDetailsSchemaType = z.infer<typeof JobDetailsSchema>;
+// Job Benefits Schema
+
+export const SalaryTypeSchema = z
+  .object({
+    salaryType: z
+      .string()
+      .min(1, "Salary Type is Needed")
+      .refine((val) => SalaryType.includes(val), "Invalid Salary Type"),
+    minSalaryAmount: z
+      .string()
+      .min(1, { message: "Minimum Salary is required" })
+      .regex(/^\d+$/, "Value must be greater than 0")
+      .nullable(),
+    maxSalaryAmount: z
+      .string()
+      .min(1, { message: "Minimum Salary is required" })
+      .regex(/^\d+$/, "Value must be greater than 0")
+      .nullable(),
+    amount: z
+      .string()
+      .min(1, { message: "Minimum Salary is required" })
+      .regex(/^\d+$/, "Value must be greater than 0")
+      .nullable(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.salaryType === "Range") {
+      if (data.minSalaryAmount === null || Number(data.minSalaryAmount) <= 0) {
+        ctx.addIssue({
+          path: ["minSalaryAmount"],
+          message: "Minimum Salary  must be greater than 0",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+      if (data.maxSalaryAmount === null || Number(data.maxSalaryAmount) <= 0) {
+        ctx.addIssue({
+          path: ["maxSalaryAmount"],
+          message: "Maximum Salary  must be greater than 0",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+      // max should be greater than min
+      if (
+        data.minSalaryAmount !== null &&
+        data.maxSalaryAmount !== null &&
+        Number(data.maxSalaryAmount) <= Number(data.minSalaryAmount)
+      ) {
+        ctx.addIssue({
+          path: ["maxSalaryAmount"],
+          message: "Maximum Salary must be greater than Minimum Salary",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+      // amount should be null
+      if (data.amount !== null) {
+        ctx.addIssue({
+          path: ["amount"],
+          message: "Salary Amount must be null when Salary Type is Range",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    } else {
+      // for other types, amount must be greater than 0
+      if (data.amount === null || Number(data.amount) <= 0) {
+        ctx.addIssue({
+          path: ["amount"],
+          message: "Salary Amount  must be greater than 0",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+      // min and max should be null
+      if (data.minSalaryAmount !== null) {
+        ctx.addIssue({
+          path: ["minSalaryAmount"],
+          message: "Minimum Salary must be null when Salary Type is not Range",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+      if (data.maxSalaryAmount !== null) {
+        ctx.addIssue({
+          path: ["maxSalaryAmount"],
+          message: "Maximum Salary must be null when Salary Type is not Range",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
+  });
+
+export const JobBenefitsSchema = z
+  .object({
+    salaryCurrency: z.string().min(1, { message: "Currency Is Required" }),
+    salaryRate: z
+      .string()
+      .min(1, { message: "Salary Rate is required" })
+      .refine((val) => SalaryRate.includes(val), "Invalid Salary Type"),
+    benefits: z.array(z.string()),
+  })
+  .and(SalaryTypeSchema);
+
+export type JobBenefitsSchemaType = z.infer<typeof JobBenefitsSchema>;
+
+// Job Description Schema
+
+export const JobDescriptionSchema = z.object({
+  description: z
+    .string()
+    .min(50, { message: "Description must be at least 50 characters" }),
+});
+
+export type JobDescriptionSchemaType = z.infer<typeof JobDescriptionSchema>;
+
+// global schema
+
+export const jobSchema = jobBasicsSchema
+  .and(JobDetailsSchema)
+  .and(JobBenefitsSchema)
+  .and(JobDescriptionSchema);
+
+export type JobSchemaType = z.infer<typeof jobSchema> & {
+  id?: string;
+};

@@ -9,6 +9,8 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "./api/uploadthing/core";
 import ReactQueryProvider from "@/context/ReactQueryProvider";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = METADATA_CONFIG;
@@ -33,6 +35,11 @@ export default function RootLayout({
         sizes="180x180"
         href="/favicon/apple-touch-icon.png"
       />
+      <meta
+        name="google-site-verification"
+        content="XMUC6CCDKCNsy6UZamxuVqmwZqoFwG0Go3AKrEY_MuQ"
+      />
+      <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
       <meta name="apple-mobile-web-app-title" content="JobVerse" />
       <link rel="manifest" href="/favicon/site.webmanifest" />
       <body className={`${font.className} antialiased`}>
@@ -49,6 +56,8 @@ export default function RootLayout({
             <Toaster />
           </ThemeProvider>
         </ReactQueryProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

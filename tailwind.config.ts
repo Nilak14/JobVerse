@@ -78,8 +78,20 @@ const config: Config = {
         orbit: "orbit calc(var(--duration)*1s) linear infinite",
         "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
         ripple: "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
+        "fade-left": "fade-left 0.2s ease",
       },
       keyframes: {
+        "fade-left": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(-10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
+
         shine: {
           from: {
             backgroundPosition: "200% 0",
