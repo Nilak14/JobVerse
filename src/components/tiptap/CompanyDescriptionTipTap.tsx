@@ -4,7 +4,6 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Toggle } from "../ui/toggle";
 import { Bold, Italic, List, ListOrdered, Strikethrough } from "lucide-react";
-import SanitizeHTML from "sanitize-html";
 import { useFormContext } from "react-hook-form";
 import { useTimeout } from "ahooks";
 
@@ -20,28 +19,7 @@ const CompanyDescriptionTiptap = ({ value }: { value: string }) => {
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
       let content = editor.getHTML();
-      // content = SanitizeHTML(content, {
-      //   allowedTags: [
-      //     "b",
-      //     "i",
-      //     "em",
-      //     "strong",
-      //     "ul",
-      //     "ol",
-      //     "li",
-      //     "p",
-      //     "br",
-      //     "span",
-      //   ], // Add `ul`, `ol`, `li` for lists
-      //   allowedAttributes: {
-      //     "*": ["style", "class"],
-      //   },
-      //   allowedClasses: {
-      //     ul: ["list-disc", "pl-4"],
-      //     ol: ["list-decimal", "pl-4"],
-      //     li: [],
-      //   },
-      // });
+
       setValue("description", content, {
         shouldValidate: true,
         shouldDirty: true,

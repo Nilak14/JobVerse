@@ -58,32 +58,34 @@ export const SalaryTypeSchema = z
       .min(1, "Salary Type is Needed")
       .refine((val) => SalaryType.includes(val), "Invalid Salary Type"),
     minSalaryAmount: z
-      .number()
-      .min(0, { message: "Minimum Salary Cannot be Less than 0" })
+      .string()
+      .min(1, { message: "Minimum Salary is required" })
+      .regex(/^\d+$/, "Value must be greater than 0")
       .nullable(),
     maxSalaryAmount: z
-      .number()
-      .min(0, { message: "Maximum Salary Cannot be less than 0" })
+      .string()
+      .min(1, { message: "Minimum Salary is required" })
+      .regex(/^\d+$/, "Value must be greater than 0")
       .nullable(),
     amount: z
-      .number()
-      .min(0, { message: "Salary Amount Cannot be less than 0" })
+      .string()
+      .min(1, { message: "Minimum Salary is required" })
+      .regex(/^\d+$/, "Value must be greater than 0")
       .nullable(),
   })
   .superRefine((data, ctx) => {
     if (data.salaryType === "Range") {
-      // min and max salary must be greater than 0
-      if (data.minSalaryAmount === null || data.minSalaryAmount <= 0) {
+      if (data.minSalaryAmount === null || Number(data.minSalaryAmount) <= 0) {
         ctx.addIssue({
           path: ["minSalaryAmount"],
-          message: "Minimum Salary is required and must be greater than 0",
+          message: "Minimum Salary  must be greater than 0",
           code: z.ZodIssueCode.custom,
         });
       }
-      if (data.maxSalaryAmount === null || data.maxSalaryAmount <= 0) {
+      if (data.maxSalaryAmount === null || Number(data.maxSalaryAmount) <= 0) {
         ctx.addIssue({
           path: ["maxSalaryAmount"],
-          message: "Maximum Salary is required and must be greater than 0",
+          message: "Maximum Salary  must be greater than 0",
           code: z.ZodIssueCode.custom,
         });
       }
@@ -91,7 +93,7 @@ export const SalaryTypeSchema = z
       if (
         data.minSalaryAmount !== null &&
         data.maxSalaryAmount !== null &&
-        data.maxSalaryAmount <= data.minSalaryAmount
+        Number(data.maxSalaryAmount) <= Number(data.minSalaryAmount)
       ) {
         ctx.addIssue({
           path: ["maxSalaryAmount"],
@@ -109,10 +111,10 @@ export const SalaryTypeSchema = z
       }
     } else {
       // for other types, amount must be greater than 0
-      if (data.amount === null || data.amount <= 0) {
+      if (data.amount === null || Number(data.amount) <= 0) {
         ctx.addIssue({
           path: ["amount"],
-          message: "Salary Amount is required and must be greater than 0",
+          message: "Salary Amount  must be greater than 0",
           code: z.ZodIssueCode.custom,
         });
       }

@@ -126,7 +126,9 @@ const JobBasicsForm = ({
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <Label>Work Mode</Label>
+            <div>
+              <Label>Work Mode</Label>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {workMode.map((mode, index) => (
                 <FormField
@@ -221,6 +223,11 @@ const JobBasicsForm = ({
                 />
               ))}
             </div>
+            {form.formState.errors.workMode?.message && (
+              <p className="text-xs text-destructive">
+                {form.formState.errors.workMode.message}
+              </p>
+            )}
           </motion.div>
 
           {showLocationField && (

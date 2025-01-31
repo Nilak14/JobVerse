@@ -1,6 +1,4 @@
-import React, { useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
-import { Currency, CurrencySelect } from "@/components/ui/currency-select";
+import React, { useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -9,27 +7,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-import { Label } from "@/components/ui/label";
-import {
-  JobBenefits,
-  SalaryRate,
-  SalaryType,
-} from "@/lib/enums/CreateJobEnums";
 import { useForm } from "react-hook-form";
-import { getSafeSymbolFromCurrency } from "country-data-list";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import { JobEditorFormProps } from "@/lib/types";
-import CreateJobTags from "@/components/Job/CreateJobTags";
-import { JobDescriptionSchemaType } from "@/schema/CreateJobSchema";
+import {
+  JobDescriptionSchema,
+  JobDescriptionSchemaType,
+} from "@/schema/CreateJobSchema";
+import JobDescriptionEditor from "@/components/tiptap/JobDescriptionTipTap";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle } from "lucide-react";
 
 const JobDescriptionForm = ({
   currentStep,
@@ -37,12 +26,13 @@ const JobDescriptionForm = ({
   setJobData,
 }: JobEditorFormProps) => {
   const { setTrigger } = useFormTriggersStore();
-  const [showRangeSalary, setShowRangeSalary] = React.useState(true);
 
   const form = useForm<JobDescriptionSchemaType>({
     defaultValues: {
       description: jobData.description || "",
     },
+    resolver: zodResolver(JobDescriptionSchema),
+    mode: "onChange",
   });
 
   useEffect(() => {
@@ -59,24 +49,41 @@ const JobDescriptionForm = ({
     return unsubscribe;
   }, [form, jobData, setJobData]);
 
-  const fadeIn = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
-  };
-
   return (
     <div className="max-w-xl mx-auto space-y-6">
       <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">Job Description</h2>
         <p className="text-sm text-muted-foreground">
-          Fill in the salary details and benefits offered for the job
+          Describe the job role and responsibilities
         </p>
       </div>
 
       <Form {...form}>
-        <form className="space-y-6"></form>
+        <form className="space-y-6">
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job Description</FormLabel>
+                <FormControl>
+                  <JobDescriptionEditor field={field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
       </Form>
+      <Alert variant="default">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Warning</AlertTitle>
+        <AlertDescription>
+          This is an OpenAI-powered job description. It uses the job title and
+          your location. By using the content, you adopt it as your own and are
+          responsible for its accuracy.
+        </AlertDescription>
+      </Alert>
     </div>
   );
 };

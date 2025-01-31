@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Label } from "@/components/ui/label";
 import {
   JobBenefits,
   SalaryRate,
@@ -49,7 +48,7 @@ const JobBenefitsForm = ({
       amount: jobData.amount || null,
       maxSalaryAmount: jobData.maxSalaryAmount || null,
       minSalaryAmount: jobData.minSalaryAmount || null,
-      salaryCurrency: jobData.salaryCurrency || "",
+      salaryCurrency: jobData.salaryCurrency || "NPR",
       salaryRate: jobData.salaryRate || "",
       benefits: jobData.benefits || [],
     },
@@ -105,7 +104,6 @@ const JobBenefitsForm = ({
                         onCurrencySelect={useCallback(
                           (e: Currency) => {
                             form.setValue("salaryCurrency", e.code);
-                            form.trigger();
                           },
                           [form]
                         )}
@@ -148,132 +146,136 @@ const JobBenefitsForm = ({
               />
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="salaryType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Show Pay By</FormLabel>
-                    <Select
-                      onValueChange={(e) => {
-                        field.onChange(e);
-                        setShowRangeSalary(e === "Range");
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select salary type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {SalaryType.map((type) => (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <motion.div
-                animate={{ height: "auto" }}
-                initial={false}
-                className="space-y-4"
-              >
-                {showRangeSalary ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <Label className="font-semibold">Minimum</Label>
-                      <Label className="font-semibold">Maximum</Label>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="minSalaryAmount"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                startIcon={() => (
-                                  <span className="text-primary">
-                                    {getSafeSymbolFromCurrency(
-                                      form.watch("salaryCurrency")
-                                    )}
-                                  </span>
-                                )}
-                                {...field}
-                                value={field.value ?? ""}
-                                type="number"
-                                placeholder="Min amount"
-                                className="w-full"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="maxSalaryAmount"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                startIcon={() => (
-                                  <span className="text-primary">
-                                    {getSafeSymbolFromCurrency(
-                                      form.watch("salaryCurrency")
-                                    )}
-                                  </span>
-                                )}
-                                {...field}
-                                value={field.value ?? ""}
-                                type="number"
-                                placeholder="Max amount"
-                                className="w-full"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <FormField
-                    control={form.control}
-                    name="amount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Amount</FormLabel>
+            <div className="grid gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                <FormField
+                  control={form.control}
+                  name="salaryType"
+                  render={({ field }) => (
+                    <FormItem className="w-full sm:w-40">
+                      <FormLabel className="text-sm">Show Pay By</FormLabel>
+                      <Select
+                        onValueChange={(e) => {
+                          field.onChange(e);
+                          setShowRangeSalary(e === "Range");
+                        }}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
-                          <Input
-                            startIcon={() => (
-                              <span className="text-primary">
-                                {getSafeSymbolFromCurrency(
-                                  form.watch("salaryCurrency")
-                                )}
-                              </span>
-                            )}
-                            {...field}
-                            value={field.value ?? ""}
-                            type="number"
-                            placeholder="Enter amount"
-                            className="w-full"
-                          />
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select type" />
+                          </SelectTrigger>
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-              </motion.div>
+                        <SelectContent>
+                          {SalaryType.map((type) => (
+                            <SelectItem key={type} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <motion.div
+                  animate={{ height: "auto" }}
+                  initial={false}
+                  className="w-full sm:flex-1"
+                >
+                  {showRangeSalary ? (
+                    <div className="space-y-2">
+                      <div className="flex gap-4">
+                        <div className="flex-1">
+                          <FormLabel>Minimum</FormLabel>
+                        </div>
+                        <div className="flex-1">
+                          <FormLabel>Maximum</FormLabel>
+                        </div>
+                      </div>
+                      <div className="flex gap-4">
+                        <FormField
+                          control={form.control}
+                          name="minSalaryAmount"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Input
+                                  startIcon={() => (
+                                    <span className="text-primary">
+                                      {getSafeSymbolFromCurrency(
+                                        form.watch("salaryCurrency")
+                                      )}
+                                    </span>
+                                  )}
+                                  {...field}
+                                  value={field.value ?? ""}
+                                  type="number"
+                                  placeholder="Min amount"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="maxSalaryAmount"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Input
+                                  startIcon={() => (
+                                    <span className="text-primary">
+                                      {getSafeSymbolFromCurrency(
+                                        form.watch("salaryCurrency")
+                                      )}
+                                    </span>
+                                  )}
+                                  {...field}
+                                  value={field.value ?? ""}
+                                  type="number"
+                                  placeholder="Max amount"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <FormField
+                      control={form.control}
+                      name="amount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Amount</FormLabel>
+                          <FormControl>
+                            <Input
+                              startIcon={() => (
+                                <span className="text-primary border-2 border-white w-fit">
+                                  {getSafeSymbolFromCurrency(
+                                    form.watch("salaryCurrency")
+                                  )}
+                                </span>
+                              )}
+                              {...field}
+                              value={field.value ?? ""}
+                              type="number"
+                              placeholder="Enter amount"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </motion.div>
+              </div>
             </div>
+
             <FormField
               control={form.control}
               name="benefits"
