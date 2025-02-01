@@ -1,3 +1,4 @@
+import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import Typography from "@tiptap/extension-typography";
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -11,6 +12,9 @@ interface ContentViewerProps {
 const ContentViewer = ({ content }: ContentViewerProps) => {
   const editor = useEditor({
     extensions: [
+      Link.configure({
+        openOnClick: false,
+      }),
       StarterKit,
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -25,7 +29,8 @@ const ContentViewer = ({ content }: ContentViewerProps) => {
     if (editor) {
       editor.commands.setContent(JSON.parse(content));
     }
-  }, [content]);
+    console.log(content);
+  }, [content, editor]);
   if (!editor) return null;
 
   return (

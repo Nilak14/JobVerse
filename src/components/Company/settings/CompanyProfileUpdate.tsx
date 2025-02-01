@@ -28,6 +28,8 @@ import { useForm } from "react-hook-form";
 import BlockLoader from "@/components/ui/block-loader";
 import useUpdateCompanyAction from "@/hooks/use-actions/useUpdateCompanyAction";
 import CustomTipTapEditor from "@/components/tiptap/CustomTipTapEditor";
+import CompanyProfilePreview from "./CompanyProfilePreview";
+import ContentViewer from "@/components/tiptap/ContentViewer";
 
 interface CompanyProfileUpdateProps {
   activeCompany: CompanyInclude;
@@ -42,6 +44,8 @@ const CompanyProfileUpdate = ({
   const [companyAvatar, setCompanyAvatar] = useState<string | null>(
     activeCompany.logoUrl
   );
+
+  const [showDescriptionPreview, setShowDescriptionPreview] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -160,12 +164,24 @@ const CompanyProfileUpdate = ({
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-lg font-semibold text-muted-foreground">
-                          Description
-                        </FormLabel>
+                        <div className="flex justify-between items-center">
+                          <FormLabel className="text-lg font-semibold text-muted-foreground">
+                            Description
+                          </FormLabel>
+                          <CompanyProfilePreview
+                            showDescriptionPreview={showDescriptionPreview}
+                            setShowDescriptionPreview={
+                              setShowDescriptionPreview
+                            }
+                          />
+                        </div>
                         <FormControl>
                           <div className="border border-input rounded-md p-4 bg-muted/10 shadow-sm">
-                            <CustomTipTapEditor height="80" field={field} />
+                            {showDescriptionPreview ? (
+                              <ContentViewer content={field.value} />
+                            ) : (
+                              <CustomTipTapEditor height="80" field={field} />
+                            )}
                           </div>
                         </FormControl>
                         <FormMessage />
