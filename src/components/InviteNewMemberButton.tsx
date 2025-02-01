@@ -13,7 +13,7 @@ const InviteNewMemberButton = () => {
         <UserPlus />
         Invite New Members
       </Button>
-      {open && <InviteMemberModal open={open} setOpen={setOpen} />}
+      <InviteMemberModal open={open} setOpen={setOpen} />
     </>
   );
 };
