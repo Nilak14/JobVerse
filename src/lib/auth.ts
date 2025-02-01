@@ -1,7 +1,8 @@
 import { auth as authJs } from "@/auth";
 import prisma from "@/lib/prisma";
+import { cache } from "react";
 
-export const auth = async () => {
+export const auth = cache(async () => {
   const session = await authJs();
   if (!session || !session.user) return null;
   if (session.user.type !== "EMPLOYER") return session;
@@ -17,6 +18,6 @@ export const auth = async () => {
     activeCompanyId: employer?.activeCompanyId || null,
     employerId: employer?.id || null,
   };
-};
+});
 
 //! after updating the auth function, update the useClientSession hook also. (use-session folder)

@@ -1,0 +1,73 @@
+enum JobStatus {
+    ACCEPTED
+    REJECTED
+    PENDING
+    INDRAFT
+}
+
+enum Rate {
+    PER_HOUR
+    PER_DAY
+    PER_WEEK
+    PER_MONTH
+    PER_YEAR
+}
+
+enum SalaryType {
+    RANGE
+    STARTING
+    MAXIMUM
+    EXACT
+}
+
+enum JobType {
+    FULL_TIME
+    PART_TIME
+    CONTRACT
+    TEMPORARY
+    INTERNSHIP
+    VOLUNTEER
+}
+
+model Job {
+    id          String  @id @default(cuid())
+    title       String
+    description String?
+    latitude    String?
+    longitude   String?
+    companyId   String
+    totalHead   Int?
+
+    categoryId String
+    category   JobCategory @relation(fields: [categoryId], references: [id])
+
+    subcategoryId String?
+    subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
+
+    status    JobStatus @default(INDRAFT)
+    company   Company   @relation(fields: [companyId], references: [id])
+    createdBy String
+    creator   Employer  @relation(fields: [createdBy], references: [id])
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    isDeleted Boolean  @default(false)
+    Salary    Salary[]
+
+    @@map("jobs")
+}
+
+model Salary {
+    id          String     @id @default(cuid())
+    type        SalaryType
+    minSalary   Float?
+    maxSalary   Float?
+    exactSalary Float?
+    currency    String
+    rate        Rate
+    job         Job        @relation(fields: [jobId], references: [id])
+    jobId       String
+
+    @@map("salaries")
+}
