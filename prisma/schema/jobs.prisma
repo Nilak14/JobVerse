@@ -32,7 +32,7 @@ enum JobType {
 model Job {
     id          String  @id @default(cuid())
     title       String
-    description String?
+    description Json?
     latitude    String?
     longitude   String?
     companyId   String

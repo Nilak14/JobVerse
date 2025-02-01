@@ -101,7 +101,7 @@ const JobDetailsForm = ({
   }, [form, jobData, setJobData]);
 
   return (
-    <div className="max-w-xl mx-auto space-y-6 ">
+    <div className="max-w-[75%] mx-auto space-y-6">
       <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">Job Details</h2>
         <p className="text-sm text-muted-foreground">
@@ -110,7 +110,6 @@ const JobDetailsForm = ({
       </div>
       <Form {...form}>
         <form className="space-y-5">
-          {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-5"> */}
           <FormField
             control={form.control}
             name="experienceLevel"
@@ -300,8 +299,6 @@ const JobDetailsForm = ({
               </FormItem>
             )}
           />
-
-          {/* </div> */}
         </form>
       </Form>
       <div className=" text-muted-foreground text-center absolute bottom-3 right-2 flex gap-1 flex-col">

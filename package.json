@@ -44,6 +44,8 @@
     "@react-email/components": "^0.0.26",
     "@react-email/tailwind": "1.0.0",
     "@tanstack/react-table": "^8.20.6",
+    "@tiptap/extension-hard-break": "^2.11.5",
+    "@tiptap/extension-link": "^2.11.5",
     "@tiptap/extension-placeholder": "^2.11.3",
     "@tiptap/extension-text-align": "^2.11.5",
     "@tiptap/extension-typography": "^2.11.5",
@@ -95,6 +97,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "19.0.1",

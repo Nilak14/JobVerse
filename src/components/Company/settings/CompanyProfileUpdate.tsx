@@ -27,9 +27,7 @@ import LoadingButton from "@/components/ui/loading-button";
 import { useForm } from "react-hook-form";
 import BlockLoader from "@/components/ui/block-loader";
 import useUpdateCompanyAction from "@/hooks/use-actions/useUpdateCompanyAction";
-import CompanyDescriptionTiptap from "@/components/tiptap/CompanyDescriptionTipTap";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import CustomTipTapEditor from "@/components/tiptap/CustomTipTapEditor";
 
 interface CompanyProfileUpdateProps {
   activeCompany: CompanyInclude;
@@ -50,7 +48,7 @@ const CompanyProfileUpdate = ({
   const form = useForm<CompanySchemaType>({
     defaultValues: {
       name: activeCompany.name,
-      description: activeCompany.description || "",
+      description: (activeCompany.description as string) || "",
       websiteURl: activeCompany.website || "",
       logo: undefined,
     },
@@ -70,7 +68,7 @@ const CompanyProfileUpdate = ({
   useEffect(() => {
     setCompanyAvatar(activeCompany.logoUrl);
     form.setValue("name", activeCompany.name);
-    form.setValue("description", activeCompany.description || "");
+    form.setValue("description", (activeCompany.description as string) || "");
     form.setValue("websiteURl", activeCompany.website || "");
   }, [activeCompany]);
   const onSubmit = (data: CompanySchemaType) => {
@@ -167,29 +165,13 @@ const CompanyProfileUpdate = ({
                         </FormLabel>
                         <FormControl>
                           <div className="border border-input rounded-md p-4 bg-muted/10 shadow-sm">
-                            <CompanyDescriptionTiptap
-                              key={activeCompany.id}
-                              value={field.value}
-                            />
+                            <CustomTipTapEditor height="80" field={field} />
                           </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
-                <div>
-                  <Label className="block text-lg font-semibold text-muted-foreground mb-2">
-                    Description Preview
-                  </Label>
-                  <div className="min-h-[120px] p-4 bg-background border border-input rounded-lg shadow-sm overflow-y-auto">
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: form.watch("description"),
-                      }}
-                      className="prose max-w-full prose-sm text-muted-foreground"
-                    />
-                  </div>
                 </div>
               </div>
 

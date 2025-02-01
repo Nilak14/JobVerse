@@ -8,7 +8,8 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { JobEditorFormSteps } from "@/lib/multi-form-steps/JobEditorStep";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
-
+import { getDescription } from "@/lib/test";
+import ContentViewer from "@/components/tiptap/ContentViewer";
 const JobEditorPage = () => {
   const searchParams = useSearchParams();
   const { triggerForm } = useFormTriggersStore();
@@ -70,8 +71,9 @@ const JobEditorPage = () => {
           </motion.div>
 
           <div className="grow md:border-r" />
-          <div className="hidden w-1/2 md:flex">
+          <div className="hidden w-1/2 md:flex ">
             <pre>{JSON.stringify(JobData, null, 2)}</pre>
+            {/* <ContentViewer content={JobData.description} /> */}
           </div>
         </div>
       </main>

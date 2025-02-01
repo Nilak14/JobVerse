@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   FormControl,
@@ -16,9 +16,11 @@ import {
   JobDescriptionSchema,
   JobDescriptionSchemaType,
 } from "@/schema/CreateJobSchema";
-import JobDescriptionEditor from "@/components/tiptap/JobDescriptionTipTap";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Brain } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { getDescription } from "@/lib/test";
+import CustomTipTapEditor from "@/components/tiptap/CustomTipTapEditor";
 
 const JobDescriptionForm = ({
   currentStep,
@@ -26,7 +28,7 @@ const JobDescriptionForm = ({
   setJobData,
 }: JobEditorFormProps) => {
   const { setTrigger } = useFormTriggersStore();
-
+  const [aiDescription, setAiDescription] = useState<any | null>(null);
   const form = useForm<JobDescriptionSchemaType>({
     defaultValues: {
       description: jobData.description || "",
@@ -49,8 +51,12 @@ const JobDescriptionForm = ({
     return unsubscribe;
   }, [form, jobData, setJobData]);
 
+  useEffect(() => {
+    console.log(aiDescription);
+  }, [aiDescription]);
+
   return (
-    <div className="max-w-xl mx-auto space-y-6">
+    <div className="max-w-[90%] mx-auto space-y-6">
       <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">Job Description</h2>
         <p className="text-sm text-muted-foreground">
@@ -65,9 +71,21 @@ const JobDescriptionForm = ({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Job Description</FormLabel>
+                <div className="flex justify-between items-center">
+                  <FormLabel>Job Description</FormLabel>
+                  <Button
+                    onClick={() => {
+                      setAiDescription(getDescription());
+                    }}
+                    type="button"
+                    variant={"secondary"}
+                    size={"icon"}
+                  >
+                    <Brain />
+                  </Button>
+                </div>
                 <FormControl>
-                  <JobDescriptionEditor field={field} />
+                  <CustomTipTapEditor aiContent={aiDescription} field={field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
