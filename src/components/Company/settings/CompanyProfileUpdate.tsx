@@ -48,7 +48,7 @@ const CompanyProfileUpdate = ({
   const form = useForm<CompanySchemaType>({
     defaultValues: {
       name: activeCompany.name,
-      description: (activeCompany.description as string) || "",
+      description: activeCompany.description || "",
       websiteURl: activeCompany.website || "",
       logo: undefined,
     },
@@ -68,7 +68,7 @@ const CompanyProfileUpdate = ({
   useEffect(() => {
     setCompanyAvatar(activeCompany.logoUrl);
     form.setValue("name", activeCompany.name);
-    form.setValue("description", (activeCompany.description as string) || "");
+    form.setValue("description", activeCompany.description || "");
     form.setValue("websiteURl", activeCompany.website || "");
   }, [activeCompany]);
   const onSubmit = (data: CompanySchemaType) => {

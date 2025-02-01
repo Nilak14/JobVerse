@@ -7,7 +7,7 @@ model Company {
     id              String          @id @default(cuid())
     logoUrl         String?
     name            String
-    description     Json?
+    description     String?
     website         String?
     adminEmployerId String // ID of the employer who created this company
     adminEmployer   Employer        @relation("AdminEmployer", fields: [adminEmployerId], references: [id], onDelete: Cascade)
