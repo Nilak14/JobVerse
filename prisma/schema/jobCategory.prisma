@@ -1,0 +1,35 @@
+enum PendingCategoryStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+model JobCategory {
+    id            String        @id @default(uuid())
+    name          String        @unique
+    subcategories SubCategory[]
+    createdAt     DateTime      @default(now())
+    Job           Job[]
+
+    @@map("job_categories")
+}
+
+model SubCategory {
+    id            String      @id @default(uuid())
+    name          String      @unique
+    jobCategoryId String
+    jobCategory   JobCategory @relation(fields: [jobCategoryId], references: [id])
+    Job           Job[]
+
+    @@map("sub_categories")
+}
+
+model PendingCategory {
+    id          String                @id @default(uuid())
+    name        String                @unique
+    submittedBy String
+    status      PendingCategoryStatus @default(PENDING)
+    createdAt   DateTime              @default(now())
+
+    @@map("pending_categories")
+}

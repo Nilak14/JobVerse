@@ -8,6 +8,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Company Members",
+  description: "This page shows all the members who are part of your company",
 };
 
 const CompanyMemberPage = async () => {

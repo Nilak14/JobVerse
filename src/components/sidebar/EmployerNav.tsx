@@ -8,6 +8,8 @@ import { UserNavProps } from "@/lib/types";
 import { useQueryAllCompanies } from "@/hooks/query-hooks/getEmployeeCompany";
 import { useEffect } from "react";
 import { EmployerCompany } from "@/lib/prisma-types/Employers";
+import { useQueryJobCategories } from "@/hooks/query-hooks/getAllJobCategories";
+import { useJobCategory } from "@/store/useJobCategory";
 
 const EmployerNav = ({
   hasSidebar = false,
@@ -16,6 +18,14 @@ const EmployerNav = ({
 }: UserNavProps) => {
   const { setActiveCompany, activeCompany } = useActiveCompany();
   const { data, isLoading } = useQueryAllCompanies();
+
+  const { data: category, isLoading: categoryLoading } =
+    useQueryJobCategories();
+  const { setCategory, setIsLoading } = useJobCategory();
+  useEffect(() => {
+    setCategory(category?.data.category);
+    setIsLoading(categoryLoading);
+  }, [category, categoryLoading]);
 
   //todo: add one client component to this component and fetch companies and set active company there. make this nav server component as much as possible
 

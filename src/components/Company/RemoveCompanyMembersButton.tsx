@@ -28,14 +28,13 @@ const RemoveCompanyMembersButton = ({
         </span>
         <span>Remove Members</span>
       </Button>
-      {open && (
-        <RemoveCompanyMemberModal
-          session={session}
-          open={open}
-          setOpen={setOpen}
-          activeCompany={activeCompany}
-        />
-      )}
+
+      <RemoveCompanyMemberModal
+        session={session}
+        open={open}
+        setOpen={setOpen}
+        activeCompany={activeCompany}
+      />
     </>
   );
 };

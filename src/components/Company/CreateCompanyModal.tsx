@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import { useForm } from "react-hook-form";
-import CompanyDescriptionTiptap from "../tiptap/CompanyDescriptionTipTap";
+import CustomTipTapEditor from "../tiptap/CustomTipTapEditor";
 interface CreateCompanyModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -87,7 +87,7 @@ const CreateCompanyModal = ({
   }, [loading, status]);
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent>
+      <ResponsiveModalContent className="min-w-[50%]">
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>Create Company</ResponsiveModalTitle>
         </ResponsiveModalHeader>
@@ -145,26 +145,13 @@ const CreateCompanyModal = ({
                       </FormLabel>
                       <FormControl>
                         <div className="border border-input rounded-md p-4 bg-muted/10 shadow-sm">
-                          <CompanyDescriptionTiptap value={field.value} />
+                          <CustomTipTapEditor field={field} />
                         </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              </div>
-              <div>
-                <Label className="block text-lg font-semibold text-muted-foreground mb-2">
-                  Description Preview
-                </Label>
-                <div className="min-h-[120px] p-4 bg-background border border-input rounded-lg shadow-sm overflow-y-auto">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: form.watch("description"),
-                    }}
-                    className="prose max-w-full prose-sm text-muted-foreground"
-                  />
-                </div>
               </div>
             </div>
             <FormField
