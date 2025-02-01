@@ -8,11 +8,15 @@ import { JobSchemaType } from "@/schema/CreateJobSchema";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { getDescription } from "@/lib/test";
+import ContentViewer from "@/components/tiptap/ContentViewer";
 
 const JobEditorPage = () => {
   const searchParams = useSearchParams();
   const { triggerForm } = useFormTriggersStore();
-  const [JobData, setJobData] = useState<JobSchemaType>({} as JobSchemaType);
+  const [JobData, setJobData] = useState<JobSchemaType>({
+    description: getDescription(),
+  } as JobSchemaType);
 
   const currentStep = searchParams.get("step") || JobEditorFormSteps[0].key;
 
@@ -70,8 +74,9 @@ const JobEditorPage = () => {
           </motion.div>
 
           <div className="grow md:border-r" />
-          <div className="hidden w-1/2 md:flex">
-            <pre>{JSON.stringify(JobData, null, 2)}</pre>
+          <div className="hidden w-1/2 md:flex ">
+            {/* <pre>{JSON.stringify(JobData, null, 2)}</pre> */}
+            <ContentViewer content={JobData.description} />
           </div>
         </div>
       </main>
