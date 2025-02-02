@@ -255,7 +255,7 @@ const JobBenefitsForm = ({
                           <FormControl>
                             <Input
                               startIcon={() => (
-                                <span className="text-primary border-2 border-white w-fit">
+                                <span className="text-primary  w-fit">
                                   {getSafeSymbolFromCurrency(
                                     form.watch("salaryCurrency")
                                   )}
