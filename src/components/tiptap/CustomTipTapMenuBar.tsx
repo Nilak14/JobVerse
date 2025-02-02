@@ -101,24 +101,6 @@ export default function CustomTipTapMenuBar({ editor }: MenuBarProps) {
             </TooltipTrigger>
             <TooltipContent>Strikethrough</TooltipContent>
           </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Toggle
-                size="sm"
-                pressed={editor.isActive("code")}
-                onPressedChange={() =>
-                  editor.chain().focus().toggleCode().run()
-                }
-                className={cn(
-                  editor.isActive("code") && "bg-muted text-muted-foreground"
-                )}
-              >
-                <Code className="h-4 w-4" />
-              </Toggle>
-            </TooltipTrigger>
-            <TooltipContent>Code</TooltipContent>
-          </Tooltip>
         </div>
 
         <div className="w-px h-6 bg-border mx-2" />

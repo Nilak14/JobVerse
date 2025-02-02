@@ -12,13 +12,13 @@ import HardBreak from "@tiptap/extension-hard-break";
 
 interface TipTapEditorProps {
   field: any;
-  height?: string;
+  height?: number;
   aiContent?: string;
 }
 
 export default function CustomTipTapEditor({
   field,
-  height = "300",
+  height = 300,
   aiContent,
 }: TipTapEditorProps) {
   const editor = useEditor({
@@ -64,8 +64,8 @@ export default function CustomTipTapEditor({
     if (editor && aiContent) {
       editor.commands.setContent("");
       editor.commands.setContent(JSON.parse(aiContent));
+      field.onChange(JSON.stringify(editor.getJSON()));
     }
-    console.log("hi");
   }, [editor, aiContent]);
 
   return (
