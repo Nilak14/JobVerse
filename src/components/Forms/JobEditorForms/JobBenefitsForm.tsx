@@ -40,7 +40,6 @@ const JobBenefitsForm = ({
   setJobData,
 }: JobEditorFormProps) => {
   const { setTrigger } = useFormTriggersStore();
-  const [showRangeSalary, setShowRangeSalary] = React.useState(true);
 
   const form = useForm<JobBenefitsSchemaType>({
     defaultValues: {
@@ -55,7 +54,9 @@ const JobBenefitsForm = ({
     resolver: zodResolver(JobBenefitsSchema),
     mode: "onChange",
   });
-
+  const [showRangeSalary, setShowRangeSalary] = React.useState(
+    form.watch("salaryType") === "Range"
+  );
   useEffect(() => {
     setTrigger(currentStep, form.trigger);
   }, [form.trigger, setTrigger]);
@@ -158,6 +159,12 @@ const JobBenefitsForm = ({
                         onValueChange={(e) => {
                           field.onChange(e);
                           setShowRangeSalary(e === "Range");
+                          if (e === "Range") {
+                            form.setValue("amount", null);
+                          } else {
+                            form.setValue("minSalaryAmount", null);
+                            form.setValue("maxSalaryAmount", null);
+                          }
                         }}
                         defaultValue={field.value}
                       >
