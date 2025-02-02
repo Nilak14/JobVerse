@@ -159,12 +159,54 @@ export const JobDescriptionSchema = z.object({
 
 export type JobDescriptionSchemaType = z.infer<typeof JobDescriptionSchema>;
 
+// Job Tags Type
+
+export const JobTagsSchema = z.object({
+  tags: z
+    .array(z.string())
+    .min(2, { message: "There should be at least 2 tags selected" })
+    .max(15, { message: "You can select at most 15 tags" }),
+});
+
+export type JobTagsSchemaType = z.infer<typeof JobTagsSchema>;
+
+// job qualification types
+
+export const JobQualificationSchema = z.object({
+  skills: z
+    .array(z.string())
+    .min(1, { message: "At least one skill is required" }),
+  minimumEducation: z.enum(
+    [
+      "High School",
+      "Associate",
+      "Bachelor's",
+      "Master's",
+      "Doctorate",
+      "Other",
+    ],
+    {
+      required_error: "Minimum Education is required",
+    }
+  ),
+  preferredGender: z.enum(["Male", "Female", "Both"], {
+    required_error: "Preferred Gender is required",
+  }),
+  license: z.enum(["None", "Two Wheeler", "Four Wheeler", "Both"], {
+    required_error: "License is required",
+  }),
+  vehicle: z.enum(["None", "Two Wheeler", "Four Wheeler", "Both"], {
+    required_error: "Vehicle is required",
+  }),
+});
+
 // global schema
 
 export const jobSchema = jobBasicsSchema
   .and(JobDetailsSchema)
   .and(JobBenefitsSchema)
-  .and(JobDescriptionSchema);
+  .and(JobDescriptionSchema)
+  .and(JobTagsSchema);
 
 export type JobSchemaType = z.infer<typeof jobSchema> & {
   id?: string;
