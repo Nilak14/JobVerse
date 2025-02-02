@@ -180,7 +180,7 @@ const CompanyProfileUpdate = ({
                             {showDescriptionPreview ? (
                               <ContentViewer content={field.value} />
                             ) : (
-                              <CustomTipTapEditor height="80" field={field} />
+                              <CustomTipTapEditor field={field} />
                             )}
                           </div>
                         </FormControl>
