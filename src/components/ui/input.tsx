@@ -7,19 +7,43 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   startIcon?: LucideIcon | React.ElementType;
   endIcon?: LucideIcon | React.ElementType;
+  endIconAction?: () => void;
+  startIconAction?: () => void;
+  endIconClassName?: React.ComponentProps<"button">["className"];
+  startIconClassName?: React.ComponentProps<"button">["className"];
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, startIcon, endIcon, ...props }, ref) => {
+  (
+    {
+      className,
+      endIconClassName,
+      startIconClassName,
+      type,
+      startIcon,
+      endIcon,
+      endIconAction,
+      startIconAction,
+      ...props
+    },
+    ref
+  ) => {
     const StartIcon = startIcon;
     const EndIcon = endIcon;
 
     return (
       <div className="w-full relative">
         {StartIcon && (
-          <div className="absolute left-1.5 top-1/2 transform -translate-y-1/2">
+          <button
+            type="button"
+            onClick={startIconAction && startIconAction}
+            className={cn(
+              "absolute left-1.5 top-1/2 transform -translate-y-1/2",
+              startIconClassName
+            )}
+          >
             <StartIcon size={18} className="text-muted-foreground" />
-          </div>
+          </button>
         )}
         <input
           type={type}
@@ -33,9 +57,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {EndIcon && (
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+          <button
+            type="button"
+            onClick={endIconAction && endIconAction}
+            className={cn(
+              "absolute right-3 top-1/2 transform -translate-y-1/2",
+              endIconClassName
+            )}
+          >
             <EndIcon className="text-muted-foreground" size={18} />
-          </div>
+          </button>
         )}
       </div>
     );

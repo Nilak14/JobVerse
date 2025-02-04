@@ -7,5 +7,6 @@ export const useQueryJobCategories = () => {
     queryFn: async () => await JVRequest.get("/api/job-categories"),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
+    cacheTime: Infinity,
   });
 };

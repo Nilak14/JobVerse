@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { useQueryJobCategories } from "@/hooks/query-hooks/getAllJobCategories";
 import { useJobCategory } from "@/store/useJobCategory";
+import { useQueryGetSkills } from "@/hooks/query-hooks/getSkills";
 
 const EmployerNav = ({
   hasSidebar = false,

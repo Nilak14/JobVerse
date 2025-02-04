@@ -24,3 +24,17 @@ export const JobBenefits = [
   "Employee Discount",
   "Referral Program",
 ];
+
+export const EducationLevel = [
+  "Basic",
+  "High School",
+  "Diploma",
+  "Associate",
+  "Bachelor",
+  "Master",
+  "Doctorate",
+];
+export const PreferredGender = ["None", "Male", "Female", "Other"];
+
+export const LicenseRequired = ["None", "Two Wheeler", "Four Wheeler", "Both"];
+export const VehicleRequired = ["None", "Two Wheeler", "Four Wheeler", "Both"];

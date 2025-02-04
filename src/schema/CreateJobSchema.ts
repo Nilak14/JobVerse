@@ -1,7 +1,11 @@
 import {
+  EducationLevel,
   jobTypes,
+  LicenseRequired,
+  PreferredGender,
   SalaryRate,
   SalaryType,
+  VehicleRequired,
   workMode,
 } from "@/lib/enums/CreateJobEnums";
 import { z } from "zod";
@@ -159,12 +163,71 @@ export const JobDescriptionSchema = z.object({
 
 export type JobDescriptionSchemaType = z.infer<typeof JobDescriptionSchema>;
 
+// Job Tags Type
+
+export const JobTagsSchema = z.object({
+  tags: z
+    .array(z.string())
+    .min(2, { message: "There should be at least 2 tags selected" })
+    .max(15, { message: "You can select at most 15 tags" }),
+});
+
+export type JobTagsSchemaType = z.infer<typeof JobTagsSchema>;
+
+// job qualification types
+
+export const JobQualificationSchema = z.object({
+  skills: z
+    .array(z.string())
+    .min(1, { message: "At least one skill is required" }),
+  educationLevel: z
+    .string()
+    .min(1, "Select Education Level")
+    .refine((val) => EducationLevel.includes(val), "Invalid Education"),
+
+  preferredGender: z
+    .string()
+    .min(1, "Select Preferred Gender")
+    .refine((val) => PreferredGender.includes(val), "Invalid Gender"),
+
+  license: z
+    .string()
+    .min(1, "Select Required License")
+    .refine((val) => LicenseRequired.includes(val), "Invalid License"),
+  vehicle: z
+    .string()
+    .min(1, "Select Required Vehicle")
+    .refine((val) => VehicleRequired.includes(val), "Invalid Vehicle"),
+});
+
+export type JobQualificationSchemaType = z.infer<typeof JobQualificationSchema>;
+
+// job settings type
+export const JobSettingsSchema = z.object({
+  resumeRequired: z.boolean({ message: "Resume Required should be selected" }),
+  getEmailNotification: z.boolean({
+    message: "Email Notification should be selected",
+  }),
+  sendIndividualEmails: z.boolean({
+    message: "Send Individual Emails should be selected",
+  }),
+  isUrgent: z.boolean({
+    message: "Urgent is required",
+  }),
+  applicationDeadline: z.coerce.date(),
+});
+
+export type JobSettingsSchemaType = z.infer<typeof JobSettingsSchema>;
+
 // global schema
 
 export const jobSchema = jobBasicsSchema
   .and(JobDetailsSchema)
   .and(JobBenefitsSchema)
-  .and(JobDescriptionSchema);
+  .and(JobDescriptionSchema)
+  .and(JobTagsSchema)
+  .and(JobQualificationSchema)
+  .and(JobSettingsSchema);
 
 export type JobSchemaType = z.infer<typeof jobSchema> & {
   id?: string;

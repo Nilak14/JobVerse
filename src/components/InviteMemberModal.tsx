@@ -10,7 +10,7 @@ import { useActiveCompany } from "@/store/useActiveCompany";
 import { Input } from "./ui/input";
 import { Search, Send } from "lucide-react";
 import LinkButtonAnimated from "./ui/animated-button-link";
-import { useDebounceText } from "@/hooks/use-debounce-text";
+import { useDebounce } from "@/hooks/use-debounce";
 import { useState } from "react";
 import { useQueryEmployeeSearch } from "@/hooks/query-hooks/useQueryEmployeeSearch";
 import UserAvatar from "./Global/Useravatar";
@@ -36,7 +36,7 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {}
   );
-  const debouncedSearchValue = useDebounceText(searchQuery);
+  const debouncedSearchValue = useDebounce(searchQuery);
 
   const {
     data: searchedEmployee,

@@ -118,3 +118,25 @@ body {
 ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0);
 }
+
+#svg {
+  height: 150px;
+  width: 150px;
+  /* stroke: var(--primary-foreground); */
+  fill-opacity: 0;
+  stroke-width: 3px;
+  stroke-dasharray: 450;
+  animation: draw 4s linear infinite;
+}
+
+@keyframes draw {
+  0% {
+    stroke-dashoffset: 450;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.css-s0iqzq-control {
+  border-color: hsl(var(--border)) !important;
+}
