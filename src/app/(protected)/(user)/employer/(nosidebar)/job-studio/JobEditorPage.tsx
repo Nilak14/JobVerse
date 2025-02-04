@@ -10,14 +10,16 @@ import { JobEditorFormSteps } from "@/lib/multi-form-steps/JobEditorStep";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import JobPreviewSection from "@/components/Job/JobPreviewSection";
 import { cn } from "@/lib/utils";
+import useAutoSaveJobPost from "@/hooks/useAutoSaveJobPost";
+import useWarning from "@/hooks/use-warning";
 
 const JobEditorPage = () => {
   const searchParams = useSearchParams();
   const { triggerForm } = useFormTriggersStore();
   const [JobData, setJobData] = useState<JobSchemaType>({} as JobSchemaType);
   const [showSMPreview, setShowSMPreview] = useState(false);
+  const { isSaving, hasUnsavedChanges } = useAutoSaveJobPost(JobData);
   const currentStep = searchParams.get("step") || JobEditorFormSteps[0].key;
-
   const setStep = async (key: string, isPrev: boolean) => {
     if (!isPrev) {
       const isValid = await triggerForm(currentStep);
@@ -27,6 +29,7 @@ const JobEditorPage = () => {
     newSearchParams.set("step", key);
     window.history.replaceState(null, "", `?${newSearchParams.toString()}`);
   };
+  useWarning(hasUnsavedChanges);
 
   const FormComponent = JobEditorFormSteps.find(
     (step) => step.key === currentStep
@@ -87,6 +90,7 @@ const JobEditorPage = () => {
         showSMPreview={showSMPreview}
         currentStep={currentStep}
         setCurrentStep={setStep}
+        isSaving={isSaving}
       />
     </section>
   );
