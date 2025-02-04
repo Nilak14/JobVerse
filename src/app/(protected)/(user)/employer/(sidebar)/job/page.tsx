@@ -1,3 +1,4 @@
+import GlobalLoading from "@/app/loading";
 import SidebarContainer from "@/components/Global/SidebarContainer";
 import { Button } from "@/components/ui/button";
 import { BriefcaseMedical } from "lucide-react";

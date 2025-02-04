@@ -8,15 +8,18 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { JobEditorFormSteps } from "@/lib/multi-form-steps/JobEditorStep";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
-import { getDescription } from "@/lib/test";
-import ContentViewer from "@/components/tiptap/ContentViewer";
+import JobPreviewSection from "@/components/Job/JobPreviewSection";
+import { cn } from "@/lib/utils";
+import useAutoSaveJobPost from "@/hooks/useAutoSaveJobPost";
+import useWarning from "@/hooks/use-warning";
+
 const JobEditorPage = () => {
   const searchParams = useSearchParams();
   const { triggerForm } = useFormTriggersStore();
   const [JobData, setJobData] = useState<JobSchemaType>({} as JobSchemaType);
-
+  const [showSMPreview, setShowSMPreview] = useState(false);
+  const { isSaving, hasUnsavedChanges } = useAutoSaveJobPost(JobData);
   const currentStep = searchParams.get("step") || JobEditorFormSteps[0].key;
-
   const setStep = async (key: string, isPrev: boolean) => {
     if (!isPrev) {
       const isValid = await triggerForm(currentStep);
@@ -26,6 +29,7 @@ const JobEditorPage = () => {
     newSearchParams.set("step", key);
     window.history.replaceState(null, "", `?${newSearchParams.toString()}`);
   };
+  useWarning(hasUnsavedChanges);
 
   const FormComponent = JobEditorFormSteps.find(
     (step) => step.key === currentStep
@@ -58,7 +62,10 @@ const JobEditorPage = () => {
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.2 }}
-            className="w-full md:w-1/2 p-3 overflow-y-auto space-y-6 relative"
+            className={cn(
+              "w-full md:w-1/2 md:block p-3 overflow-y-auto space-y-6 relative",
+              showSMPreview && "hidden"
+            )}
           >
             {/* <Breadcrumbs currentStep={currentStep} setCurrentStep={setStep} /> */}
             {FormComponent && (
@@ -71,13 +78,20 @@ const JobEditorPage = () => {
           </motion.div>
 
           <div className="grow md:border-r" />
-          <div className="hidden w-1/2 md:flex ">
-            <pre>{JSON.stringify(JobData, null, 2)}</pre>
-            {/* <ContentViewer content={JobData.description} /> */}
-          </div>
+          <JobPreviewSection
+            className={cn(showSMPreview && "flex")}
+            jobData={JobData}
+            setJobData={setJobData}
+          />
         </div>
       </main>
-      <JobEditorFooter currentStep={currentStep} setCurrentStep={setStep} />
+      <JobEditorFooter
+        setShowSMPreview={setShowSMPreview}
+        showSMPreview={showSMPreview}
+        currentStep={currentStep}
+        setCurrentStep={setStep}
+        isSaving={isSaving}
+      />
     </section>
   );
 };

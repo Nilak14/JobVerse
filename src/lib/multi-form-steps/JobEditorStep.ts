@@ -6,6 +6,7 @@ import JobBenefitsForm from "@/components/Forms/JobEditorForms/JobBenefitsForm";
 import JobDescriptionForm from "@/components/Forms/JobEditorForms/JobDescriptionForm";
 import JobTagForm from "@/components/Forms/JobEditorForms/JobTagsForm";
 import JobQualificationForm from "@/components/Forms/JobEditorForms/JobQualificationForm";
+import JobSettingForm from "@/components/Forms/JobEditorForms/JobSettingForm";
 
 export const JobEditorFormSteps: {
   title: string;
@@ -41,5 +42,10 @@ export const JobEditorFormSteps: {
     title: "Job Qualifications",
     component: JobQualificationForm,
     key: "job-qualifications",
+  },
+  {
+    title: "Job Setting",
+    component: JobSettingForm,
+    key: "job-setting",
   },
 ];

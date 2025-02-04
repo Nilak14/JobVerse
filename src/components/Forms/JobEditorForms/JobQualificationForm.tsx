@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -12,9 +11,25 @@ import {
 import { useForm } from "react-hook-form";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import { JobEditorFormProps } from "@/lib/types";
-import { JobTagsSchema, JobTagsSchemaType } from "@/schema/CreateJobSchema";
+import {
+  JobQualificationSchema,
+  JobQualificationSchemaType,
+} from "@/schema/CreateJobSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputTags } from "@/components/ui/input-tag";
+import SkillsInput from "@/components/Job/SkillsInput";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  EducationLevel,
+  LicenseRequired,
+  PreferredGender,
+  VehicleRequired,
+} from "@/lib/enums/CreateJobEnums";
 
 const JobQualificationForm = ({
   currentStep,
@@ -22,11 +37,16 @@ const JobQualificationForm = ({
   setJobData,
 }: JobEditorFormProps) => {
   const { setTrigger } = useFormTriggersStore();
-  const form = useForm<JobTagsSchemaType>({
+
+  const form = useForm<JobQualificationSchemaType>({
     defaultValues: {
-      tags: jobData.tags || [],
+      skills: jobData.skills || [],
+      license: jobData.license || "None",
+      educationLevel: jobData.educationLevel || "",
+      preferredGender: jobData.preferredGender || "None",
+      vehicle: jobData.vehicle || "None",
     },
-    resolver: zodResolver(JobTagsSchema),
+    resolver: zodResolver(JobQualificationSchema),
     mode: "onChange",
   });
 
@@ -39,8 +59,8 @@ const JobQualificationForm = ({
       setJobData({
         ...jobData,
         ...values,
-        tags:
-          values.tags?.filter((benefit): benefit is string => !!benefit) || [],
+        skills:
+          values.skills?.filter((skill): skill is string => !!skill) || [],
       });
     });
     return unsubscribe;
@@ -59,25 +79,135 @@ const JobQualificationForm = ({
         <form className="space-y-6">
           <FormField
             control={form.control}
-            name="tags"
+            name="skills"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Enter Tags (Upto 15)</FormLabel>
+                <FormLabel>Select Skills</FormLabel>
                 <FormControl>
-                  <InputTags
-                    maxLength={15}
-                    {...field}
-                    onChange={(e) => field.onChange(e)}
-                  />
+                  <SkillsInput field={field} />
                 </FormControl>
-                <FormDescription>
-                  Type Text and press enter to add the tag. This will help job
-                  seekers find your job easily.
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          <div className="grid lg:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="license"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>License Required</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select salary type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {LicenseRequired.map((license) => (
+                        <SelectItem key={license} value={license}>
+                          {license}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="vehicle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vehicle Required</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Vehicle type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {VehicleRequired.map((vehicle) => (
+                        <SelectItem key={vehicle} value={vehicle}>
+                          {vehicle}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid lg:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="educationLevel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Minimum Education Required</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Education Level" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {EducationLevel.map((education) => (
+                        <SelectItem key={education} value={education}>
+                          {education}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="preferredGender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Preferred Gender</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Preferred Gender" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {PreferredGender.map((gender) => (
+                        <SelectItem key={gender} value={gender}>
+                          {gender}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </form>
       </Form>
     </div>

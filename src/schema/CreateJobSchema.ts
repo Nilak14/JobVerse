@@ -1,7 +1,11 @@
 import {
+  EducationLevel,
   jobTypes,
+  LicenseRequired,
+  PreferredGender,
   SalaryRate,
   SalaryType,
+  VehicleRequired,
   workMode,
 } from "@/lib/enums/CreateJobEnums";
 import { z } from "zod";
@@ -176,29 +180,44 @@ export const JobQualificationSchema = z.object({
   skills: z
     .array(z.string())
     .min(1, { message: "At least one skill is required" }),
-  minimumEducation: z.enum(
-    [
-      "High School",
-      "Associate",
-      "Bachelor's",
-      "Master's",
-      "Doctorate",
-      "Other",
-    ],
-    {
-      required_error: "Minimum Education is required",
-    }
-  ),
-  preferredGender: z.enum(["Male", "Female", "Both"], {
-    required_error: "Preferred Gender is required",
-  }),
-  license: z.enum(["None", "Two Wheeler", "Four Wheeler", "Both"], {
-    required_error: "License is required",
-  }),
-  vehicle: z.enum(["None", "Two Wheeler", "Four Wheeler", "Both"], {
-    required_error: "Vehicle is required",
-  }),
+  educationLevel: z
+    .string()
+    .min(1, "Select Education Level")
+    .refine((val) => EducationLevel.includes(val), "Invalid Education"),
+
+  preferredGender: z
+    .string()
+    .min(1, "Select Preferred Gender")
+    .refine((val) => PreferredGender.includes(val), "Invalid Gender"),
+
+  license: z
+    .string()
+    .min(1, "Select Required License")
+    .refine((val) => LicenseRequired.includes(val), "Invalid License"),
+  vehicle: z
+    .string()
+    .min(1, "Select Required Vehicle")
+    .refine((val) => VehicleRequired.includes(val), "Invalid Vehicle"),
 });
+
+export type JobQualificationSchemaType = z.infer<typeof JobQualificationSchema>;
+
+// job settings type
+export const JobSettingsSchema = z.object({
+  resumeRequired: z.boolean({ message: "Resume Required should be selected" }),
+  getEmailNotification: z.boolean({
+    message: "Email Notification should be selected",
+  }),
+  sendIndividualEmails: z.boolean({
+    message: "Send Individual Emails should be selected",
+  }),
+  isUrgent: z.boolean({
+    message: "Urgent is required",
+  }),
+  applicationDeadline: z.coerce.date(),
+});
+
+export type JobSettingsSchemaType = z.infer<typeof JobSettingsSchema>;
 
 // global schema
 
@@ -206,7 +225,9 @@ export const jobSchema = jobBasicsSchema
   .and(JobDetailsSchema)
   .and(JobBenefitsSchema)
   .and(JobDescriptionSchema)
-  .and(JobTagsSchema);
+  .and(JobTagsSchema)
+  .and(JobQualificationSchema)
+  .and(JobSettingsSchema);
 
 export type JobSchemaType = z.infer<typeof jobSchema> & {
   id?: string;
