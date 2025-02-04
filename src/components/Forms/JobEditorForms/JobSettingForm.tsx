@@ -37,7 +37,6 @@ const JobSettingForm = ({
     defaultValues: {
       resumeRequired: jobData.resumeRequired || false,
       getEmailNotification: jobData.getEmailNotification || false,
-      sendIndividualEmails: jobData.sendIndividualEmails || false,
       applicationDeadline: jobData.applicationDeadline || "",
       isUrgent: jobData.isUrgent || false,
     },

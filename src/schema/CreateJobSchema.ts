@@ -208,9 +208,6 @@ export const JobSettingsSchema = z.object({
   getEmailNotification: z.boolean({
     message: "Email Notification should be selected",
   }),
-  sendIndividualEmails: z.boolean({
-    message: "Send Individual Emails should be selected",
-  }),
   isUrgent: z.boolean({
     message: "Urgent is required",
   }),

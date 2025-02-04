@@ -3,71 +3,61 @@ enum JobStatus {
     REJECTED
     PENDING
     INDRAFT
-}
-
-enum Rate {
-    PER_HOUR
-    PER_DAY
-    PER_WEEK
-    PER_MONTH
-    PER_YEAR
-}
-
-enum SalaryType {
-    RANGE
-    STARTING
-    MAXIMUM
-    EXACT
-}
-
-enum JobType {
-    FULL_TIME
-    PART_TIME
-    CONTRACT
-    TEMPORARY
-    INTERNSHIP
-    VOLUNTEER
+    DELETED
 }
 
 model Job {
-    id          String  @id @default(cuid())
-    title       String
-    description String?
-    latitude    String?
-    longitude   String?
-    companyId   String
-    totalHead   Int?
+    id                    String       @id @default(cuid())
+    title                 String?
+    jobType               String?
+    workMode              String?
+    location              String?
+    categoryId            String?
+    category              JobCategory? @relation(fields: [categoryId], references: [id])
+    subcategoryId         String?
+    subcategory           SubCategory? @relation(fields: [subcategoryId], references: [id])
+    experienceLevel       String?
+    totalHeads            String?
+    Salary                Salary[]
+    benefits              String[]
+    description           String?
+    tags                  String[]
+    skills                String[]
+    minEducationRequired  String?
+    preferredGender       String?
+    licenseRequired       String?
+    vehicleRequired       String?
+    resumeRequired        String?
+    isUrgent              Boolean      @default(false)
+    isFeatured            Boolean      @default(false)
+    deadline              DateTime?
+    sendEmailNotification Boolean      @default(false)
+    latitude              String?
+    longitude             String?
+    status                JobStatus    @default(INDRAFT)
+    companyId             String
+    company               Company      @relation(fields: [companyId], references: [id])
+    createdBy             String
+    creator               Employer     @relation(fields: [createdBy], references: [id])
 
-    categoryId String
-    category   JobCategory @relation(fields: [categoryId], references: [id])
-
-    subcategoryId String?
-    subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
-
-    status    JobStatus @default(INDRAFT)
-    company   Company   @relation(fields: [companyId], references: [id])
-    createdBy String
-    creator   Employer  @relation(fields: [createdBy], references: [id])
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-
-    isDeleted Boolean  @default(false)
-    Salary    Salary[]
+    isDeleted Boolean   @default(false)
 
     @@map("jobs")
 }
 
 model Salary {
-    id          String     @id @default(cuid())
-    type        SalaryType
-    minSalary   Float?
-    maxSalary   Float?
-    exactSalary Float?
-    currency    String
-    rate        Rate
-    job         Job        @relation(fields: [jobId], references: [id])
-    jobId       String
+    id        String  @id @default(cuid())
+    type      String?
+    minAmount Float?
+    maxAmount Float?
+    amount    Float?
+    currency  String?
+    rate      String?
+    job       Job     @relation(fields: [jobId], references: [id])
+    jobId     String
 
     @@map("salaries")
 }
