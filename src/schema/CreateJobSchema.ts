@@ -202,6 +202,23 @@ export const JobQualificationSchema = z.object({
 
 export type JobQualificationSchemaType = z.infer<typeof JobQualificationSchema>;
 
+// job settings type
+export const JobSettingsSchema = z.object({
+  resumeRequired: z.boolean({ message: "Resume Required should be selected" }),
+  getEmailNotification: z.boolean({
+    message: "Email Notification should be selected",
+  }),
+  sendIndividualEmails: z.boolean({
+    message: "Send Individual Emails should be selected",
+  }),
+  isUrgent: z.boolean({
+    message: "Urgent is required",
+  }),
+  applicationDeadline: z.coerce.date(),
+});
+
+export type JobSettingsSchemaType = z.infer<typeof JobSettingsSchema>;
+
 // global schema
 
 export const jobSchema = jobBasicsSchema
@@ -209,7 +226,8 @@ export const jobSchema = jobBasicsSchema
   .and(JobBenefitsSchema)
   .and(JobDescriptionSchema)
   .and(JobTagsSchema)
-  .and(JobQualificationSchema);
+  .and(JobQualificationSchema)
+  .and(JobSettingsSchema);
 
 export type JobSchemaType = z.infer<typeof jobSchema> & {
   id?: string;

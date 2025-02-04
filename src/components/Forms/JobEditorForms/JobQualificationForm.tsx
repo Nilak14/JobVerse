@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,15 +12,11 @@ import { useForm } from "react-hook-form";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import { JobEditorFormProps } from "@/lib/types";
 import {
+  JobQualificationSchema,
   JobQualificationSchemaType,
-  JobTagsSchema,
-  JobTagsSchemaType,
 } from "@/schema/CreateJobSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputTags } from "@/components/ui/input-tag";
-import { useQueryGetSkills } from "@/hooks/query-hooks/getSkills";
 import SkillsInput from "@/components/Job/SkillsInput";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -51,7 +46,7 @@ const JobQualificationForm = ({
       preferredGender: jobData.preferredGender || "None",
       vehicle: jobData.vehicle || "None",
     },
-    resolver: zodResolver(JobTagsSchema),
+    resolver: zodResolver(JobQualificationSchema),
     mode: "onChange",
   });
 
