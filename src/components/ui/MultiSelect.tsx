@@ -9,6 +9,7 @@ interface MultiSelectProps {
   onSearch?: (e: string) => void;
   options: options[];
   field: any;
+  defaultValue?: string[];
 }
 
 const MultiSelect = ({
@@ -16,6 +17,7 @@ const MultiSelect = ({
   onSearch,
   options,
   field,
+  defaultValue,
 }: MultiSelectProps) => {
   const theme = (theme: Theme) => ({
     ...theme,
@@ -51,6 +53,7 @@ const MultiSelect = ({
       </div>
     );
   };
+  console.log("from select", field.value);
 
   return (
     <div>
@@ -104,6 +107,13 @@ const MultiSelect = ({
         onInputChange={(e) => {
           onSearch && onSearch(e);
         }}
+        defaultValue={field.value.map(
+          (item: string) =>
+            ({
+              value: item,
+              label: item,
+            }) as options
+        )}
         onChange={(e) => {
           let arr: string[] = [];
           e.map((item) => arr.push(item.value));

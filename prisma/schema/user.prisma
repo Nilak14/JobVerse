@@ -56,11 +56,11 @@ model Employer {
     id                  String          @id @default(cuid())
     userId              String          @unique
     user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-    companyMemberships  CompanyMember[] // Relationship through the join table
+    companyMemberships  CompanyMember[]
     sentInvitations     Invitations[]   @relation("InviterToInvitations")
     receivedInvitations Invitations[]   @relation("InviteeToInvitations")
     adminCompanies      Company[]       @relation("AdminEmployer")
-    activeCompanyId     String? // ID of the company the employer is currently active in
+    activeCompanyId     String?
     createdJobs         Job[]
 
     @@map("employers")

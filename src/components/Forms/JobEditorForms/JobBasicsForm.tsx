@@ -54,6 +54,14 @@ const JobBasicsForm = ({
     return unsubscribe;
   }, [form, jobData, setJobData, setShowLocationField, showLocationField]);
 
+  useEffect(() => {
+    if (jobData.workMode === "Remote") {
+      setShowLocationField(false);
+    } else {
+      setShowLocationField(true);
+    }
+  }, []);
+
   const getIcon = (mode: string) => {
     switch (mode) {
       case "On-site":
@@ -67,13 +75,13 @@ const JobBasicsForm = ({
     }
   };
   return (
-    <div className="max-w-xl mx-auto space-y-6">
-      <div className="space-y-1.5 text-center">
+    <div className="max-w-xl mx-auto space-y-6 pt-5">
+      {/* <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">Job Basics</h2>
         <p className="text-sm text-muted-foreground">
           Enter the basic information about the job you are posting
         </p>
-      </div>
+      </div> */}
       <Form {...form}>
         <form className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

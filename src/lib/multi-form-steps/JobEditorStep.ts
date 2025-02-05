@@ -12,40 +12,48 @@ export const JobEditorFormSteps: {
   title: string;
   component: React.ComponentType<JobEditorFormProps>;
   key: string;
+  isLastStep: boolean;
 }[] = [
   {
     title: "Job Basics",
     component: JobBasicsForm,
     key: "job-basics",
+    isLastStep: false,
   },
   {
     title: "Job Details",
     component: JobDetailsForm,
     key: "job-details",
+    isLastStep: false,
   },
   {
     title: "Job Benefits",
     component: JobBenefitsForm,
     key: "job-benefits",
+    isLastStep: false,
   },
   {
     title: "Job Tags",
     component: JobTagForm,
     key: "job-tags",
+    isLastStep: false,
   },
   {
     title: "Job Description",
     component: JobDescriptionForm,
     key: "job-description",
+    isLastStep: false,
   },
   {
     title: "Job Qualifications",
     component: JobQualificationForm,
     key: "job-qualifications",
+    isLastStep: false,
   },
   {
     title: "Job Setting",
     component: JobSettingForm,
     key: "job-setting",
+    isLastStep: true,
   },
 ];

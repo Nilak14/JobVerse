@@ -45,8 +45,8 @@ export type jobBasicsSchemaType = z.infer<typeof jobBasicsSchema>;
 
 // Job Details Schema
 export const JobDetailsSchema = z.object({
-  category: z.string().min(1, { message: "Category is required" }),
-  subCategory: z.string().min(1, { message: "Sub Category is required" }),
+  categoryId: z.string().min(1, { message: "Category is required" }),
+  subCategoryId: z.string().min(1, { message: "Sub Category is required" }),
   experienceLevel: z
     .string()
     .min(1, { message: "Experience Level is required" }),
@@ -73,7 +73,7 @@ export const SalaryTypeSchema = z
       .nullable(),
     amount: z
       .string()
-      .min(1, { message: "Minimum Salary is required" })
+      .min(1, { message: " Salary is required" })
       .regex(/^\d+$/, "Value must be greater than 0")
       .nullable(),
   })
@@ -208,20 +208,19 @@ export const JobSettingsSchema = z.object({
   getEmailNotification: z.boolean({
     message: "Email Notification should be selected",
   }),
-  sendIndividualEmails: z.boolean({
-    message: "Send Individual Emails should be selected",
-  }),
   isUrgent: z.boolean({
     message: "Urgent is required",
   }),
-  applicationDeadline: z.coerce.date(),
+  applicationDeadline: z.coerce.date().nullable(),
 });
 
 export type JobSettingsSchemaType = z.infer<typeof JobSettingsSchema>;
 
 // global schema
 
-export const jobSchema = jobBasicsSchema
+export const jobSchema = z
+  .object({ id: z.string().optional() })
+  .and(jobBasicsSchema)
   .and(JobDetailsSchema)
   .and(JobBenefitsSchema)
   .and(JobDescriptionSchema)
@@ -229,6 +228,4 @@ export const jobSchema = jobBasicsSchema
   .and(JobQualificationSchema)
   .and(JobSettingsSchema);
 
-export type JobSchemaType = z.infer<typeof jobSchema> & {
-  id?: string;
-};
+export type JobSchemaType = z.infer<typeof jobSchema>;
