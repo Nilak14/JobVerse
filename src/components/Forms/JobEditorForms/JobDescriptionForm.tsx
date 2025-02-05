@@ -56,13 +56,13 @@ const JobDescriptionForm = ({
   }, [aiDescription]);
 
   return (
-    <div className="max-w-[90%] mx-auto space-y-6">
-      <div className="space-y-1.5 text-center">
+    <div className="max-w-[90%] mx-auto space-y-6 pt-5">
+      {/* <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">Job Description</h2>
         <p className="text-sm text-muted-foreground">
           Describe the job role and responsibilities
         </p>
-      </div>
+      </div> */}
 
       <Form {...form}>
         <form className="space-y-6">

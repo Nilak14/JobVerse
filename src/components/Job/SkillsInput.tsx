@@ -1,5 +1,5 @@
 import { useQueryGetSkills } from "@/hooks/query-hooks/getSkills";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Fuse, { IFuseOptions } from "fuse.js";
 import MultipleSelector from "../ui/MultiSelect";
 import { Skeleton } from "../ui/skeleton";
@@ -10,10 +10,11 @@ interface Skill {
 
 interface SkillsInputProps {
   field: any;
+  form: any;
 }
 
-const SkillsInput = ({ field }: SkillsInputProps) => {
-  const { data: skillsData, isLoading } = useQueryGetSkills();
+const SkillsInput = ({ field, form }: SkillsInputProps) => {
+  const { data: skillsData, isLoading, isSuccess } = useQueryGetSkills();
   const [query, setQuery] = useState<string>("");
 
   const fuseOptions: IFuseOptions<Skill> = {
@@ -31,6 +32,12 @@ const SkillsInput = ({ field }: SkillsInputProps) => {
     return fuse.search(query).map((result) => result.item);
   }, [fuse, query, skillsData]);
 
+  useEffect(() => {
+    const arr = form.getValues("skills") || [];
+    console.log(form.getValues("skills"));
+    field.onChange([...arr]);
+    field.value = form.getValues("skills") || [];
+  }, [skillsData, isLoading]);
   return (
     <div>
       {isLoading ? (

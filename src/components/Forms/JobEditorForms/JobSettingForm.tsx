@@ -37,7 +37,7 @@ const JobSettingForm = ({
     defaultValues: {
       resumeRequired: jobData.resumeRequired || false,
       getEmailNotification: jobData.getEmailNotification || false,
-      applicationDeadline: jobData.applicationDeadline || "",
+      applicationDeadline: jobData.applicationDeadline || null,
       isUrgent: jobData.isUrgent || false,
     },
     resolver: zodResolver(JobSettingsSchema),
@@ -51,18 +51,19 @@ const JobSettingForm = ({
   useEffect(() => {
     const { unsubscribe } = form.watch(async (values) => {
       setJobData({ ...jobData, ...values });
+      console.log(values.applicationDeadline);
     });
     return unsubscribe;
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto space-y-6">
-      <div className="space-y-1.5 text-center">
+    <div className="max-w-xl mx-auto space-y-6 pt-5">
+      {/* <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">Job Settings</h2>
         <p className="text-sm text-muted-foreground">
           Configure the settings for your job posting.
         </p>
-      </div>
+      </div> */}
       <Form {...form}>
         <form className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
@@ -93,8 +94,11 @@ const JobSettingForm = ({
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
+                      disabled={(date) => date < new Date()}
                       mode="single"
-                      selected={field.value}
+                      selected={
+                        field.value instanceof Date ? field.value : undefined
+                      }
                       onSelect={field.onChange}
                       initialFocus
                     />

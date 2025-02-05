@@ -1,5 +1,4 @@
 "use client";
-// import Breadcrumbs from "@/components/Breadcrumbs";
 import { motion } from "framer-motion";
 import JobEditorFooter from "@/components/Job/JobEditorFooter";
 import BoxReveal from "@/components/ui/box-reveal";
@@ -9,16 +8,24 @@ import { useState } from "react";
 import { JobEditorFormSteps } from "@/lib/multi-form-steps/JobEditorStep";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import JobPreviewSection from "@/components/Job/JobPreviewSection";
-import { cn } from "@/lib/utils";
+import { cn, mapToJobValues } from "@/lib/utils";
 import useAutoSaveJobPost from "@/hooks/useAutoSaveJobPost";
 import useWarning from "@/hooks/use-warning";
+import Breadcrumbs from "@/components/BreadCrumbs";
+import { JobServerData } from "@/lib/prisma-types/Job";
 
-const JobEditorPage = () => {
+interface JobEditorPageProps {
+  jobToEdit: JobServerData | null;
+}
+
+const JobEditorPage = ({ jobToEdit }: JobEditorPageProps) => {
   const searchParams = useSearchParams();
   const { triggerForm } = useFormTriggersStore();
-  const [JobData, setJobData] = useState<JobSchemaType>({} as JobSchemaType);
+  const [JobData, setJobData] = useState<JobSchemaType>(
+    jobToEdit ? mapToJobValues(jobToEdit) : ({} as JobSchemaType)
+  );
   const [showSMPreview, setShowSMPreview] = useState(false);
-  const { isSaving, hasUnsavedChanges } = useAutoSaveJobPost(JobData);
+  const { isSaving, hasUnsavedChanges, jobId } = useAutoSaveJobPost(JobData);
   const currentStep = searchParams.get("step") || JobEditorFormSteps[0].key;
   const setStep = async (key: string, isPrev: boolean) => {
     if (!isPrev) {
@@ -57,26 +64,28 @@ const JobEditorPage = () => {
 
       <main className="relative grow ">
         <div className="absolute bottom-0 top-0 flex w-full">
-          <motion.div
-            key={currentStep}
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.2 }}
+          <div
             className={cn(
               "w-full md:w-1/2 md:block p-3 overflow-y-auto space-y-6 relative",
               showSMPreview && "hidden"
             )}
           >
-            {/* <Breadcrumbs currentStep={currentStep} setCurrentStep={setStep} /> */}
-            {FormComponent && (
-              <FormComponent
-                currentStep={currentStep}
-                jobData={JobData}
-                setJobData={setJobData}
-              />
-            )}
-          </motion.div>
-
+            <Breadcrumbs currentStep={currentStep} />
+            <motion.div
+              key={currentStep}
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.2 }}
+            >
+              {FormComponent && (
+                <FormComponent
+                  currentStep={currentStep}
+                  jobData={JobData}
+                  setJobData={setJobData}
+                />
+              )}
+            </motion.div>
+          </div>
           <div className="grow md:border-r" />
           <JobPreviewSection
             className={cn(showSMPreview && "flex")}
@@ -91,6 +100,7 @@ const JobEditorPage = () => {
         currentStep={currentStep}
         setCurrentStep={setStep}
         isSaving={isSaving}
+        jobId={jobId}
       />
     </section>
   );

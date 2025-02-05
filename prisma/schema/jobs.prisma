@@ -18,7 +18,7 @@ model Job {
     subcategory           SubCategory? @relation(fields: [subcategoryId], references: [id])
     experienceLevel       String?
     totalHeads            String?
-    Salary                Salary[]
+    Salary                Salary?
     benefits              String[]
     description           String?
     tags                  String[]
@@ -27,7 +27,7 @@ model Job {
     preferredGender       String?
     licenseRequired       String?
     vehicleRequired       String?
-    resumeRequired        String?
+    resumeRequired        Boolean      @default(false)
     isUrgent              Boolean      @default(false)
     isFeatured            Boolean      @default(false)
     deadline              DateTime?
@@ -39,11 +39,10 @@ model Job {
     company               Company      @relation(fields: [companyId], references: [id])
     createdBy             String
     creator               Employer     @relation(fields: [createdBy], references: [id])
-
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-    isDeleted Boolean   @default(false)
+    createdAt             DateTime     @default(now())
+    updatedAt             DateTime     @updatedAt
+    deletedAt             DateTime?
+    isDeleted             Boolean      @default(false)
 
     @@map("jobs")
 }
@@ -56,8 +55,8 @@ model Salary {
     amount    Float?
     currency  String?
     rate      String?
-    job       Job     @relation(fields: [jobId], references: [id])
-    jobId     String
+    job       Job     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+    jobId     String  @unique
 
     @@map("salaries")
 }
