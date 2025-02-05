@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { formatDistance, formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
+import { JobServerData } from "./prisma-types/Job";
+import { JobSchemaType } from "@/schema/CreateJobSchema";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -31,3 +33,47 @@ export const handleError = ({
 
   return { success: false, message: defaultMessage };
 };
+
+export function mapToJobValues(data: JobServerData): JobSchemaType {
+  const { Salary } = data;
+  const minSalaryAmount = convertToString(Salary?.minAmount);
+  const maxSalaryAmount = convertToString(Salary?.maxAmount);
+  const amount = convertToString(Salary?.amount);
+
+  return {
+    id: data.id,
+    title: data.title || "",
+    jobType: data.jobType || "",
+    workMode: data.workMode || "",
+    location: data.location || "",
+    categoryId: data.categoryId || "",
+    subCategoryId: data.subcategoryId || "",
+    experienceLevel: data.experienceLevel || "",
+    totalHeads: data.totalHeads || "",
+    salaryType: Salary?.type || "",
+    minSalaryAmount: minSalaryAmount,
+    maxSalaryAmount: maxSalaryAmount,
+    amount: amount,
+    salaryCurrency: Salary?.currency || "",
+    salaryRate: Salary?.rate || "",
+    benefits: data.benefits || [],
+    description: data.description || "",
+    tags: data.tags || [],
+    skills: data.skills || [],
+    educationLevel: data.minEducationRequired || "",
+    preferredGender: data.preferredGender || "",
+    license: data.licenseRequired || "",
+    vehicle: data.vehicleRequired || "",
+    resumeRequired: data.resumeRequired || false,
+    isUrgent: data.isUrgent || false,
+    applicationDeadline: data.deadline || null,
+    getEmailNotification: data.sendEmailNotification || false,
+  };
+}
+
+export function convertToString(value: number | null | undefined): string {
+  if (!value) {
+    return "";
+  }
+  return value.toString();
+}

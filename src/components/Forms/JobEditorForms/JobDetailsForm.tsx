@@ -70,8 +70,8 @@ const JobDetailsForm = ({
   const form = useForm<JobDetailsSchemaType>({
     defaultValues: {
       experienceLevel: jobData.experienceLevel || "",
-      category: jobData.category || "",
-      subCategory: jobData.subCategory || "",
+      categoryId: jobData.categoryId || "",
+      subCategoryId: jobData.subCategoryId || "",
       totalHeads: jobData.totalHeads || "",
     },
     resolver: zodResolver(JobDetailsSchema),
@@ -79,15 +79,15 @@ const JobDetailsForm = ({
   });
 
   useEffect(() => {
-    if (form.watch("category")) {
+    if (form.watch("categoryId")) {
       const selectedCategory = category.find(
-        (cat) => cat.id === form.watch("category")
+        (cat) => cat.id === form.watch("categoryId")
       );
       if (selectedCategory) {
         setSubCategoryArray(selectedCategory.subcategories || []);
       }
     }
-  }, [form.watch("category"), category]);
+  }, [form.watch("categoryId"), category]);
 
   useEffect(() => {
     setTrigger(currentStep, form.trigger);
@@ -101,13 +101,13 @@ const JobDetailsForm = ({
   }, [form, jobData, setJobData]);
 
   return (
-    <div className="max-w-[75%] mx-auto space-y-6">
-      <div className="space-y-1.5 text-center">
+    <div className="max-w-[75%] mx-auto space-y-6 pt-5">
+      {/* <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">Job Details</h2>
         <p className="text-sm text-muted-foreground">
           Enter the Details for the Job
         </p>
-      </div>
+      </div> */}
       <Form {...form}>
         <form className="space-y-5">
           <FormField
@@ -141,7 +141,7 @@ const JobDetailsForm = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <FormField
               control={form.control}
-              name="category"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Job Category</FormLabel>
@@ -179,8 +179,8 @@ const JobDetailsForm = ({
                                   value={cat.name}
                                   key={cat.id}
                                   onSelect={() => {
-                                    form.setValue("category", cat.id);
-                                    form.trigger("category");
+                                    form.setValue("categoryId", cat.id);
+                                    form.trigger("categoryId");
                                   }}
                                 >
                                   {cat.name}
@@ -206,7 +206,7 @@ const JobDetailsForm = ({
             />
             <FormField
               control={form.control}
-              name="subCategory"
+              name="subCategoryId"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Sub Category</FormLabel>
@@ -244,8 +244,8 @@ const JobDetailsForm = ({
                                   value={cat.name}
                                   key={cat.id}
                                   onSelect={() => {
-                                    form.setValue("subCategory", cat.id);
-                                    form.trigger("subCategory");
+                                    form.setValue("subCategoryId", cat.id);
+                                    form.trigger("subCategoryId");
                                   }}
                                 >
                                   {cat.name}
@@ -301,14 +301,16 @@ const JobDetailsForm = ({
           />
         </form>
       </Form>
-      <div className=" text-muted-foreground text-center absolute bottom-3 right-2 flex gap-1 flex-col">
-        <p className="text-xs">Missing a Category?</p>
-        <LinkButtonAnimated>
-          <div className="flex items-center gap-2 cursor-pointer text-sm">
-            <Sparkles className="h-4 w-4 inline-block text-yellow-500" />
-            <span>Request New Category</span>
-          </div>
-        </LinkButtonAnimated>
+      <div className=" text-muted-foreground text-center absolute bottom-3 right-2 flex gap-1 flex-col bg-background w-full">
+        <div className="self-end">
+          <p className="text-xs">Missing a Category?</p>
+          <LinkButtonAnimated>
+            <div className="flex items-center gap-2 cursor-pointer text-sm">
+              <Sparkles className="h-4 w-4 inline-block text-yellow-500" />
+              <span>Request New Category</span>
+            </div>
+          </LinkButtonAnimated>
+        </div>
       </div>
     </div>
   );
