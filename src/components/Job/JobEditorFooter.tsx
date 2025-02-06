@@ -28,7 +28,7 @@ import {
 import { useState, useTransition } from "react";
 import { changeJobStatus } from "@/actions/job/changeJobStatus";
 import { toast } from "sonner";
-import { error } from "console";
+
 import { useRouter } from "next/navigation";
 interface JobEditorFooterProps {
   currentStep: string;
@@ -128,7 +128,7 @@ const JobEditorFooter = ({
                     className="w-full justify-start"
                     variant={"ghost"}
                   >
-                    Publish
+                    Send For Review
                   </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -186,9 +186,9 @@ const JobEditorFooter = ({
           className="space-y-5 md:space-y-0 overflow-x-hidden"
         >
           <ResponsiveModalHeader>
-            <ResponsiveModalTitle>Publish Job</ResponsiveModalTitle>
+            <ResponsiveModalTitle>Submit Job</ResponsiveModalTitle>
             <ResponsiveModalDescription>
-              Publishing this job means the request will be sent to the JobVerse
+              Submitting this job means the request will be sent to the JobVerse
               team for review and approval. You will be notified once the job is
               live.
             </ResponsiveModalDescription>

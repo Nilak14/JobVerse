@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { jobSchema } from "@/schema/JobBackendValidationSchema";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
+import { revalidatePath } from "next/cache";
 
 export const saveJob = async (values: JobSchemaType) => {
   const session = await auth();
@@ -45,7 +46,7 @@ export const saveJob = async (values: JobSchemaType) => {
 
   if (jobId) {
     //update the job
-    return prisma.job.update({
+    const job = await prisma.job.update({
       where: { id: jobId },
       data: {
         title: values.title,
@@ -84,9 +85,11 @@ export const saveJob = async (values: JobSchemaType) => {
         },
       },
     });
+    revalidatePath("/employer/job");
+    return job;
   } else {
     // make new entry
-    return prisma.job.create({
+    const job = await prisma.job.create({
       data: {
         title: values.title,
         jobType: values.jobType,
@@ -122,5 +125,7 @@ export const saveJob = async (values: JobSchemaType) => {
         },
       },
     });
+    revalidatePath("/employer/job");
+    return job;
   }
 };
