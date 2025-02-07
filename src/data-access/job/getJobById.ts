@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { JobDateInclude } from "@/lib/prisma-types/Job";
+import { JobDataInclude } from "@/lib/prisma-types/Job";
 import "server-only";
 
 export const getJobById = async (jobId: string) => {
@@ -13,7 +13,7 @@ export const getJobById = async (jobId: string) => {
       id: jobId,
       companyId: session.activeCompanyId,
     },
-    include: JobDateInclude,
+    include: JobDataInclude,
   });
   return job;
 };
