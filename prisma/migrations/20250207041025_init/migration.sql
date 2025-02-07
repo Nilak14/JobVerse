@@ -5,13 +5,10 @@ CREATE TYPE "CompanyRole" AS ENUM ('ADMIN', 'MEMBER');
 CREATE TYPE "InvitationStatus" AS ENUM ('PENDING', 'ACCEPTED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "JobStatus" AS ENUM ('ACCEPTED', 'REJECTED', 'PENDING', 'INDRAFT');
+CREATE TYPE "PendingCategoryStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "Rate" AS ENUM ('PER_HOUR', 'PER_DAY', 'PER_WEEK', 'PER_MONTH', 'PER_YEAR');
-
--- CreateEnum
-CREATE TYPE "SalaryType" AS ENUM ('RANGE', 'STARTING', 'MAXIMUM', 'EXACT');
+CREATE TYPE "JobStatus" AS ENUM ('ACCEPTED', 'REJECTED', 'PENDING', 'INDRAFT', 'DELETED');
 
 -- CreateEnum
 CREATE TYPE "UserType" AS ENUM ('ADMIN', 'JOB_SEEKER', 'EMPLOYER');
@@ -60,34 +57,83 @@ CREATE TABLE "invitations" (
 );
 
 -- CreateTable
-CREATE TABLE "Job" (
+CREATE TABLE "job_categories" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "location" TEXT NOT NULL,
-    "companyId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "job_categories_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "sub_categories" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "jobCategoryId" TEXT NOT NULL,
+
+    CONSTRAINT "sub_categories_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "pending_categories" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "submittedBy" TEXT NOT NULL,
+    "status" "PendingCategoryStatus" NOT NULL DEFAULT 'PENDING',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "pending_categories_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "jobs" (
+    "id" TEXT NOT NULL,
+    "title" TEXT,
+    "jobType" TEXT,
+    "workMode" TEXT,
+    "location" TEXT,
+    "categoryId" TEXT,
+    "subcategoryId" TEXT,
+    "experienceLevel" TEXT,
+    "totalHeads" TEXT,
+    "benefits" TEXT[],
+    "description" TEXT,
+    "tags" TEXT[],
+    "skills" TEXT[],
+    "minEducationRequired" TEXT,
+    "preferredGender" TEXT,
+    "licenseRequired" TEXT,
+    "vehicleRequired" TEXT,
+    "resumeRequired" BOOLEAN NOT NULL DEFAULT false,
+    "isUrgent" BOOLEAN NOT NULL DEFAULT false,
+    "isFeatured" BOOLEAN NOT NULL DEFAULT false,
+    "deadline" TIMESTAMP(3),
+    "sendEmailNotification" BOOLEAN NOT NULL DEFAULT false,
+    "latitude" TEXT,
+    "longitude" TEXT,
     "status" "JobStatus" NOT NULL DEFAULT 'INDRAFT',
+    "companyId" TEXT NOT NULL,
     "createdBy" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "Job_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "jobs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Salary" (
+CREATE TABLE "salaries" (
     "id" TEXT NOT NULL,
-    "type" "SalaryType" NOT NULL,
-    "minSalary" DOUBLE PRECISION,
-    "maxSalary" DOUBLE PRECISION,
-    "exactSalary" DOUBLE PRECISION,
-    "currency" TEXT NOT NULL,
-    "rate" "Rate" NOT NULL,
+    "type" TEXT,
+    "minAmount" DOUBLE PRECISION,
+    "maxAmount" DOUBLE PRECISION,
+    "amount" DOUBLE PRECISION,
+    "currency" TEXT,
+    "rate" TEXT,
     "jobId" TEXT NOT NULL,
 
-    CONSTRAINT "Salary_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "salaries_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -166,6 +212,18 @@ CREATE TABLE "employers" (
 CREATE UNIQUE INDEX "company_members_employerId_companyId_key" ON "company_members"("employerId", "companyId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "job_categories_name_key" ON "job_categories"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "sub_categories_name_key" ON "sub_categories"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "pending_categories_name_key" ON "pending_categories"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "salaries_jobId_key" ON "salaries"("jobId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "email_verification_tokens_email_key" ON "email_verification_tokens"("email");
 
 -- CreateIndex
@@ -211,13 +269,22 @@ ALTER TABLE "invitations" ADD CONSTRAINT "invitations_inviteeId_fkey" FOREIGN KE
 ALTER TABLE "invitations" ADD CONSTRAINT "invitations_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Job" ADD CONSTRAINT "Job_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "sub_categories" ADD CONSTRAINT "sub_categories_jobCategoryId_fkey" FOREIGN KEY ("jobCategoryId") REFERENCES "job_categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Job" ADD CONSTRAINT "Job_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "employers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "job_categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Salary" ADD CONSTRAINT "Salary_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "Job"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_subcategoryId_fkey" FOREIGN KEY ("subcategoryId") REFERENCES "sub_categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "employers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "salaries" ADD CONSTRAINT "salaries_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "jobs"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

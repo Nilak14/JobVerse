@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
 
-export const JobDateInclude = {
+export const JobDataInclude = {
   Salary: true,
 } satisfies Prisma.JobInclude;
 
 export type JobServerData = Prisma.JobGetPayload<{
-  include: typeof JobDateInclude;
+  include: typeof JobDataInclude;
 }>;
