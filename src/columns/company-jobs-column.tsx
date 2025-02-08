@@ -1,0 +1,90 @@
+"use client";
+
+import { SortableHeader } from "@/components/Global/SortableHeader";
+import { JobServerData } from "@/lib/prisma-types/Job";
+import { ColumnDef } from "@tanstack/react-table";
+import {
+  DateTableCell,
+  JobStatusBadge,
+  NumberTableCell,
+  UserTableCell,
+} from "@/components/Global/TableRowComponents";
+
+import JobTableRowAction from "@/components/Job/JobTableRowAction";
+export const companyJobsColumn: ColumnDef<JobServerData>[] = [
+  {
+    accessorKey: "createdBy",
+
+    id: "Created By",
+    header: ({ column }) => {
+      return <p className="">Created By</p>;
+    },
+    cell: ({ row }) => {
+      return (
+        <UserTableCell
+          email={row.original.creator.user.email || ""}
+          imageUrl={row.original.creator.user.image || ""}
+          username={row.original.creator.user.name || ""}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "title",
+    header: "Job Title",
+  },
+  {
+    accessorKey: "view",
+    header: "Views",
+    cell: ({ row }) => {
+      return <NumberTableCell number={100} />;
+    },
+  },
+  {
+    accessorKey: "applicants",
+    header: "Applicants",
+    cell: ({ row }) => {
+      return <NumberTableCell number={10} />;
+    },
+  },
+
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return <SortableHeader column={column} title="Posted At" />;
+    },
+    cell: ({ row }) => {
+      return <DateTableCell suffix="ago" date={row.original.createdAt} />;
+    },
+  },
+  {
+    accessorKey: "deadline",
+    header: ({ column }) => {
+      return <SortableHeader column={column} title="Expires At" />;
+    },
+    cell: ({ row }) => {
+      return row.original.deadline ? (
+        <DateTableCell prefix="After" date={row.original.deadline} />
+      ) : (
+        <p className="">N/A</p>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    id: "Status",
+    header: "Status",
+    cell: ({ row }) => {
+      return <JobStatusBadge status={row.original.status} />;
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      return (
+        <JobTableRowAction id={row.original.id} status={row.original.status} />
+      );
+    },
+  },
+];

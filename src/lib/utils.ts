@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict, format } from "date-fns";
 import { JobServerData } from "./prisma-types/Job";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
 // tailwind merge
@@ -12,6 +12,10 @@ export function cn(...inputs: ClassValue[]) {
 
 export const getTimeDistance = (from: Date) => {
   return formatDistanceToNowStrict(from);
+};
+
+export const formatDate = (date: Date) => {
+  return format(date, "MMM dd, yyyy");
 };
 
 type HandleError = {

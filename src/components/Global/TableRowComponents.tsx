@@ -1,0 +1,93 @@
+import { formatDate, getTimeDistance } from "@/lib/utils";
+import UserAvatar from "./Useravatar";
+import { JobStatus } from "@prisma/client";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+
+export const UserTableCell = ({
+  email,
+  username,
+  imageUrl,
+}: {
+  username: string;
+  imageUrl: string;
+  email: string;
+}) => {
+  return (
+    <HoverCard>
+      <HoverCardTrigger>
+        <UserAvatar
+          classname="h-7 w-7"
+          imageUrl={imageUrl}
+          userName={username}
+        />
+      </HoverCardTrigger>
+      <HoverCardContent>
+        <div className="flex items-center gap-4">
+          <UserAvatar
+            classname="h-7 w-7"
+            imageUrl={imageUrl}
+            userName={username}
+          />
+          <div className="">
+            <p>{username}</p>
+            <p className=" text-xs text-muted-foreground">{email}</p>
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+};
+
+export const DateTableCell = ({
+  date,
+  prefix,
+  suffix,
+}: {
+  date: Date;
+  suffix?: string;
+  prefix?: string;
+}) => {
+  return (
+    <div className="flex flex-col gap-1">
+      <p>{formatDate(date)}</p>
+      <p className="text-xs text-muted-foreground">
+        {prefix} {getTimeDistance(date)} {suffix}
+      </p>
+    </div>
+  );
+};
+
+export const NumberTableCell = ({ number }: { number: number | string }) => {
+  return (
+    <p className="bg-background border-input border-2 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center w-10 h-10 tabular-nums">
+      {number}
+    </p>
+  );
+};
+
+export const JobStatusBadge = ({ status }: { status: JobStatus }) => {
+  const statusStyles: Record<string, string> = {
+    ACCEPTED: "text-green-600 border-green-600 bg-green-600/10",
+    REJECTED: "text-red-600 border-red-600 bg-red-600/10",
+    PENDING: "text-yellow-600 border-yellow-600 bg-yellow-600/10",
+    INDRAFT: "text-purple-600 border-purple-600 bg-purple-600/10",
+  };
+  const statusText: Record<string, string> = {
+    ACCEPTED: "Accepted",
+    REJECTED: "Rejected",
+    PENDING: "Pending",
+    INDRAFT: "In-Draft",
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${statusStyles[status]}`}
+    >
+      {statusText[status]}
+    </span>
+  );
+};

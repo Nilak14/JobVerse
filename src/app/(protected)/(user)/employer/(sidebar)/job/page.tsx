@@ -1,4 +1,7 @@
+import { companyJobsColumn } from "@/columns/company-jobs-column";
 import SidebarContainer from "@/components/Global/SidebarContainer";
+import EmployerJobTable from "@/components/Table/EmployerJobTable";
+import JobCard from "@/components/TableCard/JobTableCard";
 import { Button } from "@/components/ui/button";
 import { getAllCompanyJobs } from "@/data-access/job/getAllCompanyJobs";
 import { auth } from "@/lib/auth";
@@ -38,24 +41,23 @@ const JobListPage = async () => {
             </Link>
           </Button>
         </div>
-        <div className="flex flex-col gap-4">
+
+        {/* table for larger screens */}
+        <div className="hidden lg:block">
+          <EmployerJobTable
+            searchColumn={"title"}
+            searchPlaceholder="Search Jobs By Title..."
+            columns={companyJobsColumn}
+            data={jobs || []}
+          />
+        </div>
+        {/* card for smaller screens */}
+
+        <div className="lg:hidden grid grid-cols-1 gap-4  lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
           {jobs.map((job) => (
-            <div key={job.id}>
-              <p>{job.title}</p>
-              <p>{job.status}</p>
-              <p>{job.workMode}</p>
-              <Button asChild>
-                <Link href={`/employer/job-studio/?jobId=${job.id}`}>Edit</Link>
-              </Button>
-            </div>
+            <JobCard key={job.id} jobData={job} />
           ))}
         </div>
-        {/* <JVTableClient
-          searchColumn={"name"}
-          searchPlaceholder="Search User..."
-          columns={companyEmployerColumns}
-          data={data || []}
-        /> */}
       </section>
     </SidebarContainer>
   );

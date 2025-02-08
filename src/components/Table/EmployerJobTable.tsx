@@ -22,7 +22,7 @@ import {
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { TablePagination } from "./PaginationTable";
+import { TablePagination } from "../Global/PaginationTable";
 interface JVTableClientProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -31,7 +31,7 @@ interface JVTableClientProps<TData, TValue> {
   searchPlaceholder?: string;
   showSerialNumber?: boolean;
 }
-const JVTableClient = <TData, TValue>({
+const EmployerJobTable = <TData, TValue>({
   columns,
   data,
   showPagination = true,
@@ -152,4 +152,4 @@ const JVTableClient = <TData, TValue>({
     </div>
   );
 };
-export default JVTableClient;
+export default EmployerJobTable;
