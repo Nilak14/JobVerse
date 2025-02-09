@@ -40,9 +40,7 @@ const JobTableRowAction = ({
   status,
   TriggerIcon = MoreHorizontal,
 }: JobTableRowActionProps) => {
-  const router = useRouter();
   const [openEditWarningDialog, setOpenEditDialog] = useState(false);
-  const [openDeleteWarningDialog, setOpenDeleteDialog] = useState(false);
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
   return (
@@ -64,32 +62,39 @@ const JobTableRowAction = ({
             <span>Preview</span>
           </DropdownMenuItem>
           {/* // edit job */}
-          {status === "DRAFT" ? (
-            <DropdownMenuItem asChild>
-              <Link href={`/employer/job-studio/?jobId=${id}`}>
-                <PenSquare color="#10b981" className="h-4 w-4 mr-2 " />
-                <span>Edit Job</span>
-              </Link>
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem
-              onClick={() => {
-                setOpenEditDialog(true);
-              }}
-            >
-              <PenSquare color="#10b981" className="h-4 w-4 mr-2 " />
-              <span>Edit Job</span>
-            </DropdownMenuItem>
+          {status !== "PENDING" && (
+            <>
+              {status === "DRAFT" ? (
+                <DropdownMenuItem asChild>
+                  <Link href={`/employer/job-studio/?jobId=${id}`}>
+                    <PenSquare color="#10b981" className="h-4 w-4 mr-2 " />
+                    <span>Edit Job</span>
+                  </Link>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem
+                  onClick={() => {
+                    setOpenEditDialog(true);
+                  }}
+                >
+                  <PenSquare color="#10b981" className="h-4 w-4 mr-2 " />
+                  <span>Edit Job</span>
+                </DropdownMenuItem>
+              )}
+            </>
           )}
+
           {/* delete job */}
           <DropdownMenuItem asChild>
             <DeleteJobPopover jobId={id} />
           </DropdownMenuItem>
           {/* // change job status */}
-          <DropdownMenuItem onClick={() => setOpenStatusDialog(true)}>
-            <Repeat color="#3b82f6" className="h-4 w-4 mr-2" />
-            <span>Change Job Status</span>
-          </DropdownMenuItem>
+          {status !== "PENDING" && (
+            <DropdownMenuItem onClick={() => setOpenStatusDialog(true)}>
+              <Repeat color="#3b82f6" className="h-4 w-4 mr-2" />
+              <span>Change Job Status</span>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
       <EditJobWarningDialog

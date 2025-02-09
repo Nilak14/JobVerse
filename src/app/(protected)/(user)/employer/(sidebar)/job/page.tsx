@@ -1,7 +1,6 @@
 import { companyJobsColumn } from "@/columns/company-jobs-column";
 import SidebarContainer from "@/components/Global/SidebarContainer";
 import EmployerJobTable from "@/components/Table/EmployerJobTable";
-import JobCard from "@/components/TableCard/JobTableCard";
 import { Button } from "@/components/ui/button";
 import { getAllCompanyJobs } from "@/data-access/job/getAllCompanyJobs";
 import { auth } from "@/lib/auth";
