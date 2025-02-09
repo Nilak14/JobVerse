@@ -10,7 +10,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 /**
- *
  * maxAmount: upto Rs. 20000
  * startingAmount: from Rs. 20000
  * range: Rs. 20000 - Rs. 40000
