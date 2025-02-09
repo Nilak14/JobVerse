@@ -1,8 +1,11 @@
 enum JobStatus {
-    ACCEPTED
-    REJECTED
+    DRAFT
     PENDING
-    INDRAFT
+    ACTIVE
+    REJECTED
+    NEED_REVIEW
+    PAUSED
+    EXPIRED
     DELETED
 }
 
@@ -34,7 +37,7 @@ model Job {
     sendEmailNotification Boolean      @default(false)
     latitude              String?
     longitude             String?
-    status                JobStatus    @default(INDRAFT)
+    status                JobStatus    @default(DRAFT)
     companyId             String
     company               Company      @relation(fields: [companyId], references: [id])
     createdBy             String

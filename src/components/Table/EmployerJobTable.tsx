@@ -20,9 +20,11 @@ import {
   TableRow,
 } from "../ui/table";
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
 import { TablePagination } from "../Global/PaginationTable";
+import DataTableToolbar from "./TableComponents/data-table-toolbar";
+import JobTableCard from "../TableCard/JobTableCard";
+import { JobServerData } from "@/lib/prisma-types/Job";
 interface JVTableClientProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -66,89 +68,90 @@ const EmployerJobTable = <TData, TValue>({
       pagination,
     },
   });
+
+  const filteredData = table.getRowModel().rows.map((row) => row.original);
+
   return (
     <div>
       <div className="flex items-center py-4">
-        {searchColumn && (
-          <Input
-            placeholder={searchPlaceholder}
-            value={
-              (table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn(searchColumn)?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+        <DataTableToolbar table={table} />
+      </div>
+      <div className="hidden lg:block">
+        <div className="rounded-md  border overflow-hidden">
+          <Table>
+            <TableHeader className="relative ">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {showSerialNumber && (
+                    <TableHead className="bg-primary text-white w-24 pl-4 ">
+                      <p>SN</p>
+                    </TableHead>
+                  )}
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead
+                        className="bg-primary text-white "
+                        key={header.id}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    className="h-16"
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {showSerialNumber && (
+                      <TableCell className="pl-4">{row.index + 1}</TableCell>
+                    )}
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    <div className="p-4 text-center">No data</div>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        {showPagination && (
+          <div className=" mt-4">
+            <TablePagination table={table} />
+          </div>
         )}
       </div>
-      <div className="rounded-md  border overflow-hidden">
-        <Table>
-          <TableHeader className="relative ">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {showSerialNumber && (
-                  <TableHead className="bg-primary text-white w-24 pl-4 ">
-                    <p>SN</p>
-                  </TableHead>
-                )}
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      className="bg-primary text-white "
-                      key={header.id}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  className="h-16"
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {showSerialNumber && (
-                    <TableCell className="pl-4">{row.index + 1}</TableCell>
-                  )}
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  <div className="p-4 text-center">No data</div>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+
+      <div className="lg:hidden grid grid-cols-1 gap-4  lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
+        {filteredData.map((data) => {
+          const jobData = data as JobServerData;
+          return <JobTableCard key={jobData.id} jobData={jobData} />;
+        })}
       </div>
-      {showPagination && (
-        <div className=" mt-4">
-          <TablePagination table={table} />
-        </div>
-      )}
     </div>
   );
 };

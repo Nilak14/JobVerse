@@ -51,7 +51,14 @@ export const companyJobsColumn: ColumnDef<JobServerData>[] = [
   {
     accessorKey: "createdAt",
     header: ({ column }) => {
-      return <SortableHeader column={column} title="Posted At" />;
+      return (
+        <SortableHeader
+          ascText="Oldest"
+          descText="Newest"
+          column={column}
+          title="Posted At"
+        />
+      );
     },
     cell: ({ row }) => {
       return <DateTableCell suffix="ago" date={row.original.createdAt} />;
@@ -72,10 +79,13 @@ export const companyJobsColumn: ColumnDef<JobServerData>[] = [
   },
   {
     accessorKey: "status",
-    id: "Status",
+    id: "status",
     header: "Status",
     cell: ({ row }) => {
       return <JobStatusBadge status={row.original.status} />;
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {

@@ -64,7 +64,7 @@ const JobTableRowAction = ({
             <span>Preview</span>
           </DropdownMenuItem>
           {/* // edit job */}
-          {status === "INDRAFT" ? (
+          {status === "DRAFT" ? (
             <DropdownMenuItem asChild>
               <Link href={`/employer/job-studio/?jobId=${id}`}>
                 <PenSquare color="#10b981" className="h-4 w-4 mr-2 " />

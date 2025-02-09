@@ -42,22 +42,12 @@ const JobListPage = async () => {
           </Button>
         </div>
 
-        {/* table for larger screens */}
-        <div className="hidden lg:block">
-          <EmployerJobTable
-            searchColumn={"title"}
-            searchPlaceholder="Search Jobs By Title..."
-            columns={companyJobsColumn}
-            data={jobs || []}
-          />
-        </div>
-        {/* card for smaller screens */}
-
-        <div className="lg:hidden grid grid-cols-1 gap-4  lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
-          {jobs.map((job) => (
-            <JobCard key={job.id} jobData={job} />
-          ))}
-        </div>
+        <EmployerJobTable
+          searchColumn={"title"}
+          searchPlaceholder="Search Jobs By Title..."
+          columns={companyJobsColumn}
+          data={jobs || []}
+        />
       </section>
     </SidebarContainer>
   );
