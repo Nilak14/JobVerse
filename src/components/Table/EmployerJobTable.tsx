@@ -29,16 +29,12 @@ interface JVTableClientProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   showPagination?: boolean;
-  searchColumn?: string;
-  searchPlaceholder?: string;
   showSerialNumber?: boolean;
 }
 const EmployerJobTable = <TData, TValue>({
   columns,
   data,
   showPagination = true,
-  searchColumn,
-  searchPlaceholder = "Search",
   showSerialNumber = true,
 }: JVTableClientProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);

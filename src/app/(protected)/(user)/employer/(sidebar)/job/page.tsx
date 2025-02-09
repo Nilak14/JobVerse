@@ -42,12 +42,7 @@ const JobListPage = async () => {
           </Button>
         </div>
 
-        <EmployerJobTable
-          searchColumn={"title"}
-          searchPlaceholder="Search Jobs By Title..."
-          columns={companyJobsColumn}
-          data={jobs || []}
-        />
+        <EmployerJobTable columns={companyJobsColumn} data={jobs || []} />
       </section>
     </SidebarContainer>
   );
