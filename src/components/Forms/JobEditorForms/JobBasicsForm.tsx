@@ -55,7 +55,10 @@ const JobBasicsForm = ({
   }, [form, jobData, setJobData, setShowLocationField, showLocationField]);
 
   useEffect(() => {
-    if (jobData.workMode === "Remote") {
+    if (
+      jobData.workMode === "Remote" ||
+      form.getValues("workMode") === "Remote"
+    ) {
       setShowLocationField(false);
     } else {
       setShowLocationField(true);

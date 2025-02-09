@@ -14,12 +14,16 @@ interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title: string;
+  ascText?: string;
+  descText?: string;
 }
 
 export function SortableHeader<TData, TValue>({
   column,
   title,
   className,
+  ascText = "Asc",
+  descText = "Desc",
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
@@ -43,11 +47,11 @@ export function SortableHeader<TData, TValue>({
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
             <ArrowUp className="h-3.5 w-3.5 text-muted-foreground/70" />
-            Asc
+            {ascText}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
             <ArrowDown className="h-3.5 w-3.5 text-muted-foreground/70" />
-            Desc
+            {descText}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
         </DropdownMenuContent>

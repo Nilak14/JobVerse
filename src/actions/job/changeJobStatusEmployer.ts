@@ -46,33 +46,25 @@ export const changeJobStatus = async (jobId: string, newStatus: JobStatus) => {
   }
   // if job status is accepted or rejected, check if user is admin or not
 
-  if (newStatus === JobStatus.ACCEPTED || newStatus === JobStatus.REJECTED) {
-    if (session.user.type === "ADMIN") {
-      return { success: false, message: "Unauthorized" };
-    }
+  if (
+    newStatus === JobStatus.ACTIVE ||
+    newStatus === JobStatus.REJECTED ||
+    newStatus === JobStatus.NEED_REVIEW
+  ) {
+    return { success: false, message: "Unauthorized" };
   }
 
   // update job status
 
-  // cant change status to pending if job status is accepted or rejected
-  if (job.status === JobStatus.ACCEPTED || job.status === JobStatus.REJECTED) {
+  // cant change status to pending if job status is active or rejected
+  if (job.status === JobStatus.ACTIVE || job.status === JobStatus.REJECTED) {
     if (newStatus === JobStatus.PENDING) {
       return { success: false, message: "Invalid status change" };
     }
   }
 
-  // cant change status to accepted or rejected if job status is draft
-  if (job.status === JobStatus.INDRAFT) {
-    if (newStatus === JobStatus.ACCEPTED || newStatus === JobStatus.REJECTED) {
-      return { success: false, message: "Invalid status change" };
-    }
-  }
-
-  if (newStatus === JobStatus.INDRAFT) {
-    if (
-      job.status === JobStatus.ACCEPTED ||
-      job.status === JobStatus.REJECTED
-    ) {
+  if (newStatus === JobStatus.DRAFT) {
+    if (job.status === JobStatus.ACTIVE || job.status === JobStatus.REJECTED) {
       return { success: false, message: "Invalid status change" };
     }
   }

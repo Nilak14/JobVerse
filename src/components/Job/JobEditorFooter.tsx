@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { JobEditorFormSteps } from "@/lib/multi-form-steps/JobEditorStep";
-import { ChevronDown, Eye, X } from "lucide-react";
+import { AlertCircle, ChevronDown, Eye, X } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +27,7 @@ import {
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";
 import { useState, useTransition } from "react";
-import { changeJobStatus } from "@/actions/job/changeJobStatus";
+import { changeJobStatus } from "@/actions/job/changeJobStatusEmployer";
 import { toast } from "sonner";
 
 import { useRouter } from "next/navigation";
@@ -65,7 +66,7 @@ const JobEditorFooter = ({
     startTransition(async () => {
       const res = await changeJobStatus(jobId, as);
       if (res.success) {
-        if (as === "INDRAFT") {
+        if (as === "DRAFT") {
           router.replace("/employer/job");
           toast.success("Saved As Draft", { id: "job-status" });
         } else if (as === "PENDING") {
@@ -113,7 +114,7 @@ const JobEditorFooter = ({
                     showIconOnly
                     loading={isPending}
                     onClick={() => {
-                      saveJobAs(JobStatus.INDRAFT);
+                      saveJobAs(JobStatus.DRAFT);
                     }}
                     className="w-full justify-start"
                     variant={"ghost"}
@@ -186,19 +187,27 @@ const JobEditorFooter = ({
           className="space-y-5 md:space-y-0 overflow-x-hidden"
         >
           <ResponsiveModalHeader>
-            <ResponsiveModalTitle>Submit Job</ResponsiveModalTitle>
-            <ResponsiveModalDescription>
+            <ResponsiveModalTitle>Send For a Review</ResponsiveModalTitle>
+            <ResponsiveModalDescription className="sr-only">
               Submitting this job means the request will be sent to the JobVerse
               team for review and approval. You will be notified once the job is
               live.
             </ResponsiveModalDescription>
           </ResponsiveModalHeader>
-
+          <Alert variant="info">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Info</AlertTitle>
+            <AlertDescription>
+              By submitting this job, your request will be sent to the JobVerse
+              team for review and approval. You will be notified once the job
+              post is successfully reviewed and live.
+            </AlertDescription>
+          </Alert>
           <ResponsiveModalFooter>
             <Button
               disabled={isPending}
               onClick={() => setShowDialog(false)}
-              className="w-full"
+              className="w-full mb-5 md:mb-0"
               variant={"secondary"}
             >
               Cancel
@@ -207,9 +216,9 @@ const JobEditorFooter = ({
               showIconOnly
               loading={isPending}
               onClick={() => saveJobAs(JobStatus.PENDING)}
-              className="w-full"
+              className="w-full mb-5 md:mb-0"
             >
-              Publish
+              Send
             </LoadingButton>
           </ResponsiveModalFooter>
         </ResponsiveModalContent>

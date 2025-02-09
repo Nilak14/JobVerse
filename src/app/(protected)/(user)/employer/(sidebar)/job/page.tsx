@@ -1,4 +1,6 @@
+import { companyJobsColumn } from "@/columns/company-jobs-column";
 import SidebarContainer from "@/components/Global/SidebarContainer";
+import EmployerJobTable from "@/components/Table/EmployerJobTable";
 import { Button } from "@/components/ui/button";
 import { getAllCompanyJobs } from "@/data-access/job/getAllCompanyJobs";
 import { auth } from "@/lib/auth";
@@ -8,7 +10,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 /**
- *
  * maxAmount: upto Rs. 20000
  * startingAmount: from Rs. 20000
  * range: Rs. 20000 - Rs. 40000
@@ -38,24 +39,8 @@ const JobListPage = async () => {
             </Link>
           </Button>
         </div>
-        <div className="flex flex-col gap-4">
-          {jobs.map((job) => (
-            <div key={job.id}>
-              <p>{job.title}</p>
-              <p>{job.status}</p>
-              <p>{job.workMode}</p>
-              <Button asChild>
-                <Link href={`/employer/job-studio/?jobId=${job.id}`}>Edit</Link>
-              </Button>
-            </div>
-          ))}
-        </div>
-        {/* <JVTableClient
-          searchColumn={"name"}
-          searchPlaceholder="Search User..."
-          columns={companyEmployerColumns}
-          data={data || []}
-        /> */}
+
+        <EmployerJobTable columns={companyJobsColumn} data={jobs || []} />
       </section>
     </SidebarContainer>
   );
