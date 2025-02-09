@@ -18,6 +18,7 @@ model User {
     EMPLOYER      Employer?
     JOB_SEEKER    JOB_SEEKER?
     isBlocked     Boolean     @default(false)
+    Admin         Admin?
 
     @@map("users")
 }
@@ -64,4 +65,12 @@ model Employer {
     createdJobs         Job[]
 
     @@map("employers")
+}
+
+model Admin {
+    id     String @id @default(cuid())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("admins")
 }
