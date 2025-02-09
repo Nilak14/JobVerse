@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 interface UserAvatarProps {
   imageUrl: string;

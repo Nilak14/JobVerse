@@ -29,7 +29,7 @@ interface JVTableClientProps<TData, TValue> {
   showPagination?: boolean;
   searchColumn?: string;
   searchPlaceholder?: string;
-  onRefresh?: () => void;
+  showSerialNumber?: boolean;
 }
 const JVTableClient = <TData, TValue>({
   columns,
@@ -37,6 +37,7 @@ const JVTableClient = <TData, TValue>({
   showPagination = true,
   searchColumn,
   searchPlaceholder = "Search",
+  showSerialNumber = true,
 }: JVTableClientProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -80,34 +81,17 @@ const JVTableClient = <TData, TValue>({
             className="max-w-sm"
           />
         )}
-        {/* 
-        <TooltipProvider delayDuration={300}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={() => {
-                  router.refresh();
-                }}
-                variant={"outline"}
-                size={"icon"}
-              >
-                <RefreshCcw />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top" sideOffset={10}>
-              <p>Refresh Table</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider> */}
       </div>
       <div className="rounded-md  border overflow-hidden">
         <Table>
-          <TableHeader className="relative">
+          <TableHeader className="relative ">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {/* <TableHead className="bg-primary text-white w-24 pl-4 ">
-                  <p>SN</p>
-                </TableHead> */}
+                {showSerialNumber && (
+                  <TableHead className="bg-primary text-white w-24 pl-4 ">
+                    <p>SN</p>
+                  </TableHead>
+                )}
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
@@ -134,7 +118,9 @@ const JVTableClient = <TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {/* <TableCell className="pl-4">{row.index + 1}</TableCell> */}
+                  {showSerialNumber && (
+                    <TableCell className="pl-4">{row.index + 1}</TableCell>
+                  )}
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

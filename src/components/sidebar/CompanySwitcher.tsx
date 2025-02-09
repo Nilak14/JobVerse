@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronsUpDown, Plus } from "lucide-react";
+import { Check, CheckCircle, ChevronsUpDown, Plus } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -23,6 +23,7 @@ import { ExtendedUser } from "@/next-auth";
 import CreateCompanyModal from "@/components/Company/CreateCompanyModal";
 import CompanySwitchDialog from "@/components/Company/CompanySwitchDialog";
 import { useActiveCompany } from "@/store/useActiveCompany";
+import { Badge } from "../ui/badge";
 
 export function CompanySwitcher({
   companies,
@@ -69,10 +70,12 @@ export function CompanySwitcher({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground gap-2"
               >
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <UserAvatar
-                    imageUrl={activeCompany.logoUrl!}
-                    userName={activeCompany.name}
-                  />
+                  <div className="flex size-6 items-center justify-center rounded-sm border">
+                    <UserAvatar
+                      imageUrl={activeCompany.logoUrl!}
+                      userName={activeCompany.name}
+                    />
+                  </div>
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight relative">
                   <span className="truncate font-semibold">
@@ -95,24 +98,32 @@ export function CompanySwitcher({
               <DropdownMenuLabel className="text-xs text-muted-foreground">
                 Switch Company
               </DropdownMenuLabel>
-              {companies.map((company) => (
-                <DropdownMenuItem
-                  key={company.name}
-                  onClick={() => {
-                    setSelectedCompany(company);
-                    setOpenCompanySwitcherDialog(true);
-                  }}
-                  className="gap-5 p-2"
-                >
-                  <div className="flex size-6 items-center justify-center rounded-sm border">
-                    <UserAvatar
-                      imageUrl={company.logoUrl!}
-                      userName={company.name}
-                    />
-                  </div>
-                  <span className="line-clamp-2">{company.name}</span>
-                </DropdownMenuItem>
-              ))}
+              {[
+                activeCompany,
+                ...companies.filter(
+                  (company) => company.id !== activeCompany.id
+                ),
+              ].map((company) => {
+                return (
+                  <DropdownMenuItem
+                    key={company.name}
+                    onClick={() => {
+                      if (activeCompany.id === company.id) return;
+                      setSelectedCompany(company);
+                      setOpenCompanySwitcherDialog(true);
+                    }}
+                    className="gap-5 p-2"
+                  >
+                    <div className="flex size-6 items-center justify-center rounded-sm border">
+                      <UserAvatar
+                        imageUrl={company.logoUrl!}
+                        userName={company.name}
+                      />
+                    </div>
+                    <span className="line-clamp-2">{company.name}</span>
+                  </DropdownMenuItem>
+                );
+              })}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => setOpenCreateCompanyModal(true)}
