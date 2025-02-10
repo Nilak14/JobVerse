@@ -6,6 +6,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { useState } from "react";
 
 export const UserTableCell = ({
   email,
@@ -98,5 +99,77 @@ export const JobStatusBadge = ({ status }: { status: JobStatus }) => {
     >
       {statusText[status]}
     </span>
+  );
+};
+
+type CompanyJobCellType = {
+  logoUrl: string | null;
+  name: string;
+  adminEmployer: {
+    user: {
+      email: string;
+      name: string | null;
+      image: string | null;
+    };
+  };
+};
+
+interface CompanyTableCellProps {
+  company: CompanyJobCellType;
+  creator: {
+    user: {
+      email: string;
+      name: string | null;
+      image: string | null;
+    };
+  };
+}
+export const CompanyTableCell = ({
+  company: { logoUrl, name, adminEmployer },
+  creator,
+}: CompanyTableCellProps) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <HoverCard open={open} onOpenChange={setOpen}>
+      <HoverCardTrigger onClick={() => setOpen(!open)}>
+        <UserAvatar classname="h-7 w-7" imageUrl={logoUrl!} userName={name} />
+      </HoverCardTrigger>
+      <HoverCardContent>
+        <div className="flex items-center gap-4">
+          <UserAvatar classname="h-7 w-7" imageUrl={logoUrl!} userName={name} />
+          <div className="">
+            <p>{name}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 mt-4">
+          <p className="text-xs text-muted-foreground"> Admin:</p>
+          <UserAvatar
+            classname="h-7 w-7"
+            imageUrl={adminEmployer.user.image!}
+            userName={adminEmployer.user.name!}
+          />
+          <div>
+            <p>{adminEmployer.user.name}</p>
+            <p className=" text-xs text-muted-foreground">
+              {adminEmployer.user.email}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 mt-4">
+          <p className="text-xs text-muted-foreground"> Job Creator:</p>
+          <UserAvatar
+            classname="h-7 w-7"
+            imageUrl={creator.user.image!}
+            userName={creator.user.name!}
+          />
+          <div>
+            <p>{creator.user.name}</p>
+            <p className=" text-xs text-muted-foreground">
+              {creator.user.email}
+            </p>
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   );
 };

@@ -9,6 +9,12 @@ enum JobStatus {
     DELETED
 }
 
+enum JobReviewStatus {
+    APPROVED
+    REJECTED
+    NEED_REVIEW
+}
+
 model Job {
     id                    String       @id @default(cuid())
     title                 String?
@@ -46,6 +52,7 @@ model Job {
     updatedAt             DateTime     @updatedAt
     deletedAt             DateTime?
     isDeleted             Boolean      @default(false)
+    review                JobReview?
 
     @@map("jobs")
 }
@@ -62,4 +69,15 @@ model Salary {
     jobId     String  @unique
 
     @@map("salaries")
+}
+
+model JobReview {
+    id              String           @id @default(cuid())
+    jobId           String           @unique
+    job             Job              @relation(fields: [jobId], references: [id])
+    reviewedStatus  JobReviewStatus?
+    reviewedBy      String?
+    reviewer        Admin?           @relation(fields: [reviewedBy], references: [id])
+    reviewedAt      DateTime?
+    reviewedComment String?
 }
