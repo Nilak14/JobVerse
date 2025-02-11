@@ -1,6 +1,6 @@
 // Sidebar NavLinks for Admin
 
-import { Globe, LayoutDashboard, Video } from "lucide-react";
+import { BriefcaseBusiness, LayoutDashboard, List } from "lucide-react";
 import { SidebarNavLinks } from "../types";
 
 export const AdminSideBarLinks: SidebarNavLinks[] = [
@@ -10,14 +10,14 @@ export const AdminSideBarLinks: SidebarNavLinks[] = [
     url: "/admin/dashboard",
   },
   {
-    title: "Test",
-    icon: Video,
-    url: "/admin/test",
+    title: "Job Studio",
+    icon: BriefcaseBusiness,
+    url: "",
     items: [
       {
-        title: "Test Route",
-        url: "/admin/test",
-        icon: Globe,
+        title: "All Jobs",
+        url: "/admin/all-jobs",
+        icon: List,
       },
     ],
   },

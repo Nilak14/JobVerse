@@ -21,4 +21,3 @@ export const publicSEORoute = ["/sitemap.xml", "/robots.txt", "/skills.json"];
 export const DEFAULT_LOGIN_REDIRECT_JOB_SEEKER = "/job-seeker/dashboard";
 export const DEFAULT_LOGIN_REDIRECT_EMPLOYER = "/employer/dashboard";
 export const DEFAULT_LOGIN_REDIRECT_ADMIN = "/admin/dashboard";
-export const DEFAULT_LOGIN_REDIRECT = "/admin/dashboard";
