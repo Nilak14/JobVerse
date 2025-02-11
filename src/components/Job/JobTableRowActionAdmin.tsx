@@ -15,17 +15,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { JobServerDataAdmin } from "@/lib/prisma-types/Job";
+import AcceptJobModal from "../Table/TableActionModals/AcceptJobModal";
+import RejectJobModal from "../Table/TableActionModals/RejectJobModal";
 interface JobTableRowActionAdminProps {
   status: JobStatus;
-  jobId: string;
+  job: JobServerDataAdmin;
   TriggerIcon?: LucideIcon;
 }
 const JobTableRowActionAdmin = ({
-  jobId,
+  job,
   status,
   TriggerIcon = MoreHorizontal,
 }: JobTableRowActionAdminProps) => {
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
+  const [openAcceptDialog, setOpenAcceptDialog] = useState(false);
+  const [openRejectDialog, setOpenRejectDialog] = useState(false);
   return (
     <>
       <DropdownMenu>
@@ -46,7 +51,7 @@ const JobTableRowActionAdmin = ({
           </DropdownMenuItem>
           {/* // accept job */}
           {status === "PENDING" && (
-            <DropdownMenuItem onClick={() => setOpenPreviewDialog(true)}>
+            <DropdownMenuItem onClick={() => setOpenAcceptDialog(true)}>
               <CircleCheckBig color="#10b981 " className="h-4 w-4 mr-2  " />
               <span>Accept</span>
             </DropdownMenuItem>
@@ -54,7 +59,7 @@ const JobTableRowActionAdmin = ({
 
           {/* // reject job */}
           {status === "PENDING" && (
-            <DropdownMenuItem onClick={() => setOpenPreviewDialog(true)}>
+            <DropdownMenuItem onClick={() => setOpenRejectDialog(true)}>
               <OctagonX color="red" className="h-4 w-4 mr-2  " />
               <span>Reject</span>
             </DropdownMenuItem>
@@ -68,6 +73,16 @@ const JobTableRowActionAdmin = ({
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+      <AcceptJobModal
+        job={job}
+        open={openAcceptDialog}
+        setOpen={setOpenAcceptDialog}
+      />
+      <RejectJobModal
+        job={job}
+        open={openRejectDialog}
+        setOpen={setOpenRejectDialog}
+      />
     </>
   );
 };

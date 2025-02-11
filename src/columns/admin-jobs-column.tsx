@@ -1,14 +1,13 @@
 "use client";
 
 import { SortableHeader } from "@/components/Global/SortableHeader";
-import { JobServerData, JobServerDataAdmin } from "@/lib/prisma-types/Job";
+import { JobServerDataAdmin } from "@/lib/prisma-types/Job";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   CompanyTableCell,
   DateTableCell,
   JobStatusBadge,
   NumberTableCell,
-  UserTableCell,
 } from "@/components/Global/TableRowComponents";
 
 import JobTableRowActionAdmin from "@/components/Job/JobTableRowActionAdmin";
@@ -94,7 +93,7 @@ export const AdminAllJobsColumn: ColumnDef<JobServerDataAdmin>[] = [
     cell: ({ row }) => {
       return (
         <JobTableRowActionAdmin
-          jobId={row.original.id}
+          job={row.original}
           status={row.original.status}
         />
       );

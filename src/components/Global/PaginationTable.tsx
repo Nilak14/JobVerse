@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "../ui/input";
+import { useEffect } from "react";
 
 interface TablePaginationProps<TData> {
   table: Table<TData>;

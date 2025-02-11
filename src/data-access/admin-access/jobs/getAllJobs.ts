@@ -9,6 +9,9 @@ export const getAllJobs = cache(async () => {
 
   const allJobs = await prisma.job.findMany({
     include: JobDataIncludeAdmin,
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   return allJobs;
 });

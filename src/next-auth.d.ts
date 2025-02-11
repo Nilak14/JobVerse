@@ -12,5 +12,6 @@ declare module "next-auth" {
     user: ExtendedUser;
     activeCompanyId?: string | null;
     employerId?: string | null;
+    adminId?: string | null;
   }
 }

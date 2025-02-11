@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 };
 const AllJobs = async () => {
   const jobs = await getAllJobs();
-  console.log(jobs);
 
   return (
     <>
