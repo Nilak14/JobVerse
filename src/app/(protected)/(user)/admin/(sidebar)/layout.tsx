@@ -7,6 +7,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
+import SidebarContainer from "@/components/Global/SidebarContainer";
 
 const AdminSidebarLayout = async ({
   children,
@@ -30,7 +31,9 @@ const AdminSidebarLayout = async ({
             <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2" />
             <AdminNav user={user} hasSidebar />
           </div>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">{children}</div>
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">
+            <SidebarContainer>{children}</SidebarContainer>
+          </div>
         </SidebarInset>
       </div>
     </SidebarProvider>

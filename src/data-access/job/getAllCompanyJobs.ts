@@ -7,6 +7,9 @@ export const getAllCompanyJobs = async (companyId: string) => {
       companyId,
     },
     include: JobDataInclude,
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   return allJobs;
 };

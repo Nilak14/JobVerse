@@ -146,7 +146,6 @@ async function main() {
   ];
 
   // insert data into database
-
   for (const category of jobCategories) {
     const createdCategory = await prisma.jobCategory.upsert({
       where: {
@@ -164,7 +163,38 @@ async function main() {
       });
     }
   }
+
   console.log("✅ Default categories and subcategories initialized!");
+
+  // add admin user
+  const adminEmail = "info.jobverse@gmail.com";
+  const adminUser = await prisma.user.upsert({
+    where: {
+      email: adminEmail,
+    },
+    update: {},
+    create: {
+      email: adminEmail,
+      name: "JV Admin",
+      emailVerified: new Date(),
+      image: null,
+      password: "$2a$10$AhFIeOAf7iQM/8.QtaI0PuQ2uRb/BtWNKvFadJM7OrPNvhREEAyym",
+      userType: "ADMIN",
+    },
+  });
+
+  await prisma.admin.upsert({
+    where: { userId: adminUser.id },
+    update: {},
+    create: {
+      user: {
+        connect: {
+          id: adminUser.id,
+        },
+      },
+    },
+  });
+  console.log("✅ Created admin with default email and password");
 }
 main()
   .catch((e) => {
