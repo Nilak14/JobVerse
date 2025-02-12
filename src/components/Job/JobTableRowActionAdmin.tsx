@@ -18,6 +18,7 @@ import { useState } from "react";
 import { JobServerDataAdmin } from "@/lib/prisma-types/Job";
 import AcceptJobModal from "../Table/TableActionModals/AcceptJobModal";
 import RejectJobModal from "../Table/TableActionModals/RejectJobModal";
+import NeedReviewJobModal from "../Table/TableActionModals/NeedReviewJobModal";
 interface JobTableRowActionAdminProps {
   status: JobStatus;
   job: JobServerDataAdmin;
@@ -31,6 +32,7 @@ const JobTableRowActionAdmin = ({
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
   const [openAcceptDialog, setOpenAcceptDialog] = useState(false);
   const [openRejectDialog, setOpenRejectDialog] = useState(false);
+  const [openNeedReviewDialog, setOpenNeedReviewDialog] = useState(false);
   return (
     <>
       <DropdownMenu>
@@ -66,7 +68,7 @@ const JobTableRowActionAdmin = ({
           )}
           {/* // ask for change in job */}
           {status === "PENDING" && (
-            <DropdownMenuItem onClick={() => setOpenPreviewDialog(true)}>
+            <DropdownMenuItem onClick={() => setOpenNeedReviewDialog(true)}>
               <MessageSquareMore color="#3b82f6 " className="h-4 w-4 mr-2  " />
               <span>Ask For Changes</span>
             </DropdownMenuItem>
@@ -82,6 +84,11 @@ const JobTableRowActionAdmin = ({
         job={job}
         open={openRejectDialog}
         setOpen={setOpenRejectDialog}
+      />
+      <NeedReviewJobModal
+        job={job}
+        open={openNeedReviewDialog}
+        setOpen={setOpenNeedReviewDialog}
       />
     </>
   );
