@@ -11,12 +11,8 @@ const NoSidebarLayout = async ({ children }: { children: React.ReactNode }) => {
   }
   return (
     <>
-      <SidebarProvider>
-        <SidebarInset>
-          <EmployerNav activeCompanyId={session.activeCompanyId} user={user} />
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
+      <EmployerNav activeCompanyId={session.activeCompanyId} user={user} />
+      {children}
     </>
   );
 };

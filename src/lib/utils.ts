@@ -81,3 +81,14 @@ export function convertToString(value: number | null | undefined): string {
   }
   return value.toString();
 }
+
+export const formatNumber = (n: number): string => {
+  // if (n < 10000) {
+  //   return n.toLocaleString("en-US"); // Keep exact numbers below 10,000
+  // }
+
+  return Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1, // More precision for millions+
+  }).format(n);
+};

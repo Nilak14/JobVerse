@@ -53,3 +53,32 @@ export const JobDataIncludeAdmin = {
 export type JobServerDataAdmin = Prisma.JobGetPayload<{
   include: typeof JobDataIncludeAdmin;
 }>;
+
+export function getJobDataIncludeBrowse() {
+  return {
+    Salary: true,
+    company: {
+      select: {
+        name: true,
+        logoUrl: true,
+      },
+    },
+    category: true,
+    subcategory: true,
+  } satisfies Prisma.JobInclude;
+}
+
+export type JobDataBrowse = Prisma.JobGetPayload<{
+  include: ReturnType<typeof getJobDataIncludeBrowse>;
+}>;
+
+export type JobDataBrowseAPIResponse = {
+  success: boolean;
+  message: string;
+  data?: {
+    nextCursor: string | null;
+    data: {
+      jobs: JobDataBrowse[];
+    };
+  };
+};

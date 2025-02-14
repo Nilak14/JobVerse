@@ -1,7 +1,7 @@
 import Container from "../Global/Container";
 import Notification from "../Global/Notification";
 import { Logo } from "../LandingPage/NavBar";
-import { SidebarUser } from "./SidebarUser";
+import { NavUser } from "./NavUser";
 import { UserNavProps } from "@/lib/types";
 
 const AdminNav = ({ hasSidebar = false, user }: UserNavProps) => {
@@ -19,7 +19,7 @@ const AdminNav = ({ hasSidebar = false, user }: UserNavProps) => {
           </div>
           {hasSidebar || (
             <div>
-              <SidebarUser isNav user={user} isLoading={!user} />
+              <NavUser user={user} isLoading={!user} />
             </div>
           )}
         </section>
