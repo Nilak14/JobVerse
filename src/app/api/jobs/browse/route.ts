@@ -25,6 +25,7 @@ export const GET = async (req: NextRequest) => {
     const globalSearch = globalSearchParams
       .split(" ")
       .filter((word) => word.length > 0)
+      .map((word) => word.toLowerCase())
       .join(" & ");
 
     // transform experience level params

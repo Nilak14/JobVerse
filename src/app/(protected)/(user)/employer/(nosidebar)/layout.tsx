@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import EmployerNav from "@/components/sidebar/EmployerNav";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 
 const NoSidebarLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -11,8 +11,10 @@ const NoSidebarLayout = async ({ children }: { children: React.ReactNode }) => {
   }
   return (
     <>
-      <EmployerNav activeCompanyId={session.activeCompanyId} user={user} />
-      {children}
+      <SidebarInset>
+        <EmployerNav activeCompanyId={session.activeCompanyId} user={user} />
+        {children}
+      </SidebarInset>
     </>
   );
 };
