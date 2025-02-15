@@ -1,4 +1,12 @@
-export const jobTypes = [
+export type JobType =
+  | "Full-time"
+  | "Part-time"
+  | "Contract"
+  | "Temporary"
+  | "Internship"
+  | "Volunteer";
+
+export const jobTypes: JobType[] = [
   "Full-time",
   "Part-time",
   "Contract",
@@ -6,12 +14,25 @@ export const jobTypes = [
   "Internship",
   "Volunteer",
 ];
+export type WorkMode = "Remote" | "On-site" | "Hybrid";
+export const workMode: WorkMode[] = ["Remote", "On-site", "Hybrid"];
 
-export const workMode = ["Remote", "On-site", "Hybrid"];
+export type SalaryType = "Range" | "Starting" | "Maximum" | "Exact";
+export const SalaryType: SalaryType[] = [
+  "Range",
+  "Starting",
+  "Maximum",
+  "Exact",
+];
 
-export const SalaryType = ["Range", "Starting", "Maximum", "Exact"];
-
-export const SalaryRate = ["Hour", "Day", "Week", "Month", "Year"];
+export type SalaryRate = "Hour" | "Day" | "Week" | "Month" | "Year";
+export const SalaryRate: SalaryRate[] = [
+  "Hour",
+  "Day",
+  "Week",
+  "Month",
+  "Year",
+];
 
 export const JobBenefits = [
   "Health insurance",

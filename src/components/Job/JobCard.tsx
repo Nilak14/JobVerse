@@ -22,7 +22,6 @@ interface JobCardProps {
   job: JobDataBrowse;
 }
 const JobCard = ({ job }: JobCardProps) => {
-  const endTime = getTimeDistance(job.deadline!);
   return (
     <Card>
       <CardHeader>

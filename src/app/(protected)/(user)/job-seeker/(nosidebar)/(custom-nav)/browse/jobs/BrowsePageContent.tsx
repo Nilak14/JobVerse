@@ -1,8 +1,10 @@
 import InfiniteScrollContainer from "@/components/Global/InfiniteScrollContainer";
 import JobCard from "@/components/Job/JobCard";
-import { Input } from "@/components/ui/input";
+import JobNotFound from "@/components/Job/JobNotFound";
+import JobCardSkeleton from "@/components/skeletons/JobCardSkeleton";
 import { JobDataBrowse } from "@/lib/prisma-types/Job";
-import { Loader2, Search } from "lucide-react";
+import { createArray } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 interface BrowsePageContentProps {
   jobs: JobDataBrowse[];
   fetchNextPage: () => void;
@@ -21,6 +23,9 @@ const BrowsePageContent = ({
 }: BrowsePageContentProps) => {
   return (
     <div>
+      {status === "success" && jobs.length === 0 && !hasNextPage && (
+        <JobNotFound />
+      )}
       <InfiniteScrollContainer
         onBottomReached={() => {
           if (hasNextPage && !isFetching) {
@@ -29,11 +34,12 @@ const BrowsePageContent = ({
         }}
         className="grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3  gap-5"
       >
-        {status === "success" && jobs.length === 0 && !hasNextPage && (
-          <p>No Jobs Found</p>
-        )}
         {status === "loading" ? (
-          <div>loading...</div>
+          <>
+            {createArray(10).map((_, i) => (
+              <JobCardSkeleton key={i} />
+            ))}
+          </>
         ) : (
           <>
             {jobs.map((job) => (

@@ -7,16 +7,53 @@ import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
   try {
-    const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+    const url = req.nextUrl;
+    const cursor = url.searchParams.get("cursor") || undefined;
     const PAGE_SIZE = 10 as const;
 
     //todo: not sure it user need to be authenticated to browse jobs or not
 
+    // retrieve filter status
+    const workModeParams = url.searchParams.get("workMode") || "";
+    const jobTypesParams = url.searchParams.get("jobTypes") || "";
+    const experienceLevelParams = url.searchParams.get("experienceLevel") || "";
+
+    // transform experience level params
+    // frontend sends as "0,1-3,3-5,5+"
+    // db has exp as "0","1","2","3","4","5"
+    let expLevelFilter: string[] | undefined = undefined;
+
+    if (experienceLevelParams) {
+      const selections = experienceLevelParams.split(",");
+      const allowedLevels: string[] = [];
+      for (const selection of selections) {
+        if (selection === "0") {
+          allowedLevels.push("0");
+        }
+        if (selection === "1-3") {
+          allowedLevels.push("1", "2", "3");
+        }
+        if (selection === "3-5") {
+          allowedLevels.push("3", "4", "5");
+        }
+        if (selection === "5+") {
+          allowedLevels.push("5");
+        }
+      }
+      // remove duplicates
+      expLevelFilter = Array.from(new Set(allowedLevels));
+    }
+
     const jobPost = await prisma.job.findMany({
       where: {
         status: "ACTIVE",
-        //todo: remove the jobs which user have already applied
+        workMode: workModeParams
+          ? { in: workModeParams.split(",") }
+          : undefined,
+        jobType: jobTypesParams ? { in: jobTypesParams.split(",") } : undefined,
+        experienceLevel: expLevelFilter ? { in: expLevelFilter } : undefined,
       },
+      //todo: remove the jobs which user have already applied
       include: getJobDataIncludeBrowse(),
       take: PAGE_SIZE + 1,
       orderBy: { createdAt: "desc" },
