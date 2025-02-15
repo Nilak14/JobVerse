@@ -9,6 +9,7 @@ import BrowsePageFilter from "./BrowseJobFilter";
 import { ExtendedUser } from "@/next-auth";
 import BrowsePageContent from "./BrowsePageContent";
 import { useSearchParams } from "next/navigation";
+import BrowsePageSearch from "./BrowsePageSearch";
 
 interface BrowsePageProps {
   user: ExtendedUser;
@@ -20,6 +21,9 @@ const BrowsePage = ({ user }: BrowsePageProps) => {
     workMode: searchParams.get("workMode") || "",
     jobTypes: searchParams.get("jobTypes") || "",
     experienceLevel: searchParams.get("experienceLevel") || "",
+    globalSearch: searchParams.get("globalSearch") || "",
+    companySearch: searchParams.get("companySearch") || "",
+    locationSearch: searchParams.get("locationSearch") || "",
   };
   const {
     data,
@@ -44,8 +48,9 @@ const BrowsePage = ({ user }: BrowsePageProps) => {
         <aside className="max-w-[300px] w-[300px] bg-sidebar fixed h-[calc(100vh-64px)] overflow-y-auto hidden md:block">
           <BrowsePageFilter />
         </aside>
-
         <section className="flex-1 md:pl-[340px] px-10 mx-auto mt-10 ">
+          <BrowsePageSearch />
+
           <BrowsePageContent
             status={status}
             fetchNextPage={fetchNextPage}

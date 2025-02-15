@@ -7,6 +7,9 @@ export interface Filters {
   workMode: string;
   jobTypes: string;
   experienceLevel: string;
+  globalSearch: string;
+  companySearch: string;
+  locationSearch: string;
 }
 
 export const useBrowseJobInfiniteQuery = (filters: Filters) => {
@@ -25,6 +28,15 @@ export const useBrowseJobInfiniteQuery = (filters: Filters) => {
       }
       if (filters.experienceLevel) {
         params.set("experienceLevel", filters.experienceLevel);
+      }
+      if (filters.globalSearch) {
+        params.set("globalSearch", filters.globalSearch);
+      }
+      if (filters.companySearch) {
+        params.set("companySearch", filters.companySearch);
+      }
+      if (filters.locationSearch) {
+        params.set("locationSearch", filters.locationSearch);
       }
       const url = `/api/jobs/browse?${params.toString()}`;
       return kyInstance.get(url).json<JobDataBrowseAPIResponse>();

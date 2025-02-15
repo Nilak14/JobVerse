@@ -6,15 +6,12 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DualRangeSlider } from "@/components/ui/dual-slider";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { Separator } from "@/components/ui/separator";
 import {
   JobType,
   jobTypes,
-  SalaryRate,
   WorkMode,
   workMode,
 } from "@/lib/enums/CreateJobEnums";
@@ -90,8 +87,12 @@ const BrowsePageFilter = () => {
         </Button>
       </div>
       <Separator />
-      <Accordion type="multiple" className="w-full pt-5">
-        <AccordionItem value="work mode">
+      <Accordion
+        defaultValue={[...searchParams.keys()]}
+        type="multiple"
+        className="w-full pt-5"
+      >
+        <AccordionItem value="workMode">
           <AccordionTrigger>Work Mode</AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-5">
             {workMode.map((mode) => (
@@ -115,7 +116,7 @@ const BrowsePageFilter = () => {
             ))}
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="job-types">
+        <AccordionItem value="jobTypes">
           <AccordionTrigger>Job Types</AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-5">
             {jobTypes.map((type) => (
@@ -140,7 +141,7 @@ const BrowsePageFilter = () => {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="exp-level">
+        <AccordionItem value="experienceLevel">
           <AccordionTrigger>Experience Level</AccordionTrigger>
           <AccordionContent className="grid grid-cols-1 gap-4">
             <div className="flex items-center gap-2">
@@ -215,8 +216,6 @@ const BrowsePageFilter = () => {
         </AccordionItem>
       </Accordion>
     </div>
-
-    // </Container>
   );
 };
 export default BrowsePageFilter;

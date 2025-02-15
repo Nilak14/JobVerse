@@ -3,6 +3,7 @@ import {
   getJobDataIncludeBrowse,
   JobDataBrowseAPIResponse,
 } from "@/lib/prisma-types/Job";
+import { Prisma } from "@prisma/client";
 import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
@@ -17,12 +18,19 @@ export const GET = async (req: NextRequest) => {
     const workModeParams = url.searchParams.get("workMode") || "";
     const jobTypesParams = url.searchParams.get("jobTypes") || "";
     const experienceLevelParams = url.searchParams.get("experienceLevel") || "";
+    const globalSearchParams = url.searchParams.get("globalSearch") || "";
+    const companySearchParams = url.searchParams.get("companySearch") || "";
+    const locationSearchParams = url.searchParams.get("locationSearch") || "";
+
+    const globalSearch = globalSearchParams
+      .split(" ")
+      .filter((word) => word.length > 0)
+      .join(" & ");
 
     // transform experience level params
     // frontend sends as "0,1-3,3-5,5+"
     // db has exp as "0","1","2","3","4","5"
     let expLevelFilter: string[] | undefined = undefined;
-
     if (experienceLevelParams) {
       const selections = experienceLevelParams.split(",");
       const allowedLevels: string[] = [];
@@ -44,15 +52,47 @@ export const GET = async (req: NextRequest) => {
       expLevelFilter = Array.from(new Set(allowedLevels));
     }
 
+    const searchFilter: Prisma.JobWhereInput = globalSearch
+      ? {
+          OR: [
+            { title: { search: globalSearch, mode: "insensitive" } },
+            { description: { search: globalSearch, mode: "insensitive" } },
+            { tags: { hasSome: globalSearch.split(" ") } },
+            { skills: { hasSome: globalSearch.split(" ") } },
+          ],
+        }
+      : {};
+
+    const where: Prisma.JobWhereInput = {
+      status: "ACTIVE",
+      AND: [
+        searchFilter,
+        workModeParams
+          ? { workMode: { in: workModeParams.split(","), mode: "insensitive" } }
+          : {},
+        jobTypesParams
+          ? { jobType: { in: jobTypesParams.split(","), mode: "insensitive" } }
+          : {},
+        expLevelFilter
+          ? { experienceLevel: { in: expLevelFilter, mode: "insensitive" } }
+          : {},
+        companySearchParams
+          ? {
+              company: {
+                name: { contains: companySearchParams, mode: "insensitive" },
+              },
+            }
+          : {},
+        locationSearchParams
+          ? {
+              location: { contains: locationSearchParams, mode: "insensitive" },
+            }
+          : {},
+      ],
+    };
+
     const jobPost = await prisma.job.findMany({
-      where: {
-        status: "ACTIVE",
-        workMode: workModeParams
-          ? { in: workModeParams.split(",") }
-          : undefined,
-        jobType: jobTypesParams ? { in: jobTypesParams.split(",") } : undefined,
-        experienceLevel: expLevelFilter ? { in: expLevelFilter } : undefined,
-      },
+      where,
       //todo: remove the jobs which user have already applied
       include: getJobDataIncludeBrowse(),
       take: PAGE_SIZE + 1,
