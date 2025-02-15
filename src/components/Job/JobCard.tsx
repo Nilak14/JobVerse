@@ -93,7 +93,7 @@ const JobCard = ({ job }: JobCardProps) => {
       </CardContent>
       <CardFooter className="w-full">
         <div className="flex justify-between items-center w-full">
-          <Button variant={"default"}>Apply Now</Button>
+          <Button size={"sm"}>Apply Now</Button>
           {/* <Button>Preview</Button> */}
           <p className="text-muted-foreground text-sm">
             Posted {getTimeDistance(job.createdAt)} ago

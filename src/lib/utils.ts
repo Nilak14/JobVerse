@@ -92,3 +92,7 @@ export const formatNumber = (n: number): string => {
     maximumFractionDigits: 1, // More precision for millions+
   }).format(n);
 };
+
+export const createArray = (length: number): number[] => {
+  return Array.from({ length }, (_, i) => i);
+};

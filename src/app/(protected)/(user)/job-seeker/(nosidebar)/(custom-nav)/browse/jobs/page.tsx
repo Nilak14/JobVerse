@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import BrowsePage from "./BrowsePage";
 import { auth } from "@/lib/auth";
+import Container from "@/components/Global/Container";
 
 export const metadata: Metadata = {
   title: "Browse Jobs",
@@ -12,10 +13,6 @@ const JobBrowsePage = async () => {
   if (!session || !session.user) {
     return null;
   }
-  return (
-    <div className="overflow-hidden">
-      <BrowsePage user={session.user} />
-    </div>
-  );
+  return <BrowsePage user={session.user} />;
 };
 export default JobBrowsePage;
