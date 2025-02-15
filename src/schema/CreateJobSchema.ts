@@ -1,11 +1,13 @@
 import {
   EducationLevel,
+  JobType,
   jobTypes,
   LicenseRequired,
   PreferredGender,
   SalaryRate,
   SalaryType,
   VehicleRequired,
+  WorkMode,
   workMode,
 } from "@/lib/enums/CreateJobEnums";
 import { z } from "zod";
@@ -16,7 +18,7 @@ export const workModeSchema = z
     workMode: z
       .string()
       .min(1, "Select Atleast One Work Mode")
-      .refine((val) => workMode.includes(val), "Invalid Work Mode"),
+      .refine((val) => workMode.includes(val as WorkMode), "Invalid Work Mode"),
     location: z.string().trim().max(100).optional(),
   })
   .refine((data) => data.workMode === "Remote" || !!data.location, {
@@ -35,7 +37,7 @@ export const jobBasicsSchema = z
     jobType: z
       .string()
       .min(1, { message: "Job Type is required" })
-      .refine((value) => jobTypes.includes(value), {
+      .refine((value) => jobTypes.includes(value as JobType), {
         message: "Invalid Job Type",
       }),
   })
@@ -60,7 +62,10 @@ export const SalaryTypeSchema = z
     salaryType: z
       .string()
       .min(1, "Salary Type is Needed")
-      .refine((val) => SalaryType.includes(val), "Invalid Salary Type"),
+      .refine(
+        (val) => SalaryType.includes(val as SalaryType),
+        "Invalid Salary Type"
+      ),
     minSalaryAmount: z
       .string()
       .min(1, { message: "Minimum Salary is required" })
@@ -146,7 +151,10 @@ export const JobBenefitsSchema = z
     salaryRate: z
       .string()
       .min(1, { message: "Salary Rate is required" })
-      .refine((val) => SalaryRate.includes(val), "Invalid Salary Type"),
+      .refine(
+        (val) => SalaryRate.includes(val as SalaryRate),
+        "Invalid Salary Type"
+      ),
     benefits: z.array(z.string()),
   })
   .and(SalaryTypeSchema);
