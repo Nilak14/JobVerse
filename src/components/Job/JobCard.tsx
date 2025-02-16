@@ -17,89 +17,108 @@ import {
   UsersRound,
 } from "lucide-react";
 import { cn, formatNumber, getTimeDistance } from "@/lib/utils";
-
+import { motion } from "framer-motion";
 interface JobCardProps {
   job: JobDataBrowse;
 }
 const JobCard = ({ job }: JobCardProps) => {
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex justify-between flex-row mb-3">
-          <div className="flex gap-4 items-center  ">
-            <Image
-              src={job.company.logoUrl!}
-              alt={job.company.name}
-              width={50}
-              height={50}
-              className="aspect-square rounded-full"
-            />
-            <div className=" content-start flex justify-between flex-col gap-1 truncate line-clamp-1">
-              <p className="text-xs text-muted-foreground">
-                {job.company.name}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      whileHover={{
+        scale: 1.02,
+        transition: { duration: 0.2 },
+      }}
+      whileTap={{ scale: 0.98 }}
+      className="cursor-pointer"
+    >
+      <Card>
+        <CardHeader>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex justify-between flex-row mb-3"
+          >
+            <div className="flex gap-4 items-center">
+              <Image
+                src={job.company.logoUrl!}
+                alt={job.company.name}
+                width={50}
+                height={50}
+                className="aspect-square rounded-full"
+              />
+              <div className=" content-start flex justify-between flex-col gap-1 truncate line-clamp-1">
+                <p className="text-xs text-muted-foreground">
+                  {job.company.name}
+                </p>
+                <CardTitle className="">{job.title}</CardTitle>
+              </div>
+            </div>
+            <div>
+              <button className="flex items-center gap-2">
+                <Bookmark
+                  className={cn(
+                    "size-5 hover:text-primary fill-primary text-primary"
+                  )}
+                />
+              </button>
+            </div>
+          </motion.div>
+          <div className="">
+            <Separator />
+          </div>
+          <CardDescription className="sr-only">
+            Card Description
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <motion.div className="flex gap-5 items-center">
+              <JobBrowseBadge text={job.workMode} />
+              <JobBrowseBadge text={job.jobType} />
+              {/* <JobBrowseBadge text={endTime + " left"} /> */}
+            </motion.div>
+            <div className="space-y-3">
+              <SalaryDisplay
+                rate={job.Salary?.rate!}
+                exactAmount={job.Salary?.amount}
+                maxAmount={job.Salary?.maxAmount}
+                startingAmount={job.Salary?.minAmount}
+                displayType={
+                  job.Salary?.type as
+                    | "Maximum"
+                    | "Starting"
+                    | "Range"
+                    | "Exact"
+                    | null
+                }
+                currency={job.Salary?.currency}
+              />
+              <p className="flex items-center gap-2 text-sm">
+                <MapPinCheckInside className="text-red-600 size-5" />
+                <span>{job.location}</span>
               </p>
-              <CardTitle className="">{job.title}</CardTitle>
+              <p className="flex items-center gap-2 text-sm">
+                <UsersRound className="text-blue-600 size-5" />
+                <span>{formatNumber(200)} applicants</span>
+              </p>
             </div>
           </div>
-          <div>
-            <button className="flex items-center gap-2">
-              <Bookmark
-                className={cn(
-                  "size-5 hover:text-primary fill-primary text-primary"
-                )}
-              />
-            </button>
-          </div>
-        </div>
-        <div className="">
-          <Separator />
-        </div>
-        <CardDescription className="sr-only">Card Description</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex gap-5 items-center">
-            <JobBrowseBadge text={job.workMode} />
-            <JobBrowseBadge text={job.jobType} />
-            {/* <JobBrowseBadge text={endTime + " left"} /> */}
-          </div>
-          <div className="space-y-3">
-            <SalaryDisplay
-              rate={job.Salary?.rate!}
-              exactAmount={job.Salary?.amount}
-              maxAmount={job.Salary?.maxAmount}
-              startingAmount={job.Salary?.minAmount}
-              displayType={
-                job.Salary?.type as
-                  | "Maximum"
-                  | "Starting"
-                  | "Range"
-                  | "Exact"
-                  | null
-              }
-              currency={job.Salary?.currency}
-            />
-            <p className="flex items-center gap-2 text-sm">
-              <MapPinCheckInside className="text-red-600 size-5" />
-              <span>{job.location}</span>
-            </p>
-            <p className="flex items-center gap-2 text-sm">
-              <UsersRound className="text-blue-600 size-5" />
-              <span>{formatNumber(200)} applicants</span>
+        </CardContent>
+        <CardFooter className="w-full">
+          <div className="flex justify-between items-center w-full">
+            <Button size={"sm"}>Apply Now</Button>
+            {/* <Button>Preview</Button> */}
+            <p className="text-muted-foreground text-sm">
+              Posted {getTimeDistance(job.createdAt)} ago
             </p>
           </div>
-        </div>
-      </CardContent>
-      <CardFooter className="w-full">
-        <div className="flex justify-between items-center w-full">
-          <Button size={"sm"}>Apply Now</Button>
-          {/* <Button>Preview</Button> */}
-          <p className="text-muted-foreground text-sm">
-            Posted {getTimeDistance(job.createdAt)} ago
-          </p>
-        </div>
-      </CardFooter>
-    </Card>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 export default JobCard;

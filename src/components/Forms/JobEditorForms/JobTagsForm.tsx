@@ -67,6 +67,7 @@ const JobTagForm = ({
                     maxLength={15}
                     {...field}
                     onChange={(e) =>
+                      //@ts-ignore
                       field.onChange(e.map((tag) => tag.trim().toLowerCase()))
                     }
                   />

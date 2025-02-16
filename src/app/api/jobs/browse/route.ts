@@ -95,7 +95,8 @@ export const GET = async (req: NextRequest) => {
     const jobPost = await prisma.job.findMany({
       where,
       //todo: remove the jobs which user have already applied
-      include: getJobDataIncludeBrowse(),
+      select: getJobDataIncludeBrowse(),
+
       take: PAGE_SIZE + 1,
       orderBy: { createdAt: "desc" },
       cursor: cursor ? { id: cursor } : undefined,

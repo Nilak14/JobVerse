@@ -5,6 +5,7 @@ import JobCardSkeleton from "@/components/skeletons/JobCardSkeleton";
 import { JobDataBrowse } from "@/lib/prisma-types/Job";
 import { createArray } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 interface BrowsePageContentProps {
   jobs: JobDataBrowse[];
   fetchNextPage: () => void;
@@ -32,20 +33,19 @@ const BrowsePageContent = ({
             fetchNextPage();
           }
         }}
-        className="grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3  gap-5"
       >
         {status === "loading" ? (
-          <>
+          <div className="grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3  gap-5">
             {createArray(10).map((_, i) => (
               <JobCardSkeleton key={i} />
             ))}
-          </>
+          </div>
         ) : (
-          <>
+          <motion.div className="grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3  gap-5">
             {jobs.map((job) => (
               <JobCard key={job?.id} job={job!} />
             ))}
-          </>
+          </motion.div>
         )}
 
         {isFetchingNextPage && (

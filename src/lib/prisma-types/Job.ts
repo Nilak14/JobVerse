@@ -65,11 +65,17 @@ export function getJobDataIncludeBrowse() {
     },
     category: true,
     subcategory: true,
-  } satisfies Prisma.JobInclude;
+    id: true,
+    title: true,
+    workMode: true,
+    jobType: true,
+    location: true,
+    createdAt: true,
+  } satisfies Prisma.JobSelect;
 }
 
 export type JobDataBrowse = Prisma.JobGetPayload<{
-  include: ReturnType<typeof getJobDataIncludeBrowse>;
+  select: ReturnType<typeof getJobDataIncludeBrowse>;
 }>;
 
 export type JobDataBrowseAPIResponse = {
