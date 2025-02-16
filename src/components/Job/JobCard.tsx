@@ -15,45 +15,86 @@ import {
   Bookmark,
   MapPinCheckInside,
   UsersRound,
+  Timer,
+  Calendar,
+  Eye,
 } from "lucide-react";
 import { cn, formatNumber, getTimeDistance } from "@/lib/utils";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import LinkButtonAnimated from "../ui/animated-button-link";
+
 interface JobCardProps {
   job: JobDataBrowse;
 }
+
 const JobCard = ({ job }: JobCardProps) => {
+  const getDaysUntilDeadline = () => {
+    if (!job.deadline) return null;
+    const deadline = new Date(job.deadline);
+    const today = new Date();
+    const diffTime = deadline.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const daysLeft = getDaysUntilDeadline();
+  const isCloseToDeadline = daysLeft !== null && daysLeft <= 5;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      whileHover={{
-        scale: 1.02,
-        transition: { duration: 0.2 },
-      }}
-      whileTap={{ scale: 0.98 }}
-      className="cursor-pointer"
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      className=" relative"
     >
-      <Card>
+      {job.isUrgent && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 30,
+            delay: 0.3,
+          }}
+          className="absolute -top-2 -right-2 z-10"
+        >
+          <div className="flex items-center gap-1 bg-red-500 text-white px-3 py-1 rounded-full shadow-md">
+            <Timer className="size-3 animate-pulse" />
+            <span className="text-xs font-semibold">Urgent</span>
+          </div>
+        </motion.div>
+      )}
+      <Card
+        className={cn(
+          job.isUrgent && "border-red-500",
+          isCloseToDeadline && "border-orange-500"
+        )}
+      >
         <CardHeader>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex justify-between flex-row mb-3"
-          >
+          <div className="flex justify-between flex-row mb-3">
             <div className="flex gap-4 items-center">
-              <Image
-                src={job.company.logoUrl!}
-                alt={job.company.name}
-                width={50}
-                height={50}
-                className="aspect-square rounded-full"
-              />
-              <div className=" content-start flex justify-between flex-col gap-1 truncate line-clamp-1">
-                <p className="text-xs text-muted-foreground">
-                  {job.company.name}
-                </p>
+              <Link href={`/company/${job.company.id}`}>
+                <Image
+                  src={job.company.logoUrl!}
+                  alt={job.company.name}
+                  width={50}
+                  height={50}
+                  className="aspect-square rounded-full"
+                />
+              </Link>
+
+              <div className="content-start flex justify-between flex-col gap-1 truncate line-clamp-1">
+                <LinkButtonAnimated lineClassName="bg-muted-foreground">
+                  <Link
+                    className="text-xs text-muted-foreground"
+                    href={`/company/${job.company.id}`}
+                  >
+                    {job.company.name}
+                  </Link>
+                </LinkButtonAnimated>
+
                 <CardTitle className="">{job.title}</CardTitle>
               </div>
             </div>
@@ -66,7 +107,7 @@ const JobCard = ({ job }: JobCardProps) => {
                 />
               </button>
             </div>
-          </motion.div>
+          </div>
           <div className="">
             <Separator />
           </div>
@@ -76,11 +117,10 @@ const JobCard = ({ job }: JobCardProps) => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <motion.div className="flex gap-5 items-center">
+            <div className="flex gap-5 items-center">
               <JobBrowseBadge text={job.workMode} />
               <JobBrowseBadge text={job.jobType} />
-              {/* <JobBrowseBadge text={endTime + " left"} /> */}
-            </motion.div>
+            </div>
             <div className="space-y-3">
               <SalaryDisplay
                 rate={job.Salary?.rate!}
@@ -105,22 +145,64 @@ const JobCard = ({ job }: JobCardProps) => {
                 <UsersRound className="text-blue-600 size-5" />
                 <span>{formatNumber(200)} applicants</span>
               </p>
+              {job.deadline && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className={cn(
+                    "flex items-center gap-2 text-sm",
+                    isCloseToDeadline && "text-orange-600 font-medium"
+                  )}
+                >
+                  <Calendar
+                    className={cn(
+                      "size-5",
+                      isCloseToDeadline ? "text-orange-600" : "text-gray-600"
+                    )}
+                  />
+                  <span>
+                    {daysLeft === 0
+                      ? "Deadline is today!"
+                      : daysLeft === 1
+                        ? "Deadline is tomorrow"
+                        : daysLeft && daysLeft > 0
+                          ? `${daysLeft} days left to apply`
+                          : "Deadline passed"}
+                  </span>
+                </motion.p>
+              )}
             </div>
           </div>
         </CardContent>
         <CardFooter className="w-full">
           <div className="flex justify-between items-center w-full">
-            <Button size={"sm"}>Apply Now</Button>
-            {/* <Button>Preview</Button> */}
-            <p className="text-muted-foreground text-sm">
-              Posted {getTimeDistance(job.createdAt)} ago
-            </p>
+            <Button
+              size={"sm"}
+              className={cn(
+                daysLeft !== null &&
+                  daysLeft < 0 &&
+                  "opacity-50 cursor-not-allowed"
+              )}
+              disabled={daysLeft !== null && daysLeft < 0}
+            >
+              Apply Now
+            </Button>
+
+            <Button asChild size={"sm"} variant={"secondary"}>
+              <Link href={`/job/${job.id}`}>
+                <span>
+                  <Eye size={10} />
+                </span>
+                View More
+              </Link>
+            </Button>
           </div>
         </CardFooter>
       </Card>
     </motion.div>
   );
 };
+
 export default JobCard;
 
 export const JobBrowseBadge = ({ text }: { text: string | null }) => {

@@ -61,6 +61,7 @@ export function getJobDataIncludeBrowse() {
       select: {
         name: true,
         logoUrl: true,
+        id: true,
       },
     },
     category: true,
@@ -71,6 +72,8 @@ export function getJobDataIncludeBrowse() {
     jobType: true,
     location: true,
     createdAt: true,
+    isUrgent: true,
+    deadline: true,
   } satisfies Prisma.JobSelect;
 }
 

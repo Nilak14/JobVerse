@@ -59,6 +59,7 @@ const JobCardSkeleton = () => {
         <CardFooter className="w-full">
           <div className="flex justify-between items-center w-full">
             <Skeleton className="h-9 w-24" />
+            <Skeleton className="h-9 w-24" />
           </div>
         </CardFooter>
       </Card>
