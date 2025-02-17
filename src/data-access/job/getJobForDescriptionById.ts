@@ -16,6 +16,7 @@ export const getJobByIdDescription = cache(async (jobId: string) => {
           logoUrl: true,
         },
       },
+      Salary: true,
     },
   });
   return job;

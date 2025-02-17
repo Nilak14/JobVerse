@@ -19,7 +19,12 @@ import {
   Calendar,
   Eye,
 } from "lucide-react";
-import { cn, formatNumber, getTimeDistance } from "@/lib/utils";
+import {
+  cn,
+  formatNumber,
+  getTimeDistance,
+  renderSalaryText,
+} from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import LinkButtonAnimated from "../ui/animated-button-link";
@@ -189,7 +194,7 @@ const JobCard = ({ job }: JobCardProps) => {
             </Button>
 
             <Button asChild size={"sm"} variant={"secondary"}>
-              <Link href={`/job/${job.id}`}>
+              <Link href={`/job/description/${job.id}`}>
                 <span>
                   <Eye size={10} />
                 </span>
@@ -228,28 +233,18 @@ export const SalaryDisplay = ({
   currency?: string | null;
   rate: string;
 }) => {
-  const renderSalaryText = () => {
-    switch (displayType) {
-      case "Maximum":
-        return `upto ${currency} ${formatNumber(exactAmount || 0)}`;
-      case "Starting":
-        return `from ${currency} ${formatNumber(exactAmount || 0)}`;
-      case "Range":
-        if (startingAmount && maxAmount) {
-          return `${currency} ${formatNumber(startingAmount)} - ${currency} ${formatNumber(maxAmount)}`;
-        }
-        return "";
-      case "Exact":
-        return `${currency} ${formatNumber(exactAmount || 0)}`;
-      default:
-        return "";
-    }
-  };
   return (
     <p className="flex items-center gap-2 text-sm">
       <Banknote className="text-green-600 size-5" />
       <span>
-        {renderSalaryText()} <span className="lowercase">/ per {rate}</span>
+        {renderSalaryText({
+          maxAmount,
+          startingAmount,
+          exactAmount,
+          displayType,
+          currency,
+        })}{" "}
+        <span className="lowercase">/ per {rate}</span>
       </span>
     </p>
   );

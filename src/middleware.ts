@@ -24,10 +24,9 @@ export default auth((req) => {
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  const isPublicApiRoute = publicApiRoute.includes(nextUrl.pathname);
   const isPublicSEORoute = publicSEORoute.includes(nextUrl.pathname);
-  const isPublicContentRoute = publicContentRoute.map((route) =>
-    route.startsWith(nextUrl.pathname)
+  const isPublicContentRoute = publicContentRoute.some((route) =>
+    nextUrl.pathname.startsWith(route)
   );
   const isEmployerRoute = nextUrl.pathname.startsWith(employerRoutePrefix);
   const isJobSeekerRoute = nextUrl.pathname.startsWith(jobSeekerRoutePrefix);
@@ -42,13 +41,10 @@ export default auth((req) => {
     return;
   }
 
-  if (isPublicApiRoute) {
+  if (nextUrl.pathname.startsWith("/api")) {
     return;
   }
   if (isPublicContentRoute) {
-    return;
-  }
-  if (nextUrl.pathname.startsWith("/api")) {
     return;
   }
 

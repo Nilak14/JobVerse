@@ -96,3 +96,32 @@ export const formatNumber = (n: number): string => {
 export const createArray = (length: number): number[] => {
   return Array.from({ length }, (_, i) => i);
 };
+export const renderSalaryText = ({
+  maxAmount,
+  startingAmount,
+  exactAmount,
+  displayType,
+  currency = "Rs.",
+}: {
+  maxAmount?: number | null;
+  startingAmount?: number | null;
+  exactAmount?: number | null;
+  displayType: "Maximum" | "Starting" | "Range" | "Exact" | null;
+  currency?: string | null;
+}) => {
+  switch (displayType) {
+    case "Maximum":
+      return `upto ${currency} ${formatNumber(exactAmount || 0)}`;
+    case "Starting":
+      return `from ${currency} ${formatNumber(exactAmount || 0)}`;
+    case "Range":
+      if (startingAmount && maxAmount) {
+        return `${currency} ${formatNumber(startingAmount)} - ${currency} ${formatNumber(maxAmount)}`;
+      }
+      return "";
+    case "Exact":
+      return `${currency} ${formatNumber(exactAmount || 0)}`;
+    default:
+      return "";
+  }
+};
