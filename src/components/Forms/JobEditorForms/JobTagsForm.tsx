@@ -39,8 +39,7 @@ const JobTagForm = ({
       setJobData({
         ...jobData,
         ...values,
-        tags:
-          values.tags?.filter((benefit): benefit is string => !!benefit) || [],
+        tags: values.tags?.filter((tag): tag is string => !!tag) || [],
       });
     });
     return unsubscribe;
@@ -67,7 +66,10 @@ const JobTagForm = ({
                   <InputTags
                     maxLength={15}
                     {...field}
-                    onChange={(e) => field.onChange(e)}
+                    onChange={(e) =>
+                      //@ts-ignore
+                      field.onChange(e.map((tag) => tag.trim().toLowerCase()))
+                    }
                   />
                 </FormControl>
                 <FormDescription>

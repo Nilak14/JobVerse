@@ -46,22 +46,24 @@ const AcceptJobModal = ({ job, open, setOpen }: AcceptJobProps) => {
           </AlertDescription>
         </Alert>
         <ResponsiveModalFooter>
-          <Button
-            disabled={loading}
-            onClick={() => setOpen(false)}
-            className="w-full "
-            variant={"secondary"}
-          >
-            Cancel
-          </Button>
-          <LoadingButton
-            showIconOnly
-            loading={loading}
-            onClick={() => handleStatusChange()}
-            className="w-full"
-          >
-            Accept & Publish
-          </LoadingButton>
+          <div className="w-full flex gap-5 flex-col md:flex-row">
+            <Button
+              disabled={loading}
+              onClick={() => setOpen(false)}
+              className="w-full "
+              variant={"secondary"}
+            >
+              Cancel
+            </Button>
+            <LoadingButton
+              showIconOnly
+              loading={loading}
+              onClick={() => handleStatusChange()}
+              className="w-full"
+            >
+              Accept & Publish
+            </LoadingButton>
+          </div>
         </ResponsiveModalFooter>
         <p className="text-sm text-muted-foreground text-center">
           You are accepting job with title:

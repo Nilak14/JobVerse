@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { useQueryJobCategories } from "@/hooks/query-hooks/getAllJobCategories";
 import { useJobCategory } from "@/store/useJobCategory";
-import { useQueryGetSkills } from "@/hooks/query-hooks/getSkills";
+import { NavUser } from "./NavUser";
 
 const EmployerNav = ({
   hasSidebar = false,
@@ -58,7 +58,7 @@ const EmployerNav = ({
           </div>
           {hasSidebar || (
             <div>
-              <SidebarUser isNav user={user} isLoading={!user} />
+              <NavUser user={user} isLoading={!user} />
             </div>
           )}
         </section>

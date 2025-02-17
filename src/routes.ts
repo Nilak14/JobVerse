@@ -16,6 +16,7 @@ export const jobSeekerRoutePrefix = "/job-seeker";
 export const adminRoutePrefix = "/admin";
 
 export const publicApiRoute = ["/api/uploadthing", "/api/clear-uploads"];
+export const publicContentRoute = ["/job/description"];
 export const publicSEORoute = ["/sitemap.xml", "/robots.txt", "/skills.json"];
 
 export const DEFAULT_LOGIN_REDIRECT_JOB_SEEKER = "/job-seeker/dashboard";
