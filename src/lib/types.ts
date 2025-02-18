@@ -29,3 +29,7 @@ export interface JobEditorFormProps {
   setJobData: (data: JobSchemaType) => void;
   currentStep: string;
 }
+
+export interface SaveJobInfo {
+  isSavedByUser: boolean;
+}

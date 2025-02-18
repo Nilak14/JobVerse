@@ -12,24 +12,18 @@ import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import {
   Banknote,
-  Bookmark,
   MapPinCheckInside,
   UsersRound,
   Timer,
   Calendar,
   Eye,
-  Heart,
 } from "lucide-react";
 import { cn, formatNumber, renderSalaryText } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import LinkButtonAnimated from "../ui/animated-button-link";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+
+import SaveJobButton from "../Global/SaveJobButton";
 
 interface JobCardProps {
   job: JobDataBrowse;
@@ -106,19 +100,7 @@ const JobCard = ({ job }: JobCardProps) => {
               </div>
             </div>
             <div>
-              <TooltipProvider>
-                <Tooltip delayDuration={2}>
-                  <TooltipTrigger asChild>
-                    <button className="flex items-center gap-2">
-                      <Heart
-                        size={20}
-                        className={cn("text-red-500 fill-red-500")}
-                      />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>Save Job</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <SaveJobButton className="hover:bg-transparent" />
             </div>
           </div>
           <div className="">
