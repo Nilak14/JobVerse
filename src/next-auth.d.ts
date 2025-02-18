@@ -13,5 +13,6 @@ declare module "next-auth" {
     activeCompanyId?: string | null;
     employerId?: string | null;
     adminId?: string | null;
+    jobSeekerId?: string | null;
   }
 }

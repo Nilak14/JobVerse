@@ -1,4 +1,4 @@
 const SavedJobs = () => {
-  return <div>SavedJobs</div>;
+  return <div className="">saved jobs</div>;
 };
 export default SavedJobs;

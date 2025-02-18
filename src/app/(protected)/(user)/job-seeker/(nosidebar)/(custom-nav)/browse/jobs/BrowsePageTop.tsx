@@ -6,6 +6,8 @@ import { SidebarUser } from "@/components/sidebar/SidebarUser";
 import { Input } from "@/components/ui/input";
 import { ExtendedUser } from "@/next-auth";
 import { Search } from "lucide-react";
+import { motion } from "framer-motion";
+import NavLogo from "@/components/Global/NavLogo";
 
 interface BrowsePageTopProps {
   user: ExtendedUser;
@@ -14,11 +16,9 @@ interface BrowsePageTopProps {
 const BrowsePageTop = ({ user }: BrowsePageTopProps) => {
   return (
     <>
-      <Container className="flex h-16 shrink-0 items-center gap-2  bg-sidebar ">
-        <section className="flex-1  h-full flex items-center">
-          <Logo showText={false} fill="#e9590c" height="40" width="40" />
-        </section>
-        <section className="flex-1  h-full flex items-center justify-end gap-10 ">
+      <Container className="flex h-16 shrink-0 items-center gap-2 bg-sidebar">
+        <NavLogo />
+        <section className="flex-1 h-full flex items-center justify-end gap-10">
           <div className="">
             <Notification />
           </div>
@@ -31,4 +31,5 @@ const BrowsePageTop = ({ user }: BrowsePageTopProps) => {
     </>
   );
 };
+
 export default BrowsePageTop;

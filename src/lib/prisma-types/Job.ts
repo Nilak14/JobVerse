@@ -74,6 +74,7 @@ export function getJobDataIncludeBrowse() {
     createdAt: true,
     isUrgent: true,
     deadline: true,
+    saved: true,
   } satisfies Prisma.JobSelect;
 }
 
@@ -94,6 +95,7 @@ export type JobDataBrowseAPIResponse = {
 
 export function getJobDataIncludeDescription() {
   return {
+    id: true,
     title: true,
     description: true,
     location: true,
@@ -128,6 +130,7 @@ export function getJobDataIncludeDescription() {
         rate: true,
       },
     },
+    saved: true,
   } satisfies Prisma.JobSelect;
 }
 

@@ -3,16 +3,13 @@ import Container from "@/components/Global/Container";
 import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
 import {
-  ArrowLeft,
   Award,
   BookOpen,
   BriefcaseBusiness,
   Calendar,
   CheckCircle,
   Clock,
-  Heart,
   MapPin,
-  Share2,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,17 +19,19 @@ import ContentViewer from "@/components/tiptap/ContentViewer";
 import { Separator } from "@/components/ui/separator";
 import { Variants } from "framer-motion";
 import JobDescriptionDetailButton from "@/components/Job/JobDescriptionDetailButton";
-import Link from "next/link";
 import BackButton from "@/components/Global/BackButton";
+import { Session } from "next-auth";
 interface JobDescriptionPageContentProps {
   job: JobDataDescription;
   containerVariants: Variants;
   itemVariant: Variants;
+  session: Session | null;
 }
 const JobDescriptionPageContent = ({
   job,
   containerVariants,
   itemVariant,
+  session,
 }: JobDescriptionPageContentProps) => {
   return (
     <Container className="pt-10">
@@ -266,8 +265,12 @@ const JobDescriptionPageContent = ({
                             </div>
                           </div>
                         </div>
-
-                        <JobDescriptionDetailButton job={job} />
+                        {session && (
+                          <JobDescriptionDetailButton
+                            session={session}
+                            job={job}
+                          />
+                        )}
                       </>
                     )}
                   </CardContent>

@@ -24,12 +24,14 @@ import Link from "next/link";
 import LinkButtonAnimated from "../ui/animated-button-link";
 
 import SaveJobButton from "../Global/SaveJobButton";
+import { Session } from "next-auth";
 
 interface JobCardProps {
   job: JobDataBrowse;
+  session: Session;
 }
 
-const JobCard = ({ job }: JobCardProps) => {
+const JobCard = ({ job, session }: JobCardProps) => {
   const getDaysUntilDeadline = () => {
     if (!job.deadline) return null;
     const deadline = new Date(job.deadline);
@@ -100,7 +102,15 @@ const JobCard = ({ job }: JobCardProps) => {
               </div>
             </div>
             <div>
-              <SaveJobButton className="hover:bg-transparent" />
+              <SaveJobButton
+                jobId={job.id}
+                initialState={{
+                  isSavedByUser: job.saved.some(
+                    (s) => s.userId === session.jobSeekerId
+                  ),
+                }}
+                className="hover:bg-transparent"
+              />
             </div>
           </div>
           <div className="">

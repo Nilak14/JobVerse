@@ -88,7 +88,7 @@ model JobReview {
 model SavedJob {
     id        String     @id @default(cuid())
     userId    String
-    user      JOB_SEEKER @relation(fields: [id], references: [userId], onDelete: Cascade)
+    user      JOB_SEEKER @relation(fields: [userId], references: [id], onDelete: Cascade)
     jobId     String
     job       Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
     createdAt DateTime   @default(now())

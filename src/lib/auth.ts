@@ -6,6 +6,14 @@ export const auth = cache(async () => {
   const session = await authJs();
   if (!session || !session.user) return null;
 
+  if (session.user.type === "JOB_SEEKER") {
+    const jobSeeker = await prisma.jOB_SEEKER.findUnique({
+      where: { userId: session.user.id },
+      select: { id: true },
+    });
+    return { ...session, jobSeekerId: jobSeeker?.id || null };
+  }
+
   if (session.user.type === "ADMIN") {
     const admin = await prisma.admin.findUnique({
       where: { userId: session.user.id },
@@ -18,7 +26,6 @@ export const auth = cache(async () => {
       where: { userId: session.user.id },
       select: { activeCompanyId: true, id: true },
     });
-
     return {
       ...session,
       activeCompanyId: employer?.activeCompanyId || null,
