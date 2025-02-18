@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { SaveJobResponse } from "@/lib/types";
+import { revalidatePath } from "next/cache";
 import { NextRequest } from "next/server";
 
 type Params = Promise<{ jobId: string }>;
@@ -94,6 +95,7 @@ export const POST = async (
       },
       update: {},
     });
+    revalidatePath("/job-seeker/saved-jobs");
     return Response.json({
       success: true,
       message: "Job saved successfully",
@@ -131,6 +133,7 @@ export const DELETE = async (
         jobId,
       },
     });
+    revalidatePath("/job-seeker/saved-jobs");
     return Response.json({
       success: true,
       message: "Removed Job From Saved List",

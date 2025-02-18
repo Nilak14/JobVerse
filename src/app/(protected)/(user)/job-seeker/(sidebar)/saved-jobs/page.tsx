@@ -1,4 +1,19 @@
-const SavedJobs = () => {
-  return <div className="">saved jobs</div>;
+import { Metadata } from "next";
+import SaveJobPage from "./SaveJobPage";
+import EmptySavedJobsState from "@/components/Job/NoSavedJobs";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Saved Jobs",
+  description: " Saved Jobs Page ",
 };
-export default SavedJobs;
+const page = async () => {
+  const session = await auth();
+  if (!session) {
+    redirect("/");
+  }
+
+  return <SaveJobPage session={session} />;
+};
+export default page;

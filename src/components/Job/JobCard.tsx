@@ -1,3 +1,4 @@
+"use client";
 import { JobDataBrowse } from "@/lib/prisma-types/Job";
 import {
   Card,
@@ -29,9 +30,10 @@ import { Session } from "next-auth";
 interface JobCardProps {
   job: JobDataBrowse;
   session: Session;
+  loading?: boolean;
 }
 
-const JobCard = ({ job, session }: JobCardProps) => {
+const JobCard = ({ job, session, loading }: JobCardProps) => {
   const getDaysUntilDeadline = () => {
     if (!job.deadline) return null;
     const deadline = new Date(job.deadline);
@@ -49,7 +51,7 @@ const JobCard = ({ job, session }: JobCardProps) => {
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className=" relative"
+      className={cn("relative", loading && "animate-pulse")}
     >
       {job.isUrgent && (
         <motion.div
