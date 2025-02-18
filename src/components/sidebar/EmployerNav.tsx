@@ -2,8 +2,6 @@
 import { useActiveCompany } from "@/store/useActiveCompany";
 import Container from "../Global/Container";
 import Notification from "../Global/Notification";
-import { Logo } from "../LandingPage/NavBar";
-import { SidebarUser } from "./SidebarUser";
 import { UserNavProps } from "@/lib/types";
 import { useQueryAllCompanies } from "@/hooks/query-hooks/getEmployeeCompany";
 import { useEffect } from "react";
@@ -18,7 +16,7 @@ const EmployerNav = ({
   user,
   activeCompanyId,
 }: UserNavProps) => {
-  const { setActiveCompany, activeCompany } = useActiveCompany();
+  const { setActiveCompany } = useActiveCompany();
   const { data, isLoading } = useQueryAllCompanies();
 
   const { data: category, isLoading: categoryLoading } =
@@ -44,7 +42,7 @@ const EmployerNav = ({
       setActiveCompany(data?.data.companies[0]);
     }
   }, [data, isLoading, activeCompanyId]);
-
+  if (!user) return null;
   return (
     <header>
       <Container className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 bg-sidebar shadow-sm shadow-muted-foreground/30 ">
