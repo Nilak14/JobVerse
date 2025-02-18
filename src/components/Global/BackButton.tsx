@@ -4,23 +4,36 @@ import { Button } from "../ui/button";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface BackButtonProps {
   className?: string;
-  href: string;
+  href?: string;
 }
 const BackButton = ({ className, href }: BackButtonProps) => {
+  const router = useRouter();
   return (
     <Button
       asChild
       size={"sm"}
       variant={"secondary"}
-      className={cn("group ", className)}
+      className={cn("group cursor-pointer ", className)}
+      onClick={() => {
+        if (href) return;
+        router.back();
+      }}
     >
-      <Link className="" href={href}>
-        <ChevronLeft className="group-hover:-translate-x-1 transition-transform  duration-200 ease-in-out" />
-        Back
-      </Link>
+      {href ? (
+        <Link href={href}>
+          <ChevronLeft className="group-hover:-translate-x-1 transition-transform  duration-200 ease-in-out" />
+          Back
+        </Link>
+      ) : (
+        <div>
+          <ChevronLeft className="group-hover:-translate-x-1 transition-transform  duration-200 ease-in-out" />
+          Back
+        </div>
+      )}
     </Button>
   );
 };

@@ -46,9 +46,10 @@ model Account {
 }
 
 model JOB_SEEKER {
-    id     String @id @default(cuid())
-    userId String @unique
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id        String     @id @default(cuid())
+    userId    String     @unique
+    user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    savedJobs SavedJob[]
 
     @@map("job_seekers")
 }

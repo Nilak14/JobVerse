@@ -53,6 +53,7 @@ model Job {
     deletedAt             DateTime?
     isDeleted             Boolean      @default(false)
     review                JobReview?
+    saved                 SavedJob[]
 
     @@map("jobs")
 }
@@ -80,4 +81,18 @@ model JobReview {
     reviewer        Admin?           @relation(fields: [reviewedBy], references: [id])
     reviewedAt      DateTime?
     reviewedComment String?
+
+    @@map("job_reviews")
+}
+
+model SavedJob {
+    id        String     @id @default(cuid())
+    userId    String
+    user      JOB_SEEKER @relation(fields: [userId], references: [id], onDelete: Cascade)
+    jobId     String
+    job       Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+    createdAt DateTime   @default(now())
+
+    @@unique([userId, jobId])
+    @@map("saved_jobs")
 }

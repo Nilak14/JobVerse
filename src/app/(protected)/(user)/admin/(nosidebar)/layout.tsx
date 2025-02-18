@@ -1,7 +1,6 @@
 import { auth } from "@/lib/auth";
 
 import AdminNav from "@/components/sidebar/AdminNav";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 
 const NoSidebarLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -12,12 +11,8 @@ const NoSidebarLayout = async ({ children }: { children: React.ReactNode }) => {
   }
   return (
     <>
-      <SidebarProvider>
-        <SidebarInset>
-          <AdminNav user={user} />
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
+      <AdminNav user={user} />
+      {children}
     </>
   );
 };

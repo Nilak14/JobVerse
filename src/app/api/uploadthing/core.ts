@@ -61,7 +61,7 @@ export const fileRouter = {
       }
       if (company && company.logoUrl) {
         const key = company.logoUrl.split("/f/")[1];
-        //   await new UTApi().deleteFiles(key);
+
         await new UTApi().deleteFiles(key);
       }
 

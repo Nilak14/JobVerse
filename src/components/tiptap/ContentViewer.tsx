@@ -1,3 +1,4 @@
+"use client";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import Typography from "@tiptap/extension-typography";
@@ -23,13 +24,13 @@ const ContentViewer = ({ content }: ContentViewerProps) => {
     ],
     content: JSON.parse(content),
     editable: false,
+    immediatelyRender: false,
   });
 
   useEffect(() => {
     if (editor) {
       editor.commands.setContent(JSON.parse(content));
     }
-    console.log(content);
   }, [content, editor]);
   if (!editor) return null;
 

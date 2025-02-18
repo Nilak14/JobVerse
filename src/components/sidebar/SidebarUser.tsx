@@ -30,11 +30,9 @@ import UseCurrentSession from "@/hooks/use-session";
 export function SidebarUser({
   isLoading,
   user,
-  isNav = false,
 }: {
   user: ExtendedUser;
   isLoading: boolean;
-  isNav?: boolean;
 }) {
   const { isMobile } = useSidebar();
   const [open, setOpen] = React.useState(false);
@@ -50,29 +48,29 @@ export function SidebarUser({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <UserAvatar imageUrl={user?.avatarUrl} userName={user?.name!} />
-                {isNav || (
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    {isLoading ? (
-                      <>
-                        <Skeleton className="w-[70%] mb-2 h-2 bg-gray-400" />
-                        <Skeleton className="w-full h-2 bg-gray-400" />
-                      </>
-                    ) : (
-                      <>
-                        <span className="truncate font-semibold">
-                          {user?.name}
-                        </span>
-                        <span className="truncate text-xs">{user?.email}</span>
-                      </>
-                    )}
-                  </div>
-                )}
-                {isNav || <ChevronsUpDown className="ml-auto size-4" />}
+
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  {isLoading ? (
+                    <>
+                      <Skeleton className="w-[70%] mb-2 h-2 bg-gray-400" />
+                      <Skeleton className="w-full h-2 bg-gray-400" />
+                    </>
+                  ) : (
+                    <>
+                      <span className="truncate font-semibold">
+                        {user?.name}
+                      </span>
+                      <span className="truncate text-xs">{user?.email}</span>
+                    </>
+                  )}
+                </div>
+
+                <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-              side={isMobile ? "bottom" : isNav ? "bottom" : "right"}
+              side={isMobile ? "bottom" : "right"}
               align="end"
               sideOffset={4}
             >
