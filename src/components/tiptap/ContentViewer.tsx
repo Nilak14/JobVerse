@@ -31,7 +31,6 @@ const ContentViewer = ({ content }: ContentViewerProps) => {
     if (editor) {
       editor.commands.setContent(JSON.parse(content));
     }
-    console.log(content);
   }, [content, editor]);
   if (!editor) return null;
 

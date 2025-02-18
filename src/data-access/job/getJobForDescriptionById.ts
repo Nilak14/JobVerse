@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { getJobDataIncludeDescription } from "@/lib/prisma-types/Job";
 import { cache } from "react";
 import "server-only";
 
@@ -8,16 +9,7 @@ export const getJobByIdDescription = cache(async (jobId: string) => {
       id: jobId,
       status: "ACTIVE",
     },
-    include: {
-      company: {
-        select: {
-          id: true,
-          name: true,
-          logoUrl: true,
-        },
-      },
-      Salary: true,
-    },
+    select: getJobDataIncludeDescription(),
   });
   return job;
 });

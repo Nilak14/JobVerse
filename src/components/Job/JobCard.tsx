@@ -18,16 +18,18 @@ import {
   Timer,
   Calendar,
   Eye,
+  Heart,
 } from "lucide-react";
-import {
-  cn,
-  formatNumber,
-  getTimeDistance,
-  renderSalaryText,
-} from "@/lib/utils";
+import { cn, formatNumber, renderSalaryText } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import LinkButtonAnimated from "../ui/animated-button-link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 interface JobCardProps {
   job: JobDataBrowse;
@@ -104,13 +106,19 @@ const JobCard = ({ job }: JobCardProps) => {
               </div>
             </div>
             <div>
-              <button className="flex items-center gap-2">
-                <Bookmark
-                  className={cn(
-                    "size-5 hover:text-primary fill-primary text-primary"
-                  )}
-                />
-              </button>
+              <TooltipProvider>
+                <Tooltip delayDuration={2}>
+                  <TooltipTrigger asChild>
+                    <button className="flex items-center gap-2">
+                      <Heart
+                        size={20}
+                        className={cn("text-red-500 fill-red-500")}
+                      />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Save Job</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
           <div className="">

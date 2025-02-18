@@ -91,3 +91,46 @@ export type JobDataBrowseAPIResponse = {
     };
   };
 };
+
+export function getJobDataIncludeDescription() {
+  return {
+    title: true,
+    description: true,
+    location: true,
+    createdAt: true,
+    deadline: true,
+    workMode: true,
+    jobType: true,
+    isUrgent: true,
+    benefits: true,
+    experienceLevel: true,
+    licenseRequired: true,
+    vehicleRequired: true,
+    minEducationRequired: true,
+    preferredGender: true,
+    resumeRequired: true,
+    skills: true,
+    totalHeads: true,
+    company: {
+      select: {
+        id: true,
+        name: true,
+        logoUrl: true,
+      },
+    },
+    Salary: {
+      select: {
+        maxAmount: true,
+        minAmount: true,
+        currency: true,
+        type: true,
+        amount: true,
+        rate: true,
+      },
+    },
+  } satisfies Prisma.JobSelect;
+}
+
+export type JobDataDescription = Prisma.JobGetPayload<{
+  select: ReturnType<typeof getJobDataIncludeDescription>;
+}>;
