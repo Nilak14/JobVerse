@@ -20,7 +20,7 @@ export interface SidebarNavLinks {
 
 export interface UserNavProps {
   hasSidebar?: boolean;
-  user: ExtendedUser;
+  user: ExtendedUser | null;
   activeCompanyId?: string | null;
 }
 
@@ -29,3 +29,15 @@ export interface JobEditorFormProps {
   setJobData: (data: JobSchemaType) => void;
   currentStep: string;
 }
+
+export interface SaveJobInfo {
+  isSavedByUser: boolean;
+}
+
+export type SaveJobResponse = {
+  success: boolean;
+  message: string;
+  data?: {
+    data: SaveJobInfo;
+  };
+};

@@ -13,6 +13,6 @@ const JobBrowsePage = async () => {
   if (!session || !session.user) {
     return null;
   }
-  return <BrowsePage user={session.user} />;
+  return <BrowsePage session={session} />;
 };
 export default JobBrowsePage;

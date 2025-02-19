@@ -1,9 +1,9 @@
 // Sidebar NavLinks for JobSeeker
 
 import {
-  Bookmark,
   BriefcaseBusiness,
   FileUser,
+  Heart,
   LayoutDashboard,
   ScanSearch,
   Video,
@@ -25,7 +25,7 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
       {
         title: "Saved Jobs",
         url: "/job-seeker/saved-jobs",
-        icon: Bookmark,
+        icon: Heart,
       },
     ],
   },

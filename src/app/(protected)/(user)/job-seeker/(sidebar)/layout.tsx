@@ -25,8 +25,8 @@ const JObSeekerSidebarLayout = async ({
       <div className="flex  h-screen w-full">
         <JobSeekerSidebar user={user} />
         <SidebarInset>
-          <div className="relative">
-            <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2" />
+          <div className="relative ">
+            <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2 z-[100]" />
             <JobSeekerNav user={user} hasSidebar />
           </div>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">

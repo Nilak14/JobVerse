@@ -1,3 +1,4 @@
+"use client";
 import { JobDataBrowse } from "@/lib/prisma-types/Job";
 import {
   Card,
@@ -12,28 +13,27 @@ import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import {
   Banknote,
-  Bookmark,
   MapPinCheckInside,
   UsersRound,
   Timer,
   Calendar,
   Eye,
 } from "lucide-react";
-import {
-  cn,
-  formatNumber,
-  getTimeDistance,
-  renderSalaryText,
-} from "@/lib/utils";
+import { cn, formatNumber, renderSalaryText } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import LinkButtonAnimated from "../ui/animated-button-link";
 
+import SaveJobButton from "../Global/SaveJobButton";
+import { Session } from "next-auth";
+
 interface JobCardProps {
   job: JobDataBrowse;
+  session: Session;
+  loading?: boolean;
 }
 
-const JobCard = ({ job }: JobCardProps) => {
+const JobCard = ({ job, session, loading }: JobCardProps) => {
   const getDaysUntilDeadline = () => {
     if (!job.deadline) return null;
     const deadline = new Date(job.deadline);
@@ -51,7 +51,7 @@ const JobCard = ({ job }: JobCardProps) => {
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className=" relative"
+      className={cn("relative ", loading && "animate-pulse")}
     >
       {job.isUrgent && (
         <motion.div
@@ -104,13 +104,15 @@ const JobCard = ({ job }: JobCardProps) => {
               </div>
             </div>
             <div>
-              <button className="flex items-center gap-2">
-                <Bookmark
-                  className={cn(
-                    "size-5 hover:text-primary fill-primary text-primary"
-                  )}
-                />
-              </button>
+              <SaveJobButton
+                jobId={job.id}
+                initialState={{
+                  isSavedByUser: job.saved.some(
+                    (s) => s.userId === session.jobSeekerId
+                  ),
+                }}
+                className="hover:bg-transparent"
+              />
             </div>
           </div>
           <div className="">
@@ -142,9 +144,10 @@ const JobCard = ({ job }: JobCardProps) => {
                 }
                 currency={job.Salary?.currency}
               />
+
               <p className="flex items-center gap-2 text-sm">
                 <MapPinCheckInside className="text-red-600 size-5" />
-                <span>{job.location}</span>
+                <span>{job.location ? job.location : job.workMode}</span>
               </p>
               <p className="flex items-center gap-2 text-sm">
                 <UsersRound className="text-blue-600 size-5" />

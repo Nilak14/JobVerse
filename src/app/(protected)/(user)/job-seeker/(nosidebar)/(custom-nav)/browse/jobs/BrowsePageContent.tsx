@@ -6,11 +6,13 @@ import { JobDataBrowse } from "@/lib/prisma-types/Job";
 import { createArray } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Session } from "next-auth";
 interface BrowsePageContentProps {
   jobs: JobDataBrowse[];
   fetchNextPage: () => void;
   hasNextPage: boolean;
   isFetching: boolean;
+  session: Session;
   isFetchingNextPage: boolean;
   status: "idle" | "error" | "loading" | "success";
 }
@@ -21,6 +23,7 @@ const BrowsePageContent = ({
   isFetchingNextPage,
   jobs,
   status,
+  session,
 }: BrowsePageContentProps) => {
   return (
     <div>
@@ -28,6 +31,7 @@ const BrowsePageContent = ({
         <JobNotFound />
       )}
       <InfiniteScrollContainer
+        className="mb-10"
         onBottomReached={() => {
           if (hasNextPage && !isFetching) {
             fetchNextPage();
@@ -43,7 +47,7 @@ const BrowsePageContent = ({
         ) : (
           <motion.div className="grid grid-cols-1  lg:grid-cols-2 xl:grid-cols-3  gap-5">
             {jobs.map((job) => (
-              <JobCard key={job?.id} job={job!} />
+              <JobCard session={session} key={job?.id} job={job!} />
             ))}
           </motion.div>
         )}
