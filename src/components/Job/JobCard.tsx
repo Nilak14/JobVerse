@@ -51,7 +51,7 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className={cn("relative", loading && "animate-pulse")}
+      className={cn("relative ", loading && "animate-pulse")}
     >
       {job.isUrgent && (
         <motion.div
@@ -144,9 +144,10 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
                 }
                 currency={job.Salary?.currency}
               />
+
               <p className="flex items-center gap-2 text-sm">
                 <MapPinCheckInside className="text-red-600 size-5" />
-                <span>{job.location}</span>
+                <span>{job.location ? job.location : job.workMode}</span>
               </p>
               <p className="flex items-center gap-2 text-sm">
                 <UsersRound className="text-blue-600 size-5" />
