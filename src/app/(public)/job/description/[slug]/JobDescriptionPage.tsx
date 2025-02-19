@@ -34,7 +34,7 @@ const JobDescriptionPageContent = ({
   session,
 }: JobDescriptionPageContentProps) => {
   return (
-    <Container className="pt-10">
+    <Container className="pt-10 mb-10">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -67,10 +67,12 @@ const JobDescriptionPageContent = ({
                           <BriefcaseBusiness size={16} />
                           {job.company.name}
                         </span>
-                        <span className="flex items-center gap-1">
-                          <MapPin size={16} />
-                          {job.location}
-                        </span>
+                        {job.location && (
+                          <span className="flex items-center gap-1">
+                            <MapPin size={16} />
+                            {job.location}
+                          </span>
+                        )}
                         <span className="flex items-center gap-1">
                           <Clock size={16} />
                           Posted {getTimeDistance(job.createdAt)} ago

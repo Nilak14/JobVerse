@@ -31,6 +31,7 @@ const BrowsePageContent = ({
         <JobNotFound />
       )}
       <InfiniteScrollContainer
+        className="mb-10"
         onBottomReached={() => {
           if (hasNextPage && !isFetching) {
             fetchNextPage();

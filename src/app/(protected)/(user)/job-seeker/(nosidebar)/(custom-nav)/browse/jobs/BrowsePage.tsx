@@ -10,6 +10,7 @@ import BrowsePageContent from "./BrowsePageContent";
 import { useSearchParams } from "next/navigation";
 import BrowsePageSearch from "./BrowsePageSearch";
 import { Session } from "next-auth";
+import BrowsePageFilterSheet from "./BrowsePageFilterSheet";
 
 interface BrowsePageProps {
   session: Session;
@@ -44,13 +45,18 @@ const BrowsePage = ({ session }: BrowsePageProps) => {
       <header className="sticky top-0 z-20  overflow-hidden">
         <BrowsePageTop user={session.user} />
       </header>
-      <div className="flex ">
+      <div className="flex">
         <aside className="max-w-[300px] w-[300px] bg-sidebar fixed h-[calc(100vh-64px)] overflow-y-auto hidden md:block">
           <BrowsePageFilter />
         </aside>
+
         <section className="flex-1 md:pl-[340px] px-10 mx-auto mt-10 ">
           <BrowsePageSearch />
-
+          <div className="md:hidden mb-5">
+            <BrowsePageFilterSheet>
+              <BrowsePageFilter />
+            </BrowsePageFilterSheet>
+          </div>
           <BrowsePageContent
             session={session}
             status={status}
