@@ -47,17 +47,18 @@ export const ProfessionalDetailsSchema = z.object({
   workExperience: z.array(
     z.object({
       companyName: z.string().min(3, "Company name is too short"),
-      designation: z.string().min(3, "Designation is too short"),
-      startDate: z.date(),
+      position: z.string().min(3, "Designation is too short"),
+      startDate: z.date().nullable(),
       endDate: z.date().nullable(),
-      index: z.string(),
+      // index: z.string(),
+      description: z.string().min(10, "Description is too short"),
     })
   ),
   education: z.array(
     z.object({
       degreeTitle: z.string().min(3, "Degree title is too short"),
       institute: z.string().min(3, "Institute name is too short"),
-      startDate: z.date(),
+      startDate: z.string().date(),
       endDate: z.date().nullable(),
       index: z.string(),
     })
