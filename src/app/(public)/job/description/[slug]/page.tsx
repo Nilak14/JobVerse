@@ -1,13 +1,9 @@
-import Container from "@/components/Global/Container";
-import Notification from "@/components/Global/Notification";
-import { Logo } from "@/components/LandingPage/NavBar";
 import { getJobByIdDescription } from "@/data-access/job/getJobForDescriptionById";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import JobDescriptionPageContent from "./JobDescriptionPage";
 import { Suspense } from "react";
 import JobDescriptionPageSkeleton from "@/components/skeletons/JobDescriptionPageSkeleton";
-import NavLogo from "@/components/Global/NavLogo";
 import JobSeekerNav from "@/components/sidebar/JobSeekerNav";
 import { auth } from "@/lib/auth";
 interface PageProps {
@@ -57,7 +53,7 @@ const JobDescriptionPage = async ({ params }: PageProps) => {
   }
 
   return (
-    <div>
+    <>
       <JobSeekerNav user={null} hasSidebar={false} />
       <Suspense fallback={<JobDescriptionPageSkeleton />}>
         <JobDescriptionPageContent
@@ -67,7 +63,7 @@ const JobDescriptionPage = async ({ params }: PageProps) => {
           job={job}
         />
       </Suspense>
-    </div>
+    </>
   );
 };
 export default JobDescriptionPage;

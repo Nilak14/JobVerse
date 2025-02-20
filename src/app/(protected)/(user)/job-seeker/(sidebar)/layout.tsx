@@ -1,5 +1,4 @@
 import { auth } from "@/lib/auth";
-import ThemeSelect from "@/components/Global/ThemeSelect";
 import JobSeekerNav from "@/components/sidebar/JobSeekerNav";
 import JobSeekerSidebar from "@/components/sidebar/JobSeekerSidebar";
 import {
@@ -26,7 +25,7 @@ const JObSeekerSidebarLayout = async ({
         <JobSeekerSidebar user={user} />
         <SidebarInset>
           <div className="relative ">
-            <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2 z-[100]" />
+            <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2 z-20 " />
             <JobSeekerNav user={user} hasSidebar />
           </div>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">
