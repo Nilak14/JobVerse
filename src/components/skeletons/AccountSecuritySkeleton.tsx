@@ -7,7 +7,6 @@ const AccountSecuritySkeleton = () => {
     <>
       <div className="space-y-3 mb-4">
         <Skeleton className="h-6 w-36" />
-        <Skeleton className="h-5 w-48 mb-2" />
 
         {/* Change Password Card Skeleton */}
         <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2 rounded-lg">

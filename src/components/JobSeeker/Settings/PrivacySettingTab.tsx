@@ -40,69 +40,71 @@ const PrivacySettingTab = () => {
           <AccountSecuritySkeleton />
         ) : (
           <>
-            <div className="space-y-3 mb-4">
-              <h3 className="font-bold">Account Security</h3>
+            {!session?.user.isOAuthUser && (
+              <div className="space-y-3 mb-4">
+                <h3 className="font-bold">Account Security</h3>
 
-              <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2  rounded-lg">
-                <div className="flex items-center gap-5">
-                  <KeyRound className="hidden md:block" />
-                  <div className="space-y-1">
-                    <p>Change Password</p>
-                    <p className="text-xs text-muted-foreground">
-                      Ensure to make your password strong and secure to protect
-                      your account
-                    </p>
+                <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2  rounded-lg">
+                  <div className="flex items-center gap-5">
+                    <KeyRound className="hidden md:block" />
+                    <div className="space-y-1">
+                      <p>Change Password</p>
+                      <p className="text-xs text-muted-foreground">
+                        Ensure to make your password strong and secure to
+                        protect your account
+                      </p>
+                    </div>
                   </div>
+                  <ResponsiveModal>
+                    <ResponsiveModalTrigger asChild>
+                      <Button className="w-full md:w-auto mt-5">
+                        Change Password
+                      </Button>
+                    </ResponsiveModalTrigger>
+                    <ResponsiveModalContent>
+                      <ResponsiveModalHeader className="sr-only">
+                        <ResponsiveModalTitle>
+                          Change Your Password
+                        </ResponsiveModalTitle>
+                        <ResponsiveModalDescription>
+                          This form is for the changing your password
+                        </ResponsiveModalDescription>
+                      </ResponsiveModalHeader>
+                      <ChangePasswordForm />
+                    </ResponsiveModalContent>
+                  </ResponsiveModal>
                 </div>
-                <ResponsiveModal>
-                  <ResponsiveModalTrigger asChild>
-                    <Button className="w-full md:w-auto mt-5">
-                      Change Password
-                    </Button>
-                  </ResponsiveModalTrigger>
-                  <ResponsiveModalContent>
-                    <ResponsiveModalHeader className="sr-only">
-                      <ResponsiveModalTitle>
-                        Change Your Password
-                      </ResponsiveModalTitle>
-                      <ResponsiveModalDescription>
-                        This form is for the changing your password
-                      </ResponsiveModalDescription>
-                    </ResponsiveModalHeader>
-                    <ChangePasswordForm />
-                  </ResponsiveModalContent>
-                </ResponsiveModal>
-              </div>
-              <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2  rounded-lg">
-                <div className="flex items-center gap-5">
-                  <Lock className="hidden md:block" />
-                  <div className="space-y-1">
-                    <p>Two Factor Authentication</p>
-                    <p className="text-xs text-muted-foreground">
-                      Enable this Two Factor Authentication To Make your Account
-                      More Secure
-                    </p>
-                  </div>
-                </div>
-                <ResponsiveModal>
-                  <ResponsiveModalTrigger asChild>
-                    <Button className="w-full md:w-auto mt-5">Enable</Button>
-                  </ResponsiveModalTrigger>
-                  <ResponsiveModalContent>
-                    <ResponsiveModalHeader className="sr-only">
-                      <ResponsiveModalTitle>
-                        Enable Two Factor Authentication
-                      </ResponsiveModalTitle>
-                      <ResponsiveModalDescription>
+                <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2  rounded-lg">
+                  <div className="flex items-center gap-5">
+                    <Lock className="hidden md:block" />
+                    <div className="space-y-1">
+                      <p>Two Factor Authentication</p>
+                      <p className="text-xs text-muted-foreground">
                         Enable this Two Factor Authentication To Make your
                         Account More Secure
-                      </ResponsiveModalDescription>
-                    </ResponsiveModalHeader>
-                    <ToggleTwoFactorAuthentication />
-                  </ResponsiveModalContent>
-                </ResponsiveModal>
+                      </p>
+                    </div>
+                  </div>
+                  <ResponsiveModal>
+                    <ResponsiveModalTrigger asChild>
+                      <Button className="w-full md:w-auto mt-5">Enable</Button>
+                    </ResponsiveModalTrigger>
+                    <ResponsiveModalContent>
+                      <ResponsiveModalHeader className="sr-only">
+                        <ResponsiveModalTitle>
+                          Enable Two Factor Authentication
+                        </ResponsiveModalTitle>
+                        <ResponsiveModalDescription>
+                          Enable this Two Factor Authentication To Make your
+                          Account More Secure
+                        </ResponsiveModalDescription>
+                      </ResponsiveModalHeader>
+                      <ToggleTwoFactorAuthentication />
+                    </ResponsiveModalContent>
+                  </ResponsiveModal>
+                </div>
               </div>
-            </div>
+            )}
             <Separator />
             <div className="space-y-3 mb-4 mt-4">
               <h3 className="font-bold">Privacy Settings</h3>
