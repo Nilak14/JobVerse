@@ -40,6 +40,7 @@ export default {
       token.type = user.userType;
       token.avatarUrl = user.image;
       token.isBlocked = user.isBlocked;
+      token.isOAuthUser = !user.password;
       return token;
     },
     async signIn({ user, account }) {
@@ -60,6 +61,7 @@ export default {
       session.user.type = token.type as UserType;
       session.user.avatarUrl = token.avatarUrl as string;
       session.user.isBlocked = token.isBlocked as boolean;
+      session.user.isOAuthUser = token.isOAuthUser as boolean;
 
       return session;
     },

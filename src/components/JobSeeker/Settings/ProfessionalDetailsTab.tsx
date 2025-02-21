@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,31 +21,17 @@ import {
   ProfessionalDetailsSchema,
   ProfessionalDetailsSchemaType,
 } from "@/schema/JobSeekerSettingSchema";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
-import { Award, FileText, GraduationCap, Plus, Trash } from "lucide-react";
+import { Award, GraduationCap, Plus, Trash } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import {
-  PointerSensor,
-  useSensor,
-  useSensors,
-  KeyboardSensor,
-  DragEndEvent,
-  DndContext,
-  closestCenter,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import WorkExperienceFormItem from "./WorkExperienceFormItem";
+import WorkExperienceDNDForm from "./WorkExperienceDNDForm";
+import AddEducationDNDForm from "./AddEducationDNDForm";
+import AddCertificationDNDForm from "./AddCertificationDNDForm";
 const ProfessionalDetailsTab = () => {
   const form = useForm<ProfessionalDetailsSchemaType>({
     defaultValues: {
@@ -80,28 +65,6 @@ const ProfessionalDetailsTab = () => {
   const onSubmit = (data: ProfessionalDetailsSchemaType) => {
     console.log(data);
   };
-
-  const { fields, append, remove, move } = useFieldArray({
-    control: form.control,
-    name: "workExperience",
-  });
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (over && active.id !== over.id) {
-      const oldIndex = fields.findIndex((item) => item.id === active.id);
-      const newIndex = fields.findIndex((item) => item.id === over.id);
-      move(oldIndex, newIndex);
-      return arrayMove(fields, oldIndex, newIndex);
-    }
-  }
 
   return (
     <Card>
@@ -196,88 +159,17 @@ const ProfessionalDetailsTab = () => {
             </div>
             <Separator />
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium flex items-center">
-                  <FileText className="mr-2 h-5 w-5 text-primary" />
-                  Work Experience
-                </h3>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    append({
-                      companyName: "",
-                      position: "",
-                      endDate: null,
-                      startDate: null,
-                      description: "",
-                    })
-                  }
-                  className="border-primary text-primary hover:bg-primary/5"
-                >
-                  <Plus className="mr-1 h-4 w-4" /> Add Experience
-                </Button>
-              </div>
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
-                modifiers={[restrictToVerticalAxis]}
-              >
-                <SortableContext
-                  items={fields}
-                  strategy={verticalListSortingStrategy}
-                >
-                  {...fields.map((field, i) => (
-                    <WorkExperienceFormItem
-                      index={i}
-                      form={form}
-                      id={field.id}
-                      remove={remove}
-                      key={field.id}
-                    />
-                  ))}
-                </SortableContext>
-              </DndContext>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium flex items-center">
-                  <GraduationCap className="mr-2 h-5 w-5 text-primary" />
-                  Education
-                </h3>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="border-primary text-primary hover:bg-primary/5"
-                >
-                  <Plus className="mr-1 h-4 w-4" /> Add Education
-                </Button>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium flex items-center">
-                  <Award className="mr-2 h-5 w-5 text-primary" />
-                  Certifications
-                </h3>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="border-primary text-primary hover:bg-primary/5"
-                >
-                  <Plus className="mr-1 h-4 w-4" /> Add Certifications
-                </Button>
-              </div>
-            </div>
+            <WorkExperienceDNDForm form={form} />
+            <AddEducationDNDForm form={form} />
+            <AddCertificationDNDForm form={form} />
           </CardContent>
           <CardFooter>
-            <p>Card Footer</p>
+            <div className="w-full  flex justify-end gap-4 ">
+              <Button type="button" variant={"secondary"}>
+                Cancel
+              </Button>
+              <Button type="submit">Save Changes</Button>
+            </div>
           </CardFooter>
         </form>
       </Form>

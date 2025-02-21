@@ -50,7 +50,7 @@ export const ProfessionalDetailsSchema = z.object({
       position: z.string().min(3, "Designation is too short"),
       startDate: z.date().nullable(),
       endDate: z.date().nullable(),
-      // index: z.string(),
+
       description: z.string().min(10, "Description is too short"),
     })
   ),
@@ -58,17 +58,17 @@ export const ProfessionalDetailsSchema = z.object({
     z.object({
       degreeTitle: z.string().min(3, "Degree title is too short"),
       institute: z.string().min(3, "Institute name is too short"),
-      startDate: z.string().date(),
-      endDate: z.date().nullable(),
-      index: z.string(),
+      startDate: z.date().nullable(),
+      endDate: z.date().nullable().optional(),
+      location: z.string().min(3, "Location is too short"),
     })
   ),
   certifications: z.array(
     z.object({
-      certificationTitle: z.string().min(3, "Certification title is too short"),
+      title: z.string().min(3, "Certification title is too short"),
       institute: z.string().min(3, "Institute name is too short"),
-      completionDate: z.date(),
-      index: z.string(),
+      completionDate: z.date().nullable(),
+      description: z.string().min(10, "Description is too short"),
     })
   ),
 });
