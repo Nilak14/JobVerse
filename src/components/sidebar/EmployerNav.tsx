@@ -10,6 +10,8 @@ import { useQueryJobCategories } from "@/hooks/query-hooks/getAllJobCategories";
 import { useJobCategory } from "@/store/useJobCategory";
 import { NavUser } from "./NavUser";
 import NavLogo from "../Global/NavLogo";
+import { SidebarTrigger } from "../ui/sidebar";
+import { Separator } from "../ui/separator";
 
 const EmployerNav = ({
   hasSidebar = false,
@@ -44,22 +46,22 @@ const EmployerNav = ({
   }, [data, isLoading, activeCompanyId]);
   if (!user) return null;
   return (
-    <header>
-      <Container className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 bg-sidebar shadow-sm shadow-muted-foreground/30 ">
-        <section className="flex-1  h-full flex items-center">
-          {hasSidebar || <NavLogo />}
-        </section>
-        <section className="flex-1  h-full flex items-center justify-end gap-10 ">
-          <div className="">
+    <header className="sticky top-0 flex h-16 shrink-0 items-center gap-2 bg-background z-50 ">
+      <div className="flex flex-1 items-center justify-center gap-2 h-16 px-3  border-b border-muted-foreground/40">
+        {hasSidebar && (
+          <>
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+          </>
+        )}
+        <Container className=" w-full flex justify-between items-center gap-10 ">
+          <div>{hasSidebar || <NavLogo />}</div>
+          <div className="flex gap-10">
             <Notification />
+            {hasSidebar || <div>{user && <NavUser user={user} />}</div>}
           </div>
-          {hasSidebar || (
-            <div>
-              <NavUser user={user} isLoading={!user} />
-            </div>
-          )}
-        </section>
-      </Container>
+        </Container>
+      </div>
     </header>
   );
 };

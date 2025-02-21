@@ -12,7 +12,7 @@ const NoSidebarLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <AdminNav user={user} />
-      {children}
+      <div className="relative flex min-h-[calc(100vh-4rem)]">{children}</div>
     </>
   );
 };

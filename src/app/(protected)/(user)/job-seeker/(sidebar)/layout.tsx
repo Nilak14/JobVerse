@@ -1,13 +1,10 @@
 import { auth } from "@/lib/auth";
 import JobSeekerNav from "@/components/sidebar/JobSeekerNav";
 import JobSeekerSidebar from "@/components/sidebar/JobSeekerSidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 import SidebarContainer from "@/components/Global/SidebarContainer";
+import SidebarPageTransition from "@/context/SidebarPageTransition";
 
 const JObSeekerSidebarLayout = async ({
   children,
@@ -21,18 +18,16 @@ const JObSeekerSidebarLayout = async ({
   }
   return (
     <SidebarProvider>
-      <div className="flex  h-screen w-full">
-        <JobSeekerSidebar user={user} />
-        <SidebarInset>
-          <div className="relative ">
-            <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2 z-20 " />
-            <JobSeekerNav user={user} hasSidebar />
-          </div>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">
+      <JobSeekerSidebar user={user} />
+      <SidebarInset>
+        <JobSeekerNav hasSidebar user={user} />
+
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <SidebarPageTransition>
             <SidebarContainer>{children}</SidebarContainer>
-          </div>
-        </SidebarInset>
-      </div>
+          </SidebarPageTransition>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 };
