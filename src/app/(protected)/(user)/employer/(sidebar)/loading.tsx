@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Loading() {
   return (
-    <div className="flex gap-10 flex-col justify-center items-center h-[80vh] ">
+    <div className="flex gap-10 flex-col justify-center items-center h-[80vh]">
       <div className="relative">
         <Image
           priority

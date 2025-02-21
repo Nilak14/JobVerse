@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Skeleton } from "../ui/skeleton";
 import { ExtendedUser } from "@/next-auth";
 import LogOutModal from "../Global/LogOutModal";
 import React from "react";
@@ -22,13 +21,7 @@ import AdminUserMenu from "../Global/AdminUserMenu";
 import ThemeSelect from "../Global/ThemeSelect";
 import UseCurrentSession from "@/hooks/use-session";
 
-export function NavUser({
-  isLoading,
-  user,
-}: {
-  user: ExtendedUser;
-  isLoading: boolean;
-}) {
+export function NavUser({ user }: { user: ExtendedUser }) {
   const [open, setOpen] = React.useState(false);
   UseCurrentSession();
   return (

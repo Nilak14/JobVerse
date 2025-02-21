@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 import SidebarContainer from "@/components/Global/SidebarContainer";
+import SidebarPageTransition from "@/context/SidebarPageTransition";
 
 const AdminSidebarLayout = async ({
   children,
@@ -24,18 +25,15 @@ const AdminSidebarLayout = async ({
   }
   return (
     <SidebarProvider>
-      <div className="flex w-full h-screen">
-        <AdminSidebar user={user} />
-        <SidebarInset>
-          <div className="relative">
-            <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2" />
-            <AdminNav user={user} hasSidebar />
-          </div>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">
+      <AdminSidebar user={user} />
+      <SidebarInset>
+        <AdminNav user={user} hasSidebar />
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <SidebarPageTransition>
             <SidebarContainer>{children}</SidebarContainer>
-          </div>
-        </SidebarInset>
-      </div>
+          </SidebarPageTransition>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 };

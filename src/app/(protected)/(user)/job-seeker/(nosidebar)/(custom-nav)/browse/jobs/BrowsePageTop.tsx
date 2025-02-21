@@ -1,12 +1,7 @@
 import Container from "@/components/Global/Container";
 import Notification from "@/components/Global/Notification";
-import { Logo } from "@/components/LandingPage/NavBar";
 import { NavUser } from "@/components/sidebar/NavUser";
-import { SidebarUser } from "@/components/sidebar/SidebarUser";
-import { Input } from "@/components/ui/input";
 import { ExtendedUser } from "@/next-auth";
-import { Search } from "lucide-react";
-import { motion } from "framer-motion";
 import NavLogo from "@/components/Global/NavLogo";
 
 interface BrowsePageTopProps {
@@ -24,7 +19,7 @@ const BrowsePageTop = ({ user }: BrowsePageTopProps) => {
           </div>
 
           <div>
-            <NavUser user={user} isLoading={!user} />
+            <NavUser user={user} />
           </div>
         </section>
       </Container>
