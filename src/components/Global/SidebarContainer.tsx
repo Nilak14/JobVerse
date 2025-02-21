@@ -7,7 +7,7 @@ interface SidebarContainerProps {
 const SidebarContainer = ({ children, className }: SidebarContainerProps) => {
   return (
     <section
-      className={cn("h-full mx-auto w-full max-w-full  px-4 py-7", className)}
+      className={cn("h-full mx-auto w-full max-w-full  px-4 pb-7", className)}
     >
       {children}
     </section>

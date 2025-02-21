@@ -1,13 +1,10 @@
 import { auth } from "@/lib/auth";
 import EmployerNav from "@/components/sidebar/EmployerNav";
 import EmployerSidebar from "@/components/sidebar/EmployerSidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 import SidebarPageTransition from "@/context/SidebarPageTransition";
+import SidebarContainer from "@/components/Global/SidebarContainer";
 
 const EmployerSidebarLayout = async ({
   children,
@@ -22,25 +19,20 @@ const EmployerSidebarLayout = async ({
 
   return (
     <SidebarProvider>
-      <div className="flex w-full h-screen">
-        <EmployerSidebar
+      <EmployerSidebar activeCompanyId={session.activeCompanyId} user={user} />
+      <SidebarInset>
+        <EmployerNav
           activeCompanyId={session.activeCompanyId}
           user={user}
+          hasSidebar
         />
-        <SidebarInset>
-          <div className="relative">
-            <SidebarTrigger className="absolute top-1/2 translate-x-1/2 -translate-y-1/2" />
-            <EmployerNav
-              activeCompanyId={session.activeCompanyId}
-              user={user}
-              hasSidebar
-            />
-          </div>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <SidebarPageTransition>{children}</SidebarPageTransition>
-          </div>
-        </SidebarInset>
-      </div>
+
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <SidebarPageTransition>
+            <SidebarContainer>{children}</SidebarContainer>
+          </SidebarPageTransition>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 };

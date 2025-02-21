@@ -6,6 +6,8 @@ import {
   Heart,
   LayoutDashboard,
   ScanSearch,
+  Settings,
+  UserCog,
   Video,
 } from "lucide-react";
 import { SidebarNavLinks } from "../types";
@@ -38,6 +40,23 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
         title: "Create CV",
         url: "/job-seeker/design-studio/create-cv",
         icon: FileUser,
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    url: "/job-seeker/settings",
+    items: [
+      {
+        title: "Account Settings",
+        url: "/job-seeker/settings/account-settings",
+        icon: UserCog,
+      },
+      {
+        title: "Test",
+        url: "/job-seeker/settings/test",
+        icon: UserCog,
       },
     ],
   },
