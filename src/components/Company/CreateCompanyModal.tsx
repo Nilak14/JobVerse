@@ -87,7 +87,10 @@ const CreateCompanyModal = ({
   }, [loading, status]);
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent className="min-w-[50%]">
+      <ResponsiveModalContent
+        isloading={status === "executing" ? "true" : undefined}
+        className="min-w-[50%]"
+      >
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>Create Company</ResponsiveModalTitle>
         </ResponsiveModalHeader>

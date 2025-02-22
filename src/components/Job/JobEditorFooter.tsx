@@ -183,7 +183,7 @@ const JobEditorFooter = ({
       </div>
       <ResponsiveModal open={showDialog} onOpenChange={setShowDialog}>
         <ResponsiveModalContent
-          isloading={isPending}
+          isloading={isPending ? "true" : undefined}
           className="space-y-5 md:space-y-0 overflow-x-hidden"
         >
           <ResponsiveModalHeader>

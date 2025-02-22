@@ -5,20 +5,22 @@ enum UserType {
 }
 
 model User {
-    id            String      @id @default(cuid())
-    name          String?
-    email         String      @unique
-    emailVerified DateTime?
-    image         String?
-    password      String?
-    accounts      Account[]
-    userType      UserType?
-    createdAt     DateTime    @default(now())
-    updatedAt     DateTime    @updatedAt
-    EMPLOYER      Employer?
-    JOB_SEEKER    JOB_SEEKER?
-    isBlocked     Boolean     @default(false)
-    Admin         Admin?
+    id                    String                 @id @default(cuid())
+    name                  String?
+    email                 String                 @unique
+    emailVerified         DateTime?
+    image                 String?
+    password              String?
+    accounts              Account[]
+    userType              UserType?
+    createdAt             DateTime               @default(now())
+    updatedAt             DateTime               @updatedAt
+    EMPLOYER              Employer?
+    JOB_SEEKER            JOB_SEEKER?
+    isBlocked             Boolean                @default(false)
+    Admin                 Admin?
+    isTwoFactorEnabled    Boolean                @default(false)
+    twoFactorConfirmation TwoFactorConfirmation?
 
     @@map("users")
 }
@@ -51,6 +53,8 @@ model JOB_SEEKER {
     user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
     savedJobs SavedJob[]
 
+    JobSeekerProfile JobSeekerProfile?
+
     @@map("job_seekers")
 }
 
@@ -75,4 +79,67 @@ model Admin {
     JobReview JobReview[]
 
     @@map("admins")
+}
+
+model JobSeekerProfile {
+    id                            String                    @id @default(cuid())
+    userId                        String                    @unique
+    user                          JOB_SEEKER                @relation(fields: [userId], references: [id], onDelete: Cascade)
+    location                      String?
+    phoneNumber                   String?
+    designation                   String?
+    profileVisibility             Boolean                   @default(true)
+    bio                           String?
+    skills                        String[]
+    receiveJobRecommendationEmail Boolean                   @default(true)
+    receiveJobApplicationUpdated  Boolean                   @default(true)
+    receiveMarketingEmails        Boolean                   @default(true)
+    WorkExperience                JobSeekerWorkExperience[]
+    createdAt                     DateTime                  @default(now())
+    updatedAt                     DateTime                  @updatedAt
+    Education                     JobSeekerEducation[]
+    Certification                 JobSeekerCertification[]
+
+    @@map("job_seeker_profiles")
+}
+
+model JobSeekerWorkExperience {
+    id                 String           @id @default(cuid())
+    jobSeekerProfileId String
+    jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
+    position           String
+    companyName        String
+    description        String
+    startDate          DateTime
+    endDate            DateTime?
+    createdAt          DateTime         @default(now())
+    updatedAt          DateTime         @updatedAt
+
+    @@map("job_seeker_work_experiences")
+}
+
+model JobSeekerEducation {
+    id                 String           @id @default(cuid())
+    jobSeekerProfileId String
+    jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
+    degreeTitle        String
+    instituteName      String
+    instituteLocation  String
+    startDate          DateTime
+    endDate            DateTime?
+    createdAt          DateTime         @default(now())
+    updatedAt          DateTime         @updatedAt
+
+    @@map("job_seeker_educations")
+}
+
+model JobSeekerCertification {
+    id                 String           @id @default(cuid())
+    jobSeekerProfileId String
+    jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
+    title              String
+    instituteName      String
+    completionDate     DateTime
+
+    @@map("job_seeker_certifications")
 }

@@ -57,9 +57,7 @@ const LeaveCompanyModal = ({
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
       <ResponsiveModalContent
-        onInteractOutside={(e) => {
-          isExecuting && e.preventDefault();
-        }}
+        isloading={isExecuting ? "true" : undefined}
         className="space-y-5 md:space-y-0"
       >
         <ResponsiveModalHeader>

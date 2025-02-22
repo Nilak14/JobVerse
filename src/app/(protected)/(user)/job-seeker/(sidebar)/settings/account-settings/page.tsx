@@ -14,7 +14,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
   };
 };
 
-const JobSeekerAccountSettingsPage = () => {
+const JobSeekerAccountSettingsPage = async () => {
+  // const jobSeeker  =
   return (
     <section className="space-y-10">
       <BoxReveal>

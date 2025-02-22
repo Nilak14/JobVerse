@@ -7,6 +7,10 @@ export const LoginSchema = z.object({
     .email()
     .trim(),
   password: z.string().trim().min(1, { message: "Password is required" }),
+  code: z
+    .string()
+    .length(6, { message: "Code must be exactly 6 characters" })
+    .optional(),
 });
 
 export type LoginSchemaType = z.infer<typeof LoginSchema>;

@@ -141,19 +141,7 @@ const AddCertificationFormItem = ({
           </FormItem>
         )}
       />
-      <FormField
-        control={form.control}
-        name={`certifications.${index}.description`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Description</FormLabel>
-            <FormControl>
-              <Textarea className="resize-none" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+
       <Button
         variant={"destructive"}
         type="button"

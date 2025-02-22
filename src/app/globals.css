@@ -140,3 +140,12 @@ body {
 .css-s0iqzq-control {
   border-color: hsl(var(--border)) !important;
 }
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,14 +1,9 @@
-import { ins } from "framer-motion/client";
-import { title } from "process";
-import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
 
 export const PersonalInformationSchema = z.object({
   fullName: z.string().min(3, "Name is too short").max(50, "Name is too long"),
   email: z.string().email("Enter a valid email address"),
-  phoneNumber: z
-    .string()
-    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+  phoneNumber: z.string().min(10, "Invalid Number").max(15, "Invalid Number"),
   address: z
     .string()
     .min(3, "Address is too short")
@@ -22,7 +17,7 @@ export type PersonalInformationSchemaType = z.infer<
 export const ChangePasswordSchema = z
   .object({
     currentPassword: z.string(),
-    newPassword: z.string().min(6, "Password is too short"),
+    newPassword: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z
       .string()
       .trim()
@@ -57,10 +52,10 @@ export const ProfessionalDetailsSchema = z.object({
   education: z.array(
     z.object({
       degreeTitle: z.string().min(3, "Degree title is too short"),
-      institute: z.string().min(3, "Institute name is too short"),
+      instituteName: z.string().min(3, "Institute name is too short"),
       startDate: z.date().nullable(),
       endDate: z.date().nullable().optional(),
-      location: z.string().min(3, "Location is too short"),
+      instituteLocation: z.string().min(3, "Location is too short"),
     })
   ),
   certifications: z.array(
@@ -68,7 +63,6 @@ export const ProfessionalDetailsSchema = z.object({
       title: z.string().min(3, "Certification title is too short"),
       institute: z.string().min(3, "Institute name is too short"),
       completionDate: z.date().nullable(),
-      description: z.string().min(10, "Description is too short"),
     })
   ),
 });

@@ -5,6 +5,8 @@ import { LoginSchema } from "./schema/LoginSchema";
 import { getUserByEmail, getUserById } from "./data-access/user";
 import bcryptjs from "bcryptjs";
 import { UserType } from "@prisma/client";
+import { getTwoFactorConfirmationByUserId } from "./data-access/tokens/twoFactorConfirmation";
+import prisma from "./lib/prisma";
 
 export default {
   providers: [
@@ -50,6 +52,24 @@ export default {
       const existingUser = await getUserById(user.id!);
       if (!existingUser?.emailVerified) {
         throw new Error("Your Email is not verified, Please Verify Your Email");
+      }
+
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
+        console.log({ twoFactorConfirmation });
+
+        if (!twoFactorConfirmation) {
+          throw new Error(
+            "Two-factor authentication is enabled. Please enter your authentication code to sign in."
+          );
+        }
+        await prisma.twoFactorConfirmation.delete({
+          where: {
+            id: twoFactorConfirmation.id,
+          },
+        });
       }
 
       return true;

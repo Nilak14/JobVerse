@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,16 +16,15 @@ import {
   ResponsiveModalTrigger,
 } from "@/components/ui/responsive-dailog";
 import { Button } from "@/components/ui/button";
-import { EyeOff, KeyRound, Lock } from "lucide-react";
+import { EyeOff, KeyRound, Loader, Lock } from "lucide-react";
 import ToggleTwoFactorAuthentication from "./ToggleTwoFactorAuthentication";
 import { Switch } from "@/components/ui/switch";
 import { getClientSession } from "@/store/getClientSession";
 import AccountSecuritySkeleton from "@/components/skeletons/AccountSecuritySkeleton";
+import { useState } from "react";
 
 const PrivacySettingTab = () => {
   const { session, status } = getClientSession();
-  console.log(session);
-
   return (
     <Card>
       <CardHeader>
@@ -55,24 +53,7 @@ const PrivacySettingTab = () => {
                       </p>
                     </div>
                   </div>
-                  <ResponsiveModal>
-                    <ResponsiveModalTrigger asChild>
-                      <Button className="w-full md:w-auto mt-5">
-                        Change Password
-                      </Button>
-                    </ResponsiveModalTrigger>
-                    <ResponsiveModalContent>
-                      <ResponsiveModalHeader className="sr-only">
-                        <ResponsiveModalTitle>
-                          Change Your Password
-                        </ResponsiveModalTitle>
-                        <ResponsiveModalDescription>
-                          This form is for the changing your password
-                        </ResponsiveModalDescription>
-                      </ResponsiveModalHeader>
-                      <ChangePasswordForm />
-                    </ResponsiveModalContent>
-                  </ResponsiveModal>
+                  <ChangePasswordForm />
                 </div>
                 <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2  rounded-lg">
                   <div className="flex items-center gap-5">
@@ -119,7 +100,16 @@ const PrivacySettingTab = () => {
                     </p>
                   </div>
                 </div>
-                <Switch />
+                <div className="flex gap-3 items-center">
+                  <Switch
+                    disabled
+                    checked
+                    onCheckedChange={() => {
+                      console.log("checked");
+                    }}
+                  />
+                  <Loader className="size-4 text-muted-foreground animate-spin" />
+                </div>
               </div>
             </div>
           </>
