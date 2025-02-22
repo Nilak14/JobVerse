@@ -76,7 +76,6 @@ const AddCertificationDNDForm = ({ form }: AddCertificationDNDFormProps) => {
             title: "",
             institute: "",
             completionDate: null,
-            description: "",
           })
         }
         type="button"

@@ -37,8 +37,8 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
     url: "/job-seeker/design-studio",
     items: [
       {
-        title: "Create CV",
-        url: "/job-seeker/design-studio/create-cv",
+        title: "Resume Studio",
+        url: "/job-seeker/design-studio/resume",
         icon: FileUser,
       },
     ],
@@ -51,11 +51,6 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
       {
         title: "Account Settings",
         url: "/job-seeker/settings/account-settings",
-        icon: UserCog,
-      },
-      {
-        title: "Test",
-        url: "/job-seeker/settings/test",
         icon: UserCog,
       },
     ],

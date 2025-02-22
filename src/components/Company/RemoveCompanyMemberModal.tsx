@@ -61,11 +61,7 @@ const RemoveCompanyMemberModal = ({
 
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent
-        onInteractOutside={(e) => {
-          removeLoading && e.preventDefault();
-        }}
-      >
+      <ResponsiveModalContent isloading={removeLoading ? "true" : undefined}>
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>
             Remove Members From {activeCompany.name}
