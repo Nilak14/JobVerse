@@ -4,7 +4,6 @@ model EmailVerificationToken {
     token   String   @unique
     expires DateTime
 
-    @@index([email])
     @@map("email_verification_tokens")
 }
 
@@ -14,6 +13,20 @@ model ResetPasswordToken {
     token   String   @unique
     expires DateTime
 
-    @@index([email])
     @@map("reset_password_tokens")
+}
+
+model TwoFactorToken {
+    id      String   @id @default(cuid())
+    email   String   @unique
+    token   String   @unique
+    expires DateTime
+
+    @@map("two_factor_tokens")
+}
+
+model TwoFactorConfirmation {
+    id     String @id @default(cuid())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

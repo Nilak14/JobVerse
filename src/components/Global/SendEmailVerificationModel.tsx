@@ -2,7 +2,6 @@ import {
   ResponsiveModal,
   ResponsiveModalContent,
   ResponsiveModalDescription,
-  ResponsiveModalFooter,
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "@/components/ui/responsive-dailog";

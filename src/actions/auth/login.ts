@@ -11,11 +11,15 @@ import {
   DEFAULT_LOGIN_REDIRECT_JOB_SEEKER,
 } from "@/routes";
 import { AuthError } from "next-auth";
+import { sendTwoFactorCode } from "./sendTwoFactorCode";
+import { getTwoFactorTokenByEmail } from "@/data-access/tokens/twoFactorToken";
+import prisma from "@/lib/prisma";
+import { getTwoFactorConfirmationByUserId } from "@/data-access/tokens/twoFactorConfirmation";
 const action = createSafeActionClient();
 
 export const login = action
   .schema(LoginSchema)
-  .action(async ({ parsedInput: { identifier, password } }) => {
+  .action(async ({ parsedInput: { identifier, password, code } }) => {
     const existingUser = await getUserByEmail(identifier);
 
     if (!existingUser || !existingUser.email || !existingUser.password) {
@@ -36,6 +40,53 @@ export const login = action
     }
 
     //todo: check if two factor is on or off and send token according to that
+
+    const isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+
+    if (isTwoFactorEnabled && existingUser.email && existingUser.password) {
+      if (code) {
+        // verify code
+        const dbToken = await getTwoFactorTokenByEmail(existingUser.email);
+        if (!dbToken) {
+          return { error: "Code Not Valid" };
+        }
+        if (dbToken.token !== code) {
+          return { error: "Invalid Code Provided" };
+        }
+        const hasExpired = new Date(dbToken.expires) < new Date();
+
+        if (hasExpired) {
+          return { error: "Code has expired, Please request a new one" };
+        }
+
+        await prisma.twoFactorToken.delete({
+          where: { id: dbToken.id },
+        });
+
+        const existingConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
+
+        if (existingConfirmation) {
+          await prisma.twoFactorConfirmation.delete({
+            where: { id: existingConfirmation.id },
+          });
+        }
+        await prisma.twoFactorConfirmation.create({
+          data: {
+            userId: existingUser.id,
+          },
+        });
+      } else {
+        // send two factor code
+        const res = await sendTwoFactorCode(existingUser.email);
+        if (res.error) {
+          return { error: res.error };
+        } else {
+          return { twoFactor: true };
+        }
+      }
+    }
 
     let redirectLink;
     if (existingUser.userType === "JOB_SEEKER") {

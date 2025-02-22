@@ -18,7 +18,7 @@ import GoogleButton from "../Global/GoogleButton";
 import Link from "next/link";
 import { PasswordInput } from "../ui/password-input";
 import LoadingButton from "../ui/loading-button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RegisterModel from "../RegisterModel";
 import { useAction } from "next-safe-action/hooks";
 import { login } from "@/actions/auth/login";
@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 
 import SendEmailVerificationModel from "../Global/SendEmailVerificationModel";
 import { cn } from "@/lib/utils";
+import TwoFactorModal from "../Global/TwoFactorModal";
 
 interface LoginFormProps {
   error: string;
@@ -37,7 +38,8 @@ const LoginForm = ({ error }: LoginFormProps) => {
   const [openEmailDialog, setOpenEmailDialog] = useState(false);
   const router = useRouter();
   const [authError, setAuthError] = useState<string | null>(null);
-
+  const ref = useRef<HTMLButtonElement>(null);
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -62,7 +64,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
   }, [authError]);
 
   const { execute, status, isTransitioning } = useAction(login, {
-    onSuccess: ({ data }) => {
+    onSuccess: ({ data, input }) => {
       if (data?.error) {
         if (data.error === "e") {
           toast.error("Your Email is not verified, Please Verify Your Email", {
@@ -77,8 +79,9 @@ const LoginForm = ({ error }: LoginFormProps) => {
         }
       } else if (data?.redirectLink) {
         router.replace(data.redirectLink);
-
         setAuthError(null);
+      } else if (data?.twoFactor) {
+        setShowTwoFactor(true);
       }
     },
     onError: () => {
@@ -141,6 +144,14 @@ const LoginForm = ({ error }: LoginFormProps) => {
                   </FormItem>
                 )}
               />
+              <TwoFactorModal
+                loading={status === "executing" || isTransitioning}
+                ref={ref}
+                open={showTwoFactor}
+                setOpen={setShowTwoFactor}
+                userEmail={form.getValues("identifier")}
+                form={form}
+              />
             </div>
             <div className="text-right text-primary text-xs mt-2  ">
               <Link
@@ -157,6 +168,7 @@ const LoginForm = ({ error }: LoginFormProps) => {
             </div>
 
             <LoadingButton
+              ref={ref}
               type="submit"
               className="w-full my-6"
               loading={status === "executing" || isTransitioning}
