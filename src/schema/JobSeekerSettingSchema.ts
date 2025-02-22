@@ -2,8 +2,9 @@ import { z } from "zod";
 
 export const PersonalInformationSchema = z.object({
   fullName: z.string().min(3, "Name is too short").max(50, "Name is too long"),
-  email: z.string().email("Enter a valid email address"),
-  phoneNumber: z.string().min(10, "Invalid Number").max(15, "Invalid Number"),
+  bio: z.string().min(10, "Description is too short"),
+  designation: z.string().min(3, "Designation is too short"),
+
   address: z
     .string()
     .min(3, "Address is too short")
@@ -36,8 +37,6 @@ export const PrivacySettingSchema = z.object({
 });
 
 export const ProfessionalDetailsSchema = z.object({
-  designation: z.string().min(3, "Designation is too short"),
-  bio: z.string().min(10, "Description is too short"),
   skills: z.array(z.string().min(1, "Skill is too short")),
   workExperience: z.array(
     z.object({
@@ -69,4 +68,13 @@ export const ProfessionalDetailsSchema = z.object({
 
 export type ProfessionalDetailsSchemaType = z.infer<
   typeof ProfessionalDetailsSchema
+>;
+
+export const PreferencesSettingsSchema = z.object({
+  jobRecommendationEmails: z.boolean(),
+  applicationUpdates: z.boolean(),
+  marketingEmails: z.boolean(),
+});
+export type PreferencesSettingsSchemaSchemaType = z.infer<
+  typeof PreferencesSettingsSchema
 >;

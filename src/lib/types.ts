@@ -1,6 +1,7 @@
 import { ExtendedUser } from "@/next-auth";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
 import { LucideIcon } from "lucide-react";
+import { JobSeekerProfile } from "./prisma-types/JobSeekerProfile";
 
 export interface LandingPageNavLinks {
   name: string;
@@ -40,4 +41,8 @@ export type SaveJobResponse = {
   data?: {
     data: SaveJobInfo;
   };
+};
+
+export type JobSeekerProfileComponentProps = {
+  profile: JobSeekerProfile;
 };

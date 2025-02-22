@@ -1,7 +1,11 @@
 import AccountSettingContent from "@/components/JobSeeker/Settings/AccountSettingContent";
+import AccountSettingContentShimmer from "@/components/skeletons/JobSeekerAccountSettingSkeleton";
 import BoxReveal from "@/components/ui/box-reveal";
+import { getJobSeekerProfile } from "@/data-access/job-seeker/jobSeekerProfile";
 import { auth } from "@/lib/auth";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const session = await auth();
@@ -15,7 +19,6 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const JobSeekerAccountSettingsPage = async () => {
-  // const jobSeeker  =
   return (
     <section className="space-y-10">
       <BoxReveal>
@@ -28,8 +31,18 @@ const JobSeekerAccountSettingsPage = async () => {
           </p>
         </div>
       </BoxReveal>
-      <AccountSettingContent />
+      <Suspense fallback={<AccountSettingContentShimmer />}>
+        <JobSeekerProfile />
+      </Suspense>
     </section>
   );
 };
 export default JobSeekerAccountSettingsPage;
+
+const JobSeekerProfile = async () => {
+  const jobSeekerProfile = await getJobSeekerProfile();
+  if (!jobSeekerProfile) {
+    notFound();
+  }
+  return <AccountSettingContent profile={jobSeekerProfile} />;
+};

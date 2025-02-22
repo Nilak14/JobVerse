@@ -26,6 +26,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           await prisma.jOB_SEEKER.create({
             data: {
               userId: updatedUser.id,
+              JobSeekerProfile: {
+                create: {},
+              },
             },
           });
         } else if (userType === "EMPLOYER") {

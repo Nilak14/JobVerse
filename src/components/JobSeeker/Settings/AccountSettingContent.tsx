@@ -11,8 +11,13 @@ import ProfessionalDetailsTab from "./ProfessionalDetailsTab";
 import PreferencesSettingTab from "./PreferencesSettingTab";
 import PrivacySettingTab from "./PrivacySettingTab";
 import { useSearchParams } from "next/navigation";
+import { JobSeekerProfile } from "@/lib/prisma-types/JobSeekerProfile";
 
-const AccountSettingContent = () => {
+interface AccountSettingContentProps {
+  profile: JobSeekerProfile;
+}
+
+const AccountSettingContent = ({ profile }: AccountSettingContentProps) => {
   const searchParams = useSearchParams();
   const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
   return (
@@ -21,16 +26,32 @@ const AccountSettingContent = () => {
         <UserProfileInput
           username="Nilak Pathak"
           size="size-24"
-          src={croppedAvatar ? URL.createObjectURL(croppedAvatar) : null}
+          src={
+            croppedAvatar ? URL.createObjectURL(croppedAvatar) : profile.image
+          }
           onImageCropped={setCroppedAvatar}
         />
         <div>
-          <h1 className="text-base sm:text-2xl font-bold mb-1">Nilak Pathak</h1>
-          <div className="flex flex-wrap gap-x-10 gap-y-2 ">
-            <p className="flex items-center gap-1 text-sm text-muted-foreground">
-              <MapPin size={20} />
-              <span>Pokhara, Nepal</span>
+          <div>
+            <h1 className="text-base sm:text-2xl font-bold mb-1">
+              {profile.name}
+              {profile.JOB_SEEKER?.JobSeekerProfile?.designation && (
+                <span>
+                  ({profile.JOB_SEEKER?.JobSeekerProfile?.designation})
+                </span>
+              )}
+            </h1>
+            <p className="text-xs font-semibold text-muted-foreground mb-2">
+              {profile.email}
             </p>
+          </div>
+          <div className="flex flex-wrap gap-x-10 gap-y-2 ">
+            {profile.JOB_SEEKER?.JobSeekerProfile?.location && (
+              <p className="flex items-center gap-1 text-sm text-muted-foreground">
+                <MapPin size={20} />
+                <span>{profile.JOB_SEEKER?.JobSeekerProfile?.location}</span>
+              </p>
+            )}
             <Badge className="bg-primary/20 text-primary hover:bg-primary/10  py-2">
               Open To Work
             </Badge>
@@ -88,16 +109,24 @@ const AccountSettingContent = () => {
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
         <TabsContent value="profile">
-          <ProfileSettingTab />
+          <div className="animate-fade-left">
+            <ProfileSettingTab profile={profile} />
+          </div>
         </TabsContent>
         <TabsContent value="professional-details">
-          <ProfessionalDetailsTab />
+          <div className="animate-fade-left">
+            <ProfessionalDetailsTab profile={profile} />
+          </div>
         </TabsContent>
         <TabsContent value="preferences">
-          <PreferencesSettingTab />
+          <div className="animate-fade-left">
+            <PreferencesSettingTab profile={profile} />
+          </div>
         </TabsContent>
         <TabsContent value="privacy">
-          <PrivacySettingTab />
+          <div className="animate-fade-left">
+            <PrivacySettingTab profile={profile} />
+          </div>
         </TabsContent>
       </Tabs>
     </section>

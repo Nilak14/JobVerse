@@ -40,6 +40,9 @@ export const register = action
             await prisma.jOB_SEEKER.create({
               data: {
                 userId: newUser.id,
+                JobSeekerProfile: {
+                  create: {},
+                },
               },
             });
           } else if (userType === "EMPLOYER") {
