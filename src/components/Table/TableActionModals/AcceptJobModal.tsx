@@ -27,7 +27,7 @@ const AcceptJobModal = ({ job, open, setOpen }: AcceptJobProps) => {
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
       <ResponsiveModalContent
-        isloading={loading}
+        isloading={loading ? "true" : undefined}
         className="space-y-5 md:space-y-0"
       >
         <ResponsiveModalHeader>

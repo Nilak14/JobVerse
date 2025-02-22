@@ -13,15 +13,15 @@ import {
   Text,
   Tailwind,
 } from "@react-email/components";
-interface ResetPasswordTemplateProps {
-  link: string;
+interface TwoFactorEmailTemplateProps {
+  token: string;
 }
 
-const ResetPasswordTemplate = ({ link }: ResetPasswordTemplateProps) => {
+const TwoFactorEmailTemplate = ({ token }: TwoFactorEmailTemplateProps) => {
   return (
     <Html>
       <Head />
-      <Preview>{"Reset Your Password"}</Preview>
+      <Preview>{"Two Factor Code"}</Preview>
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans px-2">
           <Container className="border border-solid border-[#eaeaea] rounded  mx-auto p-[20px] max-w-[465px] relative mt-10">
@@ -55,27 +55,20 @@ const ResetPasswordTemplate = ({ link }: ResetPasswordTemplateProps) => {
                 </tr>
               </table>
             </Section>
-            <Heading className="text-black text-[24px] font-normal text-center p-0 mt-[80px] mx-0">
-              <strong> Reset Your Jobverse Password</strong>
+            <Heading className="text-black text-[20px] font-normal text-center p-0 mt-[80px] mx-0">
+              <strong>
+                {" "}
+                Enter the following code to continue with your JobVerse Account
+              </strong>
             </Heading>
-            <Text className="text-black text-[14px] leading-[24px]">
-              We heard that you lost your Jobverse password. Sorry about that!
-              But don’t worry! You can use the following link to reset your
-              password:
-            </Text>
-            <Section className="text-center mt-[32px] mb-[32px]">
-              <Button
-                className="bg-[#e9590c] rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3"
-                href={link}
-              >
-                Reset Your Password
-              </Button>
+
+            <Section className="bg-slate-200 rounded-md w-[200px]">
+              <Text className="text-xl font-bold tabular-nums text-center tracking-[10px]">
+                {token}
+              </Text>
             </Section>
-            <Text className="text-black text-[14px] leading-[24px]">
-              or copy and paste this URL into your browser:{" "}
-              <Link href={link} className="text-blue-600 no-underline">
-                <span className="break-all">{link}</span>
-              </Link>
+            <Text className="text-white font-semibold text-center bg-red-500 py-2 rounded-md">
+              To protect your account, do not share this code.
             </Text>
             <Hr className="border border-solid border-[#eaeaea] mt-[26px] mx-0 w-full" />
             <Text>
@@ -86,7 +79,7 @@ const ResetPasswordTemplate = ({ link }: ResetPasswordTemplateProps) => {
         </Body>
         <Container className=" border-[#eaeaea] rounded  mx-auto p-[20px] max-w-[465px] relative">
           <Text className="text-[#666666] text-[12px] leading-[24px]">
-            You're receiving this email because you requested a password reset
+            You're receiving this email because you requested a two factor code
             for your Jobverse account.
           </Text>
         </Container>
@@ -94,4 +87,4 @@ const ResetPasswordTemplate = ({ link }: ResetPasswordTemplateProps) => {
     </Html>
   );
 };
-export default ResetPasswordTemplate;
+export default TwoFactorEmailTemplate;

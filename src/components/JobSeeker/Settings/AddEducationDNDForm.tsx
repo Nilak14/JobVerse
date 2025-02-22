@@ -72,10 +72,10 @@ const AddEducationDNDForm = ({ form }: AddEducationDNDFormProps) => {
         onClick={() => {
           append({
             degreeTitle: "",
-            institute: "",
+            instituteName: "",
             endDate: null,
             startDate: null,
-            location: "",
+            instituteLocation: "",
           });
         }}
         type="button"

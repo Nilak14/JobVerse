@@ -57,9 +57,7 @@ const CompanySwitchDialog = ({
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
       <ResponsiveModalContent
-        onInteractOutside={(e) => {
-          e.preventDefault();
-        }}
+        isloading={status === "executing" ? "true" : undefined}
       >
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>Switch Company?</ResponsiveModalTitle>

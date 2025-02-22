@@ -2,6 +2,7 @@ import "server-only";
 import { Resend } from "resend";
 import VerifyEmailTemplate from "@/template/emails/verify-email";
 import ResetPasswordTemplate from "@/template/emails/reset-password";
+import TwoFactorEmailTemplate from "@/template/emails/two-factor-email";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -38,6 +39,22 @@ export const sendResetPasswordLink = async ({
     to: email,
     subject: "Reset Your JobVerse Password",
     react: ResetPasswordTemplate({ link: resetPasswordLink }),
+  });
+  return error;
+};
+
+export const sendTwoFactorCode = async ({
+  token,
+  email,
+}: {
+  token: string;
+  email: string;
+}) => {
+  const { error } = await resend.emails.send({
+    from: "JobVerse@jobverse.me",
+    to: email,
+    subject: `Your JobVerse Two Factor Code: ${token}`,
+    react: TwoFactorEmailTemplate({ token }),
   });
   return error;
 };
