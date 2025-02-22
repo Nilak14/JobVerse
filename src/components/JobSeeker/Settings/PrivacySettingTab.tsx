@@ -7,24 +7,60 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import ChangePasswordForm from "./ChangePasswordForm";
-import {
-  ResponsiveModal,
-  ResponsiveModalContent,
-  ResponsiveModalDescription,
-  ResponsiveModalHeader,
-  ResponsiveModalTitle,
-  ResponsiveModalTrigger,
-} from "@/components/ui/responsive-dailog";
-import { Button } from "@/components/ui/button";
-import { EyeOff, KeyRound, Loader, Lock } from "lucide-react";
+import { EyeOff, KeyRound, Lock } from "lucide-react";
 import ToggleTwoFactorAuthentication from "./ToggleTwoFactorAuthentication";
 import { Switch } from "@/components/ui/switch";
 import { getClientSession } from "@/store/getClientSession";
 import AccountSecuritySkeleton from "@/components/skeletons/AccountSecuritySkeleton";
-import { useState } from "react";
+import { JobSeekerProfileComponentProps } from "@/lib/types";
+import { useOptimistic, useTransition } from "react";
+import { toggleProfileVisibility } from "@/actions/settings/toggleProfileVisibility";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
-const PrivacySettingTab = () => {
+type VisibilityState = {
+  value: boolean;
+  pending?: boolean;
+};
+
+const PrivacySettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
   const { session, status } = getClientSession();
+  const initialVisibility =
+    profile.JOB_SEEKER?.JobSeekerProfile?.profileVisibility ?? true;
+
+  const [isPending, startTransition] = useTransition();
+
+  const [optimisticState, updateOptimisticState] = useOptimistic<
+    VisibilityState,
+    boolean
+  >({ value: initialVisibility }, (state, newValue) => ({
+    value: newValue,
+    pending: true,
+  }));
+
+  const handleCheckChange = async (newStatus: boolean) => {
+    startTransition(async () => {
+      updateOptimisticState(newStatus);
+
+      try {
+        const res = await toggleProfileVisibility(newStatus);
+
+        if (res.success) {
+          updateOptimisticState(newStatus);
+          toast.success(res.message, { id: "toggle-profile-visibility" });
+        } else {
+          updateOptimisticState(!newStatus);
+          toast.error(res.message, { id: "toggle-profile-visibility" });
+        }
+      } catch (error) {
+        updateOptimisticState(!newStatus);
+        toast.error("Failed to update profile visibility", {
+          id: "toggle-profile-visibility",
+        });
+      }
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -42,7 +78,7 @@ const PrivacySettingTab = () => {
               <div className="space-y-3 mb-4">
                 <h3 className="font-bold">Account Security</h3>
 
-                <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2  rounded-lg">
+                <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2 rounded-lg">
                   <div className="flex items-center gap-5">
                     <KeyRound className="hidden md:block" />
                     <div className="space-y-1">
@@ -55,41 +91,34 @@ const PrivacySettingTab = () => {
                   </div>
                   <ChangePasswordForm />
                 </div>
-                <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2  rounded-lg">
+                <div className="flex justify-between items-center flex-col md:flex-row p-4 border-input border-2 rounded-lg">
                   <div className="flex items-center gap-5">
                     <Lock className="hidden md:block" />
                     <div className="space-y-1">
-                      <p>Two Factor Authentication</p>
+                      <p>
+                        Two Factor Authentication{" "}
+                        <span className="text-primary text-sm">
+                          (
+                          {profile.isTwoFactorEnabled
+                            ? "Currently On"
+                            : "Currently Off"}
+                          )
+                        </span>
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         Enable this Two Factor Authentication To Make your
                         Account More Secure
                       </p>
                     </div>
                   </div>
-                  <ResponsiveModal>
-                    <ResponsiveModalTrigger asChild>
-                      <Button className="w-full md:w-auto mt-5">Enable</Button>
-                    </ResponsiveModalTrigger>
-                    <ResponsiveModalContent>
-                      <ResponsiveModalHeader className="sr-only">
-                        <ResponsiveModalTitle>
-                          Enable Two Factor Authentication
-                        </ResponsiveModalTitle>
-                        <ResponsiveModalDescription>
-                          Enable this Two Factor Authentication To Make your
-                          Account More Secure
-                        </ResponsiveModalDescription>
-                      </ResponsiveModalHeader>
-                      <ToggleTwoFactorAuthentication />
-                    </ResponsiveModalContent>
-                  </ResponsiveModal>
+                  <ToggleTwoFactorAuthentication profile={profile} />
                 </div>
               </div>
             )}
             <Separator />
             <div className="space-y-3 mb-4 mt-4">
               <h3 className="font-bold">Privacy Settings</h3>
-              <div className="flex justify-between items-center  p-4 border-input border-2  rounded-lg">
+              <div className="flex justify-between items-center p-4 border-input border-2 rounded-lg">
                 <div className="flex items-center gap-5">
                   <EyeOff className="hidden md:block" />
                   <div className="space-y-1">
@@ -102,13 +131,14 @@ const PrivacySettingTab = () => {
                 </div>
                 <div className="flex gap-3 items-center">
                   <Switch
-                    disabled
-                    checked
-                    onCheckedChange={() => {
-                      console.log("checked");
-                    }}
+                    className={cn(
+                      "disabled:opacity-100",
+                      isPending && "animate-pulse"
+                    )}
+                    checked={optimisticState.value}
+                    onCheckedChange={handleCheckChange}
+                    disabled={isPending}
                   />
-                  <Loader className="size-4 text-muted-foreground animate-spin" />
                 </div>
               </div>
             </div>
@@ -118,4 +148,5 @@ const PrivacySettingTab = () => {
     </Card>
   );
 };
+
 export default PrivacySettingTab;

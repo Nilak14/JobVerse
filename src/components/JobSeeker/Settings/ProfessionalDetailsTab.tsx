@@ -1,4 +1,4 @@
-// 5:05:30
+"use client";
 import {
   Card,
   CardContent,
@@ -24,7 +24,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
-import { Award, GraduationCap, Plus, Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
@@ -32,15 +32,17 @@ import { Separator } from "@/components/ui/separator";
 import WorkExperienceDNDForm from "./WorkExperienceDNDForm";
 import AddEducationDNDForm from "./AddEducationDNDForm";
 import AddCertificationDNDForm from "./AddCertificationDNDForm";
-const ProfessionalDetailsTab = () => {
+import { JobSeekerProfileComponentProps } from "@/lib/types";
+const ProfessionalDetailsTab = ({
+  profile,
+}: JobSeekerProfileComponentProps) => {
   const form = useForm<ProfessionalDetailsSchemaType>({
     defaultValues: {
-      bio: "",
-      designation: "",
-      education: [],
-      skills: [],
-      workExperience: [],
-      certifications: [],
+      education: profile.JOB_SEEKER?.JobSeekerProfile?.Education || [],
+      skills: profile.JOB_SEEKER?.JobSeekerProfile?.skills || [],
+      workExperience:
+        profile.JOB_SEEKER?.JobSeekerProfile?.WorkExperience || [],
+      certifications: profile.JOB_SEEKER?.JobSeekerProfile?.Certification || [],
     },
     mode: "onChange",
     resolver: zodResolver(ProfessionalDetailsSchema),
@@ -77,40 +79,6 @@ const ProfessionalDetailsTab = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-8">
-            <FormField
-              control={form.control}
-              name="designation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Designation</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter Your Current Job Title"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Professional Summary</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="resize-none min-h-28"
-                      placeholder="Enter your Professional Details"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <div className="space-y-2">
               <Label>Skills</Label>
               <div className="flex flex-wrap gap-2 mt-2">
