@@ -16,20 +16,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { PhoneInput } from "@/components/ui/phone-input";
+import { Textarea } from "@/components/ui/textarea";
+import { JobSeekerProfileComponentProps } from "@/lib/types";
 import {
   PersonalInformationSchema,
   PersonalInformationSchemaType,
 } from "@/schema/JobSeekerSettingSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-const ProfileSettingTab = () => {
+const ProfileSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
   const form = useForm<PersonalInformationSchemaType>({
     defaultValues: {
-      address: "",
-      email: "",
-      fullName: "",
-      phoneNumber: "",
+      address: profile.JOB_SEEKER?.JobSeekerProfile?.location || "",
+      designation: profile.JOB_SEEKER?.JobSeekerProfile?.designation || "",
+      bio: profile.JOB_SEEKER?.JobSeekerProfile?.bio || "",
+      fullName: profile.name || "",
     },
     mode: "onChange",
     resolver: zodResolver(PersonalInformationSchema),
@@ -67,44 +68,6 @@ const ProfileSettingTab = () => {
               />
               <FormField
                 control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email Address</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="Your Email Address"
-                        {...field}
-                      />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <PhoneInput
-                        defaultCountry="NP"
-                        placeholder="Your Phone Number"
-                        {...field}
-                      />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="address"
                 render={({ field }) => (
                   <FormItem>
@@ -118,6 +81,42 @@ const ProfileSettingTab = () => {
                 )}
               />
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+              <FormField
+                control={form.control}
+                name="designation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Designation</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter Your Current Job Title"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Professional Summary</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="resize-none min-h-28"
+                      placeholder="Enter your Professional Details"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
           <CardFooter>
             <div className="w-full  flex justify-end gap-4 ">

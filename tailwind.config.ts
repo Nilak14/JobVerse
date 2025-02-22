@@ -80,8 +80,22 @@ const config: Config = {
         ripple: "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-left": "fade-left 0.5s ease",
       },
       keyframes: {
+        "fade-left": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(20px)",
+          },
+          "50%": {
+            opacity: "0.5",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)",
+          },
+        },
         shine: {
           from: {
             backgroundPosition: "200% 0",
