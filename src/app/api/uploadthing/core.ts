@@ -21,16 +21,25 @@ export const fileRouter = {
       return { user };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      const newAvatarUrl = file.url;
+      if (metadata.user.avatarUrl) {
+        const key = metadata.user.avatarUrl.split("/f/")[1];
+        console.log(key);
+
+        if (key) {
+          await new UTApi().deleteFiles(key);
+        }
+      }
+      const cdnFileUrl = `https://${process.env.UPLOADTHING_APP_ID}.ufs.sh/f/${file.key}`;
+
       await prisma.user.update({
         where: {
           id: metadata.user.id,
         },
         data: {
-          image: newAvatarUrl,
+          image: cdnFileUrl,
         },
       });
-      return { avatarUrl: newAvatarUrl };
+      return { cdnFileUrl };
     }),
   // company logo upload end point
   companyLogo: f({

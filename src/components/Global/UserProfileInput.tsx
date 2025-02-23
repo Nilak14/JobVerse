@@ -9,12 +9,16 @@ interface UserProfileInputProps {
   onImageCropped: (blob: Blob | null) => void;
   size?: string;
   username: string;
+  isUploading?: boolean;
+  uploadProgress?: number;
 }
 const UserProfileInput = ({
   onImageCropped,
   src,
   size = "size-32",
   username,
+  isUploading,
+  uploadProgress,
 }: UserProfileInputProps) => {
   const [imageToCrop, setImageToCrop] = useState<File>();
   const avatarFileInputRef = useRef<HTMLInputElement>(null);
@@ -42,11 +46,29 @@ const UserProfileInput = ({
         ref={avatarFileInputRef}
         className="hidden sr-only"
       />
+
       <button
         type="button"
         onClick={() => avatarFileInputRef.current?.click()}
         className="group relative block aspect-square"
       >
+        {isUploading && !!uploadProgress && (
+          <svg
+            className="absolute inset-0 -m-3 rotate-[-90deg]"
+            viewBox="0 0 100 100"
+          >
+            <circle
+              className="stroke-blue-500"
+              fill="none"
+              strokeWidth="4"
+              strokeDasharray={`${uploadProgress * 2.51}, 251`}
+              strokeLinecap="round"
+              cx="50"
+              cy="50"
+              r="40"
+            />
+          </svg>
+        )}
         {src ? (
           <Image
             src={src}
@@ -65,7 +87,7 @@ const UserProfileInput = ({
         <span className="absolute bottom-0 right-0 flex size-9 items-center justify-center bg-black bg-opacity-40 text-white transition-colors duration-200 group-hover:bg-opacity-25 rounded-full">
           <Camera size={24} />
         </span>
-        {src && src.toString().startsWith("blob:") && (
+        {/* {src && src.toString().startsWith("blob:") && (
           <span
             onClick={(e) => {
               e.stopPropagation();
@@ -75,7 +97,7 @@ const UserProfileInput = ({
           >
             <X size={15} />
           </span>
-        )}
+        )} */}
       </button>
       {imageToCrop && (
         <CropImageDialog

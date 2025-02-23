@@ -3,7 +3,7 @@
 import UserProfileInput from "@/components/Global/UserProfileInput";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, MapPin, Settings2, Shield, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import ProfileSettingTab from "./ProfileSettingTab";
@@ -12,6 +12,7 @@ import PreferencesSettingTab from "./PreferencesSettingTab";
 import PrivacySettingTab from "./PrivacySettingTab";
 import { useSearchParams } from "next/navigation";
 import { JobSeekerProfile } from "@/lib/prisma-types/JobSeekerProfile";
+import { useAvatarUpload } from "@/hooks/custom-hooks/useAvatarUpload";
 
 interface AccountSettingContentProps {
   profile: JobSeekerProfile;
@@ -20,17 +21,34 @@ interface AccountSettingContentProps {
 const AccountSettingContent = ({ profile }: AccountSettingContentProps) => {
   const searchParams = useSearchParams();
   const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
+
+  const { isUploading, startUpload, uploadProgress } = useAvatarUpload();
+
+  useEffect(() => {
+    if (croppedAvatar) {
+      const newAvatar = new File([croppedAvatar], "avatar.webp");
+      startUpload([newAvatar]);
+    }
+  }, [croppedAvatar]);
+  useEffect(() => {
+    console.log(uploadProgress);
+  }, [uploadProgress]);
+
   return (
     <section className="">
       <div className="flex sm:items-center items-start gap-6 sm:gap-10 flex-col sm:flex-row ">
-        <UserProfileInput
-          username="Nilak Pathak"
-          size="size-24"
-          src={
-            croppedAvatar ? URL.createObjectURL(croppedAvatar) : profile.image
-          }
-          onImageCropped={setCroppedAvatar}
-        />
+        <div className="">
+          <UserProfileInput
+            isUploading={isUploading}
+            uploadProgress={uploadProgress}
+            username="Nilak Pathak"
+            size="size-24"
+            src={
+              croppedAvatar ? URL.createObjectURL(croppedAvatar) : profile.image
+            }
+            onImageCropped={setCroppedAvatar}
+          />
+        </div>
         <div>
           <div>
             <h1 className="text-base sm:text-2xl font-bold mb-1">
