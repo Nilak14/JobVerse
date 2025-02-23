@@ -22,10 +22,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import BlockLoader from "@/components/ui/block-loader";
 import LoadingButton from "@/components/ui/loading-button";
-import useWarning from "@/hooks/use-warning";
 const PreferencesSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
-  console.log(profile);
-
   const form = useForm<PreferencesSettingsSchemaSchemaType>({
     defaultValues: {
       applicationUpdates:

@@ -76,6 +76,7 @@ const AddEducationDNDForm = ({ form }: AddEducationDNDFormProps) => {
             endDate: null,
             startDate: null,
             instituteLocation: "",
+            order: fields.length,
           });
         }}
         type="button"

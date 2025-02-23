@@ -4,7 +4,7 @@ export const PersonalInformationSchema = z.object({
   fullName: z.string().min(3, "Name is too short").max(50, "Name is too long"),
   bio: z.string().min(10, "Description is too short"),
   designation: z.string().min(3, "Designation is too short"),
-
+  openToWork: z.boolean(),
   address: z
     .string()
     .min(3, "Address is too short")
@@ -38,18 +38,20 @@ export const PrivacySettingSchema = z.object({
 
 export const ProfessionalDetailsSchema = z.object({
   skills: z.array(z.string().min(1, "Skill is too short")),
+
   workExperience: z.array(
     z.object({
+      order: z.number(),
       companyName: z.string().min(3, "Company name is too short"),
       position: z.string().min(3, "Designation is too short"),
       startDate: z.date().nullable(),
       endDate: z.date().nullable(),
-
       description: z.string().min(10, "Description is too short"),
     })
   ),
   education: z.array(
     z.object({
+      order: z.number(),
       degreeTitle: z.string().min(3, "Degree title is too short"),
       instituteName: z.string().min(3, "Institute name is too short"),
       startDate: z.date().nullable(),
@@ -59,6 +61,7 @@ export const ProfessionalDetailsSchema = z.object({
   ),
   certifications: z.array(
     z.object({
+      order: z.number(),
       title: z.string().min(3, "Certification title is too short"),
       institute: z.string().min(3, "Institute name is too short"),
       completionDate: z.date().nullable(),
