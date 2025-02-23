@@ -22,7 +22,7 @@ const AccountSettingContent = ({ profile }: AccountSettingContentProps) => {
   const [croppedAvatar, setCroppedAvatar] = useState<Blob | null>(null);
   return (
     <section className="">
-      <div className="flex items-center gap-6 sm:gap-10  ">
+      <div className="flex sm:items-center items-start gap-6 sm:gap-10 flex-col sm:flex-row ">
         <UserProfileInput
           username="Nilak Pathak"
           size="size-24"
@@ -34,7 +34,7 @@ const AccountSettingContent = ({ profile }: AccountSettingContentProps) => {
         <div>
           <div>
             <h1 className="text-base sm:text-2xl font-bold mb-1">
-              {profile.name}
+              {profile.name}{" "}
               {profile.JOB_SEEKER?.JobSeekerProfile?.designation && (
                 <span>
                   ({profile.JOB_SEEKER?.JobSeekerProfile?.designation})
@@ -52,9 +52,11 @@ const AccountSettingContent = ({ profile }: AccountSettingContentProps) => {
                 <span>{profile.JOB_SEEKER?.JobSeekerProfile?.location}</span>
               </p>
             )}
-            <Badge className="bg-primary/20 text-primary hover:bg-primary/10  py-2">
-              Open To Work
-            </Badge>
+            {profile.JOB_SEEKER?.JobSeekerProfile?.openToWork && (
+              <Badge className="bg-primary/20 text-primary hover:bg-primary/10  py-2">
+                Open To Work
+              </Badge>
+            )}
           </div>
         </div>
       </div>
