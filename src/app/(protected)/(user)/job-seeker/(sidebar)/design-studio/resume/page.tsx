@@ -3,7 +3,7 @@ import { PlusSquare } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 
-export const metaData: Metadata = {
+export const metadata: Metadata = {
   title: "Your Resumes",
   description: "Create and manage your resumes",
 };
