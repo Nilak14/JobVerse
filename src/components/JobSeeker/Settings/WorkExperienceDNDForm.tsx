@@ -1,3 +1,4 @@
+"use client";
 import {
   closestCenter,
   DndContext,
@@ -25,7 +26,7 @@ interface WorkExperienceDNDFormProps {
 }
 
 const WorkExperienceDNDForm = ({ form }: WorkExperienceDNDFormProps) => {
-  const { fields, append, remove, move } = useFieldArray({
+  const { fields, append, remove, move, update } = useFieldArray({
     control: form.control,
     name: "workExperience",
   });
@@ -40,6 +41,7 @@ const WorkExperienceDNDForm = ({ form }: WorkExperienceDNDFormProps) => {
     if (over && active.id !== over.id) {
       const oldIndex = fields.findIndex((item) => item.id === active.id);
       const newIndex = fields.findIndex((item) => item.id === over.id);
+
       move(oldIndex, newIndex);
       return arrayMove(fields, oldIndex, newIndex);
     }
@@ -85,6 +87,7 @@ const WorkExperienceDNDForm = ({ form }: WorkExperienceDNDFormProps) => {
               endDate: null,
               startDate: null,
               description: "",
+              order: fields.length,
             })
           }
           className="border-primary text-primary hover:bg-primary/5"

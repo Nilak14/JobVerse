@@ -8,14 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   ProfessionalDetailsSchema,
@@ -23,16 +16,19 @@ import {
 } from "@/schema/JobSeekerSettingSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import WorkExperienceDNDForm from "./WorkExperienceDNDForm";
 import AddEducationDNDForm from "./AddEducationDNDForm";
 import AddCertificationDNDForm from "./AddCertificationDNDForm";
 import { JobSeekerProfileComponentProps } from "@/lib/types";
+import BlockLoader from "@/components/ui/block-loader";
+import { toast } from "sonner";
+import { professionalDetailsSettings } from "@/actions/settings/professionalDetailsSettings";
+import LoadingButton from "@/components/ui/loading-button";
 const ProfessionalDetailsTab = ({
   profile,
 }: JobSeekerProfileComponentProps) => {
@@ -48,7 +44,9 @@ const ProfessionalDetailsTab = ({
     resolver: zodResolver(ProfessionalDetailsSchema),
   });
   const [newSkill, setNewSkill] = useState<string>("");
-
+  useEffect(() => {
+    console.log(form.formState.errors);
+  }, [form.formState.errors]);
   const addSkill = () => {
     const existingSkills = form.getValues("skills");
     if (newSkill && !existingSkills.includes(newSkill)) {
@@ -63,13 +61,61 @@ const ProfessionalDetailsTab = ({
       existingSkills.filter((s) => s !== skill)
     );
   };
+  const [loading, setLoading] = useState(false);
+  const onSubmit = async (data: ProfessionalDetailsSchemaType) => {
+    console.log("hi");
 
-  const onSubmit = (data: ProfessionalDetailsSchemaType) => {
-    console.log(data);
+    setLoading(true);
+    try {
+      const workExperienceWithOrder = data.workExperience.map(
+        (item, index) => ({
+          ...item,
+          order: index,
+        })
+      );
+      const educationWithOrder = data.education.map((item, index) => ({
+        ...item,
+        order: index,
+      }));
+      const certificationsWithOrder = data.certifications.map(
+        (item, index) => ({
+          ...item,
+          order: index,
+        })
+      );
+      const updatedData = {
+        ...data,
+        workExperience: workExperienceWithOrder,
+        education: educationWithOrder,
+        certifications: certificationsWithOrder,
+      };
+      const res = await professionalDetailsSettings(updatedData);
+      if (res.success) {
+        toast.success(res.message, { id: "professional-details" });
+      } else {
+        toast.error(res.message, { id: "professional-details" });
+      }
+    } catch (error) {
+      toast.error("Failed to update professional details", {
+        id: "professional-details",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // Optionally, you can render a placeholder or nothing until mounted
+    return null;
+  }
   return (
-    <Card>
+    <Card className="relative">
+      <BlockLoader isLoading={loading} textContent="Updating" />
       <CardHeader>
         <CardTitle>Professional Details</CardTitle>
         <CardDescription>
@@ -113,7 +159,6 @@ const ProfessionalDetailsTab = ({
                       }
                     }}
                   />
-
                   <Button
                     type="button"
                     size="sm"
@@ -136,7 +181,9 @@ const ProfessionalDetailsTab = ({
               <Button type="button" variant={"secondary"}>
                 Cancel
               </Button>
-              <Button type="submit">Save Changes</Button>
+              <LoadingButton loading={loading} showIconOnly type="submit">
+                Save Changes
+              </LoadingButton>
             </div>
           </CardFooter>
         </form>

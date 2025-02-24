@@ -11,7 +11,7 @@ export function getJobSeekerProfileSelect() {
         JobSeekerProfile: {
           select: {
             location: true,
-            phoneNumber: true,
+            openToWork: true,
             designation: true,
             bio: true,
             skills: true,
@@ -22,6 +22,7 @@ export function getJobSeekerProfileSelect() {
                 startDate: true,
                 endDate: true,
                 description: true,
+                order: true,
               },
             },
             Education: {
@@ -31,6 +32,7 @@ export function getJobSeekerProfileSelect() {
                 instituteLocation: true,
                 startDate: true,
                 endDate: true,
+                order: true,
               },
             },
             Certification: {
@@ -38,6 +40,7 @@ export function getJobSeekerProfileSelect() {
                 title: true,
                 completionDate: true,
                 instituteName: true,
+                order: true,
               },
             },
             receiveJobRecommendationEmail: true,

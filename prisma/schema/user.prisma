@@ -86,9 +86,9 @@ model JobSeekerProfile {
     userId                        String                    @unique
     user                          JOB_SEEKER                @relation(fields: [userId], references: [id], onDelete: Cascade)
     location                      String?
-    phoneNumber                   String?
     designation                   String?
     profileVisibility             Boolean                   @default(true)
+    openToWork                    Boolean                   @default(true)
     bio                           String?
     skills                        String[]
     receiveJobRecommendationEmail Boolean                   @default(true)
@@ -106,6 +106,7 @@ model JobSeekerProfile {
 model JobSeekerWorkExperience {
     id                 String           @id @default(cuid())
     jobSeekerProfileId String
+    order              Int
     jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
     position           String
     companyName        String
@@ -115,6 +116,7 @@ model JobSeekerWorkExperience {
     createdAt          DateTime         @default(now())
     updatedAt          DateTime         @updatedAt
 
+    @@unique([jobSeekerProfileId, order])
     @@map("job_seeker_work_experiences")
 }
 
@@ -124,12 +126,14 @@ model JobSeekerEducation {
     jobSeekerProfile   JobSeekerProfile @relation(fields: [jobSeekerProfileId], references: [id], onDelete: Cascade)
     degreeTitle        String
     instituteName      String
+    order              Int
     instituteLocation  String
     startDate          DateTime
     endDate            DateTime?
     createdAt          DateTime         @default(now())
     updatedAt          DateTime         @updatedAt
 
+    @@unique([jobSeekerProfileId, order])
     @@map("job_seeker_educations")
 }
 
@@ -140,6 +144,10 @@ model JobSeekerCertification {
     title              String
     instituteName      String
     completionDate     DateTime
+    order              Int
+    createdAt          DateTime         @default(now())
+    updatedAt          DateTime         @updatedAt
 
+    @@unique([jobSeekerProfileId, order])
     @@map("job_seeker_certifications")
 }

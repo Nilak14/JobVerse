@@ -1,3 +1,5 @@
+import { profileSettings } from "@/actions/settings/profileSettings";
+import BlockLoader from "@/components/ui/block-loader";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,15 +9,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import LoadingButton from "@/components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
 import { JobSeekerProfileComponentProps } from "@/lib/types";
 import {
@@ -23,7 +28,9 @@ import {
   PersonalInformationSchemaType,
 } from "@/schema/JobSeekerSettingSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 const ProfileSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
   const form = useForm<PersonalInformationSchemaType>({
     defaultValues: {
@@ -31,17 +38,33 @@ const ProfileSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
       designation: profile.JOB_SEEKER?.JobSeekerProfile?.designation || "",
       bio: profile.JOB_SEEKER?.JobSeekerProfile?.bio || "",
       fullName: profile.name || "",
+      openToWork: profile.JOB_SEEKER?.JobSeekerProfile?.openToWork || true,
     },
     mode: "onChange",
     resolver: zodResolver(PersonalInformationSchema),
   });
-
-  const onSubmit = (data: PersonalInformationSchemaType) => {
-    console.log(data);
+  const [loading, setLoading] = useState(false);
+  const onSubmit = async (data: PersonalInformationSchemaType) => {
+    setLoading(true);
+    try {
+      const res = await profileSettings(data);
+      if (res.success) {
+        toast.success(res.message, { id: "personal-information" });
+      } else {
+        toast.error(res.message, { id: "personal-information" });
+      }
+    } catch (error) {
+      toast.error("Failed to update personal information", {
+        id: "personal-information",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Card>
+    <Card className="relative">
+      <BlockLoader isLoading={loading} textContent="Updating" />
       <CardHeader>
         <CardTitle>Personal Information</CardTitle>
         <CardDescription>
@@ -117,13 +140,43 @@ const ProfileSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="openToWork"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 cursor-pointer">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="cursor-pointer">
+                      Open To Work?
+                    </FormLabel>
+                    <FormDescription className="pt-1">
+                      Selecting this will add an urgent tag to the job post
+                    </FormDescription>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
           </CardContent>
           <CardFooter>
             <div className="w-full  flex justify-end gap-4 ">
               <Button type="button" variant={"secondary"}>
                 Cancel
               </Button>
-              <Button type="submit">Save Changes</Button>
+              <LoadingButton
+                disabled={!form.formState.isDirty}
+                loading={loading}
+                showIconOnly
+                type="submit"
+              >
+                Save Changes
+              </LoadingButton>
             </div>
           </CardFooter>
         </form>
