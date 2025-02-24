@@ -52,3 +52,7 @@ export interface ResumeEditorFormProps {
   resumeData: ResumeValues;
   setResumeData: (data: ResumeValues) => void;
 }
+
+export interface ResumeTemplateProps {
+  resumeData: ResumeValues;
+}

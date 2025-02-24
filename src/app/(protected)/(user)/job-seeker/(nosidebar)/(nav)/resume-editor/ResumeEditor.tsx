@@ -1,6 +1,7 @@
 "use client";
 
 import ResumeEditorFooter from "@/components/Resume/ResumeEditorFooter";
+import ResumePreviewSection from "@/components/Resume/ResumePreviewSection";
 import ResumeEditorBreadCrumb from "@/components/ResumeEditorBreadCrumbs";
 import { ResumeEditorFormSteps } from "@/lib/multi-form-steps/ResumeEditorStep";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
@@ -33,7 +34,6 @@ const ResumeEditor = () => {
       <main className="relative grow">
         <div className="absolute bottom-0 top-0 flex w-full">
           <div className="w-full md:w-1/2 p-3 overflow-y-auto space-y-6">
-            {/* <GeneralInfoForm /> */}
             <ResumeEditorBreadCrumb
               currentStep={currentStep}
               setCurrentStep={setStep}
@@ -45,8 +45,11 @@ const ResumeEditor = () => {
               />
             )}
           </div>
-          <div className="grow md:border-r"></div>
-          <div className="hidden w-1/2 md:flex ">right</div>
+          <div className="grow md:border-r" />
+          <ResumePreviewSection
+            resumeDate={resumeData}
+            setResumeData={setResumeData}
+          />
         </div>
       </main>
       <ResumeEditorFooter currentStep={currentStep} setCurrentStep={setStep} />

@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import ResumeEditorFormShell from "./ResumeEditorFormShell";
 import { ResumeEditorFormProps } from "@/lib/types";
+import { useEffect } from "react";
 
 const GeneralInfoForm = ({
   resumeData,
@@ -24,10 +25,18 @@ const GeneralInfoForm = ({
   const form = useForm<GeneralInfoValues>({
     resolver: zodResolver(generalInfoSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: resumeData.title || "",
+      description: resumeData.description || "",
     },
   });
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      const isValid = await form.trigger();
+      if (!isValid) return;
+      setResumeData({ ...resumeData, ...values });
+    });
+    return unsubscribe;
+  }, [form, resumeData, setResumeData]);
   return (
     <ResumeEditorFormShell
       description="This will not appear in your resume"

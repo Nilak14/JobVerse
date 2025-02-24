@@ -23,24 +23,24 @@ const PersonalInfoForm = ({
 }: ResumeEditorFormProps) => {
   const form = useForm<PersonalInfoValues>({
     defaultValues: {
-      city: "",
-      country: "",
-      email: "",
-      fullName: "",
-      phone: "",
-      jobTitle: "",
+      city: resumeData.city || "",
+      country: resumeData.country || "",
+      email: resumeData.email || "",
+      fullName: resumeData.fullName || "",
+      phone: resumeData.phone || "",
+      jobTitle: resumeData.jobTitle || "",
     },
     resolver: zodResolver(personalInfoSchema),
   });
 
   useEffect(() => {
-    const { unsubscribe } = form.watch(async () => {
+    const { unsubscribe } = form.watch(async (values) => {
       const isValid = await form.trigger();
       if (!isValid) return;
-      //todo: update the resume data
+      setResumeData({ ...resumeData, ...values });
     });
     return unsubscribe;
-  }, [form]);
+  }, [form, resumeData, setResumeData]);
   return (
     <ResumeEditorFormShell
       title="Personal Info"
