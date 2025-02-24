@@ -154,11 +154,7 @@ const PreferencesSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
           </CardContent>
           <CardFooter>
             <div className="w-full  flex justify-end gap-4 ">
-              <LoadingButton
-                disabled={!form.formState.isDirty}
-                loading={loading}
-                type="submit"
-              >
+              <LoadingButton loading={loading} type="submit">
                 Save Changes
               </LoadingButton>
             </div>

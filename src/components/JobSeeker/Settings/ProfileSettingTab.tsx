@@ -169,12 +169,7 @@ const ProfileSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
               <Button type="button" variant={"secondary"}>
                 Cancel
               </Button>
-              <LoadingButton
-                disabled={!form.formState.isDirty}
-                loading={loading}
-                showIconOnly
-                type="submit"
-              >
+              <LoadingButton loading={loading} showIconOnly type="submit">
                 Save Changes
               </LoadingButton>
             </div>
