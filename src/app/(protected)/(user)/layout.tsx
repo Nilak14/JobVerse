@@ -1,4 +1,4 @@
 const UserTypePageLayout = ({ children }: { children: React.ReactElement }) => {
-  return <main>{children}</main>;
+  return <div>{children}</div>;
 };
 export default UserTypePageLayout;

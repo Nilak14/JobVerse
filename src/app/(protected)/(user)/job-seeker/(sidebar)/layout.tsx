@@ -22,11 +22,11 @@ const JObSeekerSidebarLayout = async ({
       <SidebarInset>
         <JobSeekerNav hasSidebar user={user} />
 
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <main className="flex flex-1 flex-col gap-4 p-4">
           <SidebarPageTransition>
             <SidebarContainer>{children}</SidebarContainer>
           </SidebarPageTransition>
-        </div>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );

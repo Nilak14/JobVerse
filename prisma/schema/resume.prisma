@@ -1,0 +1,62 @@
+model Resume {
+    id          String     @id @default(cuid())
+    userId      String
+    user        JOB_SEEKER @relation(fields: [userId], references: [id], onDelete: Cascade)
+    title       String?
+    description String?
+
+    photoUrl    String?
+    colorHex    String  @default("#000000")
+    borderStyle String  @default("squircle")
+    summary     String?
+    fullName    String?
+    jobTitle    String?
+    city        String?
+    country     String?
+    phone       String?
+    email       String?
+
+    workExperiences WorkExperience[]
+    educations      Education[]
+    skills          String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("resumes")
+}
+
+model WorkExperience {
+    id String @id @default(cuid())
+
+    position    String?
+    company     String?
+    startDate   DateTime?
+    endDate     DateTime?
+    description String?
+
+    resumeId String
+    resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("work_experiences")
+}
+
+model Education {
+    id String @id @default(cuid())
+
+    degree    String?
+    school    String?
+    startDate DateTime?
+    endDate   DateTime?
+
+    resumeId String
+    resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("educations")
+}

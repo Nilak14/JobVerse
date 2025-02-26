@@ -1,9 +1,9 @@
 import { JobSchemaType } from "@/schema/CreateJobSchema";
-import { useDebounce } from "./use-debounce";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { saveJob } from "@/actions/job/saveJob";
 import { toast } from "sonner";
+import { useDebounce } from "./use-debounce";
 
 export default function useAutoSaveJobPost(jobData: JobSchemaType) {
   const debouncedJobData = useDebounce(jobData, 1500);

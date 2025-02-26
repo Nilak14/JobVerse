@@ -6,8 +6,9 @@ const nextConfig: NextConfig = {
       dynamic: 30, // cache dynamic route for 30 sec in client side navigation
       static: 180, // cache static route for 180 sec in client side navigation
     },
-    // ppr: true,
-    // dynamicIO: true,
+    serverActions: {
+      bodySizeLimit: "4mb",
+    },
   },
   images: {
     remotePatterns: [
@@ -16,11 +17,10 @@ const nextConfig: NextConfig = {
         hostname: `${process.env.UPLOADTHING_APP_ID}.ufs.sh`,
         pathname: "/f/*",
       },
-      // {
-      //   protocol: "https",
-      //   hostname: "utfs.io",
-      //   pathname: `/a/${process.env.UPLOADTHING_APP_ID}/*`,
-      // },
+      {
+        protocol: "https",
+        hostname: "f5rwp8m32qkziuag.public.blob.vercel-storage.com",
+      },
       {
         protocol: "https",
         hostname: "*.googleusercontent.com",

@@ -9,8 +9,6 @@ export default function useWarning(condition = true) {
       event.preventDefault();
     };
     window.addEventListener("beforeunload", listener);
-    return () => {
-      window.removeEventListener("beforeunload", listener);
-    };
+    return () => window.removeEventListener("beforeunload", listener);
   }, [condition]);
 }

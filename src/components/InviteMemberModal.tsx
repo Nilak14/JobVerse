@@ -10,7 +10,7 @@ import { useActiveCompany } from "@/store/useActiveCompany";
 import { Input } from "./ui/input";
 import { Search, Send } from "lucide-react";
 import LinkButtonAnimated from "./ui/animated-button-link";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDebounce } from "@/hooks/custom-hooks/use-debounce";
 import { useState } from "react";
 import { useQueryEmployeeSearch } from "@/hooks/query-hooks/useQueryEmployeeSearch";
 import UserAvatar from "./Global/Useravatar";
