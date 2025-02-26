@@ -6,13 +6,18 @@ import ResumeEditorBreadCrumb from "@/components/ResumeEditorBreadCrumbs";
 import useWarning from "@/hooks/custom-hooks/use-warning";
 import useAutoSaveResume from "@/hooks/custom-hooks/useAutoSaveResume";
 import { ResumeEditorFormSteps } from "@/lib/multi-form-steps/ResumeEditorStep";
-import { cn } from "@/lib/utils";
+import { ResumeServerData } from "@/lib/prisma-types/Resume";
+import { cn, mapToResumeValues } from "@/lib/utils";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-
-const ResumeEditor = () => {
-  const [resumeData, setResumeData] = useState<ResumeValues>({});
+interface ResumeEditorProps {
+  resumeToEdit: ResumeServerData | null;
+}
+const ResumeEditor = ({ resumeToEdit }: ResumeEditorProps) => {
+  const [resumeData, setResumeData] = useState<ResumeValues>(
+    resumeToEdit ? mapToResumeValues(resumeToEdit) : {}
+  );
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
   const searchParams = useSearchParams();
   const currentStep = searchParams.get("step") || ResumeEditorFormSteps[0].key;
