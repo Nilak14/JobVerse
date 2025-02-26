@@ -2,12 +2,14 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { ResumeEditorFormSteps } from "@/lib/multi-form-steps/ResumeEditorStep";
 import { FileUserIcon, Pen, PenLineIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ResumeEditorFooterProps {
   currentStep: string;
   setCurrentStep: (step: string) => void;
   showSmResumePreview: boolean;
   setShowSmResumePreview: (show: boolean) => void;
+  isSaving: boolean;
 }
 
 const ResumeEditorFooter = ({
@@ -15,6 +17,7 @@ const ResumeEditorFooter = ({
   setCurrentStep,
   setShowSmResumePreview,
   showSmResumePreview,
+  isSaving,
 }: ResumeEditorFooterProps) => {
   const previousStep = ResumeEditorFormSteps.find(
     (_, index) => ResumeEditorFormSteps[index + 1]?.key === currentStep
@@ -58,7 +61,14 @@ const ResumeEditorFooter = ({
           <Button variant={"secondary"}>
             <Link href={"/job-seeker/design-studio/resume"}>Cancel</Link>
           </Button>
-          <p className="text-muted-foreground opacity-0">Saving...</p>
+          <p
+            className={cn(
+              "text-muted-foreground opacity-0",
+              isSaving && "opacity-100"
+            )}
+          >
+            Saving...
+          </p>
         </div>
       </div>
     </footer>

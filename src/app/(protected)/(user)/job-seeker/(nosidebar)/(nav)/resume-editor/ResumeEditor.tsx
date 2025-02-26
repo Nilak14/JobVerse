@@ -3,6 +3,8 @@
 import ResumeEditorFooter from "@/components/Resume/ResumeEditorFooter";
 import ResumePreviewSection from "@/components/Resume/ResumePreviewSection";
 import ResumeEditorBreadCrumb from "@/components/ResumeEditorBreadCrumbs";
+import useWarning from "@/hooks/custom-hooks/use-warning";
+import useAutoSaveResume from "@/hooks/custom-hooks/useAutoSaveResume";
 import { ResumeEditorFormSteps } from "@/lib/multi-form-steps/ResumeEditorStep";
 import { cn } from "@/lib/utils";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
@@ -15,6 +17,8 @@ const ResumeEditor = () => {
   const searchParams = useSearchParams();
   const currentStep = searchParams.get("step") || ResumeEditorFormSteps[0].key;
 
+  const { hasUnsavedChanges, isSaving } = useAutoSaveResume(resumeData);
+
   function setStep(key: string) {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("step", key);
@@ -23,6 +27,9 @@ const ResumeEditor = () => {
   const FormComponent = ResumeEditorFormSteps.find(
     (step) => step.key === currentStep
   )?.component;
+
+  useWarning(hasUnsavedChanges);
+
   return (
     <div className="flex grow flex-col">
       <header className="space-y-1.5 border-b px-3 py-5 text-center">
@@ -60,6 +67,7 @@ const ResumeEditor = () => {
         </div>
       </main>
       <ResumeEditorFooter
+        isSaving={isSaving}
         setShowSmResumePreview={setShowSmResumePreview}
         showSmResumePreview={showSmResumePreview}
         currentStep={currentStep}

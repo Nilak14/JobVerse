@@ -9,8 +9,8 @@ import { JobEditorFormSteps } from "@/lib/multi-form-steps/JobEditorStep";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import JobPreviewSection from "@/components/Job/JobPreviewSection";
 import { cn, mapToJobValues } from "@/lib/utils";
-import useAutoSaveJobPost from "@/hooks/useAutoSaveJobPost";
-import useWarning from "@/hooks/use-warning";
+import useAutoSaveJobPost from "@/hooks/custom-hooks/useAutoSaveJobPost";
+import useWarning from "@/hooks/custom-hooks/use-warning";
 import { JobServerData } from "@/lib/prisma-types/Job";
 import JobEditorBreadcrumbs from "@/components/JobEditorBreadCrumbs";
 

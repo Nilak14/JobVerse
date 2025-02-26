@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDebounce } from "@/hooks/custom-hooks/use-debounce";
 import { Building, MapPin, Search } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
