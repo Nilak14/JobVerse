@@ -1,3 +1,4 @@
+import GenerateResumeSummary from "@/components/Resume/GenerateResumeSummary";
 import {
   Form,
   FormControl,
@@ -54,6 +55,12 @@ const SummaryForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
                   />
                 </FormControl>
                 <FormMessage />
+                <GenerateResumeSummary
+                  onSummaryGenerated={(summary) =>
+                    form.setValue("summary", summary)
+                  }
+                  resumeData={resumeData}
+                />
               </FormItem>
             )}
           />
