@@ -1,7 +1,7 @@
 import { BorderStyles } from "@/components/Resume/BorderStyleButton";
 import { ResumeTemplateProps } from "@/lib/types";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const PersonalInfoHeader = ({ resumeData }: ResumeTemplateProps) => {
   const {

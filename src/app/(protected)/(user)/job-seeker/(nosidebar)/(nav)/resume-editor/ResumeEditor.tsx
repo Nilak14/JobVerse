@@ -4,13 +4,14 @@ import ResumeEditorFooter from "@/components/Resume/ResumeEditorFooter";
 import ResumePreviewSection from "@/components/Resume/ResumePreviewSection";
 import ResumeEditorBreadCrumb from "@/components/ResumeEditorBreadCrumbs";
 import { ResumeEditorFormSteps } from "@/lib/multi-form-steps/ResumeEditorStep";
+import { cn } from "@/lib/utils";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const ResumeEditor = () => {
   const [resumeData, setResumeData] = useState<ResumeValues>({});
-
+  const [showSmResumePreview, setShowSmResumePreview] = useState(false);
   const searchParams = useSearchParams();
   const currentStep = searchParams.get("step") || ResumeEditorFormSteps[0].key;
 
@@ -33,7 +34,12 @@ const ResumeEditor = () => {
       </header>
       <main className="relative grow">
         <div className="absolute bottom-0 top-0 flex w-full">
-          <div className="w-full md:w-1/2 p-3 overflow-y-auto space-y-6">
+          <div
+            className={cn(
+              "w-full md:w-1/2 p-3 overflow-y-auto space-y-6 md:block",
+              showSmResumePreview && "hidden"
+            )}
+          >
             <ResumeEditorBreadCrumb
               currentStep={currentStep}
               setCurrentStep={setStep}
@@ -47,12 +53,18 @@ const ResumeEditor = () => {
           </div>
           <div className="grow md:border-r" />
           <ResumePreviewSection
+            className={cn(showSmResumePreview && "flex")}
             resumeDate={resumeData}
             setResumeData={setResumeData}
           />
         </div>
       </main>
-      <ResumeEditorFooter currentStep={currentStep} setCurrentStep={setStep} />
+      <ResumeEditorFooter
+        setShowSmResumePreview={setShowSmResumePreview}
+        showSmResumePreview={showSmResumePreview}
+        currentStep={currentStep}
+        setCurrentStep={setStep}
+      />
     </div>
   );
 };
