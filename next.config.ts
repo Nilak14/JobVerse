@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "4mb",
     },
+    turbo: {
+      resolveAlias: {
+        canvas: "./lib/canvas.ts",
+      },
+    },
   },
   images: {
     remotePatterns: [

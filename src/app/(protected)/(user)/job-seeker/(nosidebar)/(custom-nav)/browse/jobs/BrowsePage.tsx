@@ -11,6 +11,7 @@ import { useSearchParams } from "next/navigation";
 import BrowsePageSearch from "./BrowsePageSearch";
 import { Session } from "next-auth";
 import BrowsePageFilterSheet from "./BrowsePageFilterSheet";
+import BackButton from "@/components/Global/BackButton";
 
 interface BrowsePageProps {
   session: Session;
@@ -47,9 +48,11 @@ const BrowsePage = ({ session }: BrowsePageProps) => {
       </header>
       <div className="flex">
         <aside className="max-w-[300px] w-[300px] bg-sidebar fixed h-[calc(100vh-64px)] overflow-y-auto hidden md:block">
+          <div className="flex items-center px-5">
+            <BackButton />
+          </div>
           <BrowsePageFilter />
         </aside>
-
         <section className="flex-1 md:pl-[340px] px-10 mx-auto mt-10 ">
           <BrowsePageSearch />
           <div className="md:hidden mb-5">

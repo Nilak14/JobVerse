@@ -188,7 +188,7 @@ function WorkExperienceItem({
           <FormItem>
             <FormLabel>Job Title</FormLabel>
             <FormControl>
-              <Input placeholder="Enter Job Title" {...field} autoFocus />
+              <Input placeholder="Enter Job Title" {...field} />
             </FormControl>
           </FormItem>
         )}

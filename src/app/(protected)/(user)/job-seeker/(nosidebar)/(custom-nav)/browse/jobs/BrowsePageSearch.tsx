@@ -43,33 +43,35 @@ const BrowsePageSearch = () => {
   }, [globalSearchQuery, companySearchQuery, locationSearchQuery]);
 
   return (
-    <div className=" relative  lg:sticky z-10 bg-background top-0 lg:top-16 min-h-16 items-center gap-5 mb-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:gap-4">
-      <div>
-        <Input
-          value={globalSearch}
-          onChange={(e) => setGlobalSearch(e.target.value)}
-          startIcon={Search}
-          className="w-full"
-          placeholder="Search Jobs "
-        />
+    <>
+      <div className=" relative  lg:sticky z-10 bg-background top-0 lg:top-16 min-h-16 items-center gap-5 mb-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:gap-4">
+        <div>
+          <Input
+            value={globalSearch}
+            onChange={(e) => setGlobalSearch(e.target.value)}
+            startIcon={Search}
+            className="w-full"
+            placeholder="Search Jobs "
+          />
+        </div>
+        <div>
+          <Input
+            value={companySearch}
+            onChange={(e) => setCompanySearch(e.target.value)}
+            startIcon={Building}
+            placeholder="Search By Company Name"
+          />
+        </div>
+        <div>
+          <Input
+            value={locationSearch}
+            onChange={(e) => setLocationSearch(e.target.value)}
+            startIcon={MapPin}
+            placeholder="Search By Location"
+          />
+        </div>
       </div>
-      <div>
-        <Input
-          value={companySearch}
-          onChange={(e) => setCompanySearch(e.target.value)}
-          startIcon={Building}
-          placeholder="Search By Company Name"
-        />
-      </div>
-      <div>
-        <Input
-          value={locationSearch}
-          onChange={(e) => setLocationSearch(e.target.value)}
-          startIcon={MapPin}
-          placeholder="Search By Location"
-        />
-      </div>
-    </div>
+    </>
   );
 };
 export default BrowsePageSearch;
