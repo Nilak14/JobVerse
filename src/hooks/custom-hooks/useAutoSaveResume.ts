@@ -23,7 +23,15 @@ const useAutoSaveResume = (resumeData: ResumeValues) => {
       try {
         setIsSaving(true);
         setIsError(false);
-
+        if (searchParams.get("profileData")) {
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.delete("profileData");
+          window.history.replaceState(
+            null,
+            "",
+            `?${newSearchParams.toString()}`
+          );
+        }
         const newData = structuredClone(debouncedResumeData);
 
         const updatedResume = await saveResume({

@@ -69,7 +69,7 @@ const WorkExperienceFormItem = ({
           <FormItem>
             <FormLabel>Job Title</FormLabel>
             <FormControl>
-              <Input {...field} autoFocus />
+              <Input {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

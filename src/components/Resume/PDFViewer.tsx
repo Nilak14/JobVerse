@@ -1,19 +1,19 @@
 "use client";
-import { ResumeServerData } from "@/lib/prisma-types/Resume";
+
+import { pdfjs, Document, Page } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 import Link from "next/link";
-import ResumePreview from "./ResumePreview";
-import { mapToResumeValues } from "@/lib/utils";
-import { useRef, useState, useTransition } from "react";
+import ResumeStudioSkeleton from "../skeletons/ResumeSkeleton";
+import { useState, useTransition } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { deleteCreatedResume } from "@/actions/resume/deleteCreatedResume";
-import { toast } from "sonner";
+} from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { Download, MoreVertical, Trash2 } from "lucide-react";
+import { MoreVertical, Trash2 } from "lucide-react";
 import {
   ResponsiveModal,
   ResponsiveModalContent,
@@ -23,60 +23,77 @@ import {
   ResponsiveModalTitle,
 } from "../ui/responsive-dailog";
 import LoadingButton from "../ui/loading-button";
-import { useReactToPrint } from "react-to-print";
-interface CreatedResumeCardProps {
-  resume: ResumeServerData;
-}
-const CreatedResumeCard = ({ resume }: CreatedResumeCardProps) => {
-  const wasUpdated = resume.updatedAt !== resume.createdAt;
-  const contentRef = useRef<HTMLDivElement>(null);
-  const reactToPrintFn = useReactToPrint({
-    contentRef,
-    documentTitle: resume.title || "Untitled Resume",
-  });
+import { toast } from "sonner";
+import { deleteUploadedResume } from "@/actions/resume/deleteUploadedResume";
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
+const options = {
+  cMapUrl: "/cmaps/",
+  standardFontDataUrl: "/standard_fonts/",
+};
+
+export const dynamic = "force-dynamic";
+
+interface PDFViewerProps {
+  pdfUrl: string;
+  uploadedAt: Date;
+  id: string;
+}
+const PDFViewer = ({ id, pdfUrl, uploadedAt }: PDFViewerProps) => {
   return (
-    <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p-3 ">
-      <div className="space-y-3">
-        <Link
-          className="inline-block w-full text-center"
-          href={`/job-seeker/resume-editor?id=${resume.id}`}
-        >
-          <p className="font-semibold line-clamp-1">
-            {resume.title || "Untitled Resume"}
-          </p>
-          {resume.description && (
-            <p className="text-sm line-clamp-2">{resume.description}</p>
-          )}
-          <p className="text-xs text-muted-foreground">
-            {wasUpdated ? "Updated" : "Created"} on{" "}
-            {new Date(resume.updatedAt).toLocaleDateString()}
-          </p>
-        </Link>
-        <Link
-          className="inline-block w-full relative "
-          href={`/job-seeker/resume-editor?id=${resume.id}`}
-        >
-          <ResumePreview
-            contentRef={contentRef}
-            className="shadow-sm group-hover:shadow-lg transition-shadow overflow-hidden"
-            resumeDate={mapToResumeValues(resume)}
-          />
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
-        </Link>
+    <>
+      <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p-3 ">
+        <div className="space-y-3">
+          <Link
+            target="_blank"
+            className="inline-block w-full text-center"
+            href={pdfUrl}
+          >
+            <p className="font-semibold line-clamp-1">
+              {/* {resume.title || "Untitled Resume"} */}
+            </p>
+
+            <p className="text-xs text-muted-foreground">
+              Uploaded on {new Date(uploadedAt).toLocaleDateString()}
+            </p>
+          </Link>
+          <Link
+            target="_blank"
+            className="inline-block w-full relative "
+            href={pdfUrl}
+          >
+            <Document
+              options={options}
+              file={pdfUrl}
+              loading={<ResumeStudioSkeleton total={1} />}
+              error={<div className="error">Failed to load PDF</div>}
+            >
+              <Page
+                width={250}
+                height={250}
+                pageNumber={1}
+                renderTextLayer={false}
+                renderAnnotationLayer={false}
+              />
+            </Document>
+            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
+          </Link>
+        </div>
+        <UploadedResumeMenu resumeId={id} />
       </div>
-      <ResumeMenu onPrintClick={reactToPrintFn} resumeId={resume.id} />
-    </div>
+    </>
   );
 };
-export default CreatedResumeCard;
+export default PDFViewer;
 
-interface ResumeMenuProps {
+interface UploadedResumeMenuProps {
   resumeId: string;
-  onPrintClick: () => void;
 }
 
-function ResumeMenu({ resumeId, onPrintClick }: ResumeMenuProps) {
+function UploadedResumeMenu({ resumeId }: UploadedResumeMenuProps) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   return (
     <>
@@ -97,13 +114,6 @@ function ResumeMenu({ resumeId, onPrintClick }: ResumeMenuProps) {
           >
             <Trash2 className="size-4 text-red-500" />
             Delete
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={onPrintClick}
-            className="flex items-center gap-2"
-          >
-            <Download className="size-4 text-emerald-500 " />
-            Download
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -132,7 +142,7 @@ function DeleteConfirmationDialog({
   async function handleDelete() {
     startTransition(async () => {
       try {
-        const res = await deleteCreatedResume(resumeId);
+        const res = await deleteUploadedResume(resumeId);
         if (res.success) {
           toast.success(res.message, { id: "resume-delete" });
         } else {
@@ -144,7 +154,6 @@ function DeleteConfirmationDialog({
       }
     });
   }
-
   return (
     <ResponsiveModal open={open} onOpenChange={onOpenChange}>
       <ResponsiveModalContent isloading={isPending ? "true" : undefined}>

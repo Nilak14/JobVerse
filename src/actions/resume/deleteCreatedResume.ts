@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { handleError } from "@/lib/utils";
 import { del } from "@vercel/blob";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export const deleteCreatedResume = async (resumeId: string) => {
   try {
@@ -30,7 +30,7 @@ export const deleteCreatedResume = async (resumeId: string) => {
         userId: session.jobSeekerId,
       },
     });
-    revalidateTag("/job-seeker/design-studio/resume");
+    revalidatePath("/job-seeker/design-studio/resume");
     return { success: true, message: "Resume deleted successfully" };
   } catch (error) {
     return handleError({ error: error, errorIn: "deleteCreatedResume" });

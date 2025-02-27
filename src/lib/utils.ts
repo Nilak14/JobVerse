@@ -5,6 +5,7 @@ import { JobServerData } from "./prisma-types/Job";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
 import { ResumeServerData } from "./prisma-types/Resume";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
+import { JobSeekerProfile } from "./prisma-types/JobSeekerProfile";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -169,4 +170,30 @@ export function fileReplacer(key: unknown, value: unknown) {
         lastModified: value.lastModified,
       }
     : value;
+}
+
+export function profileToResumeValue(data: JobSeekerProfile): ResumeValues {
+  return {
+    photo: data.image || undefined,
+    fullName: data.name || undefined,
+    jobTitle: data.JOB_SEEKER?.JobSeekerProfile?.designation || undefined,
+    email: data.email || undefined,
+    workExperiences: data.JOB_SEEKER?.JobSeekerProfile?.WorkExperience.map(
+      (exp) => ({
+        position: exp.position || undefined,
+        company: exp.companyName || undefined,
+        startDate: exp.startDate?.toISOString().split("T")[0],
+        endDate: exp.endDate?.toISOString().split("T")[0],
+        description: exp.description || undefined,
+      })
+    ),
+    educations: data.JOB_SEEKER?.JobSeekerProfile?.Education.map((edu) => ({
+      degree: edu.degreeTitle || undefined,
+      school: edu.instituteName || undefined,
+      startDate: edu.startDate?.toISOString().split("T")[0],
+      endDate: edu.endDate?.toISOString().split("T")[0],
+    })),
+    skills: data.JOB_SEEKER?.JobSeekerProfile?.skills || [],
+    summary: data.JOB_SEEKER?.JobSeekerProfile?.bio || undefined,
+  };
 }

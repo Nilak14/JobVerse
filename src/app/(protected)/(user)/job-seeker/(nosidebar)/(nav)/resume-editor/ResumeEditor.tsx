@@ -6,18 +6,27 @@ import ResumeEditorBreadCrumb from "@/components/ResumeEditorBreadCrumbs";
 import useWarning from "@/hooks/custom-hooks/use-warning";
 import useAutoSaveResume from "@/hooks/custom-hooks/useAutoSaveResume";
 import { ResumeEditorFormSteps } from "@/lib/multi-form-steps/ResumeEditorStep";
+import { JobSeekerProfile } from "@/lib/prisma-types/JobSeekerProfile";
 import { ResumeServerData } from "@/lib/prisma-types/Resume";
-import { cn, mapToResumeValues } from "@/lib/utils";
+import { cn, mapToResumeValues, profileToResumeValue } from "@/lib/utils";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 interface ResumeEditorProps {
   resumeToEdit: ResumeServerData | null;
+  jobSeekerProfile: JobSeekerProfile | null;
 }
-const ResumeEditor = ({ resumeToEdit }: ResumeEditorProps) => {
-  const [resumeData, setResumeData] = useState<ResumeValues>(
-    resumeToEdit ? mapToResumeValues(resumeToEdit) : {}
-  );
+const ResumeEditor = ({
+  resumeToEdit,
+  jobSeekerProfile,
+}: ResumeEditorProps) => {
+  const stateDefaultData = resumeToEdit
+    ? mapToResumeValues(resumeToEdit)
+    : jobSeekerProfile
+      ? profileToResumeValue(jobSeekerProfile)
+      : {};
+  const [resumeData, setResumeData] = useState<ResumeValues>(stateDefaultData);
+
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
   const searchParams = useSearchParams();
   const currentStep = searchParams.get("step") || ResumeEditorFormSteps[0].key;

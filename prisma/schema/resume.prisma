@@ -60,3 +60,14 @@ model Education {
 
     @@map("educations")
 }
+
+model UserUploadedResume {
+    id        String     @id @default(cuid())
+    userId    String
+    user      JOB_SEEKER @relation(fields: [userId], references: [id], onDelete: Cascade)
+    resumeUrl String
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+
+    @@map("user_uploaded_resumes")
+}
