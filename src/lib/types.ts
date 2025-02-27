@@ -2,6 +2,7 @@ import { ExtendedUser } from "@/next-auth";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
 import { LucideIcon } from "lucide-react";
 import { JobSeekerProfile } from "./prisma-types/JobSeekerProfile";
+import { ResumeValues } from "@/schema/ResumeEditorSchema";
 
 export interface LandingPageNavLinks {
   name: string;
@@ -46,3 +47,12 @@ export type SaveJobResponse = {
 export type JobSeekerProfileComponentProps = {
   profile: JobSeekerProfile;
 };
+
+export interface ResumeEditorFormProps {
+  resumeData: ResumeValues;
+  setResumeData: (data: ResumeValues) => void;
+}
+
+export interface ResumeTemplateProps {
+  resumeData: ResumeValues;
+}

@@ -9,10 +9,10 @@ import { JobEditorFormSteps } from "@/lib/multi-form-steps/JobEditorStep";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import JobPreviewSection from "@/components/Job/JobPreviewSection";
 import { cn, mapToJobValues } from "@/lib/utils";
-import useAutoSaveJobPost from "@/hooks/useAutoSaveJobPost";
-import useWarning from "@/hooks/use-warning";
-import Breadcrumbs from "@/components/BreadCrumbs";
+import useAutoSaveJobPost from "@/hooks/custom-hooks/useAutoSaveJobPost";
+import useWarning from "@/hooks/custom-hooks/use-warning";
 import { JobServerData } from "@/lib/prisma-types/Job";
+import JobEditorBreadcrumbs from "@/components/JobEditorBreadCrumbs";
 
 interface JobEditorPageProps {
   jobToEdit: JobServerData | null;
@@ -70,7 +70,7 @@ const JobEditorPage = ({ jobToEdit }: JobEditorPageProps) => {
               showSMPreview && "hidden"
             )}
           >
-            <Breadcrumbs currentStep={currentStep} />
+            <JobEditorBreadcrumbs currentStep={currentStep} />
             <motion.div
               key={currentStep}
               initial={{ x: -20, opacity: 0 }}

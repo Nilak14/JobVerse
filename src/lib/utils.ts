@@ -3,6 +3,9 @@ import { twMerge } from "tailwind-merge";
 import { formatDistanceToNowStrict, format } from "date-fns";
 import { JobServerData } from "./prisma-types/Job";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
+import { ResumeServerData } from "./prisma-types/Resume";
+import { ResumeValues } from "@/schema/ResumeEditorSchema";
+import { JobSeekerProfile } from "./prisma-types/JobSeekerProfile";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -75,6 +78,38 @@ export function mapToJobValues(data: JobServerData): JobSchemaType {
   };
 }
 
+export function mapToResumeValues(data: ResumeServerData): ResumeValues {
+  return {
+    id: data.id,
+    title: data.title || undefined,
+    description: data.description || undefined,
+    photo: data.photoUrl || undefined,
+    fullName: data.fullName || undefined,
+    jobTitle: data.jobTitle || undefined,
+    city: data.city || undefined,
+    country: data.country || undefined,
+    phone: data.phone || undefined,
+    email: data.email || undefined,
+    workExperiences: data.workExperiences.map((exp) => ({
+      position: exp.position || undefined,
+      company: exp.company || undefined,
+      startDate: exp.startDate?.toISOString().split("T")[0],
+      endDate: exp.endDate?.toISOString().split("T")[0],
+      description: exp.description || undefined,
+    })),
+    educations: data.educations.map((edu) => ({
+      degree: edu.degree || undefined,
+      school: edu.school || undefined,
+      startDate: edu.startDate?.toISOString().split("T")[0],
+      endDate: edu.endDate?.toISOString().split("T")[0],
+    })),
+    skills: data.skills,
+    borderStyle: data.borderStyle,
+    colorHex: data.colorHex,
+    summary: data.summary || undefined,
+  };
+}
+
 export function convertToString(value: number | null | undefined): string {
   if (!value) {
     return "";
@@ -125,3 +160,40 @@ export const renderSalaryText = ({
       return "";
   }
 };
+
+export function fileReplacer(key: unknown, value: unknown) {
+  return value instanceof File
+    ? {
+        name: value.name,
+        size: value.size,
+        type: value.type,
+        lastModified: value.lastModified,
+      }
+    : value;
+}
+
+export function profileToResumeValue(data: JobSeekerProfile): ResumeValues {
+  return {
+    photo: data.image || undefined,
+    fullName: data.name || undefined,
+    jobTitle: data.JOB_SEEKER?.JobSeekerProfile?.designation || undefined,
+    email: data.email || undefined,
+    workExperiences: data.JOB_SEEKER?.JobSeekerProfile?.WorkExperience.map(
+      (exp) => ({
+        position: exp.position || undefined,
+        company: exp.companyName || undefined,
+        startDate: exp.startDate?.toISOString().split("T")[0],
+        endDate: exp.endDate?.toISOString().split("T")[0],
+        description: exp.description || undefined,
+      })
+    ),
+    educations: data.JOB_SEEKER?.JobSeekerProfile?.Education.map((edu) => ({
+      degree: edu.degreeTitle || undefined,
+      school: edu.instituteName || undefined,
+      startDate: edu.startDate?.toISOString().split("T")[0],
+      endDate: edu.endDate?.toISOString().split("T")[0],
+    })),
+    skills: data.JOB_SEEKER?.JobSeekerProfile?.skills || [],
+    summary: data.JOB_SEEKER?.JobSeekerProfile?.bio || undefined,
+  };
+}

@@ -10,10 +10,8 @@ const NoSidebarLayout = async ({ children }: { children: React.ReactNode }) => {
   }
   return (
     <>
-      <div className="flex flex-1 items-center justify-center gap-2 h-16 px-3  border-b border-muted-foreground/40">
-        <JobSeekerNav user={user} />
-      </div>
-      <div>{children}</div>
+      <JobSeekerNav user={user} />
+      <div className="relative flex min-h-[calc(100vh-4rem)]">{children}</div>
     </>
   );
 };

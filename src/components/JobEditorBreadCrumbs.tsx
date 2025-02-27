@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 
-interface BreadCrumbProps {
+interface JobEditorBreadcrumbsProps {
   currentStep: string;
 }
-const Breadcrumbs = ({ currentStep }: BreadCrumbProps) => {
+const JobEditorBreadcrumbs = ({ currentStep }: JobEditorBreadcrumbsProps) => {
   const currentStepIndex = JobEditorFormSteps.findIndex(
     (step) => step.key === currentStep
   );
@@ -92,4 +92,4 @@ const Breadcrumbs = ({ currentStep }: BreadCrumbProps) => {
     </div>
   );
 };
-export default Breadcrumbs;
+export default JobEditorBreadcrumbs;
