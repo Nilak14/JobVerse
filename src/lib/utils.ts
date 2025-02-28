@@ -5,7 +5,10 @@ import { JobServerData } from "./prisma-types/Job";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
 import { ResumeServerData } from "./prisma-types/Resume";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
-import { JobSeekerProfile } from "./prisma-types/JobSeekerProfile";
+import {
+  JobSeekerProfile,
+  JobSeekerProfileApplication,
+} from "./prisma-types/JobSeekerProfile";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -197,3 +200,26 @@ export function profileToResumeValue(data: JobSeekerProfile): ResumeValues {
     summary: data.JOB_SEEKER?.JobSeekerProfile?.bio || undefined,
   };
 }
+
+export const checkProfileCompletionForApplication = (
+  profile: JobSeekerProfileApplication
+): boolean => {
+  const { JobSeekerProfile } = profile.JOB_SEEKER || {};
+  if (!JobSeekerProfile) {
+    return false;
+  }
+  if (
+    !JobSeekerProfile.bio ||
+    !JobSeekerProfile.skills ||
+    !JobSeekerProfile.location
+  ) {
+    return false;
+  }
+  if (
+    JobSeekerProfile.WorkExperience.length === 0 ||
+    JobSeekerProfile.Education.length === 0
+  ) {
+    return false;
+  }
+  return true;
+};

@@ -113,12 +113,7 @@ const UploadedResume = async ({ jobSeekerId }: ResumeStudioProps) => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-left">
             {resumes.map((resume) => (
-              <PDFViewer
-                id={resume.id}
-                key={resume.id}
-                uploadedAt={resume.createdAt}
-                pdfUrl={resume.resumeUrl}
-              />
+              <PDFViewer key={resume.id} uploadedResume={resume} />
             ))}
           </div>
         </div>

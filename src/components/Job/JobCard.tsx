@@ -26,6 +26,7 @@ import LinkButtonAnimated from "../ui/animated-button-link";
 
 import SaveJobButton from "../Global/SaveJobButton";
 import { Session } from "next-auth";
+import ApplyNowButton from "../Global/ApplyNowButton";
 
 interface JobCardProps {
   job: JobDataBrowse;
@@ -184,7 +185,8 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
         </CardContent>
         <CardFooter className="w-full">
           <div className="flex justify-between items-center w-full">
-            <Button
+            <ApplyNowButton
+              jobData={job}
               size={"sm"}
               className={cn(
                 daysLeft !== null &&
@@ -192,9 +194,7 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
                   "opacity-50 cursor-not-allowed"
               )}
               disabled={daysLeft !== null && daysLeft < 0}
-            >
-              Apply Now
-            </Button>
+            />
 
             <Button asChild size={"sm"} variant={"secondary"}>
               <Link href={`/job/description/${job.id}`}>

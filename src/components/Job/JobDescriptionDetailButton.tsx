@@ -1,9 +1,10 @@
 "use client";
-import { Share2 } from "lucide-react";
+import { Apple, Share2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { JobDataDescription } from "@/lib/prisma-types/Job";
 import SaveJobButton from "../Global/SaveJobButton";
 import { Session } from "next-auth";
+import ApplyNowButton from "../Global/ApplyNowButton";
 
 interface JobDescriptionDetailButtonProps {
   job: JobDataDescription;
@@ -15,9 +16,7 @@ const JobDescriptionDetailButton = ({
 }: JobDescriptionDetailButtonProps) => {
   return (
     <>
-      <Button className="w-full" size="lg">
-        Apply Now
-      </Button>
+      <ApplyNowButton jobData={job} className="w-full" size={"lg"} />
 
       <div className="flex gap-2">
         <SaveJobButton

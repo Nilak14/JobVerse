@@ -8,4 +8,7 @@
 
 - In this feature job seeker can recommend the job to others by entering their email. If they do not have account in the app also they can look the job but to apply they need to register them first
 
-4:49:56
+## 3. Extend Job Posting Feature
+
+- Add a input where employer can include links of their carrier page so when job seeker clicks on apply button, they will be redirected to their page instead of modal opening
+- Add fields screening question which will be asked to job seeker before applying
