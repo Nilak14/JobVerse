@@ -2,6 +2,7 @@ enum ApplicationStatus {
     PENDING
     APPROVED
     REJECTED
+    INTERVIEW
 }
 
 model Application {
