@@ -13,7 +13,11 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getTimeDistance, renderSalaryText } from "@/lib/utils";
+import {
+  getTimeDifference,
+  getTimeDistance,
+  renderSalaryText,
+} from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import ContentViewer from "@/components/tiptap/ContentViewer";
 import { Separator } from "@/components/ui/separator";
@@ -33,6 +37,7 @@ const JobDescriptionPageContent = ({
   itemVariant,
   session,
 }: JobDescriptionPageContentProps) => {
+  const daysLeft = getTimeDifference(job.deadline!);
   return (
     <Container className="pt-10 mb-10">
       <motion.div
@@ -263,7 +268,11 @@ const JobDescriptionPageContent = ({
                             </span>
                             <div className="flex items-center text-amber-600 font-medium">
                               <Calendar size={16} className="mr-1" />
-                              After {getTimeDistance(job.deadline!)}
+                              {daysLeft ? (
+                                <span>{daysLeft} remaining</span>
+                              ) : (
+                                <span>Expired</span>
+                              )}
                             </div>
                           </div>
                         </div>

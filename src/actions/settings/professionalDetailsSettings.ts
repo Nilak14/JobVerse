@@ -54,6 +54,7 @@ export const professionalDetailsSettings = async (
             ...cert,
             instituteName: cert.institute,
             completionDate: cert.completionDate || "",
+            order: cert.order || 0,
           })),
         },
       },

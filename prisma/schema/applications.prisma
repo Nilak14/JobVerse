@@ -1,0 +1,35 @@
+enum ApplicationStatus {
+    PENDING
+    APPROVED
+    REJECTED
+    INTERVIEW
+}
+
+model Application {
+    id          String            @id @default(cuid())
+    jobId       String
+    job         Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+    jobSeekerId String
+    jobSeeker   JOB_SEEKER        @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+    status      ApplicationStatus @default(PENDING)
+    resumeId    String?
+
+    createdAt         DateTime            @default(now())
+    updatedAt         DateTime            @updatedAt
+    ApplicationReview ApplicationReview[]
+
+    @@unique([jobId, jobSeekerId])
+    @@map("applications")
+}
+
+model ApplicationReview {
+    id              String      @id @default(cuid())
+    applicationId   String
+    application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+    reviewedBy      String
+    reviewer        Employer    @relation(fields: [reviewedBy], references: [id])
+    reviewedComment String?
+    reviewedAt      DateTime
+
+    @@map("application_reviews")
+}

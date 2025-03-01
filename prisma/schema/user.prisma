@@ -55,20 +55,22 @@ model JOB_SEEKER {
     createdResumes   Resume[]
     JobSeekerProfile JobSeekerProfile?
     uploadedResumes  UserUploadedResume[]
+    applications     Application[]
 
     @@map("job_seekers")
 }
 
 model Employer {
-    id                  String          @id @default(cuid())
-    userId              String          @unique
-    user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id                  String              @id @default(cuid())
+    userId              String              @unique
+    user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
     companyMemberships  CompanyMember[]
-    sentInvitations     Invitations[]   @relation("InviterToInvitations")
-    receivedInvitations Invitations[]   @relation("InviteeToInvitations")
-    adminCompanies      Company[]       @relation("AdminEmployer")
+    sentInvitations     Invitations[]       @relation("InviterToInvitations")
+    receivedInvitations Invitations[]       @relation("InviteeToInvitations")
+    adminCompanies      Company[]           @relation("AdminEmployer")
     activeCompanyId     String?
     createdJobs         Job[]
+    ApplicationReview   ApplicationReview[]
 
     @@map("employers")
 }

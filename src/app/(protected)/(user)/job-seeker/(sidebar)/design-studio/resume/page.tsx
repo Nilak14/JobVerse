@@ -4,12 +4,10 @@ import PDFViewer from "@/components/Resume/PDFViewer";
 import UploadResumeButton from "@/components/Resume/UploadResumeButton";
 import ResumeStudioSkeleton from "@/components/skeletons/ResumeSkeleton";
 import BoxReveal from "@/components/ui/box-reveal";
-import { Button } from "@/components/ui/button";
 import { getUserAllCreatedResume } from "@/data-access/resume/getUserAllCreatedResume";
 import { auth } from "@/lib/auth";
-import { FileText, Upload } from "lucide-react";
+import { FileText } from "lucide-react";
 import { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserUploadedResume } from "@/data-access/resume/getUserUploadedResume";
@@ -113,12 +111,7 @@ const UploadedResume = async ({ jobSeekerId }: ResumeStudioProps) => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-left">
             {resumes.map((resume) => (
-              <PDFViewer
-                id={resume.id}
-                key={resume.id}
-                uploadedAt={resume.createdAt}
-                pdfUrl={resume.resumeUrl}
-              />
+              <PDFViewer key={resume.id} uploadedResume={resume} />
             ))}
           </div>
         </div>

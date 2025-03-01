@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { resumeSchema, ResumeValues } from "@/schema/ResumeEditorSchema";
 import { del, put } from "@vercel/blob";
+import { revalidatePath } from "next/cache";
+import { type } from "os";
 import path from "path";
 export async function saveResume(values: ResumeValues) {
   const { id } = values;
@@ -45,8 +47,10 @@ export async function saveResume(values: ResumeValues) {
       await del(existingResume.photoUrl);
     }
     newPhotoUrl = null;
+  } else if (typeof photo === "string") {
+    newPhotoUrl = photo;
   }
-
+  revalidatePath("/job-seeker/design-studio/resume");
   if (id) {
     return prisma.resume.update({
       where: { id },
