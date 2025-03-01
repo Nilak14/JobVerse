@@ -25,6 +25,7 @@ import {
 import LoadingButton from "../ui/loading-button";
 import { toast } from "sonner";
 import { deleteUploadedResume } from "@/actions/resume/deleteUploadedResume";
+import { UserUploadedResume } from "@prisma/client";
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
   import.meta.url
@@ -38,11 +39,9 @@ const options = {
 export const dynamic = "force-dynamic";
 
 interface PDFViewerProps {
-  pdfUrl: string;
-  uploadedAt: Date;
-  id: string;
+  uploadedResume: UserUploadedResume;
 }
-const PDFViewer = ({ id, pdfUrl, uploadedAt }: PDFViewerProps) => {
+const PDFViewer = ({ uploadedResume }: PDFViewerProps) => {
   return (
     <>
       <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p-3 ">
@@ -50,24 +49,29 @@ const PDFViewer = ({ id, pdfUrl, uploadedAt }: PDFViewerProps) => {
           <Link
             target="_blank"
             className="inline-block w-full text-center"
-            href={pdfUrl}
+            href={uploadedResume.resumeUrl}
           >
             <p className="font-semibold line-clamp-1">
-              {/* {resume.title || "Untitled Resume"} */}
+              {uploadedResume.title || "Untitled Resume"}
             </p>
-
+            {uploadedResume.description && (
+              <p className="text-sm line-clamp-2">
+                {uploadedResume.description}
+              </p>
+            )}
             <p className="text-xs text-muted-foreground">
-              Uploaded on {new Date(uploadedAt).toLocaleDateString()}
+              Uploaded on{" "}
+              {new Date(uploadedResume.createdAt).toLocaleDateString()}
             </p>
           </Link>
           <Link
             target="_blank"
             className="inline-block w-full relative "
-            href={pdfUrl}
+            href={uploadedResume.resumeUrl}
           >
             <Document
               options={options}
-              file={pdfUrl}
+              file={uploadedResume.resumeUrl}
               loading={<ResumeStudioSkeleton total={1} />}
               error={<div className="error">Failed to load PDF</div>}
             >
@@ -82,7 +86,7 @@ const PDFViewer = ({ id, pdfUrl, uploadedAt }: PDFViewerProps) => {
             <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
           </Link>
         </div>
-        <UploadedResumeMenu resumeId={id} />
+        <UploadedResumeMenu resumeId={uploadedResume.id} />
       </div>
     </>
   );

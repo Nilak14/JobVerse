@@ -61,7 +61,7 @@ export const ProfessionalDetailsSchema = z.object({
   ),
   certifications: z.array(
     z.object({
-      order: z.number(),
+      order: z.number().optional(),
       title: z.string().min(3, "Certification title is too short"),
       institute: z.string().min(3, "Institute name is too short"),
       completionDate: z.date().nullable(),

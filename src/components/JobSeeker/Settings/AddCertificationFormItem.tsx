@@ -75,7 +75,6 @@ const AddCertificationFormItem = ({
                 <Input
                   placeholder="Microsoft Certified: Azure Administrator"
                   {...field}
-                  autoFocus
                 />
               </FormControl>
               <FormMessage />
@@ -89,11 +88,7 @@ const AddCertificationFormItem = ({
             <FormItem>
               <FormLabel>Institution</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Microsoft Cooperation"
-                  {...field}
-                  autoFocus
-                />
+                <Input placeholder="Microsoft Cooperation" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

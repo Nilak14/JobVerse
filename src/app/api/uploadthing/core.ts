@@ -86,31 +86,5 @@ export const fileRouter = {
 
       return { cdnFileUrl };
     }),
-  // pdf resume upload endpoint
-
-  pdfResume: f({
-    pdf: { maxFileSize: "1MB", maxFileCount: 1 },
-  })
-    .middleware(async () => {
-      const session = await auth();
-      if (!session || !session.user || !session.jobSeekerId) {
-        throw new UploadThingError("Unauthorized");
-      }
-      return { session };
-    })
-    .onUploadComplete(async ({ metadata, file }) => {
-      const cdnFileUrl = `https://${process.env.UPLOADTHING_APP_ID}.ufs.sh/f/${file.key}`;
-      if (!metadata.session.jobSeekerId) {
-        throw new UploadThingError("Unauthorized");
-      }
-
-      await prisma.userUploadedResume.create({
-        data: {
-          userId: metadata.session.jobSeekerId,
-          resumeUrl: cdnFileUrl,
-        },
-      });
-      return { cdnFileUrl };
-    }),
 } satisfies FileRouter;
 export type AppFileRouter = typeof fileRouter;

@@ -1,11 +1,23 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { formatDistanceToNowStrict, format } from "date-fns";
+import {
+  formatDistanceToNowStrict,
+  format,
+  isBefore,
+  intervalToDuration,
+  formatDuration,
+  differenceInYears,
+  differenceInMonths,
+  differenceInDays,
+} from "date-fns";
 import { JobServerData } from "./prisma-types/Job";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
 import { ResumeServerData } from "./prisma-types/Resume";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
-import { JobSeekerProfile } from "./prisma-types/JobSeekerProfile";
+import {
+  JobSeekerProfile,
+  JobSeekerProfileApplication,
+} from "./prisma-types/JobSeekerProfile";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,6 +32,26 @@ export const getTimeDistance = (from: Date) => {
 export const formatDate = (date: Date) => {
   return format(date, "MMM dd, yyyy");
 };
+
+export function getTimeDifference(targetDate: Date) {
+  const now = new Date();
+  const target = new Date(targetDate);
+
+  if (isBefore(target, now)) {
+    return null;
+  }
+
+  const years = differenceInYears(target, now);
+  if (years > 0) return `${years} year${years > 1 ? "s" : ""}`;
+
+  const months = differenceInMonths(target, now);
+  if (months > 0) return `${months} month${months > 1 ? "s" : ""}`;
+
+  const days = differenceInDays(target, now);
+  if (days > 0) return `${days} day${days > 1 ? "s" : ""}`;
+
+  return "Less than a day";
+}
 
 type HandleError = {
   error: unknown;
@@ -196,4 +228,34 @@ export function profileToResumeValue(data: JobSeekerProfile): ResumeValues {
     skills: data.JOB_SEEKER?.JobSeekerProfile?.skills || [],
     summary: data.JOB_SEEKER?.JobSeekerProfile?.bio || undefined,
   };
+}
+
+export function jobSeekerProfileStatus(
+  jobSeekerProfile: JobSeekerProfileApplication
+): { completed: boolean; message: string } {
+  const { JOB_SEEKER } = jobSeekerProfile;
+  if (!JOB_SEEKER) {
+    return { completed: false, message: "Profile not found" };
+  }
+  if (
+    JOB_SEEKER.createdResumes.length === 0 &&
+    JOB_SEEKER.uploadedResumes.length === 0
+  ) {
+    return { completed: false, message: "Resume is missing" };
+  }
+  const { JobSeekerProfile: profile } = JOB_SEEKER;
+  if (!profile) {
+    return { completed: false, message: "Profile not found" };
+  }
+  if (!profile.skills || profile.skills.length === 0) {
+    return { completed: false, message: "Skills are missing" };
+  }
+  if (!profile.WorkExperience || profile.WorkExperience.length === 0) {
+    return { completed: false, message: "Work Experience is missing" };
+  }
+  if (!profile.Education || profile.Education.length === 0) {
+    return { completed: false, message: "Education is missing" };
+  }
+
+  return { completed: true, message: "Profile is completed" };
 }

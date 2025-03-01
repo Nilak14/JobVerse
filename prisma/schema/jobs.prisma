@@ -16,15 +16,15 @@ enum JobReviewStatus {
 }
 
 model Job {
-    id                    String       @id @default(cuid())
+    id                    String        @id @default(cuid())
     title                 String?
     jobType               String?
     workMode              String?
     location              String?
     categoryId            String?
-    category              JobCategory? @relation(fields: [categoryId], references: [id])
+    category              JobCategory?  @relation(fields: [categoryId], references: [id])
     subcategoryId         String?
-    subcategory           SubCategory? @relation(fields: [subcategoryId], references: [id])
+    subcategory           SubCategory?  @relation(fields: [subcategoryId], references: [id])
     experienceLevel       String?
     totalHeads            String?
     Salary                Salary?
@@ -36,24 +36,25 @@ model Job {
     preferredGender       String?
     licenseRequired       String?
     vehicleRequired       String?
-    resumeRequired        Boolean      @default(false)
-    isUrgent              Boolean      @default(false)
-    isFeatured            Boolean      @default(false)
+    resumeRequired        Boolean       @default(false)
+    isUrgent              Boolean       @default(false)
+    isFeatured            Boolean       @default(false)
     deadline              DateTime?
-    sendEmailNotification Boolean      @default(false)
+    sendEmailNotification Boolean       @default(false)
     latitude              String?
     longitude             String?
-    status                JobStatus    @default(DRAFT)
+    status                JobStatus     @default(DRAFT)
     companyId             String
-    company               Company      @relation(fields: [companyId], references: [id])
+    company               Company       @relation(fields: [companyId], references: [id])
     createdBy             String
-    creator               Employer     @relation(fields: [createdBy], references: [id])
-    createdAt             DateTime     @default(now())
-    updatedAt             DateTime     @updatedAt
+    creator               Employer      @relation(fields: [createdBy], references: [id])
+    createdAt             DateTime      @default(now())
+    updatedAt             DateTime      @updatedAt
     deletedAt             DateTime?
-    isDeleted             Boolean      @default(false)
+    isDeleted             Boolean       @default(false)
     review                JobReview?
     saved                 SavedJob[]
+    applications          Application[]
 
     @@map("jobs")
 }

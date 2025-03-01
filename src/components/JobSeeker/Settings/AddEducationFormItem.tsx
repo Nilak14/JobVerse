@@ -72,7 +72,6 @@ const AddEducationFormItem = ({
                 <Input
                   placeholder="Bachelors in Information Technology"
                   {...field}
-                  autoFocus
                 />
               </FormControl>
               <FormMessage />
@@ -86,7 +85,7 @@ const AddEducationFormItem = ({
             <FormItem>
               <FormLabel>Institute Name</FormLabel>
               <FormControl>
-                <Input placeholder="Informatics Collage" {...field} autoFocus />
+                <Input placeholder="Informatics Collage" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -101,7 +100,7 @@ const AddEducationFormItem = ({
             <FormItem>
               <FormLabel>Institute Location</FormLabel>
               <FormControl>
-                <Input placeholder="Pokhara, Nepal" {...field} autoFocus />
+                <Input placeholder="Pokhara, Nepal" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
