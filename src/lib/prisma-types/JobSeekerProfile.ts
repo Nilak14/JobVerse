@@ -63,6 +63,11 @@ export function getJobSeekerProfileSelectForApplication() {
     id: true,
     JOB_SEEKER: {
       select: {
+        applications: {
+          select: {
+            jobId: true,
+          },
+        },
         JobSeekerProfile: {
           select: {
             location: true,
@@ -112,6 +117,7 @@ export function getJobSeekerProfileSelectForApplication() {
             updatedAt: true,
             createdAt: true,
             description: true,
+            isUploaded: true,
           },
         },
         uploadedResumes: {
@@ -120,6 +126,7 @@ export function getJobSeekerProfileSelectForApplication() {
             title: true,
             updatedAt: true,
             createdAt: true,
+            isUploaded: true,
             description: true,
           },
         },
@@ -130,3 +137,9 @@ export function getJobSeekerProfileSelectForApplication() {
 export type JobSeekerProfileApplication = Prisma.UserGetPayload<{
   select: ReturnType<typeof getJobSeekerProfileSelectForApplication>;
 }>;
+
+export type JobSeekerProfileResponse = {
+  success: boolean;
+  message: string;
+  data: JobSeekerProfileApplication;
+};

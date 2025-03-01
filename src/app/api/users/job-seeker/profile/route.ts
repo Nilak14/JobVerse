@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import {
   getJobSeekerProfileSelect,
   getJobSeekerProfileSelectForApplication,
+  JobSeekerProfileResponse,
 } from "@/lib/prisma-types/JobSeekerProfile";
 import { NextRequest } from "next/server";
 
@@ -30,7 +31,7 @@ export const GET = async (req: NextRequest) => {
       return Response.json({ message: "Not found" }, { status: 404 });
     }
 
-    const data = {
+    const data: JobSeekerProfileResponse = {
       success: true,
       message: "Job Seeker Profile Fetched Successfully",
       data: jobSeekerProfile,

@@ -19,7 +19,12 @@ import {
   Calendar,
   Eye,
 } from "lucide-react";
-import { cn, formatNumber, renderSalaryText } from "@/lib/utils";
+import {
+  cn,
+  formatNumber,
+  getTimeDifference,
+  renderSalaryText,
+} from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import LinkButtonAnimated from "../ui/animated-button-link";
@@ -35,17 +40,7 @@ interface JobCardProps {
 }
 
 const JobCard = ({ job, session, loading }: JobCardProps) => {
-  const getDaysUntilDeadline = () => {
-    if (!job.deadline) return null;
-    const deadline = new Date(job.deadline);
-    const today = new Date();
-    const diffTime = deadline.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
-
-  const daysLeft = getDaysUntilDeadline();
-  const isCloseToDeadline = daysLeft !== null && daysLeft <= 5;
+  const daysLeft = getTimeDifference(job.deadline!);
 
   return (
     <motion.div
@@ -72,12 +67,7 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
           </div>
         </motion.div>
       )}
-      <Card
-        className={cn(
-          job.isUrgent && "border-red-500",
-          isCloseToDeadline && "border-orange-500"
-        )}
-      >
+      <Card className={cn(job.isUrgent && "border-red-500")}>
         <CardHeader>
           <div className="flex justify-between flex-row mb-3">
             <div className="flex gap-4 items-center">
@@ -158,26 +148,14 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className={cn(
-                    "flex items-center gap-2 text-sm",
-                    isCloseToDeadline && "text-orange-600 font-medium"
-                  )}
+                  className={cn("flex items-center gap-2 text-sm")}
                 >
-                  <Calendar
-                    className={cn(
-                      "size-5",
-                      isCloseToDeadline ? "text-orange-600" : "text-gray-600"
-                    )}
-                  />
-                  <span>
-                    {daysLeft === 0
-                      ? "Deadline is today!"
-                      : daysLeft === 1
-                        ? "Deadline is tomorrow"
-                        : daysLeft && daysLeft > 0
-                          ? `${daysLeft} days left to apply`
-                          : "Deadline passed"}
-                  </span>
+                  <Calendar className={cn("size-5")} />
+                  {daysLeft ? (
+                    <span>{daysLeft} remaining</span>
+                  ) : (
+                    <span>Expired</span>
+                  )}
                 </motion.p>
               )}
             </div>
@@ -185,16 +163,7 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
         </CardContent>
         <CardFooter className="w-full">
           <div className="flex justify-between items-center w-full">
-            <ApplyNowButton
-              jobData={job}
-              size={"sm"}
-              className={cn(
-                daysLeft !== null &&
-                  daysLeft < 0 &&
-                  "opacity-50 cursor-not-allowed"
-              )}
-              disabled={daysLeft !== null && daysLeft < 0}
-            />
+            <ApplyNowButton jobData={job} size={"sm"} />
 
             <Button asChild size={"sm"} variant={"secondary"}>
               <Link href={`/job/description/${job.id}`}>

@@ -23,27 +23,37 @@ import { ResponsiveModalFooter } from "../ui/responsive-dailog";
 import LoadingButton from "../ui/loading-button";
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";
+import { createJobApplication } from "@/actions/job/applications/createJobApplication";
+import { toast } from "sonner";
+import { useQueryClient } from "react-query";
 interface ApplyJobFormProps {
   jobData: JobDataBrowse | JobDataDescription;
   jobSeekerProfile: JobSeekerProfileApplication;
   setOpenModal: (value: boolean) => void;
+  setLoading: (value: boolean) => void;
+  loading: boolean;
 }
 const ApplyJobForm = ({
   jobData,
   jobSeekerProfile,
   setOpenModal,
+  setLoading,
+  loading,
 }: ApplyJobFormProps) => {
   const createdResume = jobSeekerProfile.JOB_SEEKER?.createdResumes || [];
   const uploadedResume = jobSeekerProfile.JOB_SEEKER?.uploadedResumes || [];
   const userResume = createdResume.concat(uploadedResume);
+
   const form = useForm<ApplyJobSchemaType>({
     resolver: zodResolver(ApplyJobSchema),
     defaultValues: {
       resumeId: "",
       jobSeekerId: jobSeekerProfile.JOB_SEEKER?.id,
+      jobId: jobData.id,
     },
     mode: "onChange",
   });
+  const queryClient = useQueryClient();
   const handleApplicationSubmit = async (data: ApplyJobSchemaType) => {
     if (jobData.resumeRequired && !data.resumeId) {
       form.setError("resumeId", {
@@ -52,7 +62,23 @@ const ApplyJobForm = ({
       });
       return;
     }
+    setLoading(true);
+    try {
+      const res = await createJobApplication(data);
+      if (res.success) {
+        toast.success(res.message, { id: "apply-job" });
+        setOpenModal(false);
+        queryClient.invalidateQueries("jobSeekerProfile");
+      } else {
+        toast.error(res.message, { id: "apply-job" });
+      }
+    } catch (error) {
+      toast.error("Something went wrong", { id: "apply-job" });
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <Form {...form}>
       <form
@@ -117,7 +143,7 @@ const ApplyJobForm = ({
         />
         <ResponsiveModalFooter>
           <Button
-            disabled={form.formState.isSubmitting}
+            disabled={loading}
             onClick={() => setOpenModal(false)}
             className="w-full mb-5 md:mb-0"
             variant={"secondary"}
@@ -126,8 +152,7 @@ const ApplyJobForm = ({
           </Button>
           <LoadingButton
             showIconOnly
-            loading={form.formState.isSubmitting}
-            // onClick={() => saveJobAs(JobStatus.PENDING)}
+            loading={loading}
             className="w-full mb-5 md:mb-0"
           >
             Apply

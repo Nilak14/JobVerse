@@ -22,6 +22,7 @@ import { format } from "date-fns";
 import { CalendarIcon, GripHorizontal } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { CSS } from "@dnd-kit/utilities";
+import GenerateResumeWorkExperienceButton from "@/components/Resume/GenerateResumeWorkExperienceButton";
 interface WorkExperienceFormItemProps {
   form: UseFormReturn<ProfessionalDetailsSchemaType>;
   index: number;
@@ -60,6 +61,22 @@ const WorkExperienceFormItem = ({
           {...attributes}
           {...listeners}
           className="cursor-grab size-5 text-muted-foreground focus:outline-none"
+        />
+      </div>
+      <div className="flex justify-center">
+        <GenerateResumeWorkExperienceButton
+          onWorkExperienceGenerated={(exp) => {
+            const data = {
+              order: index,
+              position: exp.position!,
+              companyName: exp.company!,
+              startDate: exp.startDate ? new Date(exp.startDate) : null,
+              endDate: exp.endDate ? new Date(exp.endDate) : null,
+              description: exp.description!,
+            };
+
+            form.setValue(`workExperience.${index}`, data);
+          }}
         />
       </div>
       <FormField
@@ -185,7 +202,7 @@ const WorkExperienceFormItem = ({
           <FormItem>
             <FormLabel>Description</FormLabel>
             <FormControl>
-              <Textarea className="resize-none" {...field} />
+              <Textarea className="resize-none h-28" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
