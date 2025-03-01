@@ -29,6 +29,11 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
         url: "/job-seeker/saved-jobs",
         icon: Heart,
       },
+      {
+        title: "Applied Jobs",
+        url: "/job-seeker/applied-jobs",
+        icon: Heart,
+      },
     ],
   },
   {
