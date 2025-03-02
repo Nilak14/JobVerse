@@ -23,11 +23,12 @@ model Application {
 }
 
 model ApplicationReview {
-    id              String      @id @default(cuid())
+    id              String            @id @default(cuid())
     applicationId   String
-    application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+    application     Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+    reviewedStatus  ApplicationStatus
     reviewedBy      String
-    reviewer        Employer    @relation(fields: [reviewedBy], references: [id])
+    reviewer        Employer          @relation(fields: [reviewedBy], references: [id])
     reviewedComment String?
     reviewedAt      DateTime
 

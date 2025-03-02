@@ -22,7 +22,6 @@ import {
 
 import { useState } from "react";
 import { TablePagination } from "../Global/PaginationTable";
-import DataTableToolbar from "./TableComponents/data-table-toolbar";
 import { Input } from "../ui/input";
 
 interface JVTableClientProps<TData, TValue> {
@@ -65,7 +64,7 @@ const JobApplicationTable = <TData, TValue>({
     },
   });
 
-  const filteredData = table.getRowModel().rows.map((row) => row.original);
+  // const filteredData = table.getRowModel().rows.map((row) => row.original);
 
   return (
     <div>

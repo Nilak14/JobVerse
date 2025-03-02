@@ -5,7 +5,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Skeleton } from "../ui/skeleton";
 
 const ApplicationDataTabSkeleton = () => {
-  // Define tab values to match the real component
   const tabValues = ["ALL", "PENDING", "INTERVIEW", "APPROVED", "REJECTED"];
 
   return (

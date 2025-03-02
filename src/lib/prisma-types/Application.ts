@@ -6,11 +6,20 @@ export const JobApplicationSelect = () => {
     status: true,
     createdAt: true,
     resumeId: true,
+    ApplicationReview: {
+      select: {
+        id: true,
+        reviewedAt: true,
+        reviewedStatus: true,
+      },
+    },
     job: {
       select: {
         id: true,
         title: true,
         workMode: true,
+        Salary: true,
+        jobType: true,
         company: {
           select: {
             name: true,
