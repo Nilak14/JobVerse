@@ -33,7 +33,6 @@ interface JobTableRowActionProps {
 
 const ApplicationTableAction = ({
   application,
-
   TriggerIcon = MoreHorizontal,
 }: JobTableRowActionProps) => {
   const [openSheet, setOpenSheet] = useState(false);
