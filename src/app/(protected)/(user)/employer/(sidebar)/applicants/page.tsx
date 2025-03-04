@@ -29,7 +29,7 @@ const ApplicantPage = () => {
 };
 export default ApplicantPage;
 
-export const ApplicationDataComponent = async () => {
+const ApplicationDataComponent = async () => {
   const applicationData = await getAllApplicantsForCompany();
   return (
     <Tabs defaultValue="grid" className="mt-6">
