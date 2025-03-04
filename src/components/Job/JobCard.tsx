@@ -121,7 +121,7 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
             </div>
             <div className="space-y-3">
               <SalaryDisplay
-                rate={job.Salary?.rate!}
+                rate={job.Salary?.rate ?? "N/A"}
                 exactAmount={job.Salary?.amount}
                 maxAmount={job.Salary?.maxAmount}
                 startingAmount={job.Salary?.minAmount}

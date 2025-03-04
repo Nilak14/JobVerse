@@ -9,6 +9,12 @@ import {
 import { Suspense } from "react";
 import ApplicationDataTab from "@/components/applications/ApplicationDataTab";
 import ApplicationDataTabSkeleton from "@/components/skeletons/ApplicationDataTabSkeleton";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Applications",
+  description: " Track and manage your job applications in one place",
+};
 
 const JobAppliedPage = () => {
   return (

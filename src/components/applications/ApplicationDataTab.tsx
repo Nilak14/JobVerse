@@ -63,14 +63,18 @@ const ApplicationDataTab = ({
             <TabsContent key={val} value={val}>
               {val === "ALL" ? (
                 <JobApplicationTable
+                  key={val}
                   columns={jobApplicationColumn}
                   data={application!}
                 />
               ) : (
                 <div>
                   <JobApplicationTable
+                    key={val}
                     columns={jobApplicationColumn}
-                    data={application?.filter((app) => app.status === val)!}
+                    data={
+                      application?.filter((app) => app.status === val) || []
+                    }
                   />
                 </div>
               )}
