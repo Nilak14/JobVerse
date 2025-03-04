@@ -135,11 +135,6 @@ const EmployerJobTable = <TData, TValue>({
             </TableBody>
           </Table>
         </div>
-        {showPagination && (
-          <div className=" mt-4">
-            <TablePagination table={table} />
-          </div>
-        )}
       </div>
 
       <div className="lg:hidden grid grid-cols-1 gap-4  lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
@@ -148,6 +143,11 @@ const EmployerJobTable = <TData, TValue>({
           return <JobTableCard key={jobData.id} jobData={jobData} />;
         })}
       </div>
+      {showPagination && (
+        <div className=" mt-4">
+          <TablePagination table={table} />
+        </div>
+      )}
     </div>
   );
 };

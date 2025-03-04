@@ -68,7 +68,7 @@ export const jobApplicationColumn: ColumnDef<JobApplication>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      return <ApplicationTableAction applicationId={row.original.id} />;
+      return <ApplicationTableAction application={row.original} />;
     },
   },
 ];

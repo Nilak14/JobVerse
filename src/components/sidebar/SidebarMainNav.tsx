@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -27,12 +26,16 @@ export function SidebarMainNav({ items }: { items: SidebarNavLinks[] }) {
 
   return (
     <SidebarGroup>
-      {/* <SidebarGroupLabel>General</SidebarGroupLabel> */}
       <SidebarMenu>
         {items.map((item) => {
           const isActive = pathname === item.url; // Check if the current route matches
           return (
-            <Collapsible key={item.title} asChild className="group/collapsible">
+            <Collapsible
+              defaultOpen={true}
+              key={item.title}
+              asChild
+              className="group/collapsible"
+            >
               {item.items && item.items.length > 0 ? (
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
