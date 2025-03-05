@@ -85,6 +85,7 @@ const GenerateResumeWorkExperienceButton = ({
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
+                        disabled={form.formState.isSubmitting}
                         className="resize-none h-36"
                         {...field}
                         placeholder={`E.g. "From Jan 1 to Dec 12 i work at Everest Technology. My tasks were .... `}
@@ -96,6 +97,7 @@ const GenerateResumeWorkExperienceButton = ({
               />
               <div className="flex gap-1 flex-col md:flex-row md:gap-5 ">
                 <Button
+                  type="button"
                   disabled={form.formState.isSubmitting}
                   onClick={() => setShowDialog(false)}
                   className="w-full mb-5 md:mb-0"
@@ -106,7 +108,6 @@ const GenerateResumeWorkExperienceButton = ({
 
                 <LoadingButton
                   className="w-full"
-                  type="submit"
                   loading={form.formState.isSubmitting}
                 >
                   Generate

@@ -43,6 +43,7 @@ export const JobApplicationSelectEmployer = () => {
     job: {
       select: {
         title: true,
+        id: true,
       },
     },
     jobSeeker: {
@@ -50,6 +51,8 @@ export const JobApplicationSelectEmployer = () => {
         JobSeekerProfile: {
           select: {
             skills: true,
+            location: true,
+            profileVisibility: true,
           },
         },
         user: {
