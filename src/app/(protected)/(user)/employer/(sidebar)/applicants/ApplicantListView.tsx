@@ -5,19 +5,35 @@ import {
   Calendar,
   ChevronRight,
   Download,
+  FileText,
   Mail,
   Phone,
   Star,
   UserPlus,
 } from "lucide-react";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/Global/EmptyState";
 import UserAvatar from "@/components/Global/Useravatar";
 import ApplicationStatusBadge from "@/components/Global/ApplicationStatusBadge";
 import { formatDate } from "@/lib/utils";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import ApplicationEmployerDropdownAction from "@/components/applications/ApplicationEmployerDropdownAction";
 interface ApplicantListViewProps {
   applicantData: JobApplicationEmployer[];
 }
@@ -32,11 +48,6 @@ const ApplicantListView = ({ applicantData }: ApplicantListViewProps) => {
         staggerChildren: 0.05,
       },
     },
-  };
-
-  const item = {
-    hidden: { opacity: 0, x: -20 },
-    show: { opacity: 1, x: 0 },
   };
 
   if (!hasApplicants) {
@@ -57,92 +68,82 @@ const ApplicantListView = ({ applicantData }: ApplicantListViewProps) => {
       initial="hidden"
       animate="show"
     >
-      {applicantData.map((applicant) => (
-        <motion.div
-          key={applicant.id}
-          variants={item}
-          whileHover={{ scale: 1.01 }}
-          className="overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm"
-        >
-          <div className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center">
-            <div className="flex-shrink-0">
-              <UserAvatar
-                imageUrl={applicant.jobSeeker.user.image!}
-                userName={applicant.jobSeeker.user.name!}
-              />
-            </div>
-            <div className="grid flex-1 gap-1">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold">
-                    {" "}
-                    {applicant.jobSeeker.user.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {" "}
-                    {applicant.job.title}
-                  </p>
-                </div>
-                <ApplicationStatusBadge status={applicant.status} />
-              </div>
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <Calendar className="mr-1 h-4 w-4" />
-                  Applied {formatDate(applicant.createdAt)}
-                </div>
-                <div className="hidden flex-wrap gap-2 md:flex">
-                  {applicant.jobSeeker.JobSeekerProfile?.skills
-                    .slice(0, 3)
-                    .map((skill) => (
-                      <Badge key={skill} variant="outline">
-                        {skill}
-                      </Badge>
-                    ))}
-                  {applicant.jobSeeker.JobSeekerProfile?.skills && (
-                    <>
-                      {applicant.jobSeeker.JobSeekerProfile.skills.length >
-                        3 && (
-                        <Badge variant="outline">
-                          +
-                          {applicant.jobSeeker.JobSeekerProfile.skills.length -
-                            3}
-                        </Badge>
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-shrink-0 items-center gap-2">
-              <div className="hidden gap-2 md:flex">
-                <Button variant="ghost" size="icon">
-                  <Mail className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Phone className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Download className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Star className="h-4 w-4" />
-                </Button>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="hidden md:inline-flex"
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[300px]">Applicant</TableHead>
+              <TableHead>Skills</TableHead>
+              <TableHead>Applied</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {applicantData.map((applicant, index) => (
+              <motion.tr
+                key={applicant.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="group"
               >
-                Schedule
-              </Button>
-              <Button size="sm">View Profile</Button>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </motion.div>
-      ))}
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-3">
+                    <UserAvatar
+                      imageUrl={applicant.jobSeeker.user.image!}
+                      userName={applicant.jobSeeker.user.name!}
+                    />
+                    <div>
+                      <div className="font-medium">
+                        {applicant.jobSeeker.user.name}
+                      </div>
+                      <div className="text-sm text-muted-foreground flex items-center gap-2">
+                        <span> {applicant.job.title}</span>
+                      </div>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1">
+                    {applicant.jobSeeker.JobSeekerProfile?.skills
+                      .slice(0, 3)
+                      .map((skill) => (
+                        <Badge key={skill} variant="outline">
+                          {skill}
+                        </Badge>
+                      ))}
+                    {applicant.jobSeeker.JobSeekerProfile?.skills && (
+                      <>
+                        {applicant.jobSeeker.JobSeekerProfile.skills.length >
+                          3 && (
+                          <Badge variant="outline">
+                            +
+                            {applicant.jobSeeker.JobSeekerProfile.skills
+                              .length - 3}
+                          </Badge>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    <Calendar className="mr-1 h-4 w-4 text-muted-foreground" />
+                    {formatDate(applicant.createdAt)}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <ApplicationStatusBadge status={applicant.status} />
+                </TableCell>
+                <TableCell className="text-right">
+                  <ApplicationEmployerDropdownAction application={applicant} />
+                </TableCell>
+              </motion.tr>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </motion.div>
   );
 };

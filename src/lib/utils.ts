@@ -259,3 +259,7 @@ export function jobSeekerProfileStatus(
 
   return { completed: true, message: "Profile is completed" };
 }
+
+export function isCreatedResume(resumeId: string): boolean {
+  return resumeId.startsWith("c") && resumeId.length === 25;
+}
