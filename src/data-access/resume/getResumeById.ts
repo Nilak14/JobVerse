@@ -1,18 +1,13 @@
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { ResumeDataInclude } from "@/lib/prisma-types/Resume";
+import { cache } from "react";
 
-export const getResumeById = async (resumeId: string) => {
-  const session = await auth();
-  if (!session || !session.jobSeekerId || !session.user) {
-    return null;
-  }
+export const getResumeById = cache(async (resumeId: string) => {
   const resume = await prisma.resume.findUnique({
     where: {
       id: resumeId,
-      userId: session.jobSeekerId,
     },
     include: ResumeDataInclude,
   });
   return resume;
-};
+});

@@ -1,3 +1,4 @@
+"use client";
 import useDimensions from "@/hooks/custom-hooks/useDimension";
 import { cn } from "@/lib/utils";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";

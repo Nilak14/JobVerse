@@ -76,6 +76,7 @@ const WorkExperienceFormItem = ({
             };
 
             form.setValue(`workExperience.${index}`, data);
+            form.trigger();
           }}
         />
       </div>
