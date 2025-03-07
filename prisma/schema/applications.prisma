@@ -5,6 +5,12 @@ enum ApplicationStatus {
     INTERVIEW
 }
 
+enum InterviewType {
+    VOICE_CALL
+    VIDEO_CALL
+    FACE_TO_FACE
+}
+
 model Application {
     id          String            @id @default(cuid())
     jobId       String
@@ -17,6 +23,7 @@ model Application {
     createdAt         DateTime            @default(now())
     updatedAt         DateTime            @updatedAt
     ApplicationReview ApplicationReview[]
+    Interview         Interview?
 
     @@unique([jobId, jobSeekerId])
     @@map("applications")
@@ -33,4 +40,16 @@ model ApplicationReview {
     reviewedAt      DateTime
 
     @@map("application_reviews")
+}
+
+model Interview {
+    id            String        @id @default(cuid())
+    applicationId String        @unique
+    application   Application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+    interviewDate DateTime
+    interviewTime String
+    interviewType InterviewType
+    note          String?
+
+    @@map("interviews")
 }

@@ -2,14 +2,16 @@ import { getUserUploadedResume } from "@/hooks/query-hooks/getUploadedResume";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
+import { PropsWithChildren } from "react";
 
-interface UploadedResumeLinkProps {
+interface UploadedResumeLinkProps extends PropsWithChildren {
   resumeId: string;
   className?: string;
 }
 const UploadedResumeLink = ({
   resumeId,
   className,
+  children,
 }: UploadedResumeLinkProps) => {
   const { data, isLoading } = getUserUploadedResume(resumeId);
   console.log(data);
@@ -18,7 +20,7 @@ const UploadedResumeLink = ({
   }
   return (
     <Link className={cn(className)} href={data.resumeUrl} target="_blank">
-      View Resume
+      {children}
     </Link>
   );
 };

@@ -4,16 +4,11 @@ import { EmptyState } from "@/components/Global/EmptyState";
 import UserAvatar from "@/components/Global/Useravatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { JobApplicationEmployer } from "@/lib/prisma-types/Application";
 import { formatDate } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Calendar, MapPin, MoreHorizontal, UserPlus } from "lucide-react";
+import { Calendar, MapPin, UserPlus } from "lucide-react";
 import Link from "next/link";
 
 import ApplicationEmployerDropdownAction from "@/components/applications/ApplicationEmployerDropdownAction";
