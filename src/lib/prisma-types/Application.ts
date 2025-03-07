@@ -6,6 +6,14 @@ export const JobApplicationSelect = () => {
     status: true,
     createdAt: true,
     resumeId: true,
+    Interview: {
+      select: {
+        interviewDate: true,
+        interviewTime: true,
+        interviewType: true,
+        note: true,
+      },
+    },
     ApplicationReview: {
       select: {
         id: true,
