@@ -34,17 +34,21 @@ import { toast } from "sonner";
 import LoadingButton from "../ui/loading-button";
 import { useRouter } from "next/navigation";
 import ScheduledInterviewModal from "./ScheduleInterviewModal";
+
 interface ApplicationEmployerDropdownActionProps {
   application: JobApplicationEmployer;
 }
+
 const ApplicationEmployerDropdownAction = ({
   application,
 }: ApplicationEmployerDropdownActionProps) => {
   const userResume = application.resumeId;
   const isResumeCreated = isCreatedResume(userResume || "");
   const [openRejectModal, setOpenRejectModal] = useState(false);
+  const [openAcceptModal, setOpenAcceptModal] = useState(false);
   const [openScheduledInterviewModal, setOpenScheduledInterviewModal] =
     useState(false);
+
   return (
     <>
       <DropdownMenu>
@@ -89,15 +93,13 @@ const ApplicationEmployerDropdownAction = ({
               <span>Schedule Interview</span>
             </DropdownMenuItem>
           )}
-          {application.status !== "REJECTED" && (
-            <DropdownMenuItem>
-              <CheckCircle />
-              <span>Accept Application</span>
-            </DropdownMenuItem>
-          )}
-
-          {application.status !== "REJECTED" && (
+          {(application.status === "PENDING" ||
+            application.status === "INTERVIEW") && (
             <>
+              <DropdownMenuItem onClick={() => setOpenAcceptModal(true)}>
+                <CheckCircle />
+                <span>Accept Application</span>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => setOpenRejectModal(true)}
@@ -115,6 +117,11 @@ const ApplicationEmployerDropdownAction = ({
         onClose={() => setOpenRejectModal(false)}
         applicationId={application.id}
       />
+      <AcceptModal
+        isOpen={openAcceptModal}
+        onClose={() => setOpenAcceptModal(false)}
+        applicationId={application.id}
+      />
       <ScheduledInterviewModal
         isOpen={openScheduledInterviewModal}
         onClose={() => setOpenScheduledInterviewModal(false)}
@@ -123,15 +130,16 @@ const ApplicationEmployerDropdownAction = ({
     </>
   );
 };
+
 export default ApplicationEmployerDropdownAction;
 
-interface RejectModalProps {
+interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   applicationId: string;
 }
 
-const RejectModal = ({ isOpen, onClose, applicationId }: RejectModalProps) => {
+const RejectModal = ({ isOpen, onClose, applicationId }: ModalProps) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const onReject = async () => {
@@ -178,6 +186,58 @@ const RejectModal = ({ isOpen, onClose, applicationId }: RejectModalProps) => {
             onClick={onReject}
           >
             Reject
+          </LoadingButton>
+        </ResponsiveModalFooter>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
+  );
+};
+const AcceptModal = ({ isOpen, onClose, applicationId }: ModalProps) => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const Accept = async () => {
+    setLoading(true);
+    try {
+      const res = await updateApplicationStatus(applicationId, "APPROVED");
+      if (res.success) {
+        router.refresh();
+        toast.success("Application Accepted Successfully");
+      } else {
+        toast.error("Failed to Accept Application");
+      }
+      onClose();
+    } catch (error) {
+      toast.error("Failed to Accept Application");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <ResponsiveModal open={isOpen} onOpenChange={onClose}>
+      <ResponsiveModalContent isloading={loading ? "true" : undefined}>
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>Accept Application?</ResponsiveModalTitle>
+          <ResponsiveModalDescription>
+            Are you sure you want to Accept this application?
+          </ResponsiveModalDescription>
+        </ResponsiveModalHeader>
+        <ResponsiveModalFooter className="flex gap-4 mt-5 md:mt-0">
+          <Button
+            disabled={loading}
+            className="flex-1"
+            variant="secondary"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
+          <LoadingButton
+            loading={loading}
+            showIconOnly
+            className="flex-1"
+            onClick={Accept}
+          >
+            Accept
           </LoadingButton>
         </ResponsiveModalFooter>
       </ResponsiveModalContent>

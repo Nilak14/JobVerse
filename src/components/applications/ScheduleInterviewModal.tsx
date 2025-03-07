@@ -36,6 +36,8 @@ import { Input } from "../ui/input";
 import { InterviewType } from "@prisma/client";
 import { Textarea } from "../ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { scheduleInterview } from "@/actions/application/scheduleInterview";
 interface ScheduledInterviewModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -62,6 +64,20 @@ const ScheduledInterviewModal = ({
 
   const onSubmit = async (data: ScheduleInterviewSchemaType) => {
     console.log(data);
+    setLoading(true);
+    try {
+      const res = await scheduleInterview(data);
+      if (res.success) {
+        toast.success("Interview Scheduled Successfully");
+        onClose();
+      } else {
+        toast.error("Failed to Schedule Interview");
+      }
+    } catch (error) {
+      toast.error("Failed to Schedule Interview");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <ResponsiveModal open={isOpen} onOpenChange={onClose}>
@@ -83,7 +99,11 @@ const ScheduledInterviewModal = ({
                   <FormItem>
                     <FormLabel>Interview Date</FormLabel>
                     <FormControl>
-                      <Input type="date" placeholder="shadcn" {...field} />
+                      <Input
+                        min={new Date().toISOString().split("T")[0]}
+                        type="date"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -167,7 +187,6 @@ const ScheduledInterviewModal = ({
                 showIconOnly
                 type="submit"
                 className="flex-1"
-                // onClick={onAccept}
               >
                 Schedule
               </LoadingButton>
