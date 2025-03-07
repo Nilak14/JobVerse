@@ -15,7 +15,7 @@ export const GET = async (req: NextRequest) => {
       data: {
         category: category,
       },
-      message: "Invitations fetched successfully",
+      message: "Category fetched successfully",
     };
     return Response.json(data, { status: 200 });
   } catch (error) {

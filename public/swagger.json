@@ -1,0 +1,87 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "JobVerse API",
+    "description": "API documentation for the JobVerse application",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/job-categories": {
+      "get": {
+        "summary": "Get all job categories",
+        "description": "Retrieves a list of all job categories with their associated data",
+        "operationId": "getJobCategories",
+        "tags": ["Job Categories"],
+        "responses": {
+          "200": {
+            "description": "Job categories fetched successfully"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/users/search-employee": {
+      "get": {
+        "summary": "Search for Employers",
+        "description": "Searches for employers based on a search query and company ID. Excludes the current user, blocked users, job seekers, and employers already associated with or invited to the specified company.",
+        "operationId": "searchEmployers",
+        "tags": ["Employers"],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search keyword to filter employers by name or email",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "CID",
+            "in": "query",
+            "description": "Company ID to check employer association or invitation status",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employer search results fetched successfully"
+          },
+          "400": {
+            "description": "Bad Request - Missing required query parameters"
+          },
+          "401": {
+            "description": "Unauthorized - User not authenticated"
+          },
+          "403": {
+            "description": "Forbidden - User is blocked or not authorized"
+          },
+          "404": {
+            "description": "Not Found - Company not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
