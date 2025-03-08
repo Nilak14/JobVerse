@@ -11,6 +11,7 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserUploadedResume } from "@/data-access/resume/getUserUploadedResume";
+import ResumePageButtonSkeleton from "@/components/skeletons/ResumePageButtonSkeleton";
 
 export const metadata: Metadata = {
   title: "Resume Studio | Manage Your Resumes",
@@ -36,10 +37,9 @@ const ResumeStudioPage = async () => {
             </p>
           </div>
         </BoxReveal>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <CreateNewResumeButton />
-          <UploadResumeButton />
-        </div>
+        <Suspense fallback={<ResumePageButtonSkeleton />}>
+          <ResumeStudioPageButton jobSeekerId={session.jobSeekerId} />
+        </Suspense>
       </div>
       <Tabs className="space-y-6 mt-8" defaultValue="created">
         <TabsList className="  h-12">
@@ -91,7 +91,7 @@ const CreatedResume = async ({ jobSeekerId }: ResumeStudioProps) => {
             Create your first resume to start applying for jobs with confidence
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6">
-            <CreateNewResumeButton />
+            <CreateNewResumeButton canCreate={false} />
           </div>
         </div>
       )}
@@ -127,6 +127,17 @@ const UploadedResume = async ({ jobSeekerId }: ResumeStudioProps) => {
           </div>
         </div>
       )}
+    </>
+  );
+};
+const ResumeStudioPageButton = async ({ jobSeekerId }: ResumeStudioProps) => {
+  const [resumes, resumeCount] = await getUserAllCreatedResume(jobSeekerId);
+  return (
+    <>
+      <div className="flex flex-col sm:flex-row gap-3">
+        <CreateNewResumeButton canCreate={resumeCount < 3} />
+        <UploadResumeButton />
+      </div>
     </>
   );
 };

@@ -1,3 +1,4 @@
+import JobSeekerPremiumModal from "@/components/premium/JobSeekerPremiumModal";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -11,6 +12,11 @@ const JobSeekerLayout = async ({
     redirect("/");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <JobSeekerPremiumModal />
+    </>
+  );
 };
 export default JobSeekerLayout;
