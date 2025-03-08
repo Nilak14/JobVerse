@@ -90,7 +90,7 @@ export const JobStatusBadge = ({ status }: { status: JobStatus }) => {
     DELETED: "Deleted",
     EXPIRED: "Expired",
     NEED_REVIEW: "Need Review",
-    PAUSED: "Paused",
+    PAUSED: "Closed",
   };
 
   return (

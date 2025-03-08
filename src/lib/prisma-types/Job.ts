@@ -2,6 +2,16 @@ import { Prisma } from "@prisma/client";
 
 export const JobDataInclude = {
   Salary: true,
+  _count: {
+    select: {
+      applications: true,
+    },
+  },
+  review: {
+    select: {
+      reviewedComment: true,
+    },
+  },
   creator: {
     select: {
       user: {
@@ -20,6 +30,11 @@ export type JobServerData = Prisma.JobGetPayload<{
 }>;
 
 export const JobDataIncludeAdmin = {
+  _count: {
+    select: {
+      applications: true,
+    },
+  },
   Salary: true,
   company: {
     select: {
@@ -97,6 +112,7 @@ export type JobDataBrowseAPIResponse = {
 export function getJobDataIncludeDescription() {
   return {
     id: true,
+    status: true,
     title: true,
     description: true,
     location: true,

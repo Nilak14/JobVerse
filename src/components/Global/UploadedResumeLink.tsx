@@ -14,12 +14,15 @@ const UploadedResumeLink = ({
   children,
 }: UploadedResumeLinkProps) => {
   const { data, isLoading } = getUserUploadedResume(resumeId);
-  console.log(data);
   if (isLoading) {
     return <Skeleton className="w-full h-5" />;
   }
   return (
-    <Link className={cn(className)} href={data.resumeUrl} target="_blank">
+    <Link
+      className={cn(className)}
+      href={data?.resumeUrl || "not-found"}
+      target="_blank"
+    >
       {children}
     </Link>
   );

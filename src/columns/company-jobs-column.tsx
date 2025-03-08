@@ -41,10 +41,11 @@ export const companyJobsColumn: ColumnDef<JobServerData>[] = [
     },
   },
   {
-    accessorKey: "applicants",
+    // console.log(jobs[0]._count.applications);
+    accessorKey: "_count.applications",
     header: "Applicants",
     cell: ({ row }) => {
-      return <NumberTableCell number={10} />;
+      return <NumberTableCell number={row.original._count.applications} />;
     },
   },
 
@@ -93,7 +94,11 @@ export const companyJobsColumn: ColumnDef<JobServerData>[] = [
     header: "Actions",
     cell: ({ row }) => {
       return (
-        <JobTableRowAction id={row.original.id} status={row.original.status} />
+        <JobTableRowAction
+          message={row.original.review?.reviewedComment}
+          id={row.original.id}
+          status={row.original.status}
+        />
       );
     },
   },

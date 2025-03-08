@@ -40,10 +40,10 @@ export const AdminAllJobsColumn: ColumnDef<JobServerDataAdmin>[] = [
     },
   },
   {
-    accessorKey: "applicants",
+    accessorKey: "_count.applications",
     header: "Applicants",
     cell: ({ row }) => {
-      return <NumberTableCell number={10} />;
+      return <NumberTableCell number={row.original._count.applications} />;
     },
   },
 

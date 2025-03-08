@@ -5,8 +5,10 @@ export const getAllCompanyJobs = async (companyId: string) => {
   const allJobs = await prisma.job.findMany({
     where: {
       companyId,
+      isDeleted: false,
     },
     include: JobDataInclude,
+
     orderBy: {
       createdAt: "desc",
     },
