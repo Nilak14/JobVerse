@@ -9,13 +9,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-/**
- * maxAmount: upto Rs. 20000
- * startingAmount: from Rs. 20000
- * range: Rs. 20000 - Rs. 40000
- * exact: Rs. 20000
- */
-
 export const metadata: Metadata = {
   title: "Job Studio",
   description: "This page shows all the jobs posted in your company",

@@ -1,24 +1,20 @@
 import { cn } from "@/lib/utils";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
+import JobEmployerPreview from "./JobEmployerPreview";
 
 interface JobPreviewSectionProps {
   jobData: JobSchemaType;
-  setJobData: (data: JobSchemaType) => void;
   className?: string;
 }
-const JobPreviewSection = ({
-  jobData,
-  setJobData,
-  className,
-}: JobPreviewSectionProps) => {
+const JobPreviewSection = ({ jobData, className }: JobPreviewSectionProps) => {
   return (
     <section
       className={cn(
-        "group relative hidden md:w-1/2 md:flex w-full overflow-hidden",
+        "group relative hidden md:w-1/2 md:flex w-full overflow-y-auto  ",
         className
       )}
     >
-      <pre>{JSON.stringify(jobData, null, 2)}</pre>
+      <JobEmployerPreview job={jobData} />
     </section>
   );
 };

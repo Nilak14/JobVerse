@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "../ui/table";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { TablePagination } from "../Global/PaginationTable";
 import DataTableToolbar from "./TableComponents/data-table-toolbar";
 import JobTableCard from "../TableCard/JobTableCard";

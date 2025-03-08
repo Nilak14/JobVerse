@@ -8,7 +8,9 @@ import {
 import {
   AlertCircle,
   LucideIcon,
+  MessageCircleMore,
   MoreHorizontal,
+  Pause,
   PenSquare,
   Repeat,
   ScanEye,
@@ -28,21 +30,27 @@ import { JobStatus } from "@prisma/client";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import DeleteJobPopover from "@/components/Job/DeleteJobPopover";
+import { Card, CardContent } from "../ui/card";
+import PauseJobPopover from "./PauseJobPopover";
 
 interface JobTableRowActionProps {
   id: string;
   status: JobStatus;
   TriggerIcon?: LucideIcon;
+  message?: string | null;
 }
 
 const JobTableRowAction = ({
+  message,
   id,
   status,
   TriggerIcon = MoreHorizontal,
 }: JobTableRowActionProps) => {
   const [openEditWarningDialog, setOpenEditDialog] = useState(false);
-  const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
-  const [openStatusDialog, setOpenStatusDialog] = useState(false);
+  const [openViewMessage, setOpenViewMessage] = useState(false);
+  if (status === "PAUSED" || status === "EXPIRED") {
+    return <></>;
+  }
   return (
     <>
       <DropdownMenu>
@@ -56,44 +64,66 @@ const JobTableRowAction = ({
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {/* // preview job */}
-          <DropdownMenuItem onClick={() => setOpenPreviewDialog(true)}>
-            <ScanEye color="orange" className="h-4 w-4 mr-2 " />
-            <span>Preview</span>
-          </DropdownMenuItem>
-          {/* // edit job */}
-          {status !== "PENDING" && (
+          {status === "ACTIVE" && (
             <>
-              {status === "DRAFT" ? (
+              <DropdownMenuItem asChild>
+                <Link href={`/job/description/${id}`}>
+                  <ScanEye color="orange" className="h-4 w-4 mr-2 " />
+                  <span>Preview</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <PauseJobPopover jobId={id} />
+              </DropdownMenuItem>
+            </>
+          )}
+          {status === "PENDING" && (
+            <>
+              <DropdownMenuItem asChild>
+                <Link href={`/employer/job-studio/?jobId=${id}`}>
+                  <PenSquare color="#10b981" className="h-4 w-4 mr-2 " />
+                  <span>Edit Job</span>
+                </Link>
+              </DropdownMenuItem>
+            </>
+          )}
+
+          <>
+            {status === "DRAFT" && (
+              <>
                 <DropdownMenuItem asChild>
                   <Link href={`/employer/job-studio/?jobId=${id}`}>
                     <PenSquare color="#10b981" className="h-4 w-4 mr-2 " />
                     <span>Edit Job</span>
                   </Link>
                 </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem
-                  onClick={() => {
-                    setOpenEditDialog(true);
-                  }}
-                >
+                <DropdownMenuItem asChild>
+                  <DeleteJobPopover jobId={id} />
+                </DropdownMenuItem>
+              </>
+            )}
+          </>
+          {status === "NEED_REVIEW" && (
+            <>
+              <DropdownMenuItem asChild>
+                <Link href={`/employer/job-studio/?jobId=${id}`}>
                   <PenSquare color="#10b981" className="h-4 w-4 mr-2 " />
                   <span>Edit Job</span>
-                </DropdownMenuItem>
-              )}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setOpenViewMessage(true)}>
+                <MessageCircleMore color="#ef4444 " className="h-4 w-4 mr-2" />
+                <span>View Message</span>
+              </DropdownMenuItem>
             </>
           )}
-
-          {/* delete job */}
-          <DropdownMenuItem asChild>
-            <DeleteJobPopover jobId={id} />
-          </DropdownMenuItem>
-          {/* // change job status */}
-          {status !== "PENDING" && (
-            <DropdownMenuItem onClick={() => setOpenStatusDialog(true)}>
-              <Repeat color="#3b82f6" className="h-4 w-4 mr-2" />
-              <span>Change Job Status</span>
-            </DropdownMenuItem>
+          {status === "REJECTED" && (
+            <>
+              <DropdownMenuItem onClick={() => setOpenViewMessage(true)}>
+                <MessageCircleMore color="#ef4444 " className="h-4 w-4 mr-2" />
+                <span>View Message</span>
+              </DropdownMenuItem>
+            </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
@@ -102,16 +132,13 @@ const JobTableRowAction = ({
         open={openEditWarningDialog}
         setOpen={setOpenEditDialog}
       />
-      <ChangeJobStatusDialog
-        jobId={id}
-        open={openStatusDialog}
-        setOpen={setOpenStatusDialog}
-      />
 
-      <PreviewJobDialog
+      <ViewMessage
+        status={status}
+        message={message || ""}
         jobId={id}
-        open={openPreviewDialog}
-        setOpen={setOpenPreviewDialog}
+        open={openViewMessage}
+        setOpen={setOpenViewMessage}
       />
     </>
   );
@@ -161,65 +188,68 @@ const EditJobWarningDialog = ({
     </ResponsiveModal>
   );
 };
-const ChangeJobStatusDialog = ({
+
+const ViewMessage = ({
   jobId,
   setOpen,
   open,
+  message,
+  status,
 }: {
   jobId: string;
   open: boolean;
   setOpen: (open: boolean) => void;
+  message: string;
+  status: JobStatus;
 }) => {
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
       <ResponsiveModalContent className="space-y-5 md:space-y-0">
         <ResponsiveModalHeader>
           <ResponsiveModalTitle>
-            Are you sure, You want to Delete ?
+            {status === "NEED_REVIEW"
+              ? "Need Update For Your Job Post"
+              : "Job Post Rejected"}
           </ResponsiveModalTitle>
+          <ResponsiveModalDescription className="sr-only">
+            {status === "NEED_REVIEW"
+              ? " JobVerse wants you to update the job post with following details before it goes live. Update these changes and send for review again"
+              : " JobVerse has rejected your job post with following details."}
+          </ResponsiveModalDescription>
         </ResponsiveModalHeader>
-        <ResponsiveModalDescription className="sr-only">
-          Remove Members From
-        </ResponsiveModalDescription>
-
-        <div className="flex items-center flex-col">
-          <p className="text-sm  mb-2 self-start">
-            To Confirm, type "Delete" in the box below
-          </p>
-        </div>
-        <ResponsiveModalFooter></ResponsiveModalFooter>
-      </ResponsiveModalContent>
-    </ResponsiveModal>
-  );
-};
-
-const PreviewJobDialog = ({
-  jobId,
-  setOpen,
-  open,
-}: {
-  jobId: string;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}) => {
-  return (
-    <ResponsiveModal open={open} onOpenChange={setOpen}>
-      <ResponsiveModalContent className="space-y-5 md:space-y-0">
-        <ResponsiveModalHeader>
-          <ResponsiveModalTitle>
-            Are you sure, You want to Delete ?
-          </ResponsiveModalTitle>
-        </ResponsiveModalHeader>
-        <ResponsiveModalDescription className="sr-only">
-          Remove Members From
-        </ResponsiveModalDescription>
-
-        <div className="flex items-center flex-col">
-          <p className="text-sm  mb-2 self-start">
-            To Confirm, type "Delete" in the box below
-          </p>
-        </div>
-        <ResponsiveModalFooter></ResponsiveModalFooter>
+        <Alert variant={status === "NEED_REVIEW" ? "warning" : "destructive"}>
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              {status === "NEED_REVIEW"
+                ? " JobVerse wants you to update the job post with following details before it goes live. Update these changes and send for review again"
+                : " JobVerse has rejected your job post with following details."}
+            </AlertDescription>
+          </div>
+        </Alert>
+        <Card>
+          <CardContent className="p-5">
+            <p>{message}</p>
+          </CardContent>
+        </Card>
+        {status === "NEED_REVIEW" && (
+          <ResponsiveModalFooter>
+            <div className="w-full flex items-center gap-5 ">
+              <Button
+                className="flex-1"
+                variant={"secondary"}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button asChild className="flex-1">
+                <Link href={`/employer/job-studio/?jobId=${jobId}`}>
+                  <span>Edit Job</span>
+                </Link>
+              </Button>
+            </div>
+          </ResponsiveModalFooter>
+        )}
       </ResponsiveModalContent>
     </ResponsiveModal>
   );

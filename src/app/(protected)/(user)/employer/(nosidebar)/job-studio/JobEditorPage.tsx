@@ -90,7 +90,6 @@ const JobEditorPage = ({ jobToEdit }: JobEditorPageProps) => {
           <JobPreviewSection
             className={cn(showSMPreview && "flex")}
             jobData={JobData}
-            setJobData={setJobData}
           />
         </div>
       </main>

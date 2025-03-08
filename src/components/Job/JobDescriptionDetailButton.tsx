@@ -1,5 +1,5 @@
 "use client";
-import { Apple, Share2 } from "lucide-react";
+import { Share2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { JobDataDescription } from "@/lib/prisma-types/Job";
 import SaveJobButton from "../Global/SaveJobButton";
@@ -14,6 +14,8 @@ const JobDescriptionDetailButton = ({
   job,
   session,
 }: JobDescriptionDetailButtonProps) => {
+  if (session.user.type !== "JOB_SEEKER" || job.status !== "ACTIVE")
+    return <></>;
   return (
     <>
       <ApplyNowButton jobData={job} className="w-full" size={"lg"} />

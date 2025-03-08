@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { JobStatus } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 //logic
 
@@ -33,8 +34,6 @@ export const changeJobStatus = async (jobId: string, newStatus: JobStatus) => {
   if (jobId === undefined || newStatus === undefined) {
     return { success: false, message: "Invalid data" };
   }
-  console.log("jobId", jobId);
-  console.log("newStatus", newStatus);
 
   // does job exist
   const job = await prisma.job.findUnique({
@@ -73,5 +72,6 @@ export const changeJobStatus = async (jobId: string, newStatus: JobStatus) => {
     where: { id: jobId },
     data: { status: newStatus },
   });
+  revalidatePath("/employer/job");
   return { success: true, message: "Job status updated successfully" };
 };
