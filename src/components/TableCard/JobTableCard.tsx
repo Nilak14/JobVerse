@@ -61,7 +61,9 @@ const JobTableCard = ({ jobData }: JobTableCardProps) => {
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Users className="size-4" />
-              <span className="text-sm font-medium">0 applicants</span>
+              <span className="text-sm font-medium">
+                {jobData._count.applications} applicants
+              </span>
             </div>
           </div>
         </div>
