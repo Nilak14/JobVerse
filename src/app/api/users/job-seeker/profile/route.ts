@@ -3,7 +3,6 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import {
-  getJobSeekerProfileSelect,
   getJobSeekerProfileSelectForApplication,
   JobSeekerProfileResponse,
 } from "@/lib/prisma-types/JobSeekerProfile";
