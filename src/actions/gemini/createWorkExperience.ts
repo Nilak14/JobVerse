@@ -1,7 +1,9 @@
 "use server";
 
+import { getJobSeekerSubscriptionLevel } from "@/data-access/subscription/jobseekerSubscription";
 import gemini from "@/gemini";
 import { auth } from "@/lib/auth";
+import { canUseAITools } from "@/lib/permissions/jobSeeker-permissions";
 import {
   GenerateWorkExperienceInput,
   generateWorkExperienceSchema,
@@ -13,10 +15,15 @@ export async function generateWorkExperienceGemini(
 ) {
   const session = await auth();
 
-  if (!session || !session.user || !session.jobSeekerId) {
+  if (!session || !session.user || !session.jobSeekerId || !session.user.id) {
     throw new Error("Unauthorized");
   }
-
+  const subscriptionLevel = await getJobSeekerSubscriptionLevel(
+    session.user.id
+  );
+  if (!canUseAITools(subscriptionLevel)) {
+    throw new Error("You need a premium subscription to use this feature");
+  }
   const { description } = generateWorkExperienceSchema.parse(input);
 
   const systemMessage = `

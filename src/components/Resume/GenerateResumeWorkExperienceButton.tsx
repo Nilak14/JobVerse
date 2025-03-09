@@ -27,6 +27,9 @@ import {
 import { Textarea } from "../ui/textarea";
 import LoadingButton from "../ui/loading-button";
 import { Button } from "../ui/button";
+import { useJobSeekerSubscriptionLevel } from "@/context/JobSeekerSubscriptionLevelProvider";
+import usePremiumModal from "@/store/usePremiumModal";
+import { canUseAITools } from "@/lib/permissions/jobSeeker-permissions";
 
 interface GenerateResumeWorkExperienceButtonProps {
   onWorkExperienceGenerated: (workExperience: WorkExperience) => void;
@@ -35,7 +38,8 @@ const GenerateResumeWorkExperienceButton = ({
   onWorkExperienceGenerated,
 }: GenerateResumeWorkExperienceButtonProps) => {
   const [showDialog, setShowDialog] = useState(false);
-
+  const subscriptionLevel = useJobSeekerSubscriptionLevel();
+  const { setOpenPremiumModal } = usePremiumModal();
   const form = useForm<GenerateWorkExperienceInput>({
     defaultValues: {
       description: "",
@@ -58,7 +62,16 @@ const GenerateResumeWorkExperienceButton = ({
 
   return (
     <>
-      <AIButton loading={showDialog} onClick={() => setShowDialog(true)} />
+      <AIButton
+        loading={showDialog}
+        onClick={() => {
+          if (!canUseAITools(subscriptionLevel)) {
+            setOpenPremiumModal(true);
+            return;
+          }
+          setShowDialog(true);
+        }}
+      />
       <ResponsiveModal open={showDialog} onOpenChange={setShowDialog}>
         <ResponsiveModalContent
           isloading={form.formState.isSubmitting ? "true" : undefined}

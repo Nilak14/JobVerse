@@ -20,10 +20,26 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "../ui/responsive-dailog";
+import usePremiumModal from "@/store/usePremiumModal";
 
-const CreateNewResumeButton = () => {
+interface CreateNewResumeButtonProps {
+  canCreate: boolean;
+}
+
+const CreateNewResumeButton = ({ canCreate }: CreateNewResumeButtonProps) => {
   const [open, setOpen] = useState(false);
-
+  const { openPremiumModal, setOpenPremiumModal } = usePremiumModal();
+  if (!canCreate) {
+    return (
+      <Button
+        onClick={() => setOpenPremiumModal(true)}
+        className="flex items-center gap-2"
+      >
+        <PlusCircle className="h-4 w-4" />
+        Create New Resume
+      </Button>
+    );
+  }
   return (
     <>
       <Button onClick={() => setOpen(true)} className="flex items-center gap-2">

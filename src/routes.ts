@@ -15,7 +15,11 @@ export const employerRoutePrefix = "/employer";
 export const jobSeekerRoutePrefix = "/job-seeker";
 export const adminRoutePrefix = "/admin";
 
-export const publicApiRoute = ["/api/uploadthing", "/api/clear-uploads"];
+export const publicApiRoute = [
+  "/api/uploadthing",
+  "/api/clear-uploads",
+  "/api/stripe-webhook",
+];
 export const publicContentRoute = ["/job/description", "/resume/preview"];
 export const publicSEORoute = ["/sitemap.xml", "/robots.txt", "/skills.json"];
 

@@ -1,14 +1,18 @@
+"use client";
 import { BadgeCheck, Bell, CreditCard, Sparkles } from "lucide-react";
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
+import usePremiumModal from "@/store/usePremiumModal";
+import Link from "next/link";
 const JobSeekerUserMenu = () => {
+  const { setOpenPremiumModal } = usePremiumModal();
   return (
     <>
       <DropdownMenuGroup>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setOpenPremiumModal(true)}>
           <Sparkles />
           Upgrade to Pro
         </DropdownMenuItem>
@@ -19,9 +23,11 @@ const JobSeekerUserMenu = () => {
           <BadgeCheck />
           Account (Job Seeker)
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <CreditCard />
-          Billing
+        <DropdownMenuItem asChild>
+          <Link href={"/job-seeker/billing"}>
+            <CreditCard />
+            Billing
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Bell />

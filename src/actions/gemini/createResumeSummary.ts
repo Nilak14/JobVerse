@@ -1,14 +1,25 @@
 "use server";
 
+import { getJobSeekerSubscriptionLevel } from "@/data-access/subscription/jobseekerSubscription";
 import gemini from "@/gemini";
+import { auth } from "@/lib/auth";
+import { canUseAITools } from "@/lib/permissions/jobSeeker-permissions";
 import {
   GenerateSummaryInput,
   generateSummarySchema,
 } from "@/schema/ResumeEditorSchema";
 
 export async function generateResumeSummary(input: GenerateSummaryInput) {
-  //todo: bock for non-premium users
-
+  const session = await auth();
+  if (!session || !session.user || !session.jobSeekerId || !session.user.id) {
+    throw new Error("Unauthorized");
+  }
+  const subscriptionLevel = await getJobSeekerSubscriptionLevel(
+    session.user.id
+  );
+  if (!canUseAITools(subscriptionLevel)) {
+    throw new Error("You need a premium subscription to use this feature");
+  }
   const { jobTitle, workExperiences, educations, skills } =
     generateSummarySchema.parse(input);
 
