@@ -1,6 +1,11 @@
 "use server";
 
+import { getJobSeekerSubscriptionLevel } from "@/data-access/subscription/jobseekerSubscription";
 import { auth } from "@/lib/auth";
+import {
+  canCreateResume,
+  canUseCustomizations,
+} from "@/lib/permissions/jobSeeker-permissions";
 import prisma from "@/lib/prisma";
 import { resumeSchema, ResumeValues } from "@/schema/ResumeEditorSchema";
 import { del, put } from "@vercel/blob";
@@ -18,11 +23,25 @@ export async function saveResume(values: ResumeValues) {
     !session ||
     !session.user ||
     !session.jobSeekerId ||
-    session.user.isBlocked
+    session.user.isBlocked ||
+    !session.user.id
   ) {
     throw new Error("Unauthorized");
   }
-  //todo: check the premium subscriptions, check count
+  const subscriptionLevel = await getJobSeekerSubscriptionLevel(
+    session.user.id
+  );
+
+  if (!id) {
+    const resumeCount = await prisma.resume.count({
+      where: { userId: session.jobSeekerId },
+    });
+    if (!canCreateResume(subscriptionLevel, resumeCount)) {
+      throw new Error(
+        "You have reached the maximum number of resumes allowed for your subscription level"
+      );
+    }
+  }
 
   const existingResume = id
     ? await prisma.resume.findUnique({
@@ -33,6 +52,16 @@ export async function saveResume(values: ResumeValues) {
   if (id && !existingResume) {
     throw new Error("Resume not found");
   }
+  const hasCustomizations =
+    (resumeValues.borderStyle &&
+      resumeValues.borderStyle !== existingResume?.borderStyle) ||
+    (resumeValues.colorHex &&
+      resumeValues.colorHex !== existingResume?.colorHex);
+
+  if (hasCustomizations && !canUseCustomizations(subscriptionLevel)) {
+    throw new Error("You do not have permission to use custom customizations");
+  }
+
   let newPhotoUrl: string | undefined | null = undefined;
   if (photo instanceof File) {
     if (existingResume?.photoUrl) {

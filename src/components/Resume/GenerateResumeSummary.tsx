@@ -1,10 +1,11 @@
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
 import { useState } from "react";
-import { Loader2, WandSparklesIcon } from "lucide-react";
 import { toast } from "sonner";
 import { generateResumeSummary } from "@/actions/gemini/createResumeSummary";
-import { ShinyButton } from "../ui/shiny-button";
 import AIButton from "../Global/AIButton";
+import { useJobSeekerSubscriptionLevel } from "@/context/JobSeekerSubscriptionLevelProvider";
+import usePremiumModal from "@/store/usePremiumModal";
+import { canUseAITools } from "@/lib/permissions/jobSeeker-permissions";
 
 interface GenerateResumeSummaryProps {
   resumeData: ResumeValues;
@@ -15,8 +16,13 @@ const GenerateResumeSummary = ({
   resumeData,
 }: GenerateResumeSummaryProps) => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const subscriptionLevel = useJobSeekerSubscriptionLevel();
+  const { setOpenPremiumModal } = usePremiumModal();
   const generateSummary = async () => {
+    if (!canUseAITools(subscriptionLevel)) {
+      setOpenPremiumModal(true);
+      return;
+    }
     try {
       setIsLoading(true);
       const aiResponse = await generateResumeSummary(resumeData);

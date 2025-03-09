@@ -43,6 +43,7 @@ export default {
       token.avatarUrl = user.image;
       token.isBlocked = user.isBlocked;
       token.isOAuthUser = !user.password;
+      token.stripeCustomerId = user.stripeCustomerId;
       return token;
     },
     async signIn({ user, account }) {
@@ -82,7 +83,7 @@ export default {
       session.user.avatarUrl = token.avatarUrl as string;
       session.user.isBlocked = token.isBlocked as boolean;
       session.user.isOAuthUser = token.isOAuthUser as boolean;
-
+      session.user.stripeCustomerId = token.stripeCustomerId as string;
       return session;
     },
   },

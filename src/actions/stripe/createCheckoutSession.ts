@@ -8,12 +8,18 @@ export const createCheckoutSession = async (priceId: string) => {
   if (!session || !session.user) {
     throw new Error("User not authenticated");
   }
+  const stripeCustomerId = session.user.stripeCustomerId || undefined;
+
   const stripeSession = await stripe.checkout.sessions.create({
     line_items: [{ price: priceId, quantity: 1 }],
     mode: "subscription",
     success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/job-seeker/billing/success`,
     cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/job-seeker/billing`,
-    customer_email: session.user.email!,
+    customer: stripeCustomerId,
+    customer_email: stripeCustomerId ? undefined : session.user.email!,
+    metadata: {
+      userId: session.user.id!,
+    },
     subscription_data: {
       metadata: {
         userId: session.user.id!,
