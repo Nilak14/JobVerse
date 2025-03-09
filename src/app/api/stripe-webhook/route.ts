@@ -67,43 +67,76 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     subscription.status === "trialing" ||
     subscription.status === "past_due"
   ) {
-    await prisma.userSubscription.upsert({
-      where: {
-        userId: subscription.metadata?.userId as string,
-      },
-      create: {
-        userId: subscription.metadata?.userId as string,
-        stripeSubscriptionId: subscription.id,
-        stripeCustomerId: subscription.customer as string,
-        stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
-        stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
-      },
-      update: {
-        stripePriceId: subscription.items.data[0].price.id,
-        stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
-      },
-    });
+    await Promise.all([
+      prisma.userSubscription.upsert({
+        where: {
+          userId: subscription.metadata?.userId as string,
+        },
+        create: {
+          userId: subscription.metadata?.userId as string,
+          stripeSubscriptionId: subscription.id,
+          stripeCustomerId: subscription.customer as string,
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+          stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
+        },
+        update: {
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
+          stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+        },
+      }),
+
+      prisma.user.update({
+        where: {
+          id: subscription.metadata?.userId as string,
+        },
+        data: {
+          stripeCustomerId: subscription.customer as string,
+        },
+      }),
+    ]);
   } else {
     console.log("deleted ");
-    await prisma.userSubscription.deleteMany({
-      where: {
-        stripeCustomerId: subscription.customer as string,
-      },
-    });
+
+    await Promise.all([
+      prisma.userSubscription.deleteMany({
+        where: {
+          stripeCustomerId: subscription.customer as string,
+        },
+      }),
+      prisma.user.update({
+        where: {
+          id: subscription.metadata?.userId as string,
+        },
+        data: {
+          stripeCustomerId: null,
+        },
+      }),
+    ]);
   }
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   console.log("Subscription Deleted");
-  await prisma.userSubscription.deleteMany({
-    where: {
-      stripeCustomerId: subscription.customer as string,
-    },
-  });
+
+  await Promise.all([
+    prisma.userSubscription.deleteMany({
+      where: {
+        stripeCustomerId: subscription.customer as string,
+      },
+    }),
+    prisma.user.update({
+      where: {
+        id: subscription.metadata?.userId as string,
+      },
+      data: {
+        stripeCustomerId: null,
+      },
+    }),
+  ]);
 }
