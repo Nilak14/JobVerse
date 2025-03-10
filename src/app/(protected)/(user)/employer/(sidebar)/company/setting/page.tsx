@@ -52,6 +52,7 @@ const CompanySettingsPage = async () => {
     session.activeCompanyId,
     session.employerId!
   );
+  console.log(activeCompany);
   if (!activeCompany) {
     signOut();
     return;

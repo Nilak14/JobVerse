@@ -78,6 +78,7 @@ export const GET = async (req: NextRequest) => {
                     none: {
                       // exclude the employer who already are already in that company
                       companyId: companyId,
+                      isDeleted: false,
                     },
                   },
                   receivedInvitations: {
