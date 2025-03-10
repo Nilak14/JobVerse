@@ -9,9 +9,10 @@ export function getCompanyInclude(employerId: string) {
     },
     members: {
       where: {
-        NOT: {
-          employerId,
+        employerId: {
+          not: employerId,
         },
+        isDeleted: false,
       },
       select: {
         employer: {
