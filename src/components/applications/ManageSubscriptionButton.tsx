@@ -23,7 +23,7 @@ const ManageSubscriptionButton = () => {
   };
   return (
     <LoadingButton onClick={handleClick} loading={loading}>
-      ManageSubscriptionButton
+      Manage Subscription
     </LoadingButton>
   );
 };
