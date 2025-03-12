@@ -61,7 +61,16 @@ async function handleSessionCompleted(session: Stripe.Checkout.Session) {
 async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
   console.log("Subscription Created/Updated");
 
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+    expand: ["latest_invoice"],
+  });
+  if (
+    subscription.latest_invoice &&
+    typeof subscription.latest_invoice !== "string"
+  ) {
+    const invoiceLink = subscription.latest_invoice.hosted_invoice_url;
+    console.log("Invoice Link:", invoiceLink);
+  }
   if (
     subscription.status === "active" ||
     subscription.status === "trialing" ||
