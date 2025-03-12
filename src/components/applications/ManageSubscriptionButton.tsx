@@ -5,7 +5,7 @@ import LoadingButton from "../ui/loading-button";
 import { toast } from "sonner";
 import { createCustomerPortalSession } from "@/actions/stripe/createCustomerPortalSession";
 
-const ManageSubscriptionButton = () => {
+const ManageSubscriptionButton = ({ className }: { className?: string }) => {
   const [loading, setLoading] = useState(false);
   const handleClick = async () => {
     try {
@@ -22,7 +22,11 @@ const ManageSubscriptionButton = () => {
     }
   };
   return (
-    <LoadingButton onClick={handleClick} loading={loading}>
+    <LoadingButton
+      className={className}
+      onClick={handleClick}
+      loading={loading}
+    >
       Manage Subscription
     </LoadingButton>
   );

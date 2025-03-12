@@ -1,10 +1,11 @@
 "use client";
-import { Award, CheckCircle2, Crown, Sparkles, Zap } from "lucide-react";
+import { Award, CheckCircle2, Crown, Sparkles, X, Zap } from "lucide-react";
 import { Badge } from "../ui/badge";
 import {
   ResponsiveModal,
   ResponsiveModalContent,
   ResponsiveModalDescription,
+  ResponsiveModalFooter,
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "../ui/responsive-dailog";
@@ -13,9 +14,17 @@ import usePremiumModal from "@/store/usePremiumModal";
 import { useState } from "react";
 import { toast } from "sonner";
 import { createCheckoutSession } from "@/actions/stripe/createCheckoutSession";
+import {
+  JobSeekerEliteFeatures,
+  JobSeekerPlans,
+  JobSeekerProFeatures,
+} from "@/lib/data";
+import { cn } from "@/lib/utils";
+import ManageSubscriptionButton from "../applications/ManageSubscriptionButton";
 
-const JobSeekerPremiumModal = () => {
+const JobSeekerPremiumModal = ({ currentPlan }: { currentPlan: string }) => {
   const { openPremiumModal, setOpenPremiumModal } = usePremiumModal();
+  const isFreePlan = currentPlan === "Free";
   const [loading, setLoading] = useState(false);
   const handlePremiumClick = async (priceId: string) => {
     try {
@@ -40,7 +49,7 @@ const JobSeekerPremiumModal = () => {
             variant="outline"
             className="bg-white/10 text-white border-white/20 mb-3"
           >
-            Upgrade Your Job Search
+            Upgrade Your Job Search Experience
           </Badge>
           <ResponsiveModalHeader>
             <ResponsiveModalTitle className="text-2xl font-bold text-white">
@@ -60,7 +69,7 @@ const JobSeekerPremiumModal = () => {
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Award className="h-5 w-5 text-primary" />
-                  <h3 className="font-semibold text-lg">Premium</h3>
+                  <h3 className="font-semibold text-lg">JobVerse Pro</h3>
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-4">
@@ -69,43 +78,46 @@ const JobSeekerPremiumModal = () => {
                 </div>
 
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">
-                      AI-powered job recommendations
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">
-                      Up to 25 applications per day
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">
-                      Resume analysis and improvement
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">Basic interview preparation</span>
-                  </li>
+                  {JobSeekerProFeatures.map((feature) => {
+                    return (
+                      <li key={feature.name} className="flex items-start gap-2">
+                        {feature.avaliable ? (
+                          <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
+                        ) : (
+                          <X className="h-4 w-4 text-red-500 shrink-0 mt-1" />
+                        )}
+                        <span
+                          className={cn(
+                            "text-sm",
+                            !feature.avaliable && "line-through"
+                          )}
+                        >
+                          {feature.name}{" "}
+                          <span className="text-muted-foreground text-xs">
+                            ({feature.value})
+                          </span>
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
-
-              <Button
-                disabled={loading}
-                onClick={() =>
-                  handlePremiumClick(
-                    process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY!
-                  )
-                }
-                variant="outline"
-                className="w-full"
-              >
-                Select Plan
-              </Button>
+              {isFreePlan ? (
+                <Button
+                  disabled={loading}
+                  onClick={() =>
+                    handlePremiumClick(
+                      process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY!
+                    )
+                  }
+                  variant="outline"
+                  className="w-full"
+                >
+                  Upgrade To Pro
+                </Button>
+              ) : (
+                <></>
+              )}
             </div>
 
             {/* Premium Plus Plan */}
@@ -119,7 +131,7 @@ const JobSeekerPremiumModal = () => {
               <div className="flex flex-col justify-between">
                 <div className="flex items-center gap-2 mb-3">
                   <Crown className="h-5 w-5 text-primary" />
-                  <h3 className="font-semibold text-lg">Premium Plus</h3>
+                  <h3 className="font-semibold text-lg">JobVerse Elite</h3>
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-4">
@@ -128,52 +140,56 @@ const JobSeekerPremiumModal = () => {
                 </div>
 
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">All Premium features</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">Unlimited applications</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">
-                      Priority application status (3x visibility)
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">
-                      Advanced AI interview coaching
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <span className="text-sm">
-                      Direct messaging with recruiters
-                    </span>
-                  </li>
+                  {JobSeekerEliteFeatures.map((feature) => {
+                    return (
+                      <li key={feature.name} className="flex items-start gap-2">
+                        {feature.avaliable ? (
+                          <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-1" />
+                        ) : (
+                          <X className="h-4 w-4 text-red-500 shrink-0 mt-1" />
+                        )}
+                        <span
+                          className={cn(
+                            "text-sm",
+                            !feature.avaliable && "line-through"
+                          )}
+                        >
+                          {feature.name}{" "}
+                          <span className="text-muted-foreground text-xs">
+                            ({feature.value})
+                          </span>
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
-
-              <Button
-                disabled={loading}
-                onClick={() =>
-                  handlePremiumClick(
-                    process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_ELITE_MONTHLY!
-                  )
-                }
-                className="w-full relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 group"
-              >
-                <span className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] bg-[length:250%_250%] animate-shimmer"></span>
-                <div className="flex items-center justify-center gap-2">
-                  <Sparkles className="h-4 w-4 animate-pulse-subtle" />
-                  <span>Select Premium Plus</span>
-                </div>
-              </Button>
+              {isFreePlan ? (
+                <Button
+                  disabled={loading}
+                  onClick={() =>
+                    handlePremiumClick(
+                      process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_ELITE_MONTHLY!
+                    )
+                  }
+                  className="w-full relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 group"
+                >
+                  <span className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] bg-[length:250%_250%] animate-shimmer"></span>
+                  <div className="flex items-center justify-center gap-2">
+                    <Sparkles className="h-4 w-4 animate-pulse-subtle" />
+                    <span>Upgrade To Elite</span>
+                  </div>
+                </Button>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
+          {!isFreePlan && (
+            <ResponsiveModalFooter>
+              <ManageSubscriptionButton />
+            </ResponsiveModalFooter>
+          )}
         </div>
       </ResponsiveModalContent>
     </ResponsiveModal>
