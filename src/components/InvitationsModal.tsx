@@ -162,9 +162,9 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
       console.log("User id not found");
       return;
     }
-    pusherClient.subscribe(user.id);
+    const invitationChannel = pusherClient.subscribe(user.id);
 
-    pusherClient.bind("invitation", (data: EmployerPendingInvitations) => {
+    invitationChannel.bind("invitation", (data: EmployerPendingInvitations) => {
       const queryFilter: QueryKey = ["employer-pending-invitations"];
       queryClient.cancelQueries(queryFilter);
       queryClient.setQueryData<EmployerPendingInvitationsResponse>(
@@ -191,6 +191,8 @@ const InvitationsModal = ({ user }: InvitationsModalProps) => {
     });
 
     return () => {
+      invitationChannel.unbind_all();
+      pusherClient.unbind("invitation");
       pusherClient.unsubscribe(user.id!);
     };
   }, [user.id]);

@@ -1,4 +1,3 @@
-import { JVRequest } from "@/lib/JVRequest";
 import { useQuery } from "react-query";
 
 export const useQueryGetSkills = () => {
