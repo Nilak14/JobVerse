@@ -12,11 +12,11 @@ interface NotificationProps {
 export const NotificationContentType = ({
   notification,
 }: NotificationProps) => {
-  const isRead = true;
   const formattedMessage = notification.body.replace(
     /\((.*?)\)/g,
     (_, innerText) => `<strong>${innerText}</strong>`
   );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -25,7 +25,7 @@ export const NotificationContentType = ({
       transition={{ duration: 0.2 }}
       className={cn(
         "p-4 mb-2 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-primary/10 transition-colors duration-300 ",
-        isRead && "bg-primary/5 "
+        !notification.isRead && "bg-primary/10"
       )}
       //   onClick={() => onRead(notification.id)}
       whileHover={{ x: 4 }}

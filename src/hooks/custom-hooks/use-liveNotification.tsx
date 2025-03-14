@@ -17,12 +17,11 @@ const useLiveNotification = (
   };
   useEffect(() => {
     if (!userId) return;
-    console.log("Subscribing to notification channel");
+
     const notificationChannel = subscribeNotification(userId);
     notificationChannel.bind(
       "notifications",
       (data: { notification: NotificationType }) => {
-        console.log("New Notification", data);
         const queryFilter: QueryKey = ["notifications"];
         cancel(queryFilter);
         queryClient.setQueriesData<InfiniteData<NotificationAPIResponse>>(

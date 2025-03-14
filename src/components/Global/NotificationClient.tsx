@@ -5,6 +5,12 @@ import NotificationContainer from "./NotificationContainer";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import useLiveNotification from "@/hooks/custom-hooks/use-liveNotification";
+import { markAllNotificationsAsRead } from "@/actions/notifications/markAllAsRead";
+import { toast } from "sonner";
+import { InfiniteData, QueryKey, useQueryClient } from "react-query";
+import { NotificationAPIResponse } from "@/lib/prisma-types/Notification";
+import { m } from "framer-motion";
+import { data } from "framer-motion/client";
 
 interface NotificationClientProps {
   notificationCount: number;
@@ -16,6 +22,49 @@ const NotificationClient = ({
 }: NotificationClientProps) => {
   const [count, setCount] = useState(notificationCount);
   useLiveNotification(userId, setCount);
+  const queryClient = useQueryClient();
+  const markAllAsRead = async () => {
+    try {
+      const res = await markAllNotificationsAsRead();
+      if (res.success) {
+        setCount(0);
+        const queryFilter: QueryKey = ["notifications"];
+        queryClient.setQueriesData<InfiniteData<NotificationAPIResponse>>(
+          queryFilter,
+          (oldData) => {
+            if (!oldData) {
+              return {
+                pageParams: [],
+                pages: [],
+              };
+            }
+            return {
+              pageParams: oldData.pageParams,
+              pages: oldData.pages.map((page) => {
+                return {
+                  message: page.message,
+                  success: page.success,
+                  data: {
+                    nextCursor: page.data?.nextCursor ?? null,
+                    data: {
+                      notifications:
+                        page.data?.data.notifications?.map((n) => {
+                          return { ...n, isRead: true };
+                        }) ?? [],
+                    },
+                  },
+                };
+              }),
+            };
+          }
+        );
+      } else {
+        toast.error("Something went wrong", { id: "markAllAsRead" });
+      }
+    } catch (error) {
+      toast.error("Something went wrong", { id: "markAllAsRead" });
+    }
+  };
   return (
     <>
       <PopoverTrigger
@@ -42,7 +91,7 @@ const NotificationClient = ({
               variant="link"
               size="sm"
               className="text-xs"
-              //   onClick={handleMarkAllAsRead}
+              onClick={markAllAsRead}
             >
               Mark all as read
             </Button>
