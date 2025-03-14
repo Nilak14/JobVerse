@@ -100,6 +100,8 @@ export const leaveCompany = action
             },
           },
         });
+        revalidatePath(`/employer/company/members`);
+        revalidatePath(`/employer/company/setting`);
         after(async () => {
           await prisma.invitations.deleteMany({
             where: {
@@ -108,8 +110,7 @@ export const leaveCompany = action
             },
           });
         });
-        revalidatePath(`/employer/company/members`);
-        revalidatePath(`/employer/company/setting`);
+
         return {
           success: true,
           message: "Employer Removed Successfully",

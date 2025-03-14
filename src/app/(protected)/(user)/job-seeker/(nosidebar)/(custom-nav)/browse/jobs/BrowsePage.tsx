@@ -42,10 +42,7 @@ const BrowsePage = ({ session }: BrowsePageProps) => {
       .filter((job) => job !== undefined) ?? [];
 
   return (
-    <div>
-      <header className="sticky top-0 z-20  overflow-hidden">
-        <BrowsePageTop user={session.user} />
-      </header>
+    <>
       <div className="flex">
         <aside className="max-w-[300px] w-[300px] bg-sidebar fixed h-[calc(100vh-64px)] overflow-y-auto hidden md:block">
           <div className="flex items-center px-5">
@@ -71,7 +68,7 @@ const BrowsePage = ({ session }: BrowsePageProps) => {
           />
         </section>
       </div>
-    </div>
+    </>
   );
 };
 
