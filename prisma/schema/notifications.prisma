@@ -1,14 +1,25 @@
+enum NotificationCategory {
+    APPLICATION_STATUS
+    JOB_RECOMMENDATION
+    SUBSCRIPTION_PURCHASED
+    NEW_APPLICATION
+    NEW_MEMBER_JOINED
+    JOB_STATUS
+    PROMOTION
+}
+
 model Notifications {
-    id        String   @id @default(cuid())
+    id        String                @id @default(cuid())
     userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user      User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
     title     String
     body      String
-    isRead    Boolean  @default(false)
-    category  String?
+    isRead    Boolean               @default(false)
+    category  NotificationCategory?
     link      String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    imageURL  String?
+    createdAt DateTime              @default(now())
+    updatedAt DateTime              @updatedAt
 
     @@map("notifications")
 }

@@ -9,6 +9,7 @@ export function getNotificationSelect() {
     link: true,
     title: true,
     category: true,
+    imageURL: true,
   } satisfies Prisma.NotificationsSelect;
 }
 export type NotificationType = Prisma.NotificationsGetPayload<{

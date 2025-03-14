@@ -26,6 +26,7 @@ export function cn(...inputs: ClassValue[]) {
 // get time distance (e.g. 1 hour ago)
 
 export const getTimeDistance = (from: Date) => {
+  console.log(from);
   return formatDistanceToNowStrict(from);
 };
 
