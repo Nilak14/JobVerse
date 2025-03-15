@@ -9,8 +9,7 @@ import { markAllNotificationsAsRead } from "@/actions/notifications/markAllAsRea
 import { toast } from "sonner";
 import { InfiniteData, QueryKey, useQueryClient } from "react-query";
 import { NotificationAPIResponse } from "@/lib/prisma-types/Notification";
-import { m } from "framer-motion";
-import { data } from "framer-motion/client";
+import { useNotificationInfinityQuery } from "@/hooks/query-hooks/useNotificationInfinityQuery";
 
 interface NotificationClientProps {
   notificationCount: number;
@@ -23,6 +22,14 @@ const NotificationClient = ({
   const [count, setCount] = useState(notificationCount);
   useLiveNotification(userId, setCount);
   const queryClient = useQueryClient();
+  const {
+    data,
+    status,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useNotificationInfinityQuery();
   const markAllAsRead = async () => {
     try {
       const res = await markAllNotificationsAsRead();

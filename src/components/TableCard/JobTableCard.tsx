@@ -15,12 +15,17 @@ import {
   JobStatusBadge,
   UserTableCell,
 } from "../Global/TableRowComponents";
+import JobTableRowActionAdmin from "../Job/JobTableRowActionAdmin";
 
 interface JobTableCardProps {
   jobData: JobServerData;
+  viewUser?: "EMPLOYER" | "ADMIN";
 }
 
-const JobTableCard = ({ jobData }: JobTableCardProps) => {
+const JobTableCard = ({
+  jobData,
+  viewUser = "EMPLOYER",
+}: JobTableCardProps) => {
   return (
     <Card className="hover:shadow-lg transition-shadow duration-200">
       <CardHeader className="flex justify-between items-start flex-row pb-2">
@@ -38,11 +43,21 @@ const JobTableCard = ({ jobData }: JobTableCardProps) => {
             <span className="text-sm">{jobData.workMode}</span>
           </div>
         </div>
-        <JobTableRowAction
-          TriggerIcon={EllipsisVertical}
-          id={jobData.id}
-          status={jobData.status}
-        />
+        {viewUser === "EMPLOYER" && (
+          <JobTableRowAction
+            TriggerIcon={EllipsisVertical}
+            id={jobData.id}
+            status={jobData.status}
+          />
+        )}
+        {viewUser === "ADMIN" && (
+          <JobTableRowActionAdmin
+            TriggerIcon={EllipsisVertical}
+            //@ts-expect-error
+            job={jobData}
+            status={jobData.status}
+          />
+        )}
       </CardHeader>
 
       <CardContent className="space-y-4">
