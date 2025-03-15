@@ -2,6 +2,8 @@
 
 import { auth, signOut } from "@/auth";
 import prisma from "@/lib/prisma";
+import { getNotificationSelect } from "@/lib/prisma-types/Notification";
+import { triggerNotification } from "@/lib/triggerNotification";
 import { handleError } from "@/lib/utils";
 import { createSafeActionClient } from "next-safe-action";
 import { revalidatePath } from "next/cache";
@@ -45,6 +47,14 @@ export const acceptInvitation = action
         prisma.employer.findUnique({
           where: {
             userId: session.user.id,
+          },
+          include: {
+            user: {
+              select: {
+                name: true,
+                image: true,
+              },
+            },
           },
         }),
       ]);
@@ -130,6 +140,40 @@ export const acceptInvitation = action
             activeCompanyId: invitation.companyId,
           },
         });
+      }
+      const company = await prisma.company.findUnique({
+        where: {
+          id: invitation.companyId,
+        },
+        select: {
+          members: {
+            select: {
+              employer: {
+                select: { userId: true },
+              },
+            },
+          },
+        },
+      });
+      if (company) {
+        const memberIds = company.members.map(
+          (member) => member.employer.userId
+        );
+        await Promise.all(
+          memberIds.map(async (memberId) => {
+            const notification = await prisma.notifications.create({
+              data: {
+                title: "New Member",
+                body: `(${inviteeEmployer.user.name}) has joined (${invitation.company.name})`,
+                category: "NEW_MEMBER_JOINED",
+                userId: memberId,
+                imageURL: inviteeEmployer.user.image,
+              },
+              select: getNotificationSelect(),
+            });
+            triggerNotification(memberId, notification);
+          })
+        );
       }
 
       after(async () => {

@@ -145,7 +145,9 @@ const AdminAllJobTable = <TData, TValue>({
       <div className="lg:hidden grid grid-cols-1 gap-4  lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
         {filteredData.map((data) => {
           const jobData = data as JobServerData;
-          return <JobTableCard key={jobData.id} jobData={jobData} />;
+          return (
+            <JobTableCard viewUser="ADMIN" key={jobData.id} jobData={jobData} />
+          );
         })}
       </div>
     </div>
