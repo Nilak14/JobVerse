@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import BrowsePage from "./BrowsePage";
 import { auth } from "@/lib/auth";
+import BrowsePageTop from "./BrowsePageTop";
 
 export const metadata: Metadata = {
   title: "Browse Jobs",
@@ -13,6 +14,13 @@ const JobBrowsePage = async () => {
   if (!session || !session.user) {
     return null;
   }
-  return <BrowsePage session={session} />;
+  return (
+    <div>
+      <header className="sticky top-0 z-20  overflow-hidden">
+        <BrowsePageTop user={session.user} />
+      </header>
+      <BrowsePage session={session} />;
+    </div>
+  );
 };
 export default JobBrowsePage;

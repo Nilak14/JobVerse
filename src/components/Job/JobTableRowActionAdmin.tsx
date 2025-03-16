@@ -19,6 +19,7 @@ import { JobServerDataAdmin } from "@/lib/prisma-types/Job";
 import AcceptJobModal from "../Table/TableActionModals/AcceptJobModal";
 import RejectJobModal from "../Table/TableActionModals/RejectJobModal";
 import NeedReviewJobModal from "../Table/TableActionModals/NeedReviewJobModal";
+import JobPreviewModal from "./JobPreviewModal";
 interface JobTableRowActionAdminProps {
   status: JobStatus;
   job: JobServerDataAdmin;
@@ -90,6 +91,13 @@ const JobTableRowActionAdmin = ({
         open={openNeedReviewDialog}
         setOpen={setOpenNeedReviewDialog}
       />
+      {openPreviewDialog && (
+        <JobPreviewModal
+          jobId={job.id}
+          open={openPreviewDialog}
+          setOpen={setOpenPreviewDialog}
+        />
+      )}
     </>
   );
 };

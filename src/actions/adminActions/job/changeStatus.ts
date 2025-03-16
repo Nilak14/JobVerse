@@ -2,6 +2,8 @@
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getNotificationSelect } from "@/lib/prisma-types/Notification";
+import { triggerNotification } from "@/lib/triggerNotification";
 import { handleError } from "@/lib/utils";
 import { JobReviewStatus, JobStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -80,15 +82,71 @@ export const changeStatus = async (
         },
       });
 
-      await tx.job.update({
+      return await tx.job.update({
         where: {
           id: jobId,
         },
         data: {
           status: getUpdateJobStatus(newStatus),
         },
+        select: {
+          company: {
+            select: {
+              name: true,
+              logoUrl: true,
+              members: {
+                select: {
+                  employer: {
+                    select: {
+                      userId: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
     });
+
+    let notificationTitle: string;
+    let notificationMessage: string;
+    switch (newStatus) {
+      case "APPROVED":
+        notificationTitle = "Job Approved";
+        notificationMessage = `Job (${job.title}) posted by (${res.company.name}) has been Approved and is now live and can be viewed by job seekers`;
+        break;
+      case "REJECTED":
+        notificationTitle = "Job Rejected";
+        notificationMessage = `Job (${job.title}) posted by (${res.company.name}) has been Rejected`;
+        break;
+      case "NEED_REVIEW":
+        notificationTitle = "Job Needs Review";
+        notificationMessage = `Job (${job.title}) posted by (${res.company.name}) needs review. To see the review message please visit the job page and check the review section`;
+        break;
+    }
+
+    // send notification to employer
+    if (res) {
+      const memberIds = res.company.members.map(
+        (member) => member.employer.userId
+      );
+      await Promise.all(
+        memberIds.map(async (memberId) => {
+          const notification = await prisma.notifications.create({
+            data: {
+              title: notificationTitle,
+              body: notificationMessage,
+              category: "JOB_STATUS",
+              userId: memberId,
+              imageURL: res.company.logoUrl,
+            },
+            select: getNotificationSelect(),
+          });
+          triggerNotification(memberId, notification);
+        })
+      );
+    }
 
     revalidatePath("/admin/all-jobs");
     revalidatePath("/employer/job");

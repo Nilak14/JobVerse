@@ -2,6 +2,8 @@
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getNotificationSelect } from "@/lib/prisma-types/Notification";
+import { triggerNotification } from "@/lib/triggerNotification";
 import { handleError } from "@/lib/utils";
 import {
   ScheduleInterviewSchema,
@@ -27,6 +29,25 @@ export const scheduleInterview = async (
           companyId: session.activeCompanyId,
         },
       },
+      include: {
+        job: {
+          select: {
+            id: true,
+            title: true,
+            company: {
+              select: {
+                name: true,
+                logoUrl: true,
+              },
+            },
+          },
+        },
+        jobSeeker: {
+          select: {
+            userId: true,
+          },
+        },
+      },
     });
     if (!application) {
       throw new Error("Application not found");
@@ -35,7 +56,7 @@ export const scheduleInterview = async (
       throw new Error("Invalid Status Change");
     }
 
-    await prisma.$transaction(async (prisma) => {
+    const notification = await prisma.$transaction(async (prisma) => {
       await prisma.application.update({
         where: {
           id: applicationId,
@@ -61,7 +82,19 @@ export const scheduleInterview = async (
           reviewedAt: new Date(),
         },
       });
+      return await prisma.notifications.create({
+        data: {
+          userId: application.jobSeeker.userId,
+          title: "Interview Scheduled",
+          body: `Your Application for (${application.job.title}) at (${application.job.company.name}) has been scheduled for interview on (${new Date(interviewDate).toDateString()}) at (${interviewTime})`,
+
+          category: "APPLICATION_STATUS",
+          imageURL: application.job.company.logoUrl,
+        },
+        select: getNotificationSelect(),
+      });
     });
+    triggerNotification(application.jobSeeker.userId, notification);
     revalidatePath("/employer/applicants");
     revalidatePath("/job-seeker/applied-jobs");
     return {

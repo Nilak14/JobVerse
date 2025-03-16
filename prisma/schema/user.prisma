@@ -23,6 +23,7 @@ model User {
     twoFactorConfirmation TwoFactorConfirmation?
     subscriptions         UserSubscription?
     stripeCustomerId      String?
+    Notifications         Notifications[]
 
     @@map("users")
 }

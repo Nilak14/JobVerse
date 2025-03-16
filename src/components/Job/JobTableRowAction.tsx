@@ -32,6 +32,7 @@ import { Button } from "../ui/button";
 import DeleteJobPopover from "@/components/Job/DeleteJobPopover";
 import { Card, CardContent } from "../ui/card";
 import PauseJobPopover from "./PauseJobPopover";
+import JobPreviewModal from "./JobPreviewModal";
 
 interface JobTableRowActionProps {
   id: string;
@@ -48,9 +49,8 @@ const JobTableRowAction = ({
 }: JobTableRowActionProps) => {
   const [openEditWarningDialog, setOpenEditDialog] = useState(false);
   const [openViewMessage, setOpenViewMessage] = useState(false);
-  if (status === "PAUSED" || status === "EXPIRED") {
-    return <></>;
-  }
+  const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
+
   return (
     <>
       <DropdownMenu>
@@ -64,14 +64,12 @@ const JobTableRowAction = ({
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => setOpenPreviewDialog(true)}>
+            <ScanEye color="orange" className="h-4 w-4 mr-2 " />
+            <span>Preview</span>
+          </DropdownMenuItem>
           {status === "ACTIVE" && (
             <>
-              <DropdownMenuItem asChild>
-                <Link href={`/job/description/${id}`}>
-                  <ScanEye color="orange" className="h-4 w-4 mr-2 " />
-                  <span>Preview</span>
-                </Link>
-              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <PauseJobPopover jobId={id} />
               </DropdownMenuItem>
@@ -140,6 +138,13 @@ const JobTableRowAction = ({
         open={openViewMessage}
         setOpen={setOpenViewMessage}
       />
+      {openPreviewDialog && (
+        <JobPreviewModal
+          jobId={id}
+          open={openPreviewDialog}
+          setOpen={setOpenPreviewDialog}
+        />
+      )}
     </>
   );
 };
