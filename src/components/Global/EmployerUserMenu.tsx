@@ -7,6 +7,7 @@ import {
 import { ExtendedUser } from "@/next-auth";
 import { useInvitationModal } from "@/store/useInvitaionModal";
 import { usePendingInvitationsCount } from "@/store/usePendingInvitationsCount";
+import Link from "next/link";
 
 interface EmployerUserMenuProps {
   user: ExtendedUser;
@@ -29,9 +30,11 @@ const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
           <BadgeCheck />
           Account (Employer)
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <CreditCard />
-          Billing
+        <DropdownMenuItem asChild>
+          <Link href={"/employer/billing"}>
+            <CreditCard />
+            Billing
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
