@@ -172,3 +172,17 @@ model UserSubscription {
 
     @@map("user_subscriptions")
 }
+
+model CompanySubscription {
+    id                      String   @id @default(cuid())
+    companyId               String   @unique
+    company                 Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+    stripeCustomerId        String   @unique
+    stripePriceId           String
+    stripeCurrentPeriodEnd  DateTime
+    stripeCancelAtPeriodEnd Boolean  @default(false)
+    createdAt               DateTime @default(now())
+    updatedAt               DateTime @updatedAt
+
+    @@map("company_subscriptions")
+}
