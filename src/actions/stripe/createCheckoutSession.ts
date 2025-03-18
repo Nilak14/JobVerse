@@ -8,6 +8,7 @@ export const createCheckoutSession = async (priceId: string) => {
   if (!session || !session.user) {
     throw new Error("User not authenticated");
   }
+
   const stripeCustomerId = session.user.stripeCustomerId || undefined;
 
   const stripeSession = await stripe.checkout.sessions.create({
