@@ -4,20 +4,22 @@ enum CompanyRole {
 }
 
 model Company {
-    id              String          @id @default(cuid())
-    logoUrl         String?
-    name            String
-    description     String?
-    website         String?
-    adminEmployerId String // ID of the employer who created this company
-    adminEmployer   Employer        @relation("AdminEmployer", fields: [adminEmployerId], references: [id], onDelete: Cascade)
-    members         CompanyMember[] // Relationship through the join table
-    invitations     Invitations[]
-    isDeleted       Boolean         @default(false)
-    createdAt       DateTime        @default(now())
-    updatedAt       DateTime        @updatedAt
-    deletedAt       DateTime?
-    jobPosted       Job[]
+    id               String               @id @default(cuid())
+    logoUrl          String?
+    name             String
+    description      String?
+    website          String?
+    adminEmployerId  String // ID of the employer who created this company
+    adminEmployer    Employer             @relation("AdminEmployer", fields: [adminEmployerId], references: [id], onDelete: Cascade)
+    members          CompanyMember[] // Relationship through the join table
+    invitations      Invitations[]
+    isDeleted        Boolean              @default(false)
+    createdAt        DateTime             @default(now())
+    updatedAt        DateTime             @updatedAt
+    deletedAt        DateTime?
+    jobPosted        Job[]
+    subscriptions    CompanySubscription?
+    stripeCustomerId String?
 
     @@map("companies")
 }

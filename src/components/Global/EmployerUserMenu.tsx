@@ -7,6 +7,8 @@ import {
 import { ExtendedUser } from "@/next-auth";
 import { useInvitationModal } from "@/store/useInvitaionModal";
 import { usePendingInvitationsCount } from "@/store/usePendingInvitationsCount";
+import Link from "next/link";
+import useCompanyPremiumModal from "@/store/useCompanyPremiumModal";
 
 interface EmployerUserMenuProps {
   user: ExtendedUser;
@@ -15,10 +17,11 @@ interface EmployerUserMenuProps {
 const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
   const { setOpenInvitationModal } = useInvitationModal();
   const { pendingInvitationsCount } = usePendingInvitationsCount();
+  const { setOpenCompanyPremiumModal } = useCompanyPremiumModal();
   return (
     <>
       <DropdownMenuGroup>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setOpenCompanyPremiumModal(true)}>
           <Sparkles />
           Upgrade to Pro
         </DropdownMenuItem>
@@ -29,9 +32,11 @@ const EmployerUserMenu = ({ user }: EmployerUserMenuProps) => {
           <BadgeCheck />
           Account (Employer)
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <CreditCard />
-          Billing
+        <DropdownMenuItem asChild>
+          <Link href={"/employer/billing"}>
+            <CreditCard />
+            Billing
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
