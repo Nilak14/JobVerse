@@ -1,7 +1,6 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getJobDataIncludeDescription } from "@/lib/prisma-types/Job";
-import { s } from "framer-motion/client";
 import { NextRequest } from "next/server";
 
 type Params = Promise<{ jobId: string }>;
@@ -23,11 +22,14 @@ export const GET = async (
       },
       select: getJobDataIncludeDescription(),
     });
-    return Response.json({
-      success: true,
-      data: job,
-      message:"Job Fetched Sucesfully"
-    }, { status: 200 });
+    return Response.json(
+      {
+        success: true,
+        data: job,
+        message: "Job Fetched Sucesfully",
+      },
+      { status: 200 }
+    );
   } catch (error) {
     return Response.json(
       {
