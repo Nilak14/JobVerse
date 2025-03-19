@@ -1,14 +1,6 @@
 import ManageSubscriptionButton from "@/components/applications/ManageSubscriptionButton";
-import { Badge } from "@/components/ui/badge";
 import BoxReveal from "@/components/ui/box-reveal";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserSubscription } from "@/data-access/subscription/getUserSubscription";
 import { Metadata } from "next";
 import { Suspense } from "react";
