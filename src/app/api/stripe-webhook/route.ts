@@ -50,68 +50,157 @@ export const POST = async (req: NextRequest) => {
 async function handleSessionCompleted(session: Stripe.Checkout.Session) {
   console.log("Checkout Session Completed");
   const userId = session.metadata?.userId;
-  if (!userId) {
+  const isCompany = session.metadata?.isCompany;
+  if (!userId || !isCompany) {
     throw new Error("User ID is missing in session metadata");
   }
-  await prisma.user.update({
-    where: { id: userId },
-    data: { stripeCustomerId: session.customer as string },
-  });
+  if (isCompany === "TRUE") {
+    await prisma.company.update({
+      where: { id: userId },
+      data: { stripeCustomerId: session.customer as string },
+    });
+  } else if (isCompany === "FALSE") {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { stripeCustomerId: session.customer as string },
+    });
+  }
 }
 async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
   console.log("Subscription Created/Updated");
 
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
-    expand: ["latest_invoice"],
-  });
-  if (
-    subscription.latest_invoice &&
-    typeof subscription.latest_invoice !== "string"
-  ) {
-    const invoiceLink = subscription.latest_invoice.hosted_invoice_url;
-    console.log("Invoice Link:", invoiceLink);
-  }
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
   if (
     subscription.status === "active" ||
     subscription.status === "trialing" ||
     subscription.status === "past_due"
   ) {
+    if (subscription?.metadata?.isCompany === "TRUE") {
+      await Promise.all([
+        prisma.companySubscription.upsert({
+          where: {
+            companyId: subscription.metadata?.userId as string,
+          },
+          create: {
+            companyId: subscription.metadata?.userId as string,
+            stripeSubscriptionId: subscription.id,
+            stripeCustomerId: subscription.customer as string,
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeCurrentPeriodEnd: new Date(
+              subscription.current_period_end * 1000
+            ),
+            stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
+          },
+          update: {
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
+            stripeCurrentPeriodEnd: new Date(
+              subscription.current_period_end * 1000
+            ),
+          },
+        }),
+
+        prisma.company.update({
+          where: {
+            id: subscription.metadata?.userId as string,
+          },
+          data: {
+            stripeCustomerId: subscription.customer as string,
+          },
+        }),
+      ]);
+    } else if (subscription?.metadata?.isCompany === "FALSE") {
+      await Promise.all([
+        prisma.userSubscription.upsert({
+          where: {
+            userId: subscription.metadata?.userId as string,
+          },
+          create: {
+            userId: subscription.metadata?.userId as string,
+            stripeSubscriptionId: subscription.id,
+            stripeCustomerId: subscription.customer as string,
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeCurrentPeriodEnd: new Date(
+              subscription.current_period_end * 1000
+            ),
+            stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
+          },
+          update: {
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
+            stripeCurrentPeriodEnd: new Date(
+              subscription.current_period_end * 1000
+            ),
+          },
+        }),
+
+        prisma.user.update({
+          where: {
+            id: subscription.metadata?.userId as string,
+          },
+          data: {
+            stripeCustomerId: subscription.customer as string,
+          },
+        }),
+      ]);
+    }
+  } else {
+    console.log("deleted ");
+    if (subscription.metadata.isCompany === "TRUE") {
+      await Promise.all([
+        prisma.companySubscription.deleteMany({
+          where: {
+            stripeCustomerId: subscription.customer as string,
+          },
+        }),
+        prisma.company.update({
+          where: {
+            id: subscription.metadata?.userId as string,
+          },
+          data: {
+            stripeCustomerId: null,
+          },
+        }),
+      ]);
+    } else if (subscription.metadata.isCompany === "FALSE") {
+      await Promise.all([
+        prisma.userSubscription.deleteMany({
+          where: {
+            stripeCustomerId: subscription.customer as string,
+          },
+        }),
+        prisma.user.update({
+          where: {
+            id: subscription.metadata?.userId as string,
+          },
+          data: {
+            stripeCustomerId: null,
+          },
+        }),
+      ]);
+    }
+  }
+}
+
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  console.log("Subscription Deleted");
+  if (subscription.metadata.isCompany === "TRUE") {
     await Promise.all([
-      prisma.userSubscription.upsert({
+      prisma.companySubscription.deleteMany({
         where: {
-          userId: subscription.metadata?.userId as string,
-        },
-        create: {
-          userId: subscription.metadata?.userId as string,
-          stripeSubscriptionId: subscription.id,
           stripeCustomerId: subscription.customer as string,
-          stripePriceId: subscription.items.data[0].price.id,
-          stripeCurrentPeriodEnd: new Date(
-            subscription.current_period_end * 1000
-          ),
-          stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
-        },
-        update: {
-          stripePriceId: subscription.items.data[0].price.id,
-          stripeCancelAtPeriodEnd: subscription.cancel_at_period_end,
-          stripeCurrentPeriodEnd: new Date(
-            subscription.current_period_end * 1000
-          ),
         },
       }),
-
-      prisma.user.update({
+      prisma.company.update({
         where: {
           id: subscription.metadata?.userId as string,
         },
         data: {
-          stripeCustomerId: subscription.customer as string,
+          stripeCustomerId: null,
         },
       }),
     ]);
-  } else {
-    console.log("deleted ");
-
+  } else if (subscription.metadata.isCompany === "FALSE") {
     await Promise.all([
       prisma.userSubscription.deleteMany({
         where: {
@@ -128,24 +217,4 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
       }),
     ]);
   }
-}
-
-async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-  console.log("Subscription Deleted");
-
-  await Promise.all([
-    prisma.userSubscription.deleteMany({
-      where: {
-        stripeCustomerId: subscription.customer as string,
-      },
-    }),
-    prisma.user.update({
-      where: {
-        id: subscription.metadata?.userId as string,
-      },
-      data: {
-        stripeCustomerId: null,
-      },
-    }),
-  ]);
 }

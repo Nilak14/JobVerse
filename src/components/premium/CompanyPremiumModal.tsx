@@ -21,9 +21,11 @@ import {
 } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import ManageSubscriptionButton from "../applications/ManageSubscriptionButton";
+import useCompanyPremiumModal from "@/store/useCompanyPremiumModal";
 
 const CompanyPremiumModal = ({ currentPlan }: { currentPlan: string }) => {
-  const { openPremiumModal, setOpenPremiumModal } = usePremiumModal();
+  const { openCompanyPremiumModal, setOpenCompanyPremiumModal } =
+    useCompanyPremiumModal();
   const isFreePlan = currentPlan === "Free";
   const [loading, setLoading] = useState(false);
   const handlePremiumClick = async (priceId: string) => {
@@ -39,7 +41,10 @@ const CompanyPremiumModal = ({ currentPlan }: { currentPlan: string }) => {
     }
   };
   return (
-    <ResponsiveModal open={openPremiumModal} onOpenChange={setOpenPremiumModal}>
+    <ResponsiveModal
+      open={openCompanyPremiumModal}
+      onOpenChange={setOpenCompanyPremiumModal}
+    >
       <ResponsiveModalContent
         isloading={loading ? "true" : undefined}
         className="p-0 md:min-w-[700px] min-w-full"
