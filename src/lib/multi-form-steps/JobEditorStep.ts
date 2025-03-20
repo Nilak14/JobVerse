@@ -39,17 +39,18 @@ export const JobEditorFormSteps: {
     isLastStep: false,
   },
   {
-    title: "Job Description",
-    component: JobDescriptionForm,
-    key: "job-description",
-    isLastStep: false,
-  },
-  {
     title: "Job Qualifications",
     component: JobQualificationForm,
     key: "job-qualifications",
     isLastStep: false,
   },
+  {
+    title: "Job Description",
+    component: JobDescriptionForm,
+    key: "job-description",
+    isLastStep: false,
+  },
+
   {
     title: "Job Setting",
     component: JobSettingForm,
