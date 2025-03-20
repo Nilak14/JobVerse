@@ -5,12 +5,12 @@ export function canPostJob(
   currentJobCount: number
 ) {
   const maxJobMap: Record<CompanySubscriptionLevel, number> = {
-    FREE: 1,
-    PRO: 5,
+    FREE: 5,
+    PRO: 10,
     ELITE: Infinity,
   };
-  const maxResumes = maxJobMap[subscriptionLevel];
-  return currentJobCount < maxResumes;
+  const maxJobs = maxJobMap[subscriptionLevel];
+  return currentJobCount < maxJobs;
 }
 
 export function canUseAITools(subscriptionLevel: CompanySubscriptionLevel) {
@@ -18,6 +18,17 @@ export function canUseAITools(subscriptionLevel: CompanySubscriptionLevel) {
 }
 
 export function canParseResumeSummary(
+  subscriptionLevel: CompanySubscriptionLevel
+) {
+  return subscriptionLevel === "ELITE";
+}
+
+export function canGenerateEmbeddings(
+  subscriptionLevel: CompanySubscriptionLevel
+) {
+  return subscriptionLevel !== "FREE";
+}
+export function canCustomizeEmbeddings(
   subscriptionLevel: CompanySubscriptionLevel
 ) {
   return subscriptionLevel === "ELITE";

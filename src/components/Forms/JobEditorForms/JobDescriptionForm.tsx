@@ -17,10 +17,9 @@ import {
   JobDescriptionSchemaType,
 } from "@/schema/CreateJobSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Brain } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { getDescription } from "@/lib/test";
+import { AlertCircle } from "lucide-react";
 import CustomTipTapEditor from "@/components/tiptap/CustomTipTapEditor";
+import GenerateJobDescriptionButton from "@/components/Job/GenerateJobDescriptionButton";
 
 const JobDescriptionForm = ({
   currentStep,
@@ -28,7 +27,7 @@ const JobDescriptionForm = ({
   setJobData,
 }: JobEditorFormProps) => {
   const { setTrigger } = useFormTriggersStore();
-  const [aiDescription, setAiDescription] = useState<any | null>(null);
+  const [aiDescription, setAiDescription] = useState<any | null>();
   const form = useForm<JobDescriptionSchemaType>({
     defaultValues: {
       description: jobData.description || "",
@@ -51,19 +50,8 @@ const JobDescriptionForm = ({
     return unsubscribe;
   }, [form, jobData, setJobData]);
 
-  useEffect(() => {
-    console.log(aiDescription);
-  }, [aiDescription]);
-
   return (
     <div className="max-w-[90%] mx-auto space-y-6 pt-5">
-      {/* <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Job Description</h2>
-        <p className="text-sm text-muted-foreground">
-          Describe the job role and responsibilities
-        </p>
-      </div> */}
-
       <Form {...form}>
         <form className="space-y-6">
           <FormField
@@ -73,16 +61,12 @@ const JobDescriptionForm = ({
               <FormItem>
                 <div className="flex justify-between items-center">
                   <FormLabel>Job Description</FormLabel>
-                  <Button
-                    onClick={() => {
-                      setAiDescription(getDescription());
+                  <GenerateJobDescriptionButton
+                    jobData={jobData}
+                    onDescriptionGenerated={(description) => {
+                      setAiDescription(description);
                     }}
-                    type="button"
-                    variant={"secondary"}
-                    size={"icon"}
-                  >
-                    <Brain />
-                  </Button>
+                  />
                 </div>
                 <FormControl>
                   <CustomTipTapEditor aiContent={aiDescription} field={field} />
