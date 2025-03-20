@@ -11,6 +11,7 @@ import {
   workMode,
 } from "@/lib/enums/CreateJobEnums";
 import { z } from "zod";
+import { optionalString } from "./ResumeEditorSchema";
 
 // Job Basic Schema
 export const workModeSchema = z
