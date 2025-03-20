@@ -10,18 +10,13 @@ import {
   ResponsiveModalTitle,
 } from "../ui/responsive-dailog";
 import { Button } from "../ui/button";
-import usePremiumModal from "@/store/usePremiumModal";
 import { useState } from "react";
 import { toast } from "sonner";
 import { createCheckoutSession } from "@/actions/stripe/createCheckoutSession";
-import {
-  JobSeekerEliteFeatures,
-  JobSeekerPlans,
-  JobSeekerProFeatures,
-} from "@/lib/data";
 import { cn } from "@/lib/utils";
 import ManageSubscriptionButton from "../applications/ManageSubscriptionButton";
 import useCompanyPremiumModal from "@/store/useCompanyPremiumModal";
+import { CompanyEliteFeatures, CompanyProFeatures } from "@/lib/data";
 
 const CompanyPremiumModal = ({ currentPlan }: { currentPlan: string }) => {
   const { openCompanyPremiumModal, setOpenCompanyPremiumModal } =
@@ -47,22 +42,22 @@ const CompanyPremiumModal = ({ currentPlan }: { currentPlan: string }) => {
     >
       <ResponsiveModalContent
         isloading={loading ? "true" : undefined}
-        className="p-0 md:min-w-[700px] min-w-full"
+        className="p-0 md:min-w-[750px] min-w-full"
       >
         <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 text-white">
           <Badge
             variant="outline"
             className="bg-white/10 text-white border-white/20 mb-3"
           >
-            Upgrade Your Job Search Experience
+            Upgrade Your Hiring Experience
           </Badge>
           <ResponsiveModalHeader>
             <ResponsiveModalTitle className="text-2xl font-bold text-white">
               Unlock Premium Features
             </ResponsiveModalTitle>
             <ResponsiveModalDescription className="text-white/90 text-base">
-              Choose the plan that fits your career goals and take your job
-              search to the next level.
+              Choose the plan that fits your career goals and take your hiring
+              to the next level.
             </ResponsiveModalDescription>
           </ResponsiveModalHeader>
         </div>
@@ -83,7 +78,7 @@ const CompanyPremiumModal = ({ currentPlan }: { currentPlan: string }) => {
                 </div>
 
                 <ul className="space-y-3 mb-6">
-                  {JobSeekerProFeatures.map((feature) => {
+                  {CompanyProFeatures.map((feature) => {
                     return (
                       <li key={feature.name} className="flex items-start gap-2">
                         {feature.avaliable ? (
@@ -145,7 +140,7 @@ const CompanyPremiumModal = ({ currentPlan }: { currentPlan: string }) => {
                 </div>
 
                 <ul className="space-y-3 mb-6">
-                  {JobSeekerEliteFeatures.map((feature) => {
+                  {CompanyEliteFeatures.map((feature) => {
                     return (
                       <li key={feature.name} className="flex items-start gap-2">
                         {feature.avaliable ? (
