@@ -25,6 +25,8 @@ import { Variants } from "framer-motion";
 import JobDescriptionDetailButton from "@/components/Job/JobDescriptionDetailButton";
 import BackButton from "@/components/Global/BackButton";
 import { Session } from "next-auth";
+import UnauthorizedApplyButton from "@/components/Global/UnauthorizedApplyButton";
+import JobShareButton from "@/components/Global/JobShareButton";
 interface JobDescriptionPageContentProps {
   job: JobDataDescription;
   containerVariants: Variants;
@@ -276,11 +278,16 @@ const JobDescriptionPageContent = ({
                             </div>
                           </div>
                         </div>
-                        {session && (
+                        {session ? (
                           <JobDescriptionDetailButton
                             session={session}
                             job={job}
                           />
+                        ) : (
+                          <div className="flex gap-2">
+                            <UnauthorizedApplyButton className="flex-1" />
+                            <JobShareButton jobId={job.id} />
+                          </div>
                         )}
                       </>
                     )}

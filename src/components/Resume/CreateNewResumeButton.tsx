@@ -28,7 +28,7 @@ interface CreateNewResumeButtonProps {
 
 const CreateNewResumeButton = ({ canCreate }: CreateNewResumeButtonProps) => {
   const [open, setOpen] = useState(false);
-  const { openPremiumModal, setOpenPremiumModal } = usePremiumModal();
+  const { setOpenPremiumModal } = usePremiumModal();
   if (!canCreate) {
     return (
       <Button

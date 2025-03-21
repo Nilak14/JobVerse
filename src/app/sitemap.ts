@@ -1,18 +1,60 @@
+import { JobSearchTags, locations } from "@/lib/data/SEOData";
+import prisma from "@/lib/prisma";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // fetch all jobsPost from the API
-  // add the jobsPost to the sitemap
-  //   const jobs = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs`);
-  //   const jobsPost = await jobs.json();
-  //   const jobPostEntries:MetadataRoute.Sitemap = jobsPost.map(job=>({
-  //     url: `${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${job.id}`,
-  //     lastModified: new Date(job.updatedAt).toISOString(),
-  //   }))
+  const jobTags = await prisma.job.findMany({
+    where: {
+      status: "ACTIVE",
+    },
+    select: {
+      tags: true,
+      skills: true,
+    },
+  });
+  const allTags = jobTags.map((job) => {
+    return job.tags.concat(job.skills, JobSearchTags);
+  });
+  const uniqueTags = [...new Set(allTags.flat())];
+  const locationsData = locations;
+
+  const urlWithTagAndLocation = uniqueTags
+    .map((tag) => {
+      return locations.map((location) => {
+        return {
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/job/${location}/${tag}`,
+          changeFrequency: "weekly",
+          priority: 1,
+        };
+      });
+    })
+    .flat() as MetadataRoute.Sitemap;
+
+  const urlWithLocation = locationsData
+    .map((location) => {
+      return {
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/job/${location}`,
+        changeFrequency: "weekly",
+        priority: 1,
+      };
+    })
+    .flat() as MetadataRoute.Sitemap;
+
+  // const urlWithTags = uniqueTags
+  //   .map((tag) => {
+  //     return {
+  //       url: `${process.env.NEXT_PUBLIC_BASE_URL}/job/${tag}`,
+  //       changeFrequency: "weekly",
+  //       priority: 1,
+  //     };
+  //   })
+  //   .flat() as MetadataRoute.Sitemap;
 
   return [
     {
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
+      changeFrequency: "weekly",
+      priority: 1,
     },
     {
       url: `${process.env.NEXT_PUBLIC_BASE_URL}`,
@@ -23,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/register/job-seeker`,
     },
-
-    // ...jobPostEntries,
+    ...urlWithTagAndLocation,
+    ...urlWithLocation,
   ];
 }

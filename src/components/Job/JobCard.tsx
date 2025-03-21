@@ -32,10 +32,11 @@ import LinkButtonAnimated from "../ui/animated-button-link";
 import SaveJobButton from "../Global/SaveJobButton";
 import { Session } from "next-auth";
 import ApplyNowButton from "../Global/ApplyNowButton";
+import UnauthorizedApplyButton from "../Global/UnauthorizedApplyButton";
 
 interface JobCardProps {
   job: JobDataBrowse;
-  session: Session;
+  session?: Session | null;
   loading?: boolean;
 }
 
@@ -95,15 +96,17 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
               </div>
             </div>
             <div>
-              <SaveJobButton
-                jobId={job.id}
-                initialState={{
-                  isSavedByUser: job.saved.some(
-                    (s) => s.userId === session.jobSeekerId
-                  ),
-                }}
-                className="hover:bg-transparent"
-              />
+              {session && (
+                <SaveJobButton
+                  jobId={job.id}
+                  initialState={{
+                    isSavedByUser: job.saved.some(
+                      (s) => s.userId === session.jobSeekerId
+                    ),
+                  }}
+                  className="hover:bg-transparent"
+                />
+              )}
             </div>
           </div>
           <div className="">
@@ -163,7 +166,11 @@ const JobCard = ({ job, session, loading }: JobCardProps) => {
         </CardContent>
         <CardFooter className="w-full">
           <div className="flex justify-between items-center w-full">
-            <ApplyNowButton jobData={job} size={"sm"} />
+            {session ? (
+              <ApplyNowButton jobData={job} size={"sm"} />
+            ) : (
+              <UnauthorizedApplyButton />
+            )}
 
             <Button asChild size={"sm"} variant={"secondary"}>
               <Link href={`/job/description/${job.id}`}>
