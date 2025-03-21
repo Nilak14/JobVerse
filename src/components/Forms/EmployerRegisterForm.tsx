@@ -152,7 +152,7 @@ const EmployerRegisterForm = () => {
         </Form>
         <div className="text-right text-xs mt-3 font-semibold flex items-center justify-end gap-1">
           <span>Switch To </span>{" "}
-          <Link href={"/register/job_seeker"}>
+          <Link replace href={"/register/job_seeker"}>
             <span
               className={cn(
                 " text-primary font-semibold tracking-wide relative group cursor-pointer",

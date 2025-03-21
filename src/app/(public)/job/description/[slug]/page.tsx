@@ -7,8 +7,13 @@ import JobDescriptionPageSkeleton from "@/components/skeletons/JobDescriptionPag
 import JobSeekerNav from "@/components/sidebar/JobSeekerNav";
 import { auth } from "@/lib/auth";
 import { Session } from "next-auth";
+import NavBar from "@/components/LandingPage/NavBar";
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  return [];
 }
 
 const fetchJobData = async (slug: string) => {
@@ -59,7 +64,8 @@ const JobDescriptionPage = async ({ params }: PageProps) => {
 
   return (
     <>
-      <JobSeekerNav user={null} hasSidebar={false} />
+      {session ? <JobSeekerNav user={null} hasSidebar={false} /> : <NavBar />}
+
       <Suspense fallback={<JobDescriptionPageSkeleton />}>
         <JobDescriptionContent slug={slug} session={session} />
       </Suspense>

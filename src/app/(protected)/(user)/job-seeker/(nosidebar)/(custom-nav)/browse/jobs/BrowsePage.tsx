@@ -14,10 +14,11 @@ import BrowsePageFilterSheet from "./BrowsePageFilterSheet";
 import BackButton from "@/components/Global/BackButton";
 
 interface BrowsePageProps {
-  session: Session;
+  session?: Session | null;
+  showBackButton?: boolean;
 }
 
-const BrowsePage = ({ session }: BrowsePageProps) => {
+const BrowsePage = ({ session, showBackButton = true }: BrowsePageProps) => {
   const searchParams = useSearchParams();
   const filters: Filters = {
     workMode: searchParams.get("workMode") || "",
@@ -46,7 +47,7 @@ const BrowsePage = ({ session }: BrowsePageProps) => {
       <div className="flex">
         <aside className="max-w-[300px] w-[300px] bg-sidebar fixed h-[calc(100vh-64px)] overflow-y-auto hidden md:block">
           <div className="flex items-center px-5">
-            <BackButton />
+            {showBackButton && <BackButton />}
           </div>
           <BrowsePageFilter />
         </aside>

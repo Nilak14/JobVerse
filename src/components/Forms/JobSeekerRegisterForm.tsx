@@ -153,6 +153,7 @@ const JobSeekerRegisterForm = () => {
         <div className="text-right text-xs mt-3 font-semibold flex items-center justify-end gap-1">
           <span>Switch To </span>{" "}
           <Link
+            replace
             className={cn(status === "executing" && "pointer-events-none")}
             href={"/register/employer"}
           >

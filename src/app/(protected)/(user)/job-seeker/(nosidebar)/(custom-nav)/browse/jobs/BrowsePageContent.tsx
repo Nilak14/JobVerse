@@ -12,7 +12,7 @@ interface BrowsePageContentProps {
   fetchNextPage: () => void;
   hasNextPage: boolean;
   isFetching: boolean;
-  session: Session;
+  session?: Session | null;
   isFetchingNextPage: boolean;
   status: "idle" | "error" | "loading" | "success";
 }
