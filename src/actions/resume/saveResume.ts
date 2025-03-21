@@ -10,7 +10,6 @@ import prisma from "@/lib/prisma";
 import { resumeSchema, ResumeValues } from "@/schema/ResumeEditorSchema";
 import { del, put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
-import { type } from "os";
 import path from "path";
 export async function saveResume(values: ResumeValues) {
   const { id } = values;

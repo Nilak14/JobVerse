@@ -5,6 +5,8 @@ import prisma from "@/lib/prisma";
 import { jobSchema } from "@/schema/JobBackendValidationSchema";
 import { JobSchemaType } from "@/schema/CreateJobSchema";
 import { revalidatePath } from "next/cache";
+import { getCompanySubscriptionLevel } from "@/data-access/subscription/companySubscription";
+import { canPostJob } from "@/lib/permissions/company-permissions";
 
 export const saveJob = async (values: JobSchemaType) => {
   const session = await auth();
@@ -18,6 +20,10 @@ export const saveJob = async (values: JobSchemaType) => {
     throw new Error("Unauthorized");
   }
 
+  const subscriptionLevel = await getCompanySubscriptionLevel(
+    session.activeCompanyId
+  );
+
   const {
     id: jobId,
     salaryType,
@@ -29,7 +35,17 @@ export const saveJob = async (values: JobSchemaType) => {
     ...jobValues
   } = jobSchema.parse(values);
 
-  //todo: check the number of job post for this company for non premium company
+  if (!jobId) {
+    const jobCount = await prisma.job.count({
+      where: { companyId: session.activeCompanyId },
+    });
+
+    if (!canPostJob(subscriptionLevel, jobCount)) {
+      throw new Error(
+        "You have reached the maximum number of jobs allowed for your subscription level. Please purchase a higher subscription to post more jobs."
+      );
+    }
+  }
 
   const existingJob = jobId
     ? await prisma.job.findUnique({

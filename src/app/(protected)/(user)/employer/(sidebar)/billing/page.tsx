@@ -115,7 +115,9 @@ const BillingPageData = async () => {
                 </thead>
                 <tbody>
                   <tr className="border-b">
-                    <td className="py-3 px-4 font-medium">Create Resume</td>
+                    <td className="py-3 px-4 font-medium">
+                      Create Job Posting
+                    </td>
                     {CompanyPlans.map((plan) => (
                       <td key={`${plan.name}-create`} className="py-3 px-4">
                         {plan.features.createJob.value}
