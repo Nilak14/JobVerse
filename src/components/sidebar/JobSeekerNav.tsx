@@ -20,7 +20,7 @@ const JobSeekerNav = ({ user, hasSidebar = false }: UserNavProps) => {
         <Container className=" w-full flex justify-between items-center gap-10 ">
           <div>{hasSidebar || <NavLogo />}</div>
           <div className="flex gap-10">
-            <Notification />
+            {user && <Notification />}
             {hasSidebar || <div>{user && <NavUser user={user} />}</div>}
           </div>
         </Container>

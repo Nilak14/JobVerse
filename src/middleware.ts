@@ -9,7 +9,6 @@ import {
   DEFAULT_LOGIN_REDIRECT_EMPLOYER,
   DEFAULT_LOGIN_REDIRECT_JOB_SEEKER,
   jobSeekerRoutePrefix,
-  publicApiRoute,
   publicRoutes,
   publicSEORoute,
   publicContentRoute,
@@ -22,6 +21,7 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isPublicSEORoute = publicSEORoute.includes(nextUrl.pathname);

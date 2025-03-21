@@ -1,12 +1,12 @@
 import { companyJobsColumn } from "@/columns/company-jobs-column";
 import SidebarContainer from "@/components/Global/SidebarContainer";
+import PostJobButton from "@/components/Job/PostJobButton";
 import EmployerJobTable from "@/components/Table/EmployerJobTable";
-import { Button } from "@/components/ui/button";
 import { getAllCompanyJobs } from "@/data-access/job/getAllCompanyJobs";
+import { getCompanySubscriptionLevel } from "@/data-access/subscription/companySubscription";
 import { auth } from "@/lib/auth";
-import { BriefcaseMedical } from "lucide-react";
+import { canPostJob } from "@/lib/permissions/company-permissions";
 import { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -20,17 +20,16 @@ const JobListPage = async () => {
     redirect("/");
   }
   const jobs = await getAllCompanyJobs(session.activeCompanyId);
-
+  const subscriptionLevel = await getCompanySubscriptionLevel(
+    session.activeCompanyId
+  );
   return (
     <SidebarContainer>
       <section className="flex flex-col w-full gap-10">
         <div className="w-full flex justify-end items-end">
-          <Button asChild>
-            <Link href={"/employer/job-studio"}>
-              <BriefcaseMedical />
-              Post New Job
-            </Link>
-          </Button>
+          <PostJobButton
+            canCreate={canPostJob(subscriptionLevel, jobs.length)}
+          />
         </div>
 
         <EmployerJobTable columns={companyJobsColumn} data={jobs || []} />

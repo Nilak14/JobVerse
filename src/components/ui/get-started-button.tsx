@@ -10,7 +10,7 @@ const GetStartedButton = () => {
     <>
       <RainbowButton
         onClick={() => setOpen(!open)}
-        className="dark:text-black group text-white p-5 flex gap-2 hover:ring-4 ring-primary -ring-offset-8 "
+        className="dark:text-black group text-white p-5 flex gap-2 hover:ring-4 ring-primary -ring-offset-8 whitespace-nowrap "
       >
         Start For Free{" "}
         <ArrowRightIcon className="group-hover:translate-x-1 transition-transform duration-200 ease-in-out" />
