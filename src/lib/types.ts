@@ -13,10 +13,12 @@ export interface SidebarNavLinks {
   title: string;
   url: string;
   icon?: LucideIcon;
+  isPremium?: boolean;
   items?: {
     title: string;
     url: string;
     icon?: LucideIcon;
+    isPremium?: boolean;
   }[];
 }
 
@@ -55,4 +57,15 @@ export interface ResumeEditorFormProps {
 
 export interface ResumeTemplateProps {
   resumeData: ResumeValues;
+}
+export interface WidgetConfig {
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  borderRadius: number;
+  showLogo: boolean;
+  showApplyButton: boolean;
+  note: string;
+  showBranding: boolean;
+  containerId: string;
 }

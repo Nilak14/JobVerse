@@ -15,6 +15,7 @@ import { EmployerCompany } from "@/lib/prisma-types/Employers";
 import { Skeleton } from "../ui/skeleton";
 import { useRouter } from "next/navigation";
 import { EmployerSideBarLinks } from "@/lib/routes/EmployerRoute";
+import { useCompanySubscriptionLevel } from "@/context/CompanySubscriptionLevelProvider";
 
 const EmployerSidebar = ({
   user,
@@ -27,7 +28,7 @@ const EmployerSidebar = ({
   const { data, isLoading } = useQueryAllCompanies();
   const router = useRouter();
   const companies: EmployerCompany[] = data?.data.companies;
-
+  const companySubscription = useCompanySubscriptionLevel();
   if (!isLoading && companies.length === 0) {
     router.push("/onboarding/employer");
   }
@@ -46,7 +47,10 @@ const EmployerSidebar = ({
         )}
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMainNav items={sidebarLinks} />
+        <SidebarMainNav
+          subscriptionLevel={companySubscription}
+          items={sidebarLinks}
+        />
       </SidebarContent>
       <SidebarFooter>
         <SidebarUser user={user} isLoading={!user} />

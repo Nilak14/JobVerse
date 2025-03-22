@@ -19,8 +19,13 @@ export const publicApiRoute = [
   "/api/uploadthing",
   "/api/clear-uploads",
   "/api/stripe-webhook",
+  "/api/widget",
 ];
-export const publicContentRoute = ["/job/description", "/resume/preview"];
+export const publicContentRoute = [
+  "/job/description",
+  "/resume/preview",
+  "/job",
+];
 export const publicSEORoute = ["/sitemap.xml", "/robots.txt", "/skills.json"];
 
 export const DEFAULT_LOGIN_REDIRECT_JOB_SEEKER = "/job-seeker/dashboard";

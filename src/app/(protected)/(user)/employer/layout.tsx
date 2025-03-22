@@ -42,7 +42,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   const subscriptionLevel = await getCompanySubscriptionLevel(
     session.activeCompanyId!
   );
-  const { priceInfo, subscription } = await getCompanySubscription();
+  const { priceInfo } = await getCompanySubscription();
   const currentPlan = priceInfo
     ? (priceInfo.product as Stripe.Product).name
     : "Free";

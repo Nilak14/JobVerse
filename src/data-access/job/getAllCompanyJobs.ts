@@ -1,7 +1,11 @@
 import prisma from "@/lib/prisma";
-import { JobDataInclude } from "@/lib/prisma-types/Job";
+import {
+  getJobDataIncludeBrowse,
+  JobDataInclude,
+} from "@/lib/prisma-types/Job";
+import { cache } from "react";
 
-export const getAllCompanyJobs = async (companyId: string) => {
+export const getAllCompanyJobs = cache(async (companyId: string) => {
   const allJobs = await prisma.job.findMany({
     where: {
       companyId,
@@ -14,4 +18,19 @@ export const getAllCompanyJobs = async (companyId: string) => {
     },
   });
   return allJobs;
-};
+});
+
+export const getAllCompanyActiveJobs = cache(async (companyId: string) => {
+  const allJobs = await prisma.job.findMany({
+    where: {
+      companyId,
+      isDeleted: false,
+      status: "ACTIVE",
+    },
+    select: getJobDataIncludeBrowse(),
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return allJobs;
+});

@@ -1,4 +1,4 @@
-import { LandingPageNavLinks } from "./types";
+import { LandingPageNavLinks, WidgetConfig } from "./types";
 
 // NavLinks for landing page
 export const NavLinks: LandingPageNavLinks[] = [
@@ -211,3 +211,15 @@ export const CompanyEliteFeatures = [
     avaliable: true,
   },
 ];
+
+export const DEFAULT_EMBED_SETTINGS: WidgetConfig = {
+  primaryColor: "#f97316",
+  secondaryColor: "black",
+  accentColor: "#FFF5E6",
+  borderRadius: 8,
+  showLogo: true,
+  showApplyButton: true,
+  note: "",
+  showBranding: true,
+  containerId: "jobverse-widget",
+};

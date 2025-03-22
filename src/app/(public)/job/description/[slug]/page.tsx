@@ -12,10 +12,6 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  return [];
-}
-
 const fetchJobData = async (slug: string) => {
   const job = await getJobByIdDescription(slug);
   if (!job) {
