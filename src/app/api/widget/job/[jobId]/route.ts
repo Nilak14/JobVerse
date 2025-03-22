@@ -1,3 +1,6 @@
+import { getCompanySubscriptionLevel } from "@/data-access/subscription/companySubscription";
+import prisma from "@/lib/prisma";
+import { getJobDataIncludeBrowse } from "@/lib/prisma-types/Job";
 import { NextRequest, NextResponse } from "next/server";
 
 // Handle preflight requests
@@ -23,16 +26,30 @@ export const GET = async (
       res.headers.set("Access-Control-Allow-Origin", "*");
       return res;
     }
-    // Sample job data. Replace with your actual logic.
-    const job = {
-      id: jobId,
-      title: "Software Engineer",
-      description: "We are looking for a software engineer",
-      location: "Remote",
-      salary: 100000,
-      company: "Google",
+    const job = await prisma.job.findUnique({
+      where: {
+        id: jobId,
+        isDeleted: false,
+        status: "ACTIVE",
+      },
+      select: getJobDataIncludeBrowse(),
+    });
+    if (!job || !job.company.id) {
+      const res = NextResponse.json(
+        { error: "Job Not Found" },
+        { status: 400 }
+      );
+      res.headers.set("Access-Control-Allow-Origin", "*");
+      return res;
+    }
+    const sub = await getCompanySubscriptionLevel(job?.company.id!);
+
+    const data = {
+      job,
+      subscription: sub,
     };
-    const res = NextResponse.json(job, { status: 200 });
+
+    const res = NextResponse.json(data, { status: 200 });
     res.headers.set("Access-Control-Allow-Origin", "*");
     return res;
   } catch (error) {

@@ -91,6 +91,7 @@ export function getJobDataIncludeBrowse() {
     deadline: true,
     saved: true,
     resumeRequired: true,
+    experienceLevel: true,
   } satisfies Prisma.JobSelect;
 }
 
