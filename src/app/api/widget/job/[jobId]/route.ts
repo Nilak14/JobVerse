@@ -14,7 +14,7 @@ export const OPTIONS = () => {
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { jobId: string } }
+  { params }: { params: Promise<{ jobId: string }> }
 ) => {
   try {
     const { jobId } = await params;
