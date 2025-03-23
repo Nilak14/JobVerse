@@ -9,7 +9,7 @@ import {
   Clock,
   MapPin,
 } from "lucide-react";
-import { formatDate, getTimeDistance } from "@/lib/utils";
+import { formatDate, getTimeDistance, renderSalaryText } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import ContentViewer from "../tiptap/ContentViewer";
 import { Separator } from "../ui/separator";
@@ -173,6 +173,27 @@ const JobEmployerPreview = ({ job }: JobEmployerPreviewSectionProps) => {
 
                   <div className="space-y-4">
                     <Separator />
+
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Salary</span>
+                      <p>
+                        <span>
+                          {renderSalaryText({
+                            maxAmount: Number(job?.maxSalaryAmount),
+                            startingAmount: Number(job?.minSalaryAmount),
+                            exactAmount: Number(job?.amount),
+                            //@ts-ignore
+                            displayType: job?.salaryType,
+                            currency: job?.salaryCurrency,
+                          })}{" "}
+                        </span>
+                        <span className="lowercase">
+                          / per {job?.salaryRate}
+                        </span>
+                      </p>
+                    </div>
+                    <Separator />
+
                     {job.jobType && (
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Job Type</span>
