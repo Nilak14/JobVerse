@@ -1,5 +1,8 @@
 import { ResumeEditorFormProps } from "@/lib/types";
-import { educationSchema, EducationValues } from "@/schema/ResumeEditorSchema";
+import {
+  certificationsSchema,
+  CertificationValues,
+} from "@/schema/ResumeEditorSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
@@ -11,8 +14,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { GripHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   closestCenter,
@@ -32,16 +33,18 @@ import {
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
+import { Button } from "@/components/ui/button";
+import { GripHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
-const EducationForm = ({
+const CertificationForm = ({
   resumeData,
   setResumeData,
 }: ResumeEditorFormProps) => {
-  const form = useForm<EducationValues>({
+  const form = useForm<CertificationValues>({
     defaultValues: {
-      educations: resumeData.educations || [],
+      certification: resumeData.certification || [],
     },
-    resolver: zodResolver(educationSchema),
+    resolver: zodResolver(certificationsSchema),
   });
   useEffect(() => {
     const { unsubscribe } = form.watch(async (values) => {
@@ -49,15 +52,16 @@ const EducationForm = ({
       if (!isValid) return;
       setResumeData({
         ...resumeData,
-        educations: values.educations?.filter((edu) => edu !== undefined),
+        certification: values.certification?.filter(
+          (cert) => cert !== undefined
+        ),
       });
     });
     return unsubscribe;
   }, [form, resumeData, setResumeData]);
-
   const { fields, append, remove, move } = useFieldArray({
     control: form.control,
-    name: "educations",
+    name: "certification",
   });
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -76,8 +80,8 @@ const EducationForm = ({
   }
   return (
     <ResumeEditorFormShell
-      title="Education"
-      description="Add as many education as you want"
+      title="Certifications & Training"
+      description="Elevate your resume with noteworthy credentials that prove you are an expert in your field."
     >
       <Form {...form}>
         <form className="space-y-3">
@@ -92,7 +96,7 @@ const EducationForm = ({
               strategy={verticalListSortingStrategy}
             >
               {fields.map((field, index) => (
-                <EducationItem
+                <CertificationsItem
                   id={field.id}
                   form={form}
                   index={index}
@@ -108,14 +112,13 @@ const EducationForm = ({
               type="button"
               onClick={() => {
                 append({
-                  degree: "",
-                  endDate: "",
-                  school: "",
-                  startDate: "",
+                  title: "",
+                  completionDate: "",
+                  instituteName: "",
                 });
               }}
             >
-              Add Education
+              Add More Certifications & Training
             </Button>
           </div>
         </form>
@@ -123,16 +126,21 @@ const EducationForm = ({
     </ResumeEditorFormShell>
   );
 };
-export default EducationForm;
 
-interface WorkExperienceItemProps {
-  form: UseFormReturn<EducationValues>;
+export default CertificationForm;
+
+interface CertificationsItemProps {
+  form: UseFormReturn<CertificationValues>;
   index: number;
   remove: (index: number) => void;
   id: string;
 }
-
-function EducationItem({ id, form, index, remove }: WorkExperienceItemProps) {
+function CertificationsItem({
+  id,
+  form,
+  index,
+  remove,
+}: CertificationsItemProps) {
   const {
     attributes,
     listeners,
@@ -151,7 +159,9 @@ function EducationItem({ id, form, index, remove }: WorkExperienceItemProps) {
       style={{ transform: CSS.Transform.toString(transform), transition }}
     >
       <div className="flex justify-between gap-2">
-        <span className="font-semibold">Education {index + 1}</span>
+        <span className="font-semibold">
+          Certification & Training {index + 1}
+        </span>
         <GripHorizontal
           {...attributes}
           {...listeners}
@@ -160,10 +170,10 @@ function EducationItem({ id, form, index, remove }: WorkExperienceItemProps) {
       </div>
       <FormField
         control={form.control}
-        name={`educations.${index}.degree`}
+        name={`certification.${index}.title`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Degree</FormLabel>
+            <FormLabel>Title</FormLabel>
             <FormControl>
               <Input {...field} autoFocus />
             </FormControl>
@@ -172,10 +182,10 @@ function EducationItem({ id, form, index, remove }: WorkExperienceItemProps) {
       />
       <FormField
         control={form.control}
-        name={`educations.${index}.school`}
+        name={`certification.${index}.instituteName`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>School</FormLabel>
+            <FormLabel>Institute Name</FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -185,26 +195,10 @@ function EducationItem({ id, form, index, remove }: WorkExperienceItemProps) {
       <div className="grid grid-cols-2 gap-3">
         <FormField
           control={form.control}
-          name={`educations.${index}.startDate`}
+          name={`certification.${index}.completionDate`}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Start Date</FormLabel>
-              <FormControl>
-                <Input
-                  type="date"
-                  {...field}
-                  value={field.value?.slice(0, 10)}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name={`educations.${index}.endDate`}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>End Date</FormLabel>
+              <FormLabel>Achieved Date</FormLabel>
               <FormControl>
                 <Input
                   type="date"

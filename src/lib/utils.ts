@@ -123,6 +123,7 @@ export function mapToResumeValues(data: ResumeServerData): ResumeValues {
     country: data.country || undefined,
     phone: data.phone || undefined,
     email: data.email || undefined,
+    templateId: data.templateId || "modern",
     workExperiences: data.workExperiences.map((exp) => ({
       position: exp.position || undefined,
       company: exp.company || undefined,
@@ -135,6 +136,11 @@ export function mapToResumeValues(data: ResumeServerData): ResumeValues {
       school: edu.school || undefined,
       startDate: edu.startDate?.toISOString().split("T")[0],
       endDate: edu.endDate?.toISOString().split("T")[0],
+    })),
+    certification: data.Certifications.map((cert) => ({
+      title: cert.title || undefined,
+      instituteName: cert.instituteName || undefined,
+      completionDate: cert.completionDate?.toISOString().split("T")[0],
     })),
     skills: data.skills,
     borderStyle: data.borderStyle,
@@ -226,6 +232,13 @@ export function profileToResumeValue(data: JobSeekerProfile): ResumeValues {
       startDate: edu.startDate?.toISOString().split("T")[0],
       endDate: edu.endDate?.toISOString().split("T")[0],
     })),
+    certification: data.JOB_SEEKER?.JobSeekerProfile?.Certification.map(
+      (cert) => ({
+        title: cert.title || undefined,
+        instituteName: cert.instituteName || undefined,
+        completionDate: cert.completionDate?.toISOString().split("T")[0],
+      })
+    ),
     skills: data.JOB_SEEKER?.JobSeekerProfile?.skills || [],
     summary: data.JOB_SEEKER?.JobSeekerProfile?.bio || undefined,
   };

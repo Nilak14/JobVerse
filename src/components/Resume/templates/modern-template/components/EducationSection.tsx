@@ -14,12 +14,14 @@ const EducationSection = ({ resumeData }: ResumeTemplateProps) => {
     <>
       <hr style={{ borderColor: colorHex }} className="border-2" />
       <div className="space-y-3">
-        <p className="text-lg font-semibold">Education</p>
+        <p style={{ color: colorHex }} className="text-lg font-semibold">
+          Education
+        </p>
         {educationsNotEmpty.map((edu, index) => (
           <div key={index} className="break-inside-avoid space-y-1">
             <div
               style={{ color: colorHex }}
-              className="flex items-center justify-between text-sm font-semibold"
+              className="flex items-center justify-between text-xs font-semibold"
             >
               <span>{edu.degree}</span>
               {edu.startDate && (
@@ -29,7 +31,7 @@ const EducationSection = ({ resumeData }: ResumeTemplateProps) => {
                 </span>
               )}
             </div>
-            <p className="text-xs font-semibold">{edu.school}</p>
+            <p className="text-xs text-gray-500">{edu.school}</p>
           </div>
         ))}
       </div>

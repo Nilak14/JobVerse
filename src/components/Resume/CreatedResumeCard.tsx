@@ -34,13 +34,14 @@ const CreatedResumeCard = ({ resume }: CreatedResumeCardProps) => {
     contentRef,
     documentTitle: resume.title || "Untitled Resume",
   });
+  console.log(resume.templateId);
 
   return (
     <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p-3 ">
       <div className="space-y-3">
         <Link
           className="inline-block w-full text-center"
-          href={`/job-seeker/resume-editor?id=${resume.id}`}
+          href={`/job-seeker/resume-editor?template=${resume.templateId}&id=${resume.id}`}
         >
           <p className="font-semibold line-clamp-1">
             {resume.title || "Untitled Resume"}
@@ -55,7 +56,7 @@ const CreatedResumeCard = ({ resume }: CreatedResumeCardProps) => {
         </Link>
         <Link
           className="inline-block w-full relative "
-          href={`/job-seeker/resume-editor?id=${resume.id}`}
+          href={`/job-seeker/resume-editor?template=${resume.templateId}&id=${resume.id}`}
         >
           <ResumePreview
             contentRef={contentRef}

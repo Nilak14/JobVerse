@@ -1,21 +1,21 @@
 model Resume {
-    id          String     @id @default(cuid())
-    userId      String
-    user        JOB_SEEKER @relation(fields: [userId], references: [id], onDelete: Cascade)
-    title       String?
-    description String?
-
-    photoUrl    String?
-    colorHex    String  @default("#000000")
-    borderStyle String  @default("squircle")
-    summary     String?
-    fullName    String?
-    jobTitle    String?
-    city        String?
-    country     String?
-    phone       String?
-    email       String?
-
+    id              String           @id @default(cuid())
+    userId          String
+    user            JOB_SEEKER       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    title           String?
+    description     String?
+    templateId      String?
+    photoUrl        String?
+    colorHex        String           @default("#000000")
+    borderStyle     String           @default("squircle")
+    summary         String?
+    fullName        String?
+    jobTitle        String?
+    city            String?
+    country         String?
+    phone           String?
+    email           String?
+    Certifications  Certifications[]
     workExperiences WorkExperience[]
     educations      Education[]
     skills          String[]
@@ -59,6 +59,19 @@ model Education {
     updatedAt DateTime @updatedAt
 
     @@map("educations")
+}
+
+model Certifications {
+    id             String    @id @default(cuid())
+    title          String?
+    instituteName  String?
+    completionDate DateTime?
+    resumeId       String
+    resume         Resume    @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+    createdAt      DateTime  @default(now())
+    updatedAt      DateTime  @updatedAt
+
+    @@map("certifications")
 }
 
 model UserUploadedResume {

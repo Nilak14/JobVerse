@@ -3,6 +3,7 @@ import ResumePreview from "./ResumePreview";
 import ColorPicker from "./ColorPicker";
 import BorderStyleButton from "./BorderStyleButton";
 import { cn } from "@/lib/utils";
+import ChangeTemplateButton from "./ChangeTemplateButton";
 
 interface ResumePreviewSectionProps {
   resumeDate: ResumeValues;
@@ -31,6 +32,7 @@ const ResumePreviewSection = ({
             setResumeData({ ...resumeDate, borderStyle: style })
           }
         />
+        <ChangeTemplateButton selectedTemplate={resumeDate.templateId} />
       </div>
       <div className="flex w-full justify-center overflow-y-auto bg-secondary p-3">
         <ResumePreview

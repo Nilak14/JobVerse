@@ -223,3 +223,22 @@ export const DEFAULT_EMBED_SETTINGS: WidgetConfig = {
   showBranding: true,
   containerId: "jobverse-widget",
 };
+
+export type ResumeTemplateType = {
+  id: string;
+  name: string;
+  image: string;
+};
+
+export const RESUME_TEMPLATE: ResumeTemplateType[] = [
+  {
+    id: "modern",
+    name: "Modern",
+    image: "/resume-template-photo/Modern.jpg",
+  },
+  {
+    id: "professional",
+    name: "Professional",
+    image: "/resume-template-photo/Professional.jpg",
+  },
+];
