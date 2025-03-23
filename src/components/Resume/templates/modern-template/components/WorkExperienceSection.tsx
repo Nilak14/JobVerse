@@ -21,7 +21,7 @@ const WorkExperienceSection = ({ resumeData }: ResumeTemplateProps) => {
           <div key={index} className="break-inside-avoid space-y-1">
             <div
               style={{ color: colorHex }}
-              className="flex items-center justify-between text-sm font-semibold"
+              className="flex items-center justify-between text-xs font-semibold"
             >
               <span>{exp.position}</span>
               {exp.startDate && (

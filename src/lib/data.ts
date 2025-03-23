@@ -1,4 +1,4 @@
-import { LandingPageNavLinks } from "./types";
+import { LandingPageNavLinks, WidgetConfig } from "./types";
 
 // NavLinks for landing page
 export const NavLinks: LandingPageNavLinks[] = [
@@ -209,5 +209,36 @@ export const CompanyEliteFeatures = [
     name: "Customize Job Embeddings",
     value: "Available",
     avaliable: true,
+  },
+];
+
+export const DEFAULT_EMBED_SETTINGS: WidgetConfig = {
+  primaryColor: "#f97316",
+  secondaryColor: "black",
+  accentColor: "#FFF5E6",
+  borderRadius: 8,
+  showLogo: true,
+  showApplyButton: true,
+  note: "",
+  showBranding: true,
+  containerId: "jobverse-widget",
+};
+
+export type ResumeTemplateType = {
+  id: string;
+  name: string;
+  image: string;
+};
+
+export const RESUME_TEMPLATE: ResumeTemplateType[] = [
+  {
+    id: "modern",
+    name: "Modern",
+    image: "/resume-template-photo/Modern.jpg",
+  },
+  {
+    id: "professional",
+    name: "Professional",
+    image: "/resume-template-photo/Professional.jpg",
   },
 ];

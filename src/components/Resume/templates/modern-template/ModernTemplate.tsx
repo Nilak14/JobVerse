@@ -4,8 +4,9 @@ import SummarySection from "./components/SummarySection";
 import WorkExperienceSection from "./components/WorkExperienceSection";
 import EducationSection from "./components/EducationSection";
 import SkillsSection from "./components/SkillsSection";
+import CertificationSection from "./components/CertificationSection";
 
-const ResumeTemplate1 = ({ resumeData }: ResumeTemplateProps) => {
+const ModernTemplate = ({ resumeData }: ResumeTemplateProps) => {
   return (
     <>
       <PersonalInfoHeader resumeData={resumeData} />
@@ -13,7 +14,8 @@ const ResumeTemplate1 = ({ resumeData }: ResumeTemplateProps) => {
       <WorkExperienceSection resumeData={resumeData} />
       <EducationSection resumeData={resumeData} />
       <SkillsSection resumeData={resumeData} />
+      <CertificationSection resumeData={resumeData} />
     </>
   );
 };
-export default ResumeTemplate1;
+export default ModernTemplate;

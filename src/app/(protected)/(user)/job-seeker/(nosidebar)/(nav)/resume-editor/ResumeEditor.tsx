@@ -30,12 +30,13 @@ const ResumeEditor = ({
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
   const searchParams = useSearchParams();
   const currentStep = searchParams.get("step") || ResumeEditorFormSteps[0].key;
-
+  const templateId = searchParams.get("template") || "modern";
   const { hasUnsavedChanges, isSaving } = useAutoSaveResume(resumeData);
 
   function setStep(key: string) {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("step", key);
+
     window.history.replaceState(null, "", `?${newSearchParams.toString()}`);
   }
   const FormComponent = ResumeEditorFormSteps.find(
@@ -43,6 +44,10 @@ const ResumeEditor = ({
   )?.component;
 
   useWarning(hasUnsavedChanges);
+
+  useEffect(() => {
+    setResumeData({ ...resumeData, templateId });
+  }, [templateId]);
 
   return (
     <div className="flex grow flex-col">

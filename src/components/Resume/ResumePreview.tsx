@@ -3,7 +3,8 @@ import useDimensions from "@/hooks/custom-hooks/useDimension";
 import { cn } from "@/lib/utils";
 import { ResumeValues } from "@/schema/ResumeEditorSchema";
 import { useRef } from "react";
-import ResumeTemplate1 from "./templates/Template1/ResumeTemplate1";
+import ModernTemplate from "./templates/modern-template/ModernTemplate";
+import ProfessionalTemplate from "./templates/professional-template/ProfessionalTemplate";
 
 interface ResumePreviewProps {
   resumeDate: ResumeValues;
@@ -30,12 +31,17 @@ const ResumePreview = ({
       <div
         ref={contentRef}
         id="resumePreviewContent"
-        className={cn("space-y-6 p-6", !width && "invisible")}
+        className={cn("space-y-3 p-6", !width && "invisible")}
         style={{
           zoom: (1 / 794) * width,
         }}
       >
-        <ResumeTemplate1 resumeData={resumeDate} />
+        {resumeDate.templateId === "modern" && (
+          <ModernTemplate resumeData={resumeDate} />
+        )}
+        {resumeDate.templateId === "professional" && (
+          <ProfessionalTemplate resumeData={resumeDate} />
+        )}
       </div>
     </div>
   );

@@ -2,10 +2,9 @@
 
 import {
   BriefcaseBusiness,
-  BriefcaseMedical,
   Building,
   FileUser,
-  Globe,
+  FolderOutput,
   LayoutDashboard,
   List,
   Settings,
@@ -61,9 +60,10 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
     url: "/employer/design-studio",
     items: [
       {
-        title: "Create Website",
-        url: "/employer/design-studio/create-website",
-        icon: Globe,
+        title: "Job Embedding",
+        url: "/employer/embed-job",
+        icon: FolderOutput,
+        isPremium: true,
       },
     ],
   },

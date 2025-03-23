@@ -10,7 +10,9 @@ const SkillsSection = ({ resumeData }: ResumeTemplateProps) => {
     <>
       <hr style={{ borderColor: colorHex }} className="border-2" />
       <div className="break-inside-avoid space-y-3">
-        <p className="text-lg font-semibold">Skills</p>
+        <p style={{ color: colorHex }} className="text-lg font-semibold">
+          Skills
+        </p>
         <div className="flex break-inside-avoid flex-wrap gap-2">
           {skills.map((skill, index) => (
             <Badge

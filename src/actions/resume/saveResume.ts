@@ -12,9 +12,9 @@ import { del, put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import path from "path";
 export async function saveResume(values: ResumeValues) {
-  const { id } = values;
+  const { id, templateId } = values;
 
-  const { photo, workExperiences, educations, ...resumeValues } =
+  const { photo, certification, workExperiences, educations, ...resumeValues } =
     resumeSchema.parse(values);
 
   const session = await auth();
@@ -79,11 +79,13 @@ export async function saveResume(values: ResumeValues) {
     newPhotoUrl = photo;
   }
   revalidatePath("/job-seeker/design-studio/resume");
+
   if (id) {
     return prisma.resume.update({
       where: { id },
       data: {
         ...resumeValues,
+        templateId: templateId || undefined,
         photoUrl: newPhotoUrl,
         workExperiences: {
           deleteMany: {},
@@ -101,6 +103,15 @@ export async function saveResume(values: ResumeValues) {
             endDate: edu.endDate ? new Date(edu.endDate) : undefined,
           })),
         },
+        Certifications: {
+          deleteMany: {},
+          create: certification?.map((cert) => ({
+            ...cert,
+            completionDate: cert.completionDate
+              ? new Date(cert.completionDate)
+              : undefined,
+          })),
+        },
         updatedAt: new Date(),
       },
     });
@@ -108,6 +119,7 @@ export async function saveResume(values: ResumeValues) {
     return prisma.resume.create({
       data: {
         ...resumeValues,
+        templateId: templateId || undefined,
         userId: session.jobSeekerId,
         photoUrl: newPhotoUrl,
         workExperiences: {
@@ -115,6 +127,14 @@ export async function saveResume(values: ResumeValues) {
             ...exp,
             startDate: exp.startDate ? new Date(exp.startDate) : undefined,
             endDate: exp.endDate ? new Date(exp.endDate) : undefined,
+          })),
+        },
+        Certifications: {
+          create: certification?.map((cert) => ({
+            ...cert,
+            completionDate: cert.completionDate
+              ? new Date(cert.completionDate)
+              : undefined,
           })),
         },
         educations: {

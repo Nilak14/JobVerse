@@ -157,7 +157,7 @@ const JobPublicPage = async ({ params }: PageProps) => {
               <TagIcon className="h-5 w-5 mr-2 text-primary" />
               Related Searches
             </h2>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {relatedSearches.map((tag) => (
                 <Button key={tag} variant="outline" size="sm" asChild>
                   <Link

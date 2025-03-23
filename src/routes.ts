@@ -19,6 +19,7 @@ export const publicApiRoute = [
   "/api/uploadthing",
   "/api/clear-uploads",
   "/api/stripe-webhook",
+  "/api/widget",
 ];
 export const publicContentRoute = [
   "/job/description",
