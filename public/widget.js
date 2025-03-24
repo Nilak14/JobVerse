@@ -18,7 +18,7 @@
   const showApplyButton = configParams.get("showApplyButton") === "true";
   const note = configParams.get("note") || "";
   const showBranding = configParams.get("showBranding") === "true";
-  const productionURL = "https://jobverse.me";
+  const productionURL = "https://www.jobverse.me";
   const developmentURL = "http://localhost:3000";
 
   const containerId =
@@ -54,11 +54,11 @@
           primaryColor !== "#f97316" ||
           secondaryColor !== "black" ||
           accentColor !== "#FFF5E6" ||
-          borderRadius !== "8" ||
-          showLogo !== "true" ||
-          showApplyButton !== "true" ||
+          borderRadius !== "8px" ||
+          showLogo !== true ||
+          showApplyButton !== true ||
           note !== "" ||
-          showBranding !== "true"
+          showBranding !== true
         ) {
           container.innerHTML = `<p style="color: red;">
      ERROR FROM JOBVERSE:
