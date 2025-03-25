@@ -10,6 +10,8 @@ model User {
     email                 String                 @unique
     emailVerified         DateTime?
     image                 String?
+    latitude              String?
+    longitude             String?
     password              String?
     accounts              Account[]
     userType              UserType?

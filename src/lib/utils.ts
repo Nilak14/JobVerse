@@ -93,6 +93,8 @@ export function mapToJobValues(data: JobServerData): JobSchemaType {
     salaryType: Salary?.type || "",
     minSalaryAmount: minSalaryAmount,
     maxSalaryAmount: maxSalaryAmount,
+    latitude: data.latitude || "",
+    longitude: data.longitude || "",
     amount: amount,
     salaryCurrency: Salary?.currency || "",
     salaryRate: Salary?.rate || "",
@@ -276,4 +278,9 @@ export function jobSeekerProfileStatus(
 
 export function isCreatedResume(resumeId: string): boolean {
   return resumeId.startsWith("c") && resumeId.length === 25;
+}
+export function parseLatLng(value: string | null) {
+  if (value === null || value === undefined) return value;
+  const num = Number(value);
+  return isNaN(num) ? null : num;
 }
