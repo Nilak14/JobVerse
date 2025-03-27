@@ -1,4 +1,11 @@
-const UserTypePageLayout = ({ children }: { children: React.ReactElement }) => {
+import { storeUserLocation } from "@/actions/user/storeLoc";
+
+const UserTypePageLayout = async ({
+  children,
+}: {
+  children: React.ReactElement;
+}) => {
+  await storeUserLocation();
   return <div>{children}</div>;
 };
 export default UserTypePageLayout;

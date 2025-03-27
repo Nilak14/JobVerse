@@ -124,7 +124,7 @@ const SaveJobPage = ({ session }: SaveJobPageProps) => {
         >
           {filteredJobs.map((job) => (
             <motion.div key={job.id} variants={itemVariants}>
-              <JobCard loading={isRefetching} job={job} session={session} />
+              <JobCard loading={isRefetching} job={job} />
             </motion.div>
           ))}
         </motion.div>

@@ -30,6 +30,7 @@ const BrowsePageFilter = () => {
   const [selectedWorkMode, setSelectedWorkMode] = useState<WorkMode[]>(
     () => getInitial("workMode", workMode) as WorkMode[]
   );
+
   const [selectedJobTypes, setSelectedJobTypes] = useState<JobType[]>(
     () => getInitial("jobTypes", jobTypes) as JobType[]
   );

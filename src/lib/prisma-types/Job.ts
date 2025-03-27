@@ -92,6 +92,8 @@ export function getJobDataIncludeBrowse() {
     saved: true,
     resumeRequired: true,
     experienceLevel: true,
+    latitude: true,
+    longitude: true,
   } satisfies Prisma.JobSelect;
 }
 
@@ -107,6 +109,14 @@ export type JobDataBrowseAPIResponse = {
     data: {
       jobs: JobDataBrowse[];
     };
+  };
+};
+
+export type NearByJobResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    jobs: JobDataBrowse[];
   };
 };
 

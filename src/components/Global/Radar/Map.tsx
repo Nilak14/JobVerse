@@ -46,6 +46,7 @@ const Map = ({
     autocompleteRef.current = Radar.ui.autocomplete({
       container: "autocomplete",
       width: "400px",
+      placeholder: "Search For Your City Name",
       onSelection: (address: RadarAddress) => {
         const { latitude, longitude } = address;
         onAddressChange && onAddressChange(address);
