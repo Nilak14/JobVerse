@@ -30,19 +30,18 @@ import Link from "next/link";
 import LinkButtonAnimated from "../ui/animated-button-link";
 
 import SaveJobButton from "../Global/SaveJobButton";
-import { Session } from "next-auth";
 import ApplyNowButton from "../Global/ApplyNowButton";
 import UnauthorizedApplyButton from "../Global/UnauthorizedApplyButton";
+import { getClientSession } from "@/store/getClientSession";
 
 interface JobCardProps {
   job: JobDataBrowse;
-  session?: Session | null;
   loading?: boolean;
 }
 
-const JobCard = ({ job, session, loading }: JobCardProps) => {
+const JobCard = ({ job, loading }: JobCardProps) => {
   const daysLeft = getTimeDifference(job.deadline!);
-
+  const { session, status } = getClientSession();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}

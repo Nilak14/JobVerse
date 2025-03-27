@@ -21,6 +21,8 @@ export const workModeSchema = z
       .min(1, "Select Atleast One Work Mode")
       .refine((val) => workMode.includes(val as WorkMode), "Invalid Work Mode"),
     location: z.string().trim().max(100).optional(),
+    latitude: z.string().optional(),
+    longitude: z.string().optional(),
   })
   .refine((data) => data.workMode === "Remote" || !!data.location, {
     message: "Location is required for this work mode",

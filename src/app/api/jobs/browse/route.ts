@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import {
   getJobDataIncludeBrowse,
@@ -21,6 +22,7 @@ export const GET = async (req: NextRequest) => {
     const globalSearchParams = url.searchParams.get("globalSearch") || "";
     const companySearchParams = url.searchParams.get("companySearch") || "";
     const locationSearchParams = url.searchParams.get("locationSearch") || "";
+    const nearByJob = url.searchParams.get("isNearBy") === "true";
 
     const globalSearch = globalSearchParams
       .split(" ")
@@ -96,7 +98,6 @@ export const GET = async (req: NextRequest) => {
       where,
       //todo: remove the jobs which user have already applied
       select: getJobDataIncludeBrowse(),
-
       take: PAGE_SIZE + 1,
       orderBy: { createdAt: "desc" },
       cursor: cursor ? { id: cursor } : undefined,

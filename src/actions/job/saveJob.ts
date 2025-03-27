@@ -85,7 +85,8 @@ export const saveJob = async (values: JobSchemaType) => {
         isUrgent: values.isUrgent,
         deadline: values.applicationDeadline,
         sendEmailNotification: values.getEmailNotification,
-
+        latitude: values.latitude,
+        longitude: values.longitude,
         Salary: {
           delete: {
             id: existingJob?.Salary?.id,
@@ -128,6 +129,8 @@ export const saveJob = async (values: JobSchemaType) => {
         deadline: values.applicationDeadline || null,
         sendEmailNotification: values.getEmailNotification,
         createdBy: session.employerId,
+        latitude: values.latitude,
+        longitude: values.longitude,
         companyId: session.activeCompanyId,
         Salary: {
           create: {
