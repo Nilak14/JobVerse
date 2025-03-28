@@ -77,6 +77,10 @@ export const PreferencesSettingsSchema = z.object({
   jobRecommendationEmails: z.boolean(),
   applicationUpdates: z.boolean(),
   marketingEmails: z.boolean(),
+  nearByJobRadius: z
+    .number()
+    .min(1, "Radius must be at least 1")
+    .max(200, { message: "Radius must be at most 200" }),
 });
 export type PreferencesSettingsSchemaSchemaType = z.infer<
   typeof PreferencesSettingsSchema

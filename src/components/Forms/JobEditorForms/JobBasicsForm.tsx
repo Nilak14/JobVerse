@@ -11,6 +11,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -23,8 +32,10 @@ import { useEffect, useState } from "react";
 import { jobTypes, workMode } from "@/lib/enums/CreateJobEnums";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { cn, parseLatLng } from "@/lib/utils";
 import { Building, Building2, Home } from "lucide-react";
+import Map from "@/components/Global/Radar/Map";
+import { RadarAddress } from "radar-sdk-js/dist/types";
 const JobBasicsForm = ({
   jobData,
   setJobData,
@@ -32,12 +43,15 @@ const JobBasicsForm = ({
 }: JobEditorFormProps) => {
   const { setTrigger } = useFormTriggersStore();
   const [showLocationField, setShowLocationField] = useState(false);
+  const [address, setAddress] = useState<RadarAddress | null>(null);
   const form = useForm<jobBasicsSchemaType>({
     defaultValues: {
       title: jobData.title || "",
       jobType: jobData.jobType || "",
       workMode: jobData.workMode || "Remote",
       location: jobData.location || "",
+      latitude: jobData.latitude || "",
+      longitude: jobData.longitude || "",
     },
     resolver: zodResolver(jobBasicsSchema),
     mode: "onChange",
@@ -64,6 +78,14 @@ const JobBasicsForm = ({
       setShowLocationField(true);
     }
   }, []);
+  useEffect(() => {
+    console.log(address);
+    if (address) {
+      form.setValue("latitude", address.latitude.toString());
+      form.setValue("longitude", address.longitude.toString());
+      form.setValue("location", address.addressLabel);
+    }
+  }, [address]);
 
   const getIcon = (mode: string) => {
     switch (mode) {
@@ -79,12 +101,6 @@ const JobBasicsForm = ({
   };
   return (
     <div className="max-w-xl mx-auto space-y-6 pt-5">
-      {/* <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Job Basics</h2>
-        <p className="text-sm text-muted-foreground">
-          Enter the basic information about the job you are posting
-        </p>
-      </div> */}
       <Form {...form}>
         <form className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -131,7 +147,6 @@ const JobBasicsForm = ({
               )}
             />
           </div>
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -240,25 +255,17 @@ const JobBasicsForm = ({
               </p>
             )}
           </motion.div>
-
           {showLocationField && (
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Work Location</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Work Location" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="pb-10">
+              <Map
+                onAddressChange={setAddress}
+                defaultLat={parseLatLng(jobData.latitude!) || 40.7342}
+                defaultLng={parseLatLng(jobData.longitude!) || -73.9911}
+                className="w-[80%] h-[400px]"
+              />
+            </div>
           )}
         </form>
-        {/* <DevTool control={form.control} /> */}
       </Form>
     </div>
   );

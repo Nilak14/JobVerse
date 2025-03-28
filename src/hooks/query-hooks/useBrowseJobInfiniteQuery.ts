@@ -38,9 +38,11 @@ export const useBrowseJobInfiniteQuery = (filters: Filters) => {
       if (filters.locationSearch) {
         params.set("locationSearch", filters.locationSearch);
       }
+
       const url = `/api/jobs/browse?${params.toString()}`;
       return kyInstance.get(url).json<JobDataBrowseAPIResponse>();
     },
+
     getNextPageParam: (lastPage) => lastPage?.data?.nextCursor ?? undefined,
   });
 };

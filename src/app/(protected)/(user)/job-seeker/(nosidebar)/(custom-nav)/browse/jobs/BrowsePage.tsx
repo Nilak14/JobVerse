@@ -4,7 +4,6 @@ import {
   Filters,
   useBrowseJobInfiniteQuery,
 } from "@/hooks/query-hooks/useBrowseJobInfiniteQuery";
-import BrowsePageTop from "./BrowsePageTop";
 import BrowsePageFilter from "./BrowseJobFilter";
 import BrowsePageContent from "./BrowsePageContent";
 import { useSearchParams } from "next/navigation";
@@ -12,6 +11,8 @@ import BrowsePageSearch from "./BrowsePageSearch";
 import { Session } from "next-auth";
 import BrowsePageFilterSheet from "./BrowsePageFilterSheet";
 import BackButton from "@/components/Global/BackButton";
+import NearByJobs from "./NearByJobs";
+import { Briefcase } from "lucide-react";
 
 interface BrowsePageProps {
   session?: Session | null;
@@ -28,6 +29,7 @@ const BrowsePage = ({ session, showBackButton = true }: BrowsePageProps) => {
     companySearch: searchParams.get("companySearch") || "",
     locationSearch: searchParams.get("locationSearch") || "",
   };
+
   const {
     data,
     status,
@@ -52,6 +54,23 @@ const BrowsePage = ({ session, showBackButton = true }: BrowsePageProps) => {
           <BrowsePageFilter />
         </aside>
         <section className="flex-1 md:pl-[340px] px-10 mx-auto mt-10 ">
+          {session && (
+            <div>
+              <NearByJobs />
+              <div className="flex items-center my-5">
+                <div className="bg-primary/20 p-2 rounded-lg mr-3">
+                  <Briefcase className="text-primary" size={20} />
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-xl">All Jobs</p>
+                  <p className="text-sm text-muted-foreground">
+                    Discover job opportunities that match your skills and
+                    interests
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
           <BrowsePageSearch />
           <div className="md:hidden mb-5">
             <BrowsePageFilterSheet>

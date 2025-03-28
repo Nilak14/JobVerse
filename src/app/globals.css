@@ -165,3 +165,7 @@ body {
   size: A4;
   margin: 0.6cm;
 }
+
+.radar-autocomplete-input {
+  @apply dark:!text-white;
+}
