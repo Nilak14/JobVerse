@@ -12,6 +12,7 @@ import { Session } from "next-auth";
 import BrowsePageFilterSheet from "./BrowsePageFilterSheet";
 import BackButton from "@/components/Global/BackButton";
 import NearByJobs from "./NearByJobs";
+import { Briefcase } from "lucide-react";
 
 interface BrowsePageProps {
   session?: Session | null;
@@ -56,6 +57,18 @@ const BrowsePage = ({ session, showBackButton = true }: BrowsePageProps) => {
           {session && (
             <div>
               <NearByJobs />
+              <div className="flex items-center my-5">
+                <div className="bg-primary/20 p-2 rounded-lg mr-3">
+                  <Briefcase className="text-primary" size={20} />
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-xl">All Jobs</p>
+                  <p className="text-sm text-muted-foreground">
+                    Discover job opportunities that match your skills and
+                    interests
+                  </p>
+                </div>
+              </div>
             </div>
           )}
           <BrowsePageSearch />
