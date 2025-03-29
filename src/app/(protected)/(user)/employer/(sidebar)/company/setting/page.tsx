@@ -8,6 +8,7 @@ import { cache } from "react";
 import DangerZone from "@/components/Company/settings/DangerZone";
 import CompanyProfileUpdate from "@/components/Company/settings/CompanyProfileUpdate";
 import { Metadata } from "next";
+import CompanyIntegration from "@/components/Company/settings/CompanyIntegration";
 
 const getActiveCompany = cache(
   async (companyId: string, employerId: string) => {
@@ -52,7 +53,6 @@ const CompanySettingsPage = async () => {
     session.activeCompanyId,
     session.employerId!
   );
-  console.log(activeCompany);
   if (!activeCompany) {
     signOut();
     return;
@@ -61,6 +61,7 @@ const CompanySettingsPage = async () => {
   return (
     <SidebarContainer className="space-y-10">
       <CompanyProfileUpdate session={session} activeCompany={activeCompany} />
+      <CompanyIntegration session={session} activeCompany={activeCompany} />
       <DangerZone session={session} activeCompany={activeCompany} />
     </SidebarContainer>
   );

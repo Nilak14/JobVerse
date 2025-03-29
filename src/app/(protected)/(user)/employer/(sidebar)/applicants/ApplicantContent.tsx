@@ -14,17 +14,21 @@ import ApplicantGridView from "./ApplicantGridView";
 import ApplicantListView from "./ApplicantListView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Grid3X3, List } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 interface ApplicantContentProps {
   applicantData: JobApplicationEmployer[];
 }
 
 const ApplicantContent = ({ applicantData }: ApplicantContentProps) => {
+  const searchParams = useSearchParams();
   // Extract jobs for filtering options
   const allJobs = applicantData.map((application) => application.job);
 
   // States for filtering, searching, and sorting
-  const [selectedJob, setSelectedJob] = useState("0"); // "0" means show all jobs
+  const [selectedJob, setSelectedJob] = useState(
+    searchParams.get("jobId") || "0"
+  ); // "0" means show all jobs
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [sortOrder, setSortOrder] = useState("desc"); // "desc" for newest first, "asc" for oldest first
 
@@ -68,7 +72,19 @@ const ApplicantContent = ({ applicantData }: ApplicantContentProps) => {
         <div className="flex gap-6 flex-col lg:flex-row">
           {/* Filter by Job */}
           <div>
-            <Select onValueChange={setSelectedJob}>
+            <Select
+              defaultValue={searchParams.get("jobId") || "0"}
+              onValueChange={(e) => {
+                setSelectedJob(e);
+                const newSearchParams = new URLSearchParams(searchParams);
+                newSearchParams.set("jobId", e);
+                window.history.replaceState(
+                  null,
+                  "",
+                  `?${newSearchParams.toString()}`
+                );
+              }}
+            >
               <SelectTrigger className="w-[250px]">
                 <SelectValue placeholder="Show Candidate For" />
               </SelectTrigger>
