@@ -1,10 +1,12 @@
 "use server";
 
+import { sendJobApplicantNotification } from "@/actions/slack/sendJobApplicantNotification";
 import { signOut } from "@/auth";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { handleError } from "@/lib/utils";
 import { ApplyJobSchema, ApplyJobSchemaType } from "@/schema/ApplyJobSchema";
+import { after } from "next/server";
 
 export const createJobApplication = async (values: ApplyJobSchemaType) => {
   try {
@@ -23,6 +25,14 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
       prisma.job.findUnique({
         where: {
           id: jobId,
+        },
+        include: {
+          company: {
+            select: {
+              slackAccessToken: true,
+              slackChannelId: true,
+            },
+          },
         },
       }),
       await prisma.application.findUnique({
@@ -55,6 +65,20 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
         jobSeekerId,
         resumeId,
       },
+    });
+    after(async () => {
+      if (!job.sendEmailNotification) {
+        return;
+      }
+      if (!job.company.slackAccessToken || !job.company.slackChannelId) {
+        return;
+      }
+      await sendJobApplicantNotification({
+        applicantName: session.user.name || "Anonymous",
+        jobId: jobId,
+        jobTitle: job.title || "",
+        companyId: job.companyId,
+      });
     });
     return { success: true, message: "Job Applied  successfully" };
   } catch (error) {

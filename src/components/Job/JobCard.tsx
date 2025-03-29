@@ -144,7 +144,7 @@ const JobCard = ({ job, loading }: JobCardProps) => {
               </p>
               <p className="flex items-center gap-2 text-sm">
                 <UsersRound className="text-blue-600 size-5" />
-                <span>{formatNumber(200)} applicants</span>
+                <span>{formatNumber(job._count.applications)} applicants</span>
               </p>
               {job.deadline && (
                 <motion.p

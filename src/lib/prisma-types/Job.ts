@@ -94,6 +94,11 @@ export function getJobDataIncludeBrowse() {
     experienceLevel: true,
     latitude: true,
     longitude: true,
+    _count: {
+      select: {
+        applications: true,
+      },
+    },
   } satisfies Prisma.JobSelect;
 }
 

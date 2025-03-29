@@ -27,12 +27,15 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
+import { useActiveCompany } from "@/store/useActiveCompany";
+import Link from "next/link";
 const JobSettingForm = ({
   currentStep,
   jobData,
   setJobData,
 }: JobEditorFormProps) => {
   const { setTrigger } = useFormTriggersStore();
+  const { activeCompany } = useActiveCompany();
   const form = useForm<JobSettingsSchemaType>({
     defaultValues: {
       resumeRequired: jobData.resumeRequired || false,
@@ -151,6 +154,7 @@ const JobSettingForm = ({
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="getEmailNotification"
@@ -158,15 +162,34 @@ const JobSettingForm = ({
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
                   <Checkbox
+                    disabled={!activeCompany.slackChannelId}
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Get Email Notification</FormLabel>
+                  <FormLabel>Get Slack Notification </FormLabel>
                   <FormDescription>
-                    Get Notification In Email For Applicants Applying to this
-                    job (Admin Email Only)
+                    <p className="text-sm text-muted-foreground">
+                      {activeCompany.slackChannelId ? (
+                        <p>
+                          Get notified on slack when a new applicant applies for
+                          this job
+                        </p>
+                      ) : (
+                        <span className="text-sm text-red-500">
+                          Please connect your slack account to enable this
+                          feature. To connect your slack account, please{" "}
+                          <Link
+                            className="underline underline-offset-4 "
+                            href={"/employer/company/setting"}
+                          >
+                            Click Here
+                          </Link>
+                          .
+                        </span>
+                      )}
+                    </p>
                   </FormDescription>
                   <FormMessage />
                 </div>

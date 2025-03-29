@@ -75,10 +75,12 @@ const ApplicantGridView = ({ applicantData }: ApplicantGridViewProps) => {
             </CardHeader>
             <CardContent className="p-6 space-y-3">
               <ApplicationStatusBadge status={applicant.status} />
-              <div className="flex items-center text-sm text-muted-foreground">
-                <MapPin className="mr-1 h-4 w-4" />
-                {applicant.jobSeeker.JobSeekerProfile?.location}
-              </div>
+              {applicant.jobSeeker.JobSeekerProfile?.location && (
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <MapPin className="mr-1 h-4 w-4" />
+                  {applicant.jobSeeker.JobSeekerProfile?.location}
+                </div>
+              )}
               <div className="mb-4 flex items-center text-sm text-muted-foreground">
                 <Calendar className="mr-1 h-4 w-4" />
                 Applied {formatDate(applicant.createdAt)}

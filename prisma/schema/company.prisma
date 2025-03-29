@@ -18,6 +18,8 @@ model Company {
     updatedAt        DateTime             @updatedAt
     deletedAt        DateTime?
     jobPosted        Job[]
+    slackAccessToken String?
+    slackChannelId   String?
     subscriptions    CompanySubscription?
     stripeCustomerId String?
 
