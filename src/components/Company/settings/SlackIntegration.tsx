@@ -1,7 +1,7 @@
 "use client";
 import { SlackChannel } from "@/actions/slack/getSlackChannel";
 import { CompanyInclude } from "@/lib/prisma-types/Company";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import CompanySettingsHeader from "./CompanySettingsHeader";
@@ -48,6 +48,7 @@ const SlackIntegration = ({
   const [selectedChannel, setSelectedChannel] = useState<string>(
     activeCompany?.slackChannelId || ""
   );
+  const router = useRouter();
   const [testMessage, setTestMessage] = useState<string>(
     `Hello from ${activeCompany.name}! This is a test message.`
   );
@@ -88,7 +89,6 @@ const SlackIntegration = ({
     } catch (error) {
       setTestStatus("error");
       toast.error("Error sending test message");
-      console.log(error);
     }
   };
 
@@ -100,12 +100,12 @@ const SlackIntegration = ({
       if (res.success) {
         toast.success(res.message, { id: "save-channel" });
         setShowChannelModal(false);
-        window.location.href = window.location.pathname;
+        router.refresh();
       } else {
         toast.error(res.message, { id: "save-channel" });
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Error saving channel", { id: "save-channel" });
     }
   };
   const handleSlackDisconnect = async () => {
@@ -113,12 +113,12 @@ const SlackIntegration = ({
       const res = await disconnectSlack();
       if (res.success) {
         toast.success(res.message, { id: "disconnect-slack" });
-        window.location.href = window.location.pathname;
+        router.refresh();
       } else {
         toast.error(res.message, { id: "disconnect-slack" });
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Error disconnecting Slack", { id: "disconnect-slack" });
     }
   };
   const slackRedirectURI = `${process.env.NEXT_PUBLIC_BASE_URL}/api/callback/slack`;
@@ -129,7 +129,6 @@ const SlackIntegration = ({
       ? `https://redirectmeto.com/${slackRedirectURI}`
       : slackRedirectURI
   }`;
-  console.log(channels);
   const selectedChannelName =
     channels.find((c) => c.id === selectedChannel)?.name || "";
 
