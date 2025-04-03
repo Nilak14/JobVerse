@@ -61,6 +61,7 @@ model JOB_SEEKER {
     JobSeekerProfile JobSeekerProfile?
     uploadedResumes  UserUploadedResume[]
     applications     Application[]
+    MockInterview    MockInterview[]
 
     @@map("job_seekers")
 }

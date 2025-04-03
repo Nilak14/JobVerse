@@ -2,11 +2,14 @@
 
 import {
   BriefcaseBusiness,
+  Building2,
+  FileChartLine,
   FileUser,
   Heart,
   LayoutDashboard,
   ScanSearch,
   Settings,
+  UserCheck,
   UserCog,
   Video,
 } from "lucide-react";
@@ -33,6 +36,18 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
         title: "Applied Jobs",
         url: "/job-seeker/applied-jobs",
         icon: Heart,
+      },
+    ],
+  },
+  {
+    title: "Career Coach",
+    icon: UserCheck,
+    url: "/",
+    items: [
+      {
+        title: "Mock Interview",
+        url: "/job-seeker/career-coach/mock-interview",
+        icon: FileChartLine,
       },
     ],
   },
