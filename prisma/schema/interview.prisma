@@ -1,0 +1,16 @@
+model MockInterview {
+    id         String     @id @default(cuid())
+    userId     String
+    user       JOB_SEEKER @relation(fields: [userId], references: [id], onDelete: Cascade)
+    role       String?
+    type       String?
+    level      String?
+    techStack  String[]
+    questions  String[]
+    finalized  Boolean?   @default(false)
+    coverImage String?
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime   @updatedAt
+
+    @@map("mock_interviews")
+}

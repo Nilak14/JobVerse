@@ -69,3 +69,15 @@ export interface WidgetConfig {
   showBranding: boolean;
   containerId: string;
 }
+
+export enum CallStatus {
+  INACTIVE = "INACTIVE",
+  CONNECTING = "CONNECTING",
+  ACTIVE = "ACTIVE",
+  ENDED = "ENDED",
+}
+
+export interface SavedMessage {
+  role: "user" | "system" | "assistant";
+  content: string;
+}

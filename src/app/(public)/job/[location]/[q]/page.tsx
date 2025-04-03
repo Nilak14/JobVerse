@@ -18,24 +18,27 @@ interface PageProps {
 export const revalidate = 86400; // revalidate after 24 hours
 
 export async function generateStaticParams() {
-  const jobTags = await prisma.job.findMany({
-    where: {
-      status: "ACTIVE",
-    },
-    select: {
-      tags: true,
-      skills: true,
-    },
-  });
-  const allTags = jobTags.map((job) => {
-    return job.tags.concat(job.skills, JobSearchTags);
-  });
-  const uniqueTags = [...new Set(allTags.flat())];
-  const locationsData = locations;
-  return uniqueTags.flatMap((tag) =>
-    locationsData.map((location) => ({ location, q: tag }))
-  );
+  return [];
 }
+// export async function generateStaticParams() {
+//   const jobTags = await prisma.job.findMany({
+//     where: {
+//       status: "ACTIVE",
+//     },
+//     select: {
+//       tags: true,
+//       skills: true,
+//     },
+//   });
+//   const allTags = jobTags.map((job) => {
+//     return job.tags.concat(job.skills, JobSearchTags);
+//   });
+//   const uniqueTags = [...new Set(allTags.flat())];
+//   const locationsData = locations;
+//   return uniqueTags.flatMap((tag) =>
+//     locationsData.map((location) => ({ location, q: tag }))
+//   );
+// }
 
 export async function generateMetadata({
   params,

@@ -16,8 +16,11 @@ interface PageProps {
 export const revalidate = 86400; // revalidate after 24 hours
 
 export async function generateStaticParams() {
-  return locations.map((location) => ({ location })).flat();
+  return [];
 }
+// export async function generateStaticParams() {
+//   return locations.map((location) => ({ location })).flat();
+// }
 
 export async function generateMetadata({
   params,
