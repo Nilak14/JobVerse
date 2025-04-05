@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import {
   getMockInterviewData,
+  getMockInterviewDataWithFeedback,
   MockInterviewData,
 } from "@/lib/prisma-types/MockInterview";
 import { cache } from "react";
@@ -29,3 +30,22 @@ export const getSingleMockInterview = cache(async (id: string) => {
   });
   return mockInterview;
 });
+
+export const getUserMockInterviewWithFeedback = cache(
+  async (userId: string) => {
+    const mockInterview = await prisma.mockInterview.findMany({
+      where: {
+        userId,
+        isDeleted: false,
+        deletedAt: null,
+        MockInterviewFeedback: {
+          some: {
+            userId,
+          },
+        },
+      },
+      select: getMockInterviewDataWithFeedback(),
+    });
+    return mockInterview;
+  }
+);

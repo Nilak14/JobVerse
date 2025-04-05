@@ -46,3 +46,18 @@ export function getMockInterviewFeedbackData() {
 export type MockInterviewFeedbackData = Prisma.MockInterviewFeedbackGetPayload<{
   select: ReturnType<typeof getMockInterviewFeedbackData>;
 }>;
+
+export function getMockInterviewDataWithFeedback() {
+  return {
+    role: true,
+    MockInterviewFeedback: {
+      select: {
+        totalScore: true,
+      },
+    },
+  } satisfies Prisma.MockInterviewSelect;
+}
+
+export type MockInterviewDataWithFeedback = Prisma.MockInterviewGetPayload<{
+  select: ReturnType<typeof getMockInterviewDataWithFeedback>;
+}>;

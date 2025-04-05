@@ -114,7 +114,7 @@ export async function InterviewCard({
               {hasFeedback ? (
                 <div className="space-y-3">
                   <h4 className="text-sm font-medium text-foreground">
-                    Feedback
+                    Feedback <span>({feedback.totalScore}%)</span>
                   </h4>
                   <p className="text-sm text-muted-foreground line-clamp-2">
                     {feedback.finalAssessment}

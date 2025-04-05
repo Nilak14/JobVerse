@@ -1,6 +1,9 @@
 import BoxReveal from "@/components/ui/box-reveal";
 import { Button } from "@/components/ui/button";
-import { getUserMockInterview } from "@/data-access/mock-interview/getUserMockInterview";
+import {
+  getUserMockInterview,
+  getUserMockInterviewWithFeedback,
+} from "@/data-access/mock-interview/getUserMockInterview";
 import { auth } from "@/lib/auth";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -8,7 +11,11 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Users, Plus, Sparkles } from "lucide-react";
 import { InterviewCard } from "@/components/interview/interview-card";
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { NumberTicker } from "@/components/ui/number-ticker";
+import { refactorInterviewDateForChart } from "@/lib/utils";
+import { Inter } from "next/font/google";
+import InterviewTrendChart from "@/components/charts/InterviewTrendChart";
 export const metadata: Metadata = {
   title: "Mock Interview",
   description: "Practice and prepare for your next job interview",
@@ -41,6 +48,12 @@ const MockInterviewPage = async () => {
             </Link>
           </Button>
         </div>
+        <Suspense>
+          <MockInterviewStats userId={session.jobSeekerId} />
+        </Suspense>
+        <Suspense>
+          <MockInterviewChart userId={session.jobSeekerId} />
+        </Suspense>
         <Suspense
           fallback={
             <div className="grid gap-4 place-items-center py-16">
@@ -85,16 +98,6 @@ const MockInterviewPageDataLoader = async ({ userId }: { userId: string }) => {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-xl font-semibold tracking-tight">
-            You have {mockInterviews.length}{" "}
-            {mockInterviews.length === 1 ? "interview" : "interviews"} ready for
-            practice
-          </h2>
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {mockInterviews.map((interview) => (
           <InterviewCard
@@ -106,4 +109,68 @@ const MockInterviewPageDataLoader = async ({ userId }: { userId: string }) => {
       </div>
     </div>
   );
+};
+
+const MockInterviewStats = async ({ userId }: { userId: string }) => {
+  const mockInterviews = await getUserMockInterviewWithFeedback(userId);
+  const totalInterviews = mockInterviews.length;
+  let totalScore = 0;
+  let feedbackCount = 0;
+  console.log(mockInterviews);
+  for (const interview of mockInterviews) {
+    for (const feedback of interview.MockInterviewFeedback) {
+      totalScore += feedback.totalScore || 0;
+      feedbackCount++;
+    }
+  }
+  const averageScore = feedbackCount > 0 ? totalScore / feedbackCount : 0;
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-4 gap-4 mb-8">
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg">Total Interview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">
+            {totalInterviews ? (
+              <NumberTicker
+                value={totalInterviews}
+                className="whitespace-pre-wrap   tracking-tighter text-black dark:text-white"
+              />
+            ) : (
+              0
+            )}
+          </div>
+          <p className="text-muted-foreground text-sm">Interview Taken</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg">Average Score</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">
+            {averageScore ? (
+              <NumberTicker
+                value={averageScore}
+                className="whitespace-pre-wrap   tracking-tighter text-black dark:text-white"
+              />
+            ) : (
+              0
+            )}
+            %
+          </div>
+          <p className="text-muted-foreground text-sm">
+            Across all interview taken
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const MockInterviewChart = async ({ userId }: { userId: string }) => {
+  const mockInterviews = await getUserMockInterviewWithFeedback(userId);
+  const data = refactorInterviewDateForChart(mockInterviews);
+  return <InterviewTrendChart data={data} />;
 };

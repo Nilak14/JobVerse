@@ -19,12 +19,19 @@ import {
 import LoadingButton from "../ui/loading-button";
 import { deleteMockInterview } from "@/actions/mock-interview/delete-interview";
 import { toast } from "sonner";
+import { useJobSeekerSubscriptionLevel } from "@/context/JobSeekerSubscriptionLevelProvider";
+import { useRouter } from "next/navigation";
 interface DeleteInterviewModalProps {
   interviewId: string;
 }
 const DeleteInterviewModal = ({ interviewId }: DeleteInterviewModalProps) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const subscriptionLevel = useJobSeekerSubscriptionLevel();
+  const router = useRouter();
+  if (subscriptionLevel === "FREE" || subscriptionLevel === "PRO") {
+    router.push("/job-seeker/billing");
+  }
 
   const onDelete = async () => {
     try {

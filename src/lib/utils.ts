@@ -19,6 +19,7 @@ import {
   JobSeekerProfileApplication,
 } from "./prisma-types/JobSeekerProfile";
 import { mappings } from "./data";
+import { MockInterviewDataWithFeedback } from "./prisma-types/MockInterview";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -318,4 +319,22 @@ export const getTechLogos = async (techArray: string[]) => {
   );
 
   return results;
+};
+
+export const refactorInterviewDateForChart = (
+  mockInterviews: MockInterviewDataWithFeedback[]
+) => {
+  const refactoredData = mockInterviews.map((interview) => {
+    const total = interview.MockInterviewFeedback.reduce(
+      (sum, feedback) => sum + (feedback.totalScore ?? 0),
+      0
+    );
+    const averageScore = total / interview.MockInterviewFeedback.length;
+
+    return {
+      name: interview.role,
+      score: averageScore,
+    };
+  });
+  return refactoredData;
 };

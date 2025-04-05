@@ -48,6 +48,7 @@ const EmployerSidebar = ({
       </SidebarHeader>
       <SidebarContent>
         <SidebarMainNav
+          type="employer"
           subscriptionLevel={companySubscription}
           items={sidebarLinks}
         />

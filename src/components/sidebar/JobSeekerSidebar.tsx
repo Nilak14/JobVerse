@@ -14,21 +14,26 @@ import { SidebarMainNav } from "./SidebarMainNav";
 import { SidebarUser } from "./SidebarUser";
 import { ExtendedUser } from "@/next-auth";
 import { JobSeekerSideBarLinks } from "@/lib/routes/JobSeekerRoute";
+import { useJobSeekerSubscriptionLevel } from "@/context/JobSeekerSubscriptionLevelProvider";
 
 export default function JobSeekerSidebar({ user }: { user: ExtendedUser }) {
   const sidebarLinks = JobSeekerSideBarLinks;
-
+  const subscriptionLevel = useJobSeekerSubscriptionLevel();
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarTop
           userName={user?.name as string}
           isLoading={!user}
-          userSubType="Pro"
+          userSubType={subscriptionLevel}
         />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMainNav items={sidebarLinks} />
+        <SidebarMainNav
+          type="job-seeker"
+          subscriptionLevel={subscriptionLevel}
+          items={sidebarLinks}
+        />
       </SidebarContent>
       <SidebarFooter>
         <SidebarUser user={user} isLoading={!user} />

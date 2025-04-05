@@ -32,8 +32,9 @@ export const JobSeekerPlans = [
     features: {
       applyJob: { value: "Unlimited", available: true },
       createResume: { value: "1 resumes", available: true },
-      customizeResume: { value: "Not Available", available: false },
       createResumeAI: { value: "Not Available", available: false },
+      customizeResume: { value: "Not Available", available: false },
+      mockVoiceInterview: { value: "Not Available", available: false },
     },
     popular: false,
     buttonText: "Current Plan",
@@ -45,8 +46,9 @@ export const JobSeekerPlans = [
     features: {
       applyJob: { value: "Unlimited", available: true },
       createResume: { value: "5 resumes", available: true },
-      customizeResume: { value: "Not Available", available: false },
       createResumeAI: { value: "Available", available: true },
+      customizeResume: { value: "Not Available", available: false },
+      mockVoiceInterview: { value: "Not Available", available: false },
     },
     popular: true,
     buttonText: "Upgrade to Pro",
@@ -58,8 +60,9 @@ export const JobSeekerPlans = [
     features: {
       applyJob: { value: "Unlimited", available: true },
       createResume: { value: "Unlimited", available: true },
-      customizeResume: { value: "Available", available: true },
       createResumeAI: { value: "Available", available: true },
+      customizeResume: { value: "Available", available: true },
+      mockVoiceInterview: { value: "Available", available: true },
     },
     popular: false,
     buttonText: "Upgrade to Elite",
@@ -133,6 +136,11 @@ export const JobSeekerProFeatures = [
     value: "Not Available",
     avaliable: false,
   },
+  {
+    name: "Take Mock Voice Interview",
+    value: "Not Available",
+    avaliable: false,
+  },
 ];
 export const CompanyProFeatures = [
   {
@@ -181,6 +189,11 @@ export const JobSeekerEliteFeatures = [
   },
   {
     name: "Customize Resume",
+    value: "Available",
+    avaliable: true,
+  },
+  {
+    name: "Take Mock Voice Interview",
     value: "Available",
     avaliable: true,
   },

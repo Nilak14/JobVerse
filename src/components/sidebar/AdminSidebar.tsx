@@ -17,14 +17,14 @@ const AdminSidebar = ({ user }: { user: ExtendedUser }) => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarTop
-          userName={user.name as string}
-          isLoading={!user}
-          userSubType="Pro"
-        />
+        <SidebarTop userName={user.name as string} isLoading={!user} />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMainNav items={sidebarLinks} />
+        <SidebarMainNav
+          subscriptionLevel="ELITE"
+          type="admin"
+          items={sidebarLinks}
+        />
       </SidebarContent>
       <SidebarFooter>
         <SidebarUser user={user} isLoading={!user} />

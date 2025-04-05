@@ -14,11 +14,13 @@ export interface SidebarNavLinks {
   url: string;
   icon?: LucideIcon;
   isPremium?: boolean;
+  subscriptionLevel?: "FREE" | "PRO" | "ELITE";
   items?: {
     title: string;
     url: string;
     icon?: LucideIcon;
     isPremium?: boolean;
+    subscriptionLevel?: "FREE" | "PRO" | "ELITE";
   }[];
 }
 
