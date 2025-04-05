@@ -9,8 +9,9 @@ import { useRouter } from "next/navigation";
 interface BackButtonProps {
   className?: string;
   href?: string;
+  text?: string;
 }
-const BackButton = ({ className, href }: BackButtonProps) => {
+const BackButton = ({ className, href, text = "Back" }: BackButtonProps) => {
   const router = useRouter();
   return (
     <Button
@@ -26,12 +27,12 @@ const BackButton = ({ className, href }: BackButtonProps) => {
       {href ? (
         <Link href={href}>
           <ChevronLeft className="group-hover:-translate-x-1 transition-transform  duration-200 ease-in-out" />
-          Back
+          {text}
         </Link>
       ) : (
         <div>
           <ChevronLeft className="group-hover:-translate-x-1 transition-transform  duration-200 ease-in-out" />
-          Back
+          {text}
         </div>
       )}
     </Button>
