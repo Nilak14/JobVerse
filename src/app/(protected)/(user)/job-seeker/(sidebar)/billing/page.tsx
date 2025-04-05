@@ -131,6 +131,25 @@ const BillingPageData = async () => {
                       </td>
                     ))}
                   </tr>
+
+                  <tr>
+                    <td className="py-3 px-4 font-medium">
+                      Create Resume with AI
+                    </td>
+                    {JobSeekerPlans.map((plan) => (
+                      <td key={`${plan.name}-ai`} className="py-3 px-4">
+                        {plan.features.createResumeAI.available ? (
+                          <span className="text-primary font-medium">
+                            ✓ {plan.features.createResumeAI.value}
+                          </span>
+                        ) : (
+                          <span className="text-muted-foreground">
+                            ✗ {plan.features.createResumeAI.value}
+                          </span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
                   <tr className="border-b">
                     <td className="py-3 px-4 font-medium">Customize Resume</td>
                     {JobSeekerPlans.map((plan) => (
@@ -148,19 +167,19 @@ const BillingPageData = async () => {
                       </td>
                     ))}
                   </tr>
-                  <tr>
+                  <tr className="border-b">
                     <td className="py-3 px-4 font-medium">
-                      Create Resume with AI
+                      Take Mock Voice Interview
                     </td>
                     {JobSeekerPlans.map((plan) => (
-                      <td key={`${plan.name}-ai`} className="py-3 px-4">
-                        {plan.features.createResumeAI.available ? (
+                      <td key={`${plan.name}`} className="py-3 px-4">
+                        {plan.features.mockVoiceInterview.available ? (
                           <span className="text-primary font-medium">
-                            ✓ {plan.features.createResumeAI.value}
+                            ✓ {plan.features.mockVoiceInterview.value}
                           </span>
                         ) : (
                           <span className="text-muted-foreground">
-                            ✗ {plan.features.createResumeAI.value}
+                            ✗ {plan.features.mockVoiceInterview.value}
                           </span>
                         )}
                       </td>
@@ -189,12 +208,6 @@ const BillingPageData = async () => {
                       <span className="font-medium">Create Resume</span>
                       <span>{plan.features.createResume.value}</span>
                     </div>
-
-                    <div className="flex justify-between">
-                      <span className="font-medium">Customize Resume</span>
-                      <span>{plan.features.customizeResume.value}</span>
-                    </div>
-
                     <div className="flex justify-between">
                       <span className="font-medium">Create Resume with AI</span>
                       {plan.features.createResumeAI.available ? (
@@ -204,6 +217,32 @@ const BillingPageData = async () => {
                       ) : (
                         <span className="text-muted-foreground">
                           ✗ {plan.features.createResumeAI.value}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Customize Resume</span>
+                      {plan.features.customizeResume.available ? (
+                        <span className="text-primary font-medium">
+                          ✓ {plan.features.customizeResume.value}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">
+                          ✗ {plan.features.customizeResume.value}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">
+                        Take Voice Mock Interview
+                      </span>
+                      {plan.features.mockVoiceInterview.available ? (
+                        <span className="text-primary font-medium">
+                          ✓ {plan.features.mockVoiceInterview.value}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">
+                          ✗ {plan.features.mockVoiceInterview.value}
                         </span>
                       )}
                     </div>

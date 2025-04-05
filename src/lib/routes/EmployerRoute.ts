@@ -64,6 +64,7 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
         url: "/employer/embed-job",
         icon: FolderOutput,
         isPremium: true,
+        subscriptionLevel: "PRO",
       },
     ],
   },

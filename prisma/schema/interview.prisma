@@ -1,16 +1,47 @@
 model MockInterview {
-    id         String     @id @default(cuid())
-    userId     String
-    user       JOB_SEEKER @relation(fields: [userId], references: [id], onDelete: Cascade)
-    role       String?
-    type       String?
-    level      String?
-    techStack  String[]
-    questions  String[]
-    finalized  Boolean?   @default(false)
-    coverImage String?
-    createdAt  DateTime   @default(now())
-    updatedAt  DateTime   @updatedAt
+    id                    String                  @id @default(cuid())
+    userId                String
+    user                  JOB_SEEKER              @relation(fields: [userId], references: [id], onDelete: Cascade)
+    role                  String?
+    type                  String?
+    level                 String?
+    techStack             String[]
+    questions             String[]
+    finalized             Boolean?                @default(false)
+    coverImage            String?
+    createdAt             DateTime                @default(now())
+    updatedAt             DateTime                @updatedAt
+    isDeleted             Boolean                 @default(false)
+    deletedAt             DateTime?
+    MockInterviewFeedback MockInterviewFeedback[]
 
     @@map("mock_interviews")
+}
+
+model MockInterviewFeedback {
+    id                 String          @id @default(cuid())
+    mockInterviewId    String
+    mockInterview      MockInterview   @relation(fields: [mockInterviewId], references: [id], onDelete: Cascade)
+    userId             String
+    user               JOB_SEEKER      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    totalScore         Float?
+    strengths          String[]
+    areaForImprovement String[]
+    finalAssessment    String?
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @updatedAt
+    CategoryScore      CategoryScore[]
+
+    @@map("mock_interview_feedbacks")
+}
+
+model CategoryScore {
+    id         String                @id @default(cuid())
+    feedbackId String
+    feedback   MockInterviewFeedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+    name       String?
+    score      Float
+    comment    String?
+
+    @@map("category_scores")
 }

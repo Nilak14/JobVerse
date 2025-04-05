@@ -48,6 +48,8 @@ export const JobSeekerSideBarLinks: SidebarNavLinks[] = [
         title: "Mock Interview",
         url: "/job-seeker/career-coach/mock-interview",
         icon: FileChartLine,
+        isPremium: true,
+        subscriptionLevel: "ELITE",
       },
     ],
   },

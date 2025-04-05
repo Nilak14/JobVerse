@@ -21,23 +21,42 @@ import { cn } from "@/lib/utils";
 import { SidebarNavLinks } from "@/lib/types";
 import Link from "next/link";
 import useCompanyPremiumModal from "@/store/useCompanyPremiumModal";
+import usePremiumModal from "@/store/usePremiumModal";
 
 export function SidebarMainNav({
   items,
   subscriptionLevel,
+  type,
 }: {
   items: SidebarNavLinks[];
-  subscriptionLevel?: "FREE" | "PRO" | "ELITE";
+  subscriptionLevel: "FREE" | "PRO" | "ELITE";
+  type: "job-seeker" | "employer" | "admin";
 }) {
+  const levelRank = { FREE: 0, PRO: 1, ELITE: 2 };
   const pathname = usePathname();
   const { setOpenCompanyPremiumModal } = useCompanyPremiumModal();
+  const { setOpenPremiumModal } = usePremiumModal();
   return (
     <SidebarGroup>
       <SidebarMenu>
         {items.map((item) => {
           const isActive = pathname === item.url;
           // Determine if the main item should be disabled
-          const isDisabled = subscriptionLevel === "FREE" && item.isPremium;
+
+          let isDisabled = false;
+
+          if (item.isPremium && subscriptionLevel === "FREE") {
+            isDisabled = true;
+          }
+
+          if (
+            item.subscriptionLevel &&
+            levelRank[subscriptionLevel] < levelRank[item.subscriptionLevel]
+          ) {
+            isDisabled = true;
+          }
+
+          // const isDisabled = subscriptionLevel === "FREE" && item.isPremium;
           return (
             <Collapsible
               defaultOpen={true}
@@ -75,16 +94,31 @@ export function SidebarMainNav({
                     <SidebarMenuSub>
                       {item.items.map((subItem) => {
                         const isSubItemActive = pathname === subItem.url;
-                        const isSubItemDisabled =
-                          subscriptionLevel === "FREE" && subItem.isPremium;
+                        let isSubItemDisabled = false;
+
+                        if (subItem.isPremium && subscriptionLevel === "FREE") {
+                          isSubItemDisabled = true;
+                        }
+
+                        if (
+                          subItem.subscriptionLevel &&
+                          levelRank[subscriptionLevel] <
+                            levelRank[subItem.subscriptionLevel]
+                        ) {
+                          isSubItemDisabled = true;
+                        }
                         return (
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton asChild>
                               {isSubItemDisabled ? (
                                 <button
-                                  onClick={() =>
-                                    setOpenCompanyPremiumModal(true)
-                                  }
+                                  onClick={() => {
+                                    if (type === "job-seeker") {
+                                      setOpenPremiumModal(true);
+                                    } else if (type === "employer") {
+                                      setOpenCompanyPremiumModal(true);
+                                    }
+                                  }}
                                   className={cn(
                                     "block w-full px-3 py-2 rounded-md text-muted-foreground cursor-pointer",
                                     isSubItemActive && "bg-primary text-white"

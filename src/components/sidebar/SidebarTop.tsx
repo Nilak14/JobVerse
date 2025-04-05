@@ -12,11 +12,11 @@ import { Skeleton } from "../ui/skeleton";
 
 export function SidebarTop({
   userName,
-  userSubType = "Pro",
+  userSubType,
   isLoading,
 }: {
   userName: string;
-  userSubType: string;
+  userSubType?: "FREE" | "PRO" | "ELITE";
   isLoading: boolean;
 }) {
   return (
@@ -35,7 +35,7 @@ export function SidebarTop({
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold relative">
               JobVerse{" "}
-              {!isLoading && userSubType !== "free" && (
+              {!isLoading && userSubType && userSubType !== "FREE" && (
                 <span className=" text-amber-400 text-xs absolute ml-1 bottom-[5.1px] z-[99999] ">{`${userSubType}`}</span>
               )}
             </span>

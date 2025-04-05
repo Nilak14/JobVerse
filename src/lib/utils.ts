@@ -18,6 +18,8 @@ import {
   JobSeekerProfile,
   JobSeekerProfileApplication,
 } from "./prisma-types/JobSeekerProfile";
+import { mappings } from "./data";
+import { MockInterviewDataWithFeedback } from "./prisma-types/MockInterview";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -284,3 +286,55 @@ export function parseLatLng(value: string | null) {
   const num = Number(value);
   return isNaN(num) ? null : num;
 }
+
+const TECH_ICON_BASE_URL = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons";
+
+const normalizeTechName = (tech: string) => {
+  const key = tech.toLowerCase().replace(/\.js$/, "").replace(/\s+/g, "");
+  return mappings[key as keyof typeof mappings];
+};
+const checkIconExists = async (url: string) => {
+  try {
+    const response = await fetch(url, { method: "HEAD" });
+    return response.ok; // Returns true if the icon exists
+  } catch {
+    return false;
+  }
+};
+
+export const getTechLogos = async (techArray: string[]) => {
+  const logoURLs = techArray.map((tech) => {
+    const normalized = normalizeTechName(tech);
+    return {
+      tech,
+      url: `${TECH_ICON_BASE_URL}/${normalized}/${normalized}-original.svg`,
+    };
+  });
+
+  const results = await Promise.all(
+    logoURLs.map(async ({ tech, url }) => ({
+      tech,
+      url: (await checkIconExists(url)) ? url : "null",
+    }))
+  );
+
+  return results;
+};
+
+export const refactorInterviewDateForChart = (
+  mockInterviews: MockInterviewDataWithFeedback[]
+) => {
+  const refactoredData = mockInterviews.map((interview) => {
+    const total = interview.MockInterviewFeedback.reduce(
+      (sum, feedback) => sum + (feedback.totalScore ?? 0),
+      0
+    );
+    const averageScore = total / interview.MockInterviewFeedback.length;
+
+    return {
+      name: interview.role,
+      score: averageScore,
+    };
+  });
+  return refactoredData;
+};
