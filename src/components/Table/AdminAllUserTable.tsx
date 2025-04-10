@@ -1,16 +1,19 @@
 "use client";
 import {
   ColumnDef,
-  flexRender,
-  SortingState,
+  ColumnFilter,
   ColumnFiltersState,
+  flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
-  getFilteredRowModel,
   PaginationState,
+  SortingState,
+  useReactTable,
 } from "@tanstack/react-table";
+import { useState } from "react";
+
 import {
   Table,
   TableBody,
@@ -19,23 +22,20 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-
-import { useState } from "react";
 import { TablePagination } from "../Global/PaginationTable";
-import DataTableToolbar from "./TableComponents/data-table-toolbar";
-import JobTableCard from "../TableCard/JobTableCard";
-import { JobServerData } from "@/lib/prisma-types/Job";
+import AdminUserTableFilter from "./TableComponents/AllUserTableFilters";
 interface JVTableClientProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   showPagination?: boolean;
   showSerialNumber?: boolean;
 }
-const AdminAllJobTable = <TData, TValue>({
+
+const AdminAllUserTable = <TData, TValue>({
   columns,
   data,
-  showPagination = true,
-  showSerialNumber = true,
+  showPagination,
+  showSerialNumber,
 }: JVTableClientProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -64,13 +64,11 @@ const AdminAllJobTable = <TData, TValue>({
       pagination,
     },
   });
-
   const filteredData = table.getRowModel().rows.map((row) => row.original);
-
   return (
     <div>
       <div className="flex items-center py-4">
-        <DataTableToolbar table={table} />
+        <AdminUserTableFilter table={table} />
       </div>
       <div className="hidden lg:block">
         <div className="rounded-md  border overflow-hidden">
@@ -142,15 +140,15 @@ const AdminAllJobTable = <TData, TValue>({
         )}
       </div>
 
-      <div className="lg:hidden grid grid-cols-1 gap-4  lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
+      {/* <div className="lg:hidden grid grid-cols-1 gap-4  lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
         {filteredData.map((data) => {
           const jobData = data as JobServerData;
           return (
             <JobTableCard viewUser="ADMIN" key={jobData.id} jobData={jobData} />
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 };
-export default AdminAllJobTable;
+export default AdminAllUserTable;

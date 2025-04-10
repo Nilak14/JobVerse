@@ -47,10 +47,13 @@ export default {
       return token;
     },
     async signIn({ user, account }) {
+      const existingUser = await getUserById(user.id!);
+      if (existingUser?.isBlocked) {
+        throw new Error("Your account is blocked, Please contact support");
+      }
       if (account?.provider !== "credentials") {
         return true;
       }
-      const existingUser = await getUserById(user.id!);
       if (!existingUser?.emailVerified) {
         throw new Error("Your Email is not verified, Please Verify Your Email");
       }
@@ -59,7 +62,6 @@ export default {
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
           existingUser.id
         );
-        console.log({ twoFactorConfirmation });
 
         if (!twoFactorConfirmation) {
           throw new Error(

@@ -1,6 +1,11 @@
 // Sidebar NavLinks for Admin
 
-import { BriefcaseBusiness, LayoutDashboard, List } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  Building,
+  LayoutDashboard,
+  Users,
+} from "lucide-react";
 import { SidebarNavLinks } from "../types";
 
 export const AdminSideBarLinks: SidebarNavLinks[] = [
@@ -10,15 +15,18 @@ export const AdminSideBarLinks: SidebarNavLinks[] = [
     url: "/admin/dashboard",
   },
   {
-    title: "Job Studio",
+    title: "All Users",
+    icon: Users,
+    url: "/admin/all-users",
+  },
+  {
+    title: "All Jobs",
     icon: BriefcaseBusiness,
-    url: "",
-    items: [
-      {
-        title: "All Jobs",
-        url: "/admin/all-jobs",
-        icon: List,
-      },
-    ],
+    url: "/admin/all-jobs",
+  },
+  {
+    title: "All Company",
+    icon: Building,
+    url: "/admin/all-company",
   },
 ];

@@ -1,30 +1,43 @@
 import { Input } from "@/components/ui/input";
 import { Table } from "@tanstack/react-table";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { JobStatus } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { object } from "zod";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
 
-const option = Object.values(JobStatus)
-  .filter((status) => {
-    if (status !== "DELETED") {
-      return true;
-    }
-  })
-  .map((value) => {
-    return {
-      label: value,
-      value: value,
-    };
-  });
-console.log(option);
+const option = [
+  {
+    label: "Job Seeker",
+    value: "JOB_SEEKER",
+  },
+  {
+    label: "Employer",
+    value: "EMPLOYER",
+  },
+  {
+    label: "Admin",
+    value: "ADMIN",
+  },
+];
+const premiumOption = [
+  {
+    label: "Elite",
+    value: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_ELITE_MONTHLY!,
+  },
+  {
+    label: "Pro",
+    value: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY!,
+  },
+  {
+    label: "Non Premium",
+    value: "FREE",
+  },
+];
 
-export function DataTableToolbar<TData>({
+export function AdminCompanyTableFilter<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -32,18 +45,19 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Search By Job Title..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          placeholder="Search By Name..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(e) =>
-            table.getColumn("title")?.setFilterValue(e.target.value)
+            table.getColumn("name")?.setFilterValue(e.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn("status") && (
+
+        {table.getColumn("isPremium") && (
           <DataTableFacetedFilter
-            column={table.getColumn("status")}
-            title="Status"
-            options={option}
+            column={table.getColumn("isPremium")}
+            title="Premium"
+            options={premiumOption}
           />
         )}
         {isFiltered && (
@@ -60,4 +74,4 @@ export function DataTableToolbar<TData>({
     </div>
   );
 }
-export default DataTableToolbar;
+export default AdminCompanyTableFilter;
