@@ -81,6 +81,7 @@ export const PreferencesSettingsSchema = z.object({
     .number()
     .min(1, "Radius must be at least 1")
     .max(200, { message: "Radius must be at most 200" }),
+  showNearByJob: z.boolean(),
 });
 export type PreferencesSettingsSchemaSchemaType = z.infer<
   typeof PreferencesSettingsSchema

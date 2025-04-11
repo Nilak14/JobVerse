@@ -20,6 +20,7 @@ import {
 } from "./prisma-types/JobSeekerProfile";
 import { mappings } from "./data";
 import { MockInterviewDataWithFeedback } from "./prisma-types/MockInterview";
+import { DateRangeValue } from "@/components/Global/DateFilters";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -337,4 +338,10 @@ export const refactorInterviewDateForChart = (
     };
   });
   return refactoredData;
+};
+
+export const formatDateRange = (currentValue: DateRangeValue) => {
+  const { from, to } = currentValue.range;
+  if (!from || !to) return "";
+  return `${format(from, "MMM d, yyyy")} - ${format(to, "MMM d, yyyy")}`;
 };
