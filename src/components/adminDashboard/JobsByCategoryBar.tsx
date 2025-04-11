@@ -1,112 +1,117 @@
 "use client";
-import { AlertCircle } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { AlertCircle, TrendingUp } from "lucide-react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  Rectangle,
+  XAxis,
+} from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { YearPicker } from "../ui/year-picker";
 import { useState } from "react";
-import { useQueryUserRegistrationTrend } from "@/hooks/query-hooks/getChartData";
+import { YearPicker } from "../ui/year-picker";
+import { useQueryJobsByCategory } from "@/hooks/query-hooks/getChartData";
 
 const chartConfig = {
-  job_seeker: {
-    label: "Job Seeker",
+  visitors: {
+    label: "Visitors",
+  },
+  "Writing & Translation": {
+    label: "Writing & Translation",
     color: "hsl(var(--chart-1))",
   },
-  employer: {
-    label: "Employer",
+  "Human Resources": {
+    label: "Human Resources",
+    color: "hsl(var(--chart-2))",
+  },
+  "Human Manufacturing & Logistics": {
+    label: "Manufacturing & Logistics",
+    color: "hsl(var(--chart-2))",
+  },
+  "Marketing & Sales": {
+    label: "Marketing & Sales",
+    color: "hsl(var(--chart-2))",
+  },
+  "Healthcare & Medical": {
+    label: "Healthcare & Medical",
+    color: "hsl(var(--chart-2))",
+  },
+  "Education & Training": {
+    label: "Education & Training",
+    color: "hsl(var(--chart-2))",
+  },
+  "Finance & Accounting": {
+    label: "Finance & Accounting",
+    color: "hsl(var(--chart-2))",
+  },
+  "Software & IT": {
+    label: "Software & IT",
+    color: "hsl(var(--chart-2))",
+  },
+  "Customer Support": {
+    label: "Customer Support",
+    color: "hsl(var(--chart-2))",
+  },
+  "Design & Creative": {
+    label: "Design & Creative",
+    color: "hsl(var(--chart-2))",
+  },
+  "Legal & Compliance": {
+    label: "Legal & Compliance",
+    color: "hsl(var(--chart-2))",
+  },
+  Engineering: {
+    label: "Engineering",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
-// Placeholder data for the loading state to maintain chart dimensions
-const placeholderData = Array(12)
-  .fill(1)
-  .map((_, i) => ({
-    month: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ][i],
-    job_seeker: 0,
-    employer: 0,
-  }));
-
-const UserRegistrationTrends = () => {
+const JobsByCategoryBar = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
-  const { data, isLoading, error } = useQueryUserRegistrationTrend(
+  const { data, isLoading, error } = useQueryJobsByCategory(
     selectedYear.toString()
   );
 
-  const chartData = data?.data || placeholderData;
+  const chartData = data?.data;
 
   const renderChart = () => {
     return (
       <ChartContainer config={chartConfig}>
-        <AreaChart
-          accessibilityLayer
-          data={chartData}
-          margin={{
-            left: 12,
-            right: 12,
-          }}
-        >
+        <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis
-            dataKey="month"
+            dataKey="category"
             tickLine={false}
+            tickMargin={10}
             axisLine={false}
-            tickMargin={8}
-            tickFormatter={(value) => value.slice(0, 3)}
+            tickFormatter={(value) =>
+              chartConfig[value as keyof typeof chartConfig]?.label
+            }
           />
-          <YAxis tickCount={3} />
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent indicator="dot" />}
-          />
-          <Area
-            dataKey="job_seeker"
-            type="monotone"
-            fill="hsl(var(--chart-1))"
-            fillOpacity={isLoading ? 0.1 : 0.4}
-            stroke="hsl(var(--chart-1))"
-            strokeOpacity={isLoading ? 0.3 : 1}
-            stackId="a"
-          />
-          <Area
-            dataKey="employer"
-            type="monotone"
+          <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+          <Bar
+            dataKey="total"
             fill="hsl(var(--chart-3))"
-            fillOpacity={isLoading ? 0.1 : 0.4}
-            stroke="hsl(var(--chart-3))"
-            strokeOpacity={isLoading ? 0.3 : 1}
-            stackId="a"
-          />
-          {!isLoading && <ChartLegend content={<ChartLegendContent />} />}
-        </AreaChart>
+            strokeWidth={2}
+            radius={8}
+          ></Bar>
+        </BarChart>
       </ChartContainer>
     );
   };
@@ -120,7 +125,7 @@ const UserRegistrationTrends = () => {
             <div className="flex flex-col items-center gap-2">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
               <span className="text-sm text-muted-foreground">
-                Loading Registration Trends...
+                Loading Data...
               </span>
             </div>
           </div>
@@ -150,10 +155,10 @@ const UserRegistrationTrends = () => {
   };
 
   return (
-    <Card className="col-span-4 ">
+    <Card className=" ">
       <CardHeader className="flex justify-between items-center flex-row">
         <div>
-          <CardTitle>User Registration Trends</CardTitle>
+          <CardTitle>Jobs Posted By Category</CardTitle>
           <CardDescription>
             New user registrations for {selectedYear}
           </CardDescription>
@@ -167,4 +172,4 @@ const UserRegistrationTrends = () => {
   );
 };
 
-export default UserRegistrationTrends;
+export default JobsByCategoryBar;

@@ -1,6 +1,13 @@
 "use client";
 import { AlertCircle } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import {
+  CartesianGrid,
+  LabelList,
+  Line,
+  LineChart,
+  XAxis,
+  YAxis,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -11,23 +18,17 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { YearPicker } from "../ui/year-picker";
 import { useState } from "react";
-import { useQueryUserRegistrationTrend } from "@/hooks/query-hooks/getChartData";
+import { useQueryJobPostTrend } from "@/hooks/query-hooks/getChartData";
 
 const chartConfig = {
-  job_seeker: {
-    label: "Job Seeker",
-    color: "hsl(var(--chart-1))",
-  },
-  employer: {
-    label: "Employer",
-    color: "hsl(var(--chart-2))",
+  jobPosted: {
+    label: "Job Created",
+    color: "hsl(var(--chart-3))",
   },
 } satisfies ChartConfig;
 
@@ -49,15 +50,14 @@ const placeholderData = Array(12)
       "Nov",
       "Dec",
     ][i],
-    job_seeker: 0,
-    employer: 0,
+    jobPosted: 0,
   }));
 
-const UserRegistrationTrends = () => {
+const JobPostingTrends = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
-  const { data, isLoading, error } = useQueryUserRegistrationTrend(
+  const { data, isLoading, error } = useQueryJobPostTrend(
     selectedYear.toString()
   );
 
@@ -66,10 +66,11 @@ const UserRegistrationTrends = () => {
   const renderChart = () => {
     return (
       <ChartContainer config={chartConfig}>
-        <AreaChart
+        <LineChart
           accessibilityLayer
           data={chartData}
           margin={{
+            top: 20,
             left: 12,
             right: 12,
           }}
@@ -82,31 +83,31 @@ const UserRegistrationTrends = () => {
             tickMargin={8}
             tickFormatter={(value) => value.slice(0, 3)}
           />
-          <YAxis tickCount={3} />
+          <YAxis />
           <ChartTooltip
             cursor={false}
-            content={<ChartTooltipContent indicator="dot" />}
+            content={<ChartTooltipContent indicator="line" />}
           />
-          <Area
-            dataKey="job_seeker"
+          <Line
+            dataKey="jobPosted"
             type="monotone"
-            fill="hsl(var(--chart-1))"
-            fillOpacity={isLoading ? 0.1 : 0.4}
-            stroke="hsl(var(--chart-1))"
-            strokeOpacity={isLoading ? 0.3 : 1}
-            stackId="a"
-          />
-          <Area
-            dataKey="employer"
-            type="monotone"
-            fill="hsl(var(--chart-3))"
-            fillOpacity={isLoading ? 0.1 : 0.4}
             stroke="hsl(var(--chart-3))"
-            strokeOpacity={isLoading ? 0.3 : 1}
-            stackId="a"
-          />
-          {!isLoading && <ChartLegend content={<ChartLegendContent />} />}
-        </AreaChart>
+            strokeWidth={2}
+            dot={{
+              fill: "hsl(var(--chart-3))",
+            }}
+            activeDot={{
+              r: 6,
+            }}
+          >
+            <LabelList
+              position="top"
+              offset={12}
+              className="fill-foreground"
+              fontSize={12}
+            />
+          </Line>
+        </LineChart>
       </ChartContainer>
     );
   };
@@ -120,7 +121,7 @@ const UserRegistrationTrends = () => {
             <div className="flex flex-col items-center gap-2">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
               <span className="text-sm text-muted-foreground">
-                Loading Registration Trends...
+                Loading Data...
               </span>
             </div>
           </div>
@@ -137,7 +138,7 @@ const UserRegistrationTrends = () => {
               <AlertCircle className="h-8 w-8 text-destructive" />
               <span className="font-medium">Failed to load chart data</span>
               <p className="text-sm text-muted-foreground">
-                There was an error loading the registration data. Please try
+                There was an error loading the job created data. Please try
                 again later.
               </p>
             </div>
@@ -150,12 +151,12 @@ const UserRegistrationTrends = () => {
   };
 
   return (
-    <Card className="col-span-4 ">
+    <Card>
       <CardHeader className="flex justify-between items-center flex-row">
         <div>
-          <CardTitle>User Registration Trends</CardTitle>
-          <CardDescription>
-            New user registrations for {selectedYear}
+          <CardTitle>Job Creation Trends</CardTitle>
+          <CardDescription className="mt-1">
+            Job Creation Trend for {selectedYear}
           </CardDescription>
         </div>
         <div>
@@ -167,4 +168,4 @@ const UserRegistrationTrends = () => {
   );
 };
 
-export default UserRegistrationTrends;
+export default JobPostingTrends;

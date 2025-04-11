@@ -17,6 +17,7 @@ import {
   AlertCircle,
   LockKeyhole,
   LucideIcon,
+  MapPin,
   MoreHorizontal,
   ScanEye,
 } from "lucide-react";
@@ -58,6 +59,17 @@ const AllUserTableAction = ({
               <span>View Details</span>
             </Link>
           </DropdownMenuItem> */}
+          {user.latitude && user.longitude && (
+            <DropdownMenuItem asChild>
+              <Link
+                target="_blank"
+                href={`https://www.google.com/maps?q=${user.latitude},${user.longitude}`}
+              >
+                <MapPin color="orange" className="h-4 w-4 mr-2 " />
+                <span>View Location</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={() => setOpenBlockAlert(true)}>
             <LockKeyhole color="red" className="h-4 w-4 mr-2 " />
             <span>{user.isBlocked ? "Unblock" : "Block"}</span>

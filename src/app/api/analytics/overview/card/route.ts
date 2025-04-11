@@ -6,7 +6,6 @@ import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
   try {
-    // Fetch new users, active jobs, charges, and subscriptions within the date range
     const [newUsers, activeJobs, charges, subscriptions] = await Promise.all([
       prisma.user.count({
         where: {

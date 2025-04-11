@@ -345,3 +345,17 @@ export const formatDateRange = (currentValue: DateRangeValue) => {
   if (!from || !to) return "";
   return `${format(from, "MMM d, yyyy")} - ${format(to, "MMM d, yyyy")}`;
 };
+export const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
