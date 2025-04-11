@@ -98,6 +98,7 @@ model JobSeekerProfile {
     location                      String?
     designation                   String?
     profileVisibility             Boolean                   @default(true)
+    showNearByJobs                Boolean                   @default(true)
     nearByJobRadius               String                    @default("25")
     openToWork                    Boolean                   @default(true)
     bio                           String?

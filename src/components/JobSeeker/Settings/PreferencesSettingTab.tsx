@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
+"use client";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { JobSeekerProfileComponentProps } from "@/lib/types";
+import type { JobSeekerProfileComponentProps } from "@/lib/types";
 import {
   PreferencesSettingsSchema,
-  PreferencesSettingsSchemaSchemaType,
+  type PreferencesSettingsSchemaSchemaType,
 } from "@/schema/JobSeekerSettingSchema";
 import {
   Form,
@@ -43,6 +43,8 @@ const PreferencesSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
       marketingEmails:
         profile.JOB_SEEKER?.JobSeekerProfile?.receiveMarketingEmails ?? true,
       nearByJobRadius: nearByJobRadius,
+      showNearByJob:
+        profile.JOB_SEEKER?.JobSeekerProfile?.showNearByJobs ?? true,
     },
     mode: "onChange",
     resolver: zodResolver(PreferencesSettingsSchema),
@@ -164,50 +166,75 @@ const PreferencesSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
             <Separator />
             <div className="space-y-3 mb-4 mt-4">
               <h3 className="font-bold">Job Preferences</h3>
-              <div className="flex md:flex-row md:justify-between md:items-center p-4 border-input border-2 rounded-lg bg-background hover:border-primary/50 transition-colors duration-300 flex-col justify-start items-start">
-                <div className="flex items-center gap-5">
-                  <MapPin className="hidden md:block" />
-                  <div className="space-y-1">
-                    <p className="text-lg font-semibold text-foreground">
-                      Nearby Job Radius
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Set the radius for nearby job recommendations
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-3 items-center md:w-1/2 w-full mt-7 md:mt-0">
-                  <FormField
-                    control={form.control}
-                    name="nearByJobRadius"
-                    render={({ field: { value, onChange } }) => (
-                      <FormItem className="w-full">
-                        <div className="flex justify-between items-center">
-                          <FormLabel className="text-sm">
-                            Distance: {value} km
-                          </FormLabel>
-                        </div>
-                        <FormControl>
-                          <Slider
-                            min={0}
-                            max={200}
-                            step={5}
-                            value={[value]}
-                            onValueChange={(vals) => {
-                              onChange(vals[0]);
-                            }}
-                            className="w-full"
-                          />
-                        </FormControl>
-                        <FormDescription className="text-xs text-muted-foreground">
-                          Adjust the radius by sliding
+
+              <FormField
+                control={form.control}
+                name="showNearByJob"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 hover:border-primary/50 transition-colors duration-300">
+                    <div className="space-y-0.5 flex items-center gap-5">
+                      <MapPin className="hidden md:block" />
+                      <div>
+                        <FormLabel className="text-base">Nearby Jobs</FormLabel>
+                        <FormDescription>
+                          Show job recommendations near your location
                         </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
+                      </div>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="nearByJobRadius"
+                render={({ field: { value, onChange } }) => {
+                  const isDisabled = !form.watch("showNearByJob");
+                  return (
+                    <FormItem
+                      className={`flex flex-col rounded-lg border p-4 hover:border-primary/50 transition-colors duration-300 ${isDisabled ? "opacity-60" : ""}`}
+                    >
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="space-y-0.5 flex items-center gap-5">
+                          <div className="w-6 h-6 flex items-center justify-center">
+                            <span className="text-xs font-medium">{value}</span>
+                          </div>
+                          <div>
+                            <FormLabel className="text-base">
+                              Job Radius: {value} km
+                            </FormLabel>
+                            <FormDescription>
+                              Set the distance for nearby job recommendations
+                            </FormDescription>
+                          </div>
+                        </div>
+                      </div>
+                      <FormControl>
+                        <Slider
+                          min={0}
+                          max={200}
+                          step={5}
+                          value={[value]}
+                          onValueChange={(vals) => {
+                            if (!isDisabled) {
+                              onChange(vals[0]);
+                            }
+                          }}
+                          className={`w-full ${isDisabled ? "cursor-not-allowed" : ""}`}
+                          disabled={isDisabled}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
             </div>
           </CardContent>
           <CardFooter>

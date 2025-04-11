@@ -52,12 +52,20 @@ export const GET = async (req: NextRequest) => {
             JobSeekerProfile: {
               select: {
                 nearByJobRadius: true,
+                showNearByJobs: true,
               },
             },
           },
         },
       },
     });
+
+    if (user?.JOB_SEEKER?.JobSeekerProfile?.showNearByJobs === false) {
+      return Response.json(
+        { success: false, message: "Cant show nearby Jobs" },
+        { status: 400 }
+      );
+    }
 
     if (!user || !user.latitude || !user.longitude) {
       return Response.json(
@@ -85,11 +93,23 @@ export const GET = async (req: NextRequest) => {
       );
       return distance <= Number(nearByJobRadius);
     });
+    // select 3 random jobs from nearbyJobs
+    const randomIndex = Math.floor(Math.random() * nearByJobs.length);
+    const randomJobs = nearByJobs.slice(randomIndex, randomIndex + 3);
+    // if randomJobs length is less than 3, fill the rest with random jobs from nearbyJobs
+    if (randomJobs.length < 3) {
+      const remainingJobs = nearByJobs.filter(
+        (job) => !randomJobs.includes(job)
+      );
+      const remainingJobsCount = 3 - randomJobs.length;
+      const randomRemainingJobs = remainingJobs.slice(0, remainingJobsCount);
+      randomJobs.push(...randomRemainingJobs);
+    }
     const data: NearByJobResponse = {
       success: true,
       message: "Nearby Jobs Fetched Successfully",
       data: {
-        jobs: nearByJobs,
+        jobs: randomJobs,
       },
     };
 

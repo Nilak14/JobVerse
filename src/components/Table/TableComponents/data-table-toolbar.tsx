@@ -4,6 +4,7 @@ import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { JobStatus } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { object } from "zod";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -21,6 +22,7 @@ const option = Object.values(JobStatus)
       value: value,
     };
   });
+console.log(option);
 
 export function DataTableToolbar<TData>({
   table,

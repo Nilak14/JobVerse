@@ -35,6 +35,7 @@ export const preferencesSetting = async (
         receiveJobRecommendationEmail: data.jobRecommendationEmails,
         receiveMarketingEmails: data.marketingEmails,
         nearByJobRadius: data.nearByJobRadius.toString(),
+        showNearByJobs: data.showNearByJob,
       },
     });
     revalidatePath("/job-seeker/settings/account-settings?tab=preferences");

@@ -36,3 +36,32 @@ export function getCompanyInclude(employerId: string) {
 export type CompanyInclude = Prisma.CompanyGetPayload<{
   include: ReturnType<typeof getCompanyInclude>;
 }>;
+
+export const getAllCompanyInclude = () => {
+  return {
+    adminEmployer: {
+      select: {
+        userId: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    },
+    subscriptions: true,
+
+    _count: {
+      select: {
+        members: true,
+        jobPosted: true,
+      },
+    },
+  } satisfies Prisma.CompanyInclude;
+};
+export type AllCompanyInclude = Prisma.CompanyGetPayload<{
+  include: ReturnType<typeof getAllCompanyInclude>;
+}>;

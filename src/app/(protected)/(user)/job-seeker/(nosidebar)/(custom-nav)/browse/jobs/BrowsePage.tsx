@@ -17,9 +17,14 @@ import { Briefcase } from "lucide-react";
 interface BrowsePageProps {
   session?: Session | null;
   showBackButton?: boolean;
+  showNearByJobs: boolean;
 }
 
-const BrowsePage = ({ session, showBackButton = true }: BrowsePageProps) => {
+const BrowsePage = ({
+  session,
+  showBackButton = true,
+  showNearByJobs,
+}: BrowsePageProps) => {
   const searchParams = useSearchParams();
   const filters: Filters = {
     workMode: searchParams.get("workMode") || "",
@@ -54,7 +59,7 @@ const BrowsePage = ({ session, showBackButton = true }: BrowsePageProps) => {
           <BrowsePageFilter />
         </aside>
         <section className="flex-1 md:pl-[340px] px-10 mx-auto mt-10 ">
-          {session && (
+          {session && showNearByJobs && (
             <div>
               <NearByJobs />
               <div className="flex items-center my-5">
