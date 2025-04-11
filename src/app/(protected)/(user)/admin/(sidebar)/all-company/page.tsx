@@ -29,7 +29,7 @@ const AllCompany = () => {
 };
 export default AllCompany;
 
-export const AllCompanyDataLoader = async () => {
+const AllCompanyDataLoader = async () => {
   const users = await getAllCompany();
 
   return (
