@@ -29,7 +29,7 @@ const AllUser = () => {
 };
 export default AllUser;
 
-export const AllUserDataLoader = async () => {
+const AllUserDataLoader = async () => {
   const users = await getAllUser();
 
   return (
