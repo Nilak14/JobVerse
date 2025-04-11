@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GetRecentUser } from "@/data-access/admin-access/analytics/getRecentUser";
+import { GetRecentUser } from "@/data-access/admin-access/analytics/getAnalyticsData";
 import { Suspense } from "react";
 import UserAvatar from "../Global/Useravatar";
 import { CalendarDays, Briefcase, User, AlertCircle } from "lucide-react";

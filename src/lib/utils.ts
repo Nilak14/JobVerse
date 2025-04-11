@@ -359,3 +359,31 @@ export const monthNames = [
   "November",
   "December",
 ];
+
+type SubscriptionType = {
+  name: string;
+  price: string;
+};
+
+export const getSubscriptionValuedFromPriceId = (
+  priceId: string
+): SubscriptionType => {
+  if (!priceId) {
+    return {} as SubscriptionType;
+  }
+  if (priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY) {
+    return {
+      name: "Pro",
+      price: "$9.99",
+    };
+  } else if (
+    priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_ELITE_MONTHLY
+  ) {
+    return {
+      name: "Elite",
+      price: "$19.99",
+    };
+  } else {
+    return {} as SubscriptionType;
+  }
+};

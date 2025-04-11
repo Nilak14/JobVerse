@@ -20,6 +20,14 @@ export const useQueryUserRegistrationTrend = (year: string) => {
     refetchOnWindowFocus: false,
   });
 };
+export const useQueryRevenueTrend = (year: string) => {
+  return useQuery({
+    queryKey: ["revenue-trend", year],
+    queryFn: async () =>
+      await JVRequest.get(`/api/analytics/revenue/revenueTrend?year=${year}`),
+    refetchOnWindowFocus: false,
+  });
+};
 export const useQueryJobPostTrend = (year: string) => {
   return useQuery({
     queryKey: ["job-post-trend", year],
@@ -33,6 +41,26 @@ export const useQueryJobsByCategory = (year: string) => {
     queryKey: ["job-by-category", year],
     queryFn: async () =>
       await JVRequest.get(`/api/analytics/job/postBy-category?year=${year}`),
+    refetchOnWindowFocus: false,
+  });
+};
+export const useQueryJobSeekerRevenuePieData = () => {
+  return useQuery({
+    queryKey: ["job-seeker-revenue"],
+    queryFn: async () =>
+      await JVRequest.get(
+        `/api/analytics/revenue/premium-distribution/job-seeker`
+      ),
+    refetchOnWindowFocus: false,
+  });
+};
+export const useQueryCompanyRevenuePieData = () => {
+  return useQuery({
+    queryKey: ["company-revenue"],
+    queryFn: async () =>
+      await JVRequest.get(
+        `/api/analytics/revenue/premium-distribution/company`
+      ),
     refetchOnWindowFocus: false,
   });
 };

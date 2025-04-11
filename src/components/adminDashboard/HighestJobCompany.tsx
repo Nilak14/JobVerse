@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GetCompanyWithHighestJob } from "@/data-access/admin-access/analytics/getRecentUser";
+import { GetCompanyWithHighestJob } from "@/data-access/admin-access/analytics/getAnalyticsData";
 import { Suspense } from "react";
 import { Building, AlertCircle, User, Briefcase, Users } from "lucide-react";
 import Image from "next/image";

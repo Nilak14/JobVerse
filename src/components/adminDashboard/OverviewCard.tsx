@@ -68,7 +68,10 @@ const OverviewCard = () => {
                   {" "}
                   $
                   {analytics.totalRevenue ? (
-                    <NumberTicker value={analytics.totalRevenue} />
+                    <NumberTicker
+                      decimalPlaces={2}
+                      value={analytics.totalRevenue}
+                    />
                   ) : (
                     0
                   )}
