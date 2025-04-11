@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   List,
   Settings,
+  UserCog,
   UsersRound,
   Video,
 } from "lucide-react";
@@ -67,5 +68,10 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
         subscriptionLevel: "PRO",
       },
     ],
+  },
+  {
+    title: "Account Settings",
+    icon: UserCog,
+    url: "/employer/settings",
   },
 ];

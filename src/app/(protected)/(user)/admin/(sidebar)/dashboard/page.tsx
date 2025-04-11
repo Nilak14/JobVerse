@@ -1,24 +1,33 @@
-import { auth, signOut } from "@/auth";
 import { Metadata } from "next";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Overview from "./tabContent/Overview";
+import Jobs from "./tabContent/Jobs";
+import Revenue from "./tabContent/Revenue";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Dashboard For Admin",
 };
 const AdminDashboardPage = async () => {
-  const session = await auth();
   return (
-    <form
-      action={async () => {
-        "use server";
-        await signOut();
-      }}
-    >
-      <h1 className="">Admin</h1>
-      <button type="submit">Log Out</button>
-      <h2 className="text-2xl">{session?.user.name}</h2>
-      <h2 className="text-2xl">{session?.user.type}</h2>
-    </form>
+    <div>
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="jobs">Jobs</TabsTrigger>
+          <TabsTrigger value="revenue">Revenue</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          <Overview />
+        </TabsContent>
+        <TabsContent value="jobs">
+          <Jobs />
+        </TabsContent>
+        <TabsContent value="revenue">
+          <Revenue />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 export default AdminDashboardPage;

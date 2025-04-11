@@ -55,6 +55,11 @@ const LoginForm = ({ error }: LoginFormProps) => {
         id: "login-error",
       });
       router.replace("/login", undefined);
+    } else if (error === "AccessDenied") {
+      toast.error("Your account is blocked, Please contact support", {
+        id: "login-error",
+      });
+      router.replace("/login", undefined);
     }
   }, [error, router]);
   useEffect(() => {

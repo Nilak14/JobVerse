@@ -9,6 +9,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/login",
+    error: "/login",
   },
   events: {
     async linkAccount({ user }) {

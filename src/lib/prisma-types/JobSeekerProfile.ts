@@ -12,6 +12,7 @@ export function getJobSeekerProfileSelect() {
           select: {
             location: true,
             nearByJobRadius: true,
+            showNearByJobs: true,
             openToWork: true,
             designation: true,
             bio: true,

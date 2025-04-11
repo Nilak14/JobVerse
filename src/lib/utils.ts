@@ -20,6 +20,7 @@ import {
 } from "./prisma-types/JobSeekerProfile";
 import { mappings } from "./data";
 import { MockInterviewDataWithFeedback } from "./prisma-types/MockInterview";
+import { DateRangeValue } from "@/components/Global/DateFilters";
 // tailwind merge
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -337,4 +338,52 @@ export const refactorInterviewDateForChart = (
     };
   });
   return refactoredData;
+};
+
+export const formatDateRange = (currentValue: DateRangeValue) => {
+  const { from, to } = currentValue.range;
+  if (!from || !to) return "";
+  return `${format(from, "MMM d, yyyy")} - ${format(to, "MMM d, yyyy")}`;
+};
+export const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+type SubscriptionType = {
+  name: string;
+  price: string;
+};
+
+export const getSubscriptionValuedFromPriceId = (
+  priceId: string
+): SubscriptionType => {
+  if (!priceId) {
+    return {} as SubscriptionType;
+  }
+  if (priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY) {
+    return {
+      name: "Pro",
+      price: "$9.99",
+    };
+  } else if (
+    priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_ELITE_MONTHLY
+  ) {
+    return {
+      name: "Elite",
+      price: "$19.99",
+    };
+  } else {
+    return {} as SubscriptionType;
+  }
 };
