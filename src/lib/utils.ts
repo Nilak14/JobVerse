@@ -85,6 +85,8 @@ export function mapToJobValues(data: JobServerData): JobSchemaType {
 
   return {
     id: data.id,
+    postInLinkedin: data.postInLinkedIn || false,
+    linkedinCaption: data.linkedInCaption || "",
     title: data.title || "",
     jobType: data.jobType || "",
     workMode: data.workMode || "",
