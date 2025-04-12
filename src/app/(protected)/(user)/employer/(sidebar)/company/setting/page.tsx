@@ -62,6 +62,7 @@ const CompanySettingsPage = async () => {
     <SidebarContainer className="space-y-10">
       <CompanyProfileUpdate session={session} activeCompany={activeCompany} />
       <CompanyIntegration session={session} activeCompany={activeCompany} />
+
       <DangerZone session={session} activeCompany={activeCompany} />
     </SidebarContainer>
   );

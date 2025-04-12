@@ -3,7 +3,9 @@
 import {
   BriefcaseBusiness,
   Building,
+  Cog,
   LayoutDashboard,
+  Settings,
   Users,
 } from "lucide-react";
 import { SidebarNavLinks } from "../types";
@@ -28,5 +30,10 @@ export const AdminSideBarLinks: SidebarNavLinks[] = [
     title: "All Company",
     icon: Building,
     url: "/admin/all-company",
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    url: "/admin/settings",
   },
 ];

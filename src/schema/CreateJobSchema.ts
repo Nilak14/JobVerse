@@ -219,6 +219,10 @@ export const JobSettingsSchema = z.object({
   getEmailNotification: z.boolean({
     message: "Email Notification should be selected",
   }),
+  postInLinkedin: z.boolean({
+    message: "Post In Linkedin should be selected",
+  }),
+  linkedinCaption: z.string().optional(),
   isUrgent: z.boolean({
     message: "Urgent is required",
   }),

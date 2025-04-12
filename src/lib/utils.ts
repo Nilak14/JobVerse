@@ -387,3 +387,5 @@ export const getSubscriptionValuedFromPriceId = (
     return {} as SubscriptionType;
   }
 };
+
+export const LinkedInRedirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/callback/linkedin`;
