@@ -22,8 +22,20 @@ model Company {
     slackChannelId   String?
     subscriptions    CompanySubscription?
     stripeCustomerId String?
+    LinkedInToken    LinkedInToken?
 
     @@map("companies")
+}
+
+model LinkedInToken {
+    id          String   @id @default(cuid())
+    companyId   String   @unique
+    company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+    accessToken String
+    createdAt   DateTime @default(now())
+    expiresAt   DateTime
+
+    @@map("linked_in_tokens")
 }
 
 model CompanyMember {

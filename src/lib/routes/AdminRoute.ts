@@ -3,7 +3,9 @@
 import {
   BriefcaseBusiness,
   Building,
+  Cog,
   LayoutDashboard,
+  Settings,
   Users,
 } from "lucide-react";
 import { SidebarNavLinks } from "../types";

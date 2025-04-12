@@ -1,11 +1,13 @@
-import { JobEditorFormProps } from "@/lib/types";
+"use client";
+
+import type { JobEditorFormProps } from "@/lib/types";
 import {
   JobSettingsSchema,
-  JobSettingsSchemaType,
+  type JobSettingsSchemaType,
 } from "@/schema/CreateJobSchema";
 import { useFormTriggersStore } from "@/store/useFormTriggersStore";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import {
@@ -25,10 +27,19 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Edit, Loader2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { useActiveCompany } from "@/store/useActiveCompany";
 import Link from "next/link";
+import { useQueryGetCompanyLinkedinStatus } from "@/hooks/query-hooks/getCompanyLinkedinStatus";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 const JobSettingForm = ({
   currentStep,
   jobData,
@@ -42,6 +53,10 @@ const JobSettingForm = ({
       getEmailNotification: jobData.getEmailNotification || false,
       applicationDeadline: jobData.applicationDeadline || null,
       isUrgent: jobData.isUrgent || false,
+      postInLinkedin: jobData.postInLinkedin || false,
+      linkedinCaption:
+        jobData.linkedinCaption ||
+        `We're hiring! Check out this ${jobData.title} position at ${activeCompany.name}. Apply here: https://www.jobverse.me/job/description/${jobData.id}`,
     },
     resolver: zodResolver(JobSettingsSchema),
     mode: "onChange",
@@ -54,10 +69,16 @@ const JobSettingForm = ({
   useEffect(() => {
     const { unsubscribe } = form.watch(async (values) => {
       setJobData({ ...jobData, ...values });
-      console.log(values.applicationDeadline);
     });
     return unsubscribe;
   }, []);
+  const { data, isLoading } = useQueryGetCompanyLinkedinStatus(
+    activeCompany.id
+  );
+
+  const [showLinkedinModal, setShowLinkedinModal] = useState(false);
+
+  const postInLinkedinValue = form.watch("postInLinkedin");
 
   return (
     <div className="max-w-xl mx-auto space-y-6 pt-5">
@@ -196,6 +217,107 @@ const JobSettingForm = ({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="postInLinkedin"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <Checkbox
+                    disabled={isLoading || (!data?.data && !isLoading)}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none w-full">
+                  <div className="flex justify-between items-center">
+                    <FormLabel>Post in LinkedIn</FormLabel>
+                    {postInLinkedinValue && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowLinkedinModal(true)}
+                        className="h-8"
+                      >
+                        <Edit className="h-3.5 w-3.5 mr-1.5" />
+                        Edit Caption
+                      </Button>
+                    )}
+                  </div>
+                  <FormDescription>
+                    {isLoading ? (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Checking LinkedIn connection status...
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        {data?.data ? (
+                          <p>
+                            Share this job posting on your company's LinkedIn
+                            page
+                          </p>
+                        ) : (
+                          <span className="text-sm text-red-500">
+                            Please connect your LinkedIn account to enable this
+                            feature. To connect your LinkedIn account, please{" "}
+                            <Link
+                              className="underline underline-offset-4"
+                              href={"/employer/company/setting"}
+                            >
+                              Click Here
+                            </Link>
+                            .
+                          </span>
+                        )}
+                      </p>
+                    )}
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <Dialog open={showLinkedinModal} onOpenChange={setShowLinkedinModal}>
+            <DialogContent className="sm:max-w-[500px]">
+              <DialogHeader>
+                <DialogTitle>LinkedIn Post Caption</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="linkedinCaption"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Enter caption for your LinkedIn post
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            id="linkedin-caption"
+                            className="min-h-[120px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Your job will be posted on LinkedIn with this caption.
+                          Include relevant details to attract candidates.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button onClick={() => setShowLinkedinModal(false)}>
+                  Save Caption
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </form>
       </Form>
     </div>

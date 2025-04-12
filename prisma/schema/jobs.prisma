@@ -41,6 +41,8 @@ model Job {
     isFeatured            Boolean       @default(false)
     deadline              DateTime?
     sendEmailNotification Boolean       @default(false)
+    postInLinkedIn        Boolean       @default(false)
+    linkedInCaption       String?
     latitude              String?
     longitude             String?
     status                JobStatus     @default(DRAFT)

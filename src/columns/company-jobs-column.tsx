@@ -95,9 +95,12 @@ export const companyJobsColumn: ColumnDef<JobServerData>[] = [
     cell: ({ row }) => {
       return (
         <JobTableRowAction
+          isSlackOn={row.original.sendEmailNotification}
           message={row.original.review?.reviewedComment}
           id={row.original.id}
+          companyId={row.original.companyId!}
           status={row.original.status}
+          jobTitle={row.original.title || ""}
         />
       );
     },

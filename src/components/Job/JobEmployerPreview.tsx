@@ -14,7 +14,6 @@ import { Badge } from "../ui/badge";
 import ContentViewer from "../tiptap/ContentViewer";
 import { Separator } from "../ui/separator";
 import { useActiveCompany } from "@/store/useActiveCompany";
-import UserAvatar from "../Global/Useravatar";
 import Image from "next/image";
 
 interface JobEmployerPreviewSectionProps {
@@ -22,6 +21,7 @@ interface JobEmployerPreviewSectionProps {
 }
 const JobEmployerPreview = ({ job }: JobEmployerPreviewSectionProps) => {
   const { activeCompany } = useActiveCompany();
+  if (!activeCompany) return null;
   return (
     <div className="w-full overflow-y-auto p-5">
       <div className="lg:col-span-2 space-y-8">
@@ -31,13 +31,15 @@ const JobEmployerPreview = ({ job }: JobEmployerPreviewSectionProps) => {
               <div className="flex flex-col md:flex-row md:items-center gap-6">
                 <div className="flex-1 ">
                   <div className="flex items-center gap-4">
-                    <Image
-                      src={activeCompany.logoUrl!}
-                      width={50}
-                      height={50}
-                      alt={activeCompany.name}
-                      className="rounded-md object-cover"
-                    />
+                    {activeCompany.logoUrl && (
+                      <Image
+                        src={activeCompany.logoUrl}
+                        width={50}
+                        height={50}
+                        alt={activeCompany.name}
+                        className="rounded-md object-cover"
+                      />
+                    )}
                     {job.title && (
                       <h1 className="text-3xl font-bold">{job.title}</h1>
                     )}
