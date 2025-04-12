@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getNotificationSelect } from "@/lib/prisma-types/Notification";
 import { triggerNotification } from "@/lib/triggerNotification";
@@ -27,7 +28,7 @@ export const postToLinkedIn = async ({
       },
     });
     if (!company) {
-      return;
+      return { success: false, message: "Company not found" };
     }
 
     const token = await prisma.linkedInToken.findFirst({
@@ -52,7 +53,7 @@ export const postToLinkedIn = async ({
         select: getNotificationSelect(),
       });
       triggerNotification(company.adminEmployer.userId, notification);
-      return;
+      return { success: false, message: "Token not found" };
     }
     const hasExpired = new Date(token.expiresAt) < new Date();
     if (hasExpired) {
@@ -67,7 +68,7 @@ export const postToLinkedIn = async ({
         select: getNotificationSelect(),
       });
       triggerNotification(company.adminEmployer.userId, notification);
-      return;
+      return { success: false, message: "Token has expired" };
     }
     const profileRes = await fetch("https://api.linkedin.com/v2/userinfo", {
       method: "GET",
@@ -80,7 +81,7 @@ export const postToLinkedIn = async ({
     console.log("profileData", profileData);
     if (!profileData.sub) {
       console.log("Error fetching profile data:", profileData);
-      return;
+      return { success: false, message: "Error Fetching Profile " };
     }
     const authorUrn = `urn:li:person:${profileData.sub}`;
     const postRes = await fetch("https://api.linkedin.com/v2/ugcPosts", {
@@ -120,7 +121,7 @@ export const postToLinkedIn = async ({
         select: getNotificationSelect(),
       });
       triggerNotification(company.adminEmployer.userId, notification);
-      return;
+      return { success: true, message: "Post Created successfully" };
     } else {
       const notification = await prisma.notifications.create({
         data: {
@@ -133,10 +134,69 @@ export const postToLinkedIn = async ({
         select: getNotificationSelect(),
       });
       triggerNotification(company.adminEmployer.userId, notification);
-      return;
+      return { success: false, message: "Something went wrong" };
     }
   } catch (error) {
     console.log(error);
-    return;
+    return { success: false, message: "Internal Server Error" };
+  }
+};
+
+export const postToLinkedInWithJobId = async (
+  message: string,
+  jobId: string
+) => {
+  try {
+    const session = await auth();
+    if (!session || !session.activeCompanyId) {
+      return { success: false, message: "Unauthorized" };
+    }
+    const company = await prisma.linkedInToken.findUnique({
+      where: {
+        companyId: session.activeCompanyId,
+      },
+      select: {
+        accessToken: true,
+        expiresAt: true,
+        company: {
+          select: {
+            adminEmployer: {
+              select: {
+                userId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!company || !company.accessToken) {
+      return { success: false, message: "No Company Found" };
+    }
+    const hasExpired = new Date(company.expiresAt) < new Date();
+
+    if (hasExpired) {
+      return { success: false, message: "Token Expired!! Reconnect Again" };
+    }
+
+    const res = await postToLinkedIn({
+      caption: message,
+      companyId: session.activeCompanyId,
+    });
+    if (res.success) {
+      await prisma.job.update({
+        where: {
+          id: jobId,
+        },
+        data: {
+          postInLinkedIn: true,
+          linkedInCaption: message,
+        },
+      });
+      return { success: true, message: "Post Created successfully" };
+    } else {
+      return { success: false, message: res.message || "Something went wrong" };
+    }
+  } catch (error) {
+    return { success: false, message: "Internal Server Error" };
   }
 };

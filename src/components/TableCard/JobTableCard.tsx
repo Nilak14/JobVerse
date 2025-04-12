@@ -48,6 +48,9 @@ const JobTableCard = ({
             TriggerIcon={EllipsisVertical}
             id={jobData.id}
             status={jobData.status}
+            isSlackOn={jobData.sendEmailNotification}
+            companyId={jobData.companyId}
+            jobTitle={jobData.title || ""}
           />
         )}
         {viewUser === "ADMIN" && (
