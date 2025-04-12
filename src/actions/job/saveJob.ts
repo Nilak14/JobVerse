@@ -87,6 +87,8 @@ export const saveJob = async (values: JobSchemaType) => {
         sendEmailNotification: values.getEmailNotification,
         latitude: values.latitude,
         longitude: values.longitude,
+        postInLinkedIn: values.postInLinkedin,
+        linkedInCaption: values.linkedinCaption,
         Salary: {
           delete: {
             id: existingJob?.Salary?.id,
@@ -120,6 +122,8 @@ export const saveJob = async (values: JobSchemaType) => {
         description: values.description,
         tags: values.tags || [],
         skills: values.skills || [],
+        postInLinkedIn: values.postInLinkedin,
+        linkedInCaption: values.linkedinCaption,
         minEducationRequired: values.educationLevel,
         preferredGender: values.preferredGender,
         licenseRequired: values.license,

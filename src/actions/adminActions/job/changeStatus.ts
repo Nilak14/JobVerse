@@ -1,5 +1,6 @@
 "use server";
 
+import { postToLinkedIn } from "@/actions/linkedin/createPost";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { getNotificationSelect } from "@/lib/prisma-types/Notification";
@@ -7,6 +8,7 @@ import { triggerNotification } from "@/lib/triggerNotification";
 import { handleError } from "@/lib/utils";
 import { JobReviewStatus, JobStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 export const changeStatus = async (
   jobId: string,
@@ -90,6 +92,8 @@ export const changeStatus = async (
           status: getUpdateJobStatus(newStatus),
         },
         select: {
+          postInLinkedIn: true,
+          linkedInCaption: true,
           company: {
             select: {
               name: true,
@@ -147,6 +151,17 @@ export const changeStatus = async (
         })
       );
     }
+
+    after(() => {
+      if (newStatus === "APPROVED") {
+        if (res.postInLinkedIn && res.linkedInCaption) {
+          postToLinkedIn({
+            caption: res.linkedInCaption,
+            companyId: job.companyId,
+          });
+        }
+      }
+    });
 
     revalidatePath("/admin/all-jobs");
     revalidatePath("/employer/job");
