@@ -31,9 +31,4 @@ export const AdminSideBarLinks: SidebarNavLinks[] = [
     icon: Building,
     url: "/admin/all-company",
   },
-  {
-    title: "Settings",
-    icon: Settings,
-    url: "/admin/settings",
-  },
 ];
