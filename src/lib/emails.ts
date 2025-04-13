@@ -3,6 +3,9 @@ import { Resend } from "resend";
 import VerifyEmailTemplate from "@/template/emails/verify-email";
 import ResetPasswordTemplate from "@/template/emails/reset-password";
 import TwoFactorEmailTemplate from "@/template/emails/two-factor-email";
+import ApplicationStatusTemplate, {
+  ApplicationStatusTemplateProps,
+} from "@/template/emails/application-update";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -55,6 +58,30 @@ export const sendTwoFactorCode = async ({
     to: email,
     subject: `Your JobVerse Two Factor Code: ${token}`,
     react: TwoFactorEmailTemplate({ token }),
+  });
+  return error;
+};
+export const sendApplicationUpdateEmail = async ({
+  candidateName,
+  baseUrl,
+  companyName,
+  jobTitle,
+  status,
+  interviewDetails,
+  email,
+}: ApplicationStatusTemplateProps) => {
+  const { error } = await resend.emails.send({
+    from: "JobVerse@jobverse.me",
+    to: email!,
+    subject: `Application Update: ${status}`,
+    react: ApplicationStatusTemplate({
+      baseUrl,
+      candidateName,
+      companyName,
+      jobTitle,
+      status,
+      interviewDetails,
+    }),
   });
   return error;
 };
