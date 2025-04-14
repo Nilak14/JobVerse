@@ -1,7 +1,6 @@
 "use client";
 import {
   ColumnDef,
-  ColumnFilter,
   ColumnFiltersState,
   flexRender,
   getCoreRowModel,
@@ -23,7 +22,6 @@ import {
   TableRow,
 } from "../ui/table";
 import { TablePagination } from "../Global/PaginationTable";
-import AdminUserTableFilter from "./TableComponents/AllUserTableFilters";
 import AdminCompanyTableFilter from "./TableComponents/AllCompanyTableFilter";
 interface JVTableClientProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

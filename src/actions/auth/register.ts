@@ -5,6 +5,8 @@ import { createSafeActionClient } from "next-safe-action";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { sendEmailVerificationLink } from "./sendEmailVerification";
+import { after } from "next/server";
+import { discordNewUserRegisterBot } from "../discord_bot/bot";
 const action = createSafeActionClient();
 export const register = action
   .schema(RegisterSchema)
@@ -53,7 +55,11 @@ export const register = action
             });
           }
         });
+
         const res = await sendEmailVerificationLink(email, name);
+        after(async () => {
+          await discordNewUserRegisterBot({ name, email, role: userType });
+        });
         if (res.success) {
           return { success: res.success };
         } else {

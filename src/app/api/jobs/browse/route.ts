@@ -66,6 +66,9 @@ export const GET = async (req: NextRequest) => {
       : {};
 
     const where: Prisma.JobWhereInput = {
+      status: {
+        in: ["ACTIVE", "EXPIRED"],
+      },
       AND: [
         searchFilter,
         workModeParams

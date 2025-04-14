@@ -391,3 +391,6 @@ export const getSubscriptionValuedFromPriceId = (
 };
 
 export const LinkedInRedirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/callback/linkedin`;
+
+export const JobVerseLogoUrl =
+  "https://utfs.io/f/AxbCfMURBwL11wIuavQdKomzIhEBq659AJPs84VuLCUlgMRc";
