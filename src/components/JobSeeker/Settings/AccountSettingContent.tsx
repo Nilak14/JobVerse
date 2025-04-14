@@ -30,9 +30,6 @@ const AccountSettingContent = ({ profile }: AccountSettingContentProps) => {
       startUpload([newAvatar]);
     }
   }, [croppedAvatar]);
-  useEffect(() => {
-    console.log(uploadProgress);
-  }, [uploadProgress]);
 
   return (
     <section className="">
@@ -41,7 +38,7 @@ const AccountSettingContent = ({ profile }: AccountSettingContentProps) => {
           <UserProfileInput
             isUploading={isUploading}
             uploadProgress={uploadProgress}
-            username="Nilak Pathak"
+            username={profile.name!}
             size="size-24"
             src={
               croppedAvatar ? URL.createObjectURL(croppedAvatar) : profile.image

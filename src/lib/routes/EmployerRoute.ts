@@ -69,9 +69,4 @@ export const EmployerSideBarLinks: SidebarNavLinks[] = [
       },
     ],
   },
-  {
-    title: "Account Settings",
-    icon: UserCog,
-    url: "/employer/settings",
-  },
 ];

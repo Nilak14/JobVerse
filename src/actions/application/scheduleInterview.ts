@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
+import { sendApplicationUpdateEmail } from "@/lib/emails";
 import prisma from "@/lib/prisma";
 import { getNotificationSelect } from "@/lib/prisma-types/Notification";
 import { triggerNotification } from "@/lib/triggerNotification";
@@ -9,8 +10,10 @@ import {
   ScheduleInterviewSchema,
   ScheduleInterviewSchemaType,
 } from "@/schema/ScheduleInterviewSchema";
+import { ApplicationStatusTemplateProps } from "@/template/emails/application-update";
 import { InterviewType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 export const scheduleInterview = async (
   values: ScheduleInterviewSchemaType
@@ -45,6 +48,17 @@ export const scheduleInterview = async (
         jobSeeker: {
           select: {
             userId: true,
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+            JobSeekerProfile: {
+              select: {
+                receiveJobApplicationUpdated: true,
+              },
+            },
           },
         },
       },
@@ -97,6 +111,29 @@ export const scheduleInterview = async (
     triggerNotification(application.jobSeeker.userId, notification);
     revalidatePath("/employer/applicants");
     revalidatePath("/job-seeker/applied-jobs");
+    after(async () => {
+      if (
+        !application.jobSeeker.JobSeekerProfile?.receiveJobApplicationUpdated
+      ) {
+        return;
+      }
+      const data: ApplicationStatusTemplateProps = {
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
+        candidateName: application.jobSeeker.user.name!,
+        companyName: application.job.company.name,
+        jobTitle: application.job.title!,
+        email: application.jobSeeker.user.email!,
+        status: "interview",
+        interviewDetails: {
+          date: new Date(interviewDate).toDateString(),
+          time: interviewTime,
+          type: interviewType,
+          note: note,
+        },
+      };
+
+      await sendApplicationUpdateEmail(data);
+    });
     return {
       success: true,
       message: "Interview Scheduled Successfully",

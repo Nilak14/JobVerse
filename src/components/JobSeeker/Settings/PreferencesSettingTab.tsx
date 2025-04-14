@@ -97,7 +97,7 @@ const PreferencesSettingTab = ({ profile }: JobSeekerProfileComponentProps) => {
                             </FormLabel>
                             <FormDescription>
                               Receive personalized job recommendations in your
-                              email
+                              email every week.
                             </FormDescription>
                           </div>
                         </div>
