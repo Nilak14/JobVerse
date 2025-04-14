@@ -1,12 +1,15 @@
 "use server";
 
 import { auth } from "@/lib/auth";
+import { sendApplicationUpdateEmail } from "@/lib/emails";
 import prisma from "@/lib/prisma";
 import { getNotificationSelect } from "@/lib/prisma-types/Notification";
 import { triggerNotification } from "@/lib/triggerNotification";
 import { handleError } from "@/lib/utils";
+import { ApplicationStatusTemplateProps } from "@/template/emails/application-update";
 import { ApplicationStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 export const updateApplicationStatus = async (
   applicationId: string,
   status: ApplicationStatus
@@ -47,6 +50,17 @@ export const updateApplicationStatus = async (
         jobSeeker: {
           select: {
             userId: true,
+            user: {
+              select: {
+                name: true,
+                email: true,
+              },
+            },
+            JobSeekerProfile: {
+              select: {
+                receiveJobApplicationUpdated: true,
+              },
+            },
           },
         },
       },
@@ -116,6 +130,35 @@ export const updateApplicationStatus = async (
     triggerNotification(application.jobSeeker.userId, res);
     revalidatePath("/employer/applicants");
     revalidatePath("/job-seeker/applied-jobs");
+
+    after(async () => {
+      if (
+        !application.jobSeeker.JobSeekerProfile?.receiveJobApplicationUpdated
+      ) {
+        return;
+      }
+      const data: ApplicationStatusTemplateProps = {
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL!,
+        candidateName: application.jobSeeker.user.name!,
+        companyName: application.job.company.name,
+        jobTitle: application.job.title!,
+        email: application.jobSeeker.user.email!,
+        status: "accepted",
+        interviewDetails: {
+          date: "",
+          time: "",
+          type: "",
+          note: "",
+        },
+      };
+      if (status === "APPROVED") {
+        data.status = "accepted";
+      } else if (status === "REJECTED") {
+        data.status = "rejected";
+      }
+
+      await sendApplicationUpdateEmail(data);
+    });
 
     return {
       success: true,
