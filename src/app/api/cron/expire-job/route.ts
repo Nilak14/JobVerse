@@ -37,6 +37,10 @@ export const GET = async () => {
         message: "No Expire Jobs Found",
       });
     }
+    return Response.json(
+      { success: true, message: "Jobs expired successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     await discordCronJobBot({
       type: "JOB_EXPIRED",
@@ -44,6 +48,11 @@ export const GET = async () => {
       message:
         error instanceof Error ? error.message : "An unknown error occurred",
     });
+
     console.error("Error expiring jobs:", error);
+    return Response.json(
+      { success: false, message: "Failed to expire jobs" },
+      { status: 500 }
+    );
   }
 };
