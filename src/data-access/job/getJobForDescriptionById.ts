@@ -7,7 +7,16 @@ export const getJobByIdDescription = cache(async (jobId: string) => {
   const job = await prisma.job.findUnique({
     where: {
       id: jobId,
-      status: "ACTIVE",
+      status: {
+        notIn: [
+          "DRAFT",
+          "NEED_REVIEW",
+          "PENDING",
+          "PAUSED",
+          "REJECTED",
+          "DELETED",
+        ],
+      },
     },
     select: getJobDataIncludeDescription(),
   });
