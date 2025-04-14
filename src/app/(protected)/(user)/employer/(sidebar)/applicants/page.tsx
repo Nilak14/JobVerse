@@ -6,6 +6,10 @@ import { Suspense } from "react";
 import { DashboardSkeleton } from "@/components/skeletons/ApplicantPageSkeleton";
 import ApplicantContent from "./ApplicantContent";
 
+export const metadata = {
+  title: "Applicants",
+  description: "Manage and review job applicants for your posted positions",
+};
 const ApplicantPage = () => {
   return (
     <main>

@@ -1,24 +1,8 @@
 "use client";
 import { JobApplicationEmployer } from "@/lib/prisma-types/Application";
 import { motion } from "framer-motion";
-import {
-  Calendar,
-  ChevronRight,
-  Download,
-  FileText,
-  Mail,
-  Phone,
-  Star,
-  UserPlus,
-} from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Calendar, UserPlus } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/Global/EmptyState";
@@ -34,12 +18,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ApplicationEmployerDropdownAction from "@/components/applications/ApplicationEmployerDropdownAction";
+import PercentageCircle from "@/components/ui/ratingCircle";
+import { useCompanySubscriptionLevel } from "@/context/CompanySubscriptionLevelProvider";
 interface ApplicantListViewProps {
   applicantData: JobApplicationEmployer[];
 }
 const ApplicantListView = ({ applicantData }: ApplicantListViewProps) => {
   const hasApplicants = applicantData.length > 0;
-
+  const subLevel = useCompanySubscriptionLevel();
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -76,6 +62,7 @@ const ApplicantListView = ({ applicantData }: ApplicantListViewProps) => {
               <TableHead>Skills</TableHead>
               <TableHead>Applied</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Rating</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -135,6 +122,13 @@ const ApplicantListView = ({ applicantData }: ApplicantListViewProps) => {
                 </TableCell>
                 <TableCell>
                   <ApplicationStatusBadge status={applicant.status} />
+                </TableCell>
+                <TableCell>
+                  <PercentageCircle
+                    size={50}
+                    percentage={applicant.rating || 0}
+                    isBlur={subLevel === "FREE"}
+                  />
                 </TableCell>
                 <TableCell className="text-right">
                   <ApplicationEmployerDropdownAction application={applicant} />

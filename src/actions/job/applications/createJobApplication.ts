@@ -1,5 +1,6 @@
 "use server";
 
+import { createCandidateRating } from "@/actions/gemini/createCandidateRating";
 import { sendJobApplicantNotification } from "@/actions/slack/sendJobApplicantNotification";
 import { signOut } from "@/auth";
 import { auth } from "@/lib/auth";
@@ -29,6 +30,11 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
         include: {
           company: {
             select: {
+              subscriptions: {
+                select: {
+                  stripePriceId: true,
+                },
+              },
               slackAccessToken: true,
               slackChannelId: true,
             },
@@ -59,14 +65,19 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
     if (job.deadline && new Date(job.deadline) < new Date()) {
       throw new Error("Job application deadline has passed");
     }
-    await prisma.application.create({
+    const newApplication = await prisma.application.create({
       data: {
         jobId,
         jobSeekerId,
         resumeId,
       },
+      select: {
+        id: true,
+      },
     });
     after(async () => {
+      console.log("after runs");
+
       if (!job.sendEmailNotification) {
         return;
       }
@@ -78,6 +89,21 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
         jobId: jobId,
         jobTitle: job.title || "",
         companyId: job.companyId,
+      });
+    });
+    after(async () => {
+      if (!newApplication) {
+        return;
+      }
+      console.log("after runs for rating");
+
+      await createCandidateRating({
+        resumeId: resumeId || null,
+        jobSeekerId: jobSeekerId,
+        jobTitle: job.title || null,
+        jobDescription: job.description || null,
+        applicationId: newApplication.id,
+        jobSkills: job.skills.join(" ") || null,
       });
     });
     return { success: true, message: "Job Applied  successfully" };
