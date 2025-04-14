@@ -1,3 +1,4 @@
+import { discordSubscriptionBot } from "@/actions/discord_bot/bot";
 import prisma from "@/lib/prisma";
 import stripe from "@/lib/stripe";
 import { NextRequest } from "next/server";
@@ -26,6 +27,7 @@ export const POST = async (req: NextRequest) => {
       case "customer.subscription.created":
       case "customer.subscription.updated":
         await handleSubscriptionCreatedOrUpdated(event.data.object.id);
+
         break;
       case "customer.subscription.deleted":
         await handleSubscriptionDeleted(event.data.object);
@@ -67,8 +69,6 @@ async function handleSessionCompleted(session: Stripe.Checkout.Session) {
   }
 }
 async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
-  console.log("Subscription Created/Updated");
-
   const subscription = await stripe.subscriptions.retrieve(subscriptionId);
   if (
     subscription.status === "active" ||
@@ -144,8 +144,13 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
         }),
       ]);
     }
+    await discordSubscriptionBot({
+      userType:
+        subscription.metadata.isCompany === "TRUE" ? "COMPANY" : "JOB_SEEKER",
+      priceId: subscription.items.data[0].price.id,
+      action: "CREATED/UPDATED",
+    });
   } else {
-    console.log("deleted ");
     if (subscription.metadata.isCompany === "TRUE") {
       await Promise.all([
         prisma.companySubscription.deleteMany({
@@ -179,6 +184,12 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
         }),
       ]);
     }
+    await discordSubscriptionBot({
+      userType:
+        subscription.metadata.isCompany === "TRUE" ? "COMPANY" : "JOB_SEEKER",
+      priceId: subscription.items.data[0].price.id,
+      action: "DELETED",
+    });
   }
 }
 
@@ -217,4 +228,10 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       }),
     ]);
   }
+  await discordSubscriptionBot({
+    userType:
+      subscription.metadata.isCompany === "TRUE" ? "COMPANY" : "JOB_SEEKER",
+    priceId: subscription.items.data[0].price.id,
+    action: "DELETED",
+  });
 }

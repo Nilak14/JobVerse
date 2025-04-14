@@ -1,4 +1,6 @@
+import { discordCronJobBot } from "@/actions/discord_bot/bot";
 import prisma from "@/lib/prisma";
+import { after } from "next/server";
 
 export const GET = async () => {
   try {
@@ -13,7 +15,7 @@ export const GET = async () => {
       },
     });
     if (needToExpireJobs.length > 0) {
-      await prisma.job.updateMany({
+      const job = await prisma.job.updateMany({
         where: {
           id: {
             in: needToExpireJobs.map((job) => job.id),
@@ -23,10 +25,25 @@ export const GET = async () => {
           status: "EXPIRED",
         },
       });
+      await discordCronJobBot({
+        type: "JOB_EXPIRED",
+        success: true,
+        message: `${job.count} Jobs expired`,
+      });
+    } else {
+      await discordCronJobBot({
+        type: "JOB_EXPIRED",
+        success: true,
+        message: "No Expire Jobs Found",
+      });
     }
-    //todo: send notification to admin in discord
   } catch (error) {
-    //todo: send error to admin in discord
+    await discordCronJobBot({
+      type: "JOB_EXPIRED",
+      success: false,
+      message:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    });
     console.error("Error expiring jobs:", error);
   }
 };
