@@ -34,6 +34,7 @@ model Job {
     skills                String[]
     minEducationRequired  String?
     preferredGender       String?
+    views                 Int           @default(0)
     licenseRequired       String?
     vehicleRequired       String?
     resumeRequired        Boolean       @default(false)

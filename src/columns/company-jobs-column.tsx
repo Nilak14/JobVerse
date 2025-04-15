@@ -33,13 +33,7 @@ export const companyJobsColumn: ColumnDef<JobServerData>[] = [
     accessorKey: "title",
     header: "Job Title",
   },
-  {
-    accessorKey: "view",
-    header: "Views",
-    cell: ({ row }) => {
-      return <NumberTableCell number={100} />;
-    },
-  },
+
   {
     // console.log(jobs[0]._count.applications);
     accessorKey: "_count.applications",

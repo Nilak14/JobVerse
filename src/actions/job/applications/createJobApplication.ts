@@ -5,6 +5,8 @@ import { sendJobApplicantNotification } from "@/actions/slack/sendJobApplicantNo
 import { signOut } from "@/auth";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getNotificationSelect } from "@/lib/prisma-types/Notification";
+import { triggerNotification } from "@/lib/triggerNotification";
 import { handleError } from "@/lib/utils";
 import { ApplyJobSchema, ApplyJobSchemaType } from "@/schema/ApplyJobSchema";
 import { after } from "next/server";
@@ -30,9 +32,20 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
         include: {
           company: {
             select: {
+              logoUrl: true,
               subscriptions: {
                 select: {
                   stripePriceId: true,
+                },
+              },
+
+              members: {
+                select: {
+                  employer: {
+                    select: {
+                      userId: true,
+                    },
+                  },
                 },
               },
               slackAccessToken: true,
@@ -76,8 +89,6 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
       },
     });
     after(async () => {
-      console.log("after runs");
-
       if (!job.sendEmailNotification) {
         return;
       }
@@ -95,8 +106,6 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
       if (!newApplication) {
         return;
       }
-      console.log("after runs for rating");
-
       await createCandidateRating({
         resumeId: resumeId || null,
         jobSeekerId: jobSeekerId,
@@ -105,6 +114,28 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
         applicationId: newApplication.id,
         jobSkills: job.skills.join(" ") || null,
       });
+    });
+    after(async () => {
+      const memberIds = job.company.members.map(
+        (member) => member.employer.userId
+      );
+      await Promise.all(
+        memberIds.map(async (memberId) => {
+          const notification = await prisma.notifications.create({
+            data: {
+              title: `New Job Application for ${job.title}`,
+              body: `${
+                session.user.name || "Anonymous"
+              } has applied for the job ${job.title}`,
+              category: "NEW_APPLICATION",
+              userId: memberId,
+              imageURL: job.company.logoUrl,
+            },
+            select: getNotificationSelect(),
+          });
+          triggerNotification(memberId, notification);
+        })
+      );
     });
     return { success: true, message: "Job Applied  successfully" };
   } catch (error) {

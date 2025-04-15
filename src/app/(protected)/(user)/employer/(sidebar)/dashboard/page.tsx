@@ -1,5 +1,7 @@
 import ApplicationStatusDistributionPie from "@/components/employer/dashboard/ApplicationStatusDistributionPie";
 import ApplicationTrends from "@/components/employer/dashboard/ApplicationTrend";
+import RecentPendingApplicant from "@/components/employer/dashboard/RecentPendingApplicant";
+import ScheduledInterview from "@/components/employer/dashboard/ScheduledInterview";
 import TopCard from "@/components/employer/dashboard/TopCard";
 import { auth } from "@/lib/auth";
 import { Metadata } from "next";
@@ -20,6 +22,10 @@ const EmployerDashboardPage = async () => {
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
         <ApplicationTrends companyId={session.activeCompanyId} />
         <ApplicationStatusDistributionPie companyId={session.activeCompanyId} />
+      </div>
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+        <ScheduledInterview companyId={session.activeCompanyId} />
+        <RecentPendingApplicant companyId={session.activeCompanyId} />
       </div>
     </div>
   );

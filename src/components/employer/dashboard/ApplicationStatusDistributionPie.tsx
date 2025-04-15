@@ -108,7 +108,7 @@ const ApplicationStatusDistributionPie = ({
     return (
       <ChartContainer
         config={chartConfig}
-        className="mx-auto aspect-square max-h-[250px]"
+        className="mx-auto aspect-square max-h-[250px] "
       >
         <PieChart>
           <ChartTooltip
@@ -222,7 +222,9 @@ const ApplicationStatusDistributionPie = ({
         <CardTitle>Application Status Distribution</CardTitle>
         <CardDescription>Breakdown of application status</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0 h-64">{renderContent()}</CardContent>
+      <CardContent className="flex-1  h-72">
+        <div className="mt-10">{renderContent()}</div>
+      </CardContent>
     </Card>
   );
 };
