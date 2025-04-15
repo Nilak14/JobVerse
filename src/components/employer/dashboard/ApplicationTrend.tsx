@@ -16,18 +16,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { YearPicker } from "../ui/year-picker";
 import { useState } from "react";
-import { useQueryUserRegistrationTrend } from "@/hooks/query-hooks/getChartData";
+import { YearPicker } from "@/components/ui/year-picker";
+import { useQueryEmployerApplicantTrend } from "@/hooks/query-hooks/getChartData";
 
 const chartConfig = {
-  job_seeker: {
-    label: "Job Seeker",
+  totalApplicant: {
+    label: "Applicant",
     color: "hsl(var(--chart-1))",
-  },
-  employer: {
-    label: "Employer",
-    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
@@ -48,16 +44,19 @@ const placeholderData = Array(12)
       "Nov",
       "Dec",
     ][i],
-    job_seeker: 0,
-    employer: 0,
+    totalApplicant: 0,
   }));
 
-const UserRegistrationTrends = () => {
+interface ApplicationTrendsProps {
+  companyId: string;
+}
+const ApplicationTrends = ({ companyId }: ApplicationTrendsProps) => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
-  const { data, isLoading, error } = useQueryUserRegistrationTrend(
-    selectedYear.toString()
+  const { data, isLoading, error } = useQueryEmployerApplicantTrend(
+    selectedYear.toString(),
+    companyId
   );
 
   const chartData = data?.data || placeholderData;
@@ -86,17 +85,9 @@ const UserRegistrationTrends = () => {
             cursor={false}
             content={<ChartTooltipContent indicator="dot" />}
           />
+
           <Area
-            dataKey="job_seeker"
-            type="monotone"
-            fill="hsl(var(--chart-1))"
-            fillOpacity={isLoading ? 0.1 : 0.4}
-            stroke="hsl(var(--chart-1))"
-            strokeOpacity={isLoading ? 0.3 : 1}
-            stackId="a"
-          />
-          <Area
-            dataKey="employer"
+            dataKey="totalApplicant"
             type="monotone"
             fill="hsl(var(--chart-3))"
             fillOpacity={isLoading ? 0.1 : 0.4}
@@ -119,7 +110,7 @@ const UserRegistrationTrends = () => {
             <div className="flex flex-col items-center gap-2">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
               <span className="text-sm text-muted-foreground">
-                Loading Registration Trends...
+                Loading Data...
               </span>
             </div>
           </div>
@@ -152,9 +143,9 @@ const UserRegistrationTrends = () => {
     <Card className="col-span-4 ">
       <CardHeader className="flex justify-between items-center flex-row">
         <div>
-          <CardTitle>User Registration Trends</CardTitle>
-          <CardDescription>
-            New user registrations for {selectedYear}
+          <CardTitle>Applicant Trends</CardTitle>
+          <CardDescription className="mt-1 ">
+            All Applicants for {selectedYear}
           </CardDescription>
         </div>
         <div>
@@ -166,4 +157,4 @@ const UserRegistrationTrends = () => {
   );
 };
 
-export default UserRegistrationTrends;
+export default ApplicationTrends;

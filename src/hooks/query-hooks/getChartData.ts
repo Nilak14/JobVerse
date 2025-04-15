@@ -64,3 +64,26 @@ export const useQueryCompanyRevenuePieData = () => {
     refetchOnWindowFocus: false,
   });
 };
+
+export const useQueryEmployerApplicantTrend = (
+  year: string,
+  companyId: string
+) => {
+  return useQuery({
+    queryKey: ["employer-applicant-trend", year, companyId],
+    queryFn: async () =>
+      await JVRequest.get(
+        `/api/analytics/employer/applicant-trend?year=${year}`
+      ),
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useQueryEmployerApplicationDistribution = (companyId: string) => {
+  return useQuery({
+    queryKey: ["employer-application-distribution", companyId],
+    queryFn: async () =>
+      await JVRequest.get(`/api/analytics/employer/application-distribution`),
+    refetchOnWindowFocus: false,
+  });
+};
