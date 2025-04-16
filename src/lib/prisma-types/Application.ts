@@ -48,6 +48,7 @@ export const JobApplicationSelectEmployer = () => {
     status: true,
     createdAt: true,
     resumeId: true,
+    rating: true,
     job: {
       select: {
         title: true,

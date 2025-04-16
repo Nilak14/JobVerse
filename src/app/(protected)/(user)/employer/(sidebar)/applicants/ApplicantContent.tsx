@@ -9,12 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input"; // Ensure you have an Input component available
-import ApplicantGridView from "./ApplicantGridView";
-import ApplicantListView from "./ApplicantListView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { Grid3X3, List } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import ApplicantGridView from "./ApplicantGridView";
+import ApplicantListView from "./ApplicantListView";
 
 interface ApplicantContentProps {
   applicantData: JobApplicationEmployer[];
@@ -22,6 +22,7 @@ interface ApplicantContentProps {
 
 const ApplicantContent = ({ applicantData }: ApplicantContentProps) => {
   const searchParams = useSearchParams();
+
   // Extract jobs for filtering options
   const allJobs = applicantData.map((application) => application.job);
 
@@ -30,9 +31,21 @@ const ApplicantContent = ({ applicantData }: ApplicantContentProps) => {
     searchParams.get("jobId") || "0"
   ); // "0" means show all jobs
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const [sortOrder, setSortOrder] = useState("desc"); // "desc" for newest first, "asc" for oldest first
 
-  // Apply filtering and searching
+  // Sorting-related states:
+  // sortType: decides whether we sort by date or rating
+  const [sortType, setSortType] = useState<"date" | "rating">("date");
+  const [sortOrder, setSortOrder] = useState("desc"); // for date sorting: "desc" for newest first, "asc" for oldest first
+  const [ratingSortOrder, setRatingSortOrder] = useState("desc"); // for rating sorting: "desc" for higher to lower, "asc" for lower to higher
+
+  // Determine if we have at least one valid rating to enable rating sorting.
+  const hasValidRating = useMemo(() => {
+    return applicantData.some(
+      (application) => !isNaN(Number(application.rating))
+    );
+  }, [applicantData]);
+
+  // Apply filtering based on job and status
   const filteredData = useMemo(() => {
     return applicantData.filter((application) => {
       const jobMatch =
@@ -43,22 +56,33 @@ const ApplicantContent = ({ applicantData }: ApplicantContentProps) => {
     });
   }, [applicantData, selectedJob, selectedStatus]);
 
-  // Apply sorting based on creation date
+  // Apply sorting based on sortType and the chosen order
   const sortedData = useMemo(() => {
     const data = [...filteredData];
-    data.sort((a, b) => {
-      const dateA = new Date(a.createdAt);
-      const dateB = new Date(b.createdAt);
-      return sortOrder === "asc"
-        ? dateA.getTime() - dateB.getTime()
-        : dateB.getTime() - dateA.getTime();
-    });
+    if (sortType === "rating" && hasValidRating) {
+      data.sort((a, b) => {
+        const ratingA = Number(a.rating);
+        const ratingB = Number(b.rating);
+        // Fallback to 0 if conversion fails
+        const validA = isNaN(ratingA) ? 0 : ratingA;
+        const validB = isNaN(ratingB) ? 0 : ratingB;
+        return ratingSortOrder === "asc" ? validA - validB : validB - validA;
+      });
+    } else {
+      data.sort((a, b) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        return sortOrder === "asc"
+          ? dateA.getTime() - dateB.getTime()
+          : dateB.getTime() - dateA.getTime();
+      });
+    }
     return data;
-  }, [filteredData, sortOrder]);
+  }, [filteredData, sortType, sortOrder, ratingSortOrder, hasValidRating]);
 
   return (
     <Tabs defaultValue="list" className="mt-6">
-      <div className="flex justify-between flex-col md:flex-row gap-6">
+      <div className="flex justify-between flex-col gap-6">
         <div className="flex items-center justify-between">
           <TabsList>
             <TabsTrigger value="grid">
@@ -98,6 +122,7 @@ const ApplicantContent = ({ applicantData }: ApplicantContentProps) => {
               </SelectContent>
             </Select>
           </div>
+
           {/* Filter by Status */}
           <div>
             <Select onValueChange={setSelectedStatus}>
@@ -114,20 +139,56 @@ const ApplicantContent = ({ applicantData }: ApplicantContentProps) => {
             </Select>
           </div>
 
-          {/* Sorting by Created Date */}
+          {/* Sorting type: Date vs Rating */}
           <div>
-            <Select onValueChange={setSortOrder}>
+            <Select
+              onValueChange={(val) => setSortType(val as "date" | "rating")}
+            >
               <SelectTrigger className="w-[250px]">
-                <SelectValue placeholder="Sort by Date" />
+                <SelectValue placeholder="Sort By" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="asc">Oldest First</SelectItem>
-                <SelectItem value="desc">Newest First</SelectItem>
+                <SelectItem value="date">Sort by Date</SelectItem>
+                {/* Render rating option only if there is at least one valid rating */}
+                {hasValidRating && (
+                  <SelectItem value="rating">Sort by Rating</SelectItem>
+                )}
               </SelectContent>
             </Select>
           </div>
+
+          {/* Sorting order for date or rating */}
+          {sortType === "date" ? (
+            <div>
+              <Select onValueChange={setSortOrder} defaultValue="desc">
+                <SelectTrigger className="w-[250px]">
+                  <SelectValue placeholder="Sort by Date" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="asc">Oldest First</SelectItem>
+                  <SelectItem value="desc">Newest First</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            // For rating sorting, only show if we have valid ratings.
+            hasValidRating && (
+              <div>
+                <Select onValueChange={setRatingSortOrder} defaultValue="desc">
+                  <SelectTrigger className="w-[250px]">
+                    <SelectValue placeholder="Sort by Rating" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="asc">Lower to Higher</SelectItem>
+                    <SelectItem value="desc">Higher to Lower</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )
+          )}
         </div>
       </div>
+
       <TabsContent value="grid" className="mt-6">
         <ApplicantGridView applicantData={sortedData} />
       </TabsContent>

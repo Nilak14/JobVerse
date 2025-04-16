@@ -1,9 +1,12 @@
 "use server";
 
+import { createCandidateRating } from "@/actions/gemini/createCandidateRating";
 import { sendJobApplicantNotification } from "@/actions/slack/sendJobApplicantNotification";
 import { signOut } from "@/auth";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getNotificationSelect } from "@/lib/prisma-types/Notification";
+import { triggerNotification } from "@/lib/triggerNotification";
 import { handleError } from "@/lib/utils";
 import { ApplyJobSchema, ApplyJobSchemaType } from "@/schema/ApplyJobSchema";
 import { after } from "next/server";
@@ -29,6 +32,22 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
         include: {
           company: {
             select: {
+              logoUrl: true,
+              subscriptions: {
+                select: {
+                  stripePriceId: true,
+                },
+              },
+
+              members: {
+                select: {
+                  employer: {
+                    select: {
+                      userId: true,
+                    },
+                  },
+                },
+              },
               slackAccessToken: true,
               slackChannelId: true,
             },
@@ -59,11 +78,14 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
     if (job.deadline && new Date(job.deadline) < new Date()) {
       throw new Error("Job application deadline has passed");
     }
-    await prisma.application.create({
+    const newApplication = await prisma.application.create({
       data: {
         jobId,
         jobSeekerId,
         resumeId,
+      },
+      select: {
+        id: true,
       },
     });
     after(async () => {
@@ -79,6 +101,41 @@ export const createJobApplication = async (values: ApplyJobSchemaType) => {
         jobTitle: job.title || "",
         companyId: job.companyId,
       });
+    });
+    after(async () => {
+      if (!newApplication) {
+        return;
+      }
+      await createCandidateRating({
+        resumeId: resumeId || null,
+        jobSeekerId: jobSeekerId,
+        jobTitle: job.title || null,
+        jobDescription: job.description || null,
+        applicationId: newApplication.id,
+        jobSkills: job.skills.join(" ") || null,
+      });
+    });
+    after(async () => {
+      const memberIds = job.company.members.map(
+        (member) => member.employer.userId
+      );
+      await Promise.all(
+        memberIds.map(async (memberId) => {
+          const notification = await prisma.notifications.create({
+            data: {
+              title: `New Job Application for ${job.title}`,
+              body: `${
+                session.user.name || "Anonymous"
+              } has applied for the job ${job.title}`,
+              category: "NEW_APPLICATION",
+              userId: memberId,
+              imageURL: job.company.logoUrl,
+            },
+            select: getNotificationSelect(),
+          });
+          triggerNotification(memberId, notification);
+        })
+      );
     });
     return { success: true, message: "Job Applied  successfully" };
   } catch (error) {

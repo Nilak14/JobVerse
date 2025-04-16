@@ -41,7 +41,7 @@ interface JobCardProps {
 
 const JobCard = ({ job, loading }: JobCardProps) => {
   const daysLeft = getTimeDifference(job.deadline!);
-  const { session, status } = getClientSession();
+  const { session } = getClientSession();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}

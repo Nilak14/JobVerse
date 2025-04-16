@@ -40,15 +40,18 @@ export const GET = async (req: NextRequest) => {
     // Calculate the number of active subscriptions
     const activeSubscriptions = subscriptions.data.length;
 
-    return Response.json({
-      success: true,
-      data: {
-        newUsers,
-        activeJobs,
-        totalRevenue,
-        activeSubscriptions,
+    return Response.json(
+      {
+        success: true,
+        data: {
+          newUsers,
+          activeJobs,
+          totalRevenue,
+          activeSubscriptions,
+        },
       },
-    });
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Analytics error:", error);
     return Response.json(

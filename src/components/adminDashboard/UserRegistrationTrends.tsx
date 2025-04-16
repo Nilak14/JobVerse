@@ -31,7 +31,6 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-// Placeholder data for the loading state to maintain chart dimensions
 const placeholderData = Array(12)
   .fill(1)
   .map((_, i) => ({

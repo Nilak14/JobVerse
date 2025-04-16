@@ -65,7 +65,7 @@ export async function generateResumeSummary(input: GenerateSummaryInput) {
       temperature: 1,
       topP: 0.95,
       topK: 40,
-      maxOutputTokens: 8192,
+      maxOutputTokens: 400,
       responseMimeType: "text/plain",
     },
   });

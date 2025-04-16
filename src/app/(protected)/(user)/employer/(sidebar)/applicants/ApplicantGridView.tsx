@@ -12,11 +12,14 @@ import { Calendar, MapPin, UserPlus } from "lucide-react";
 import Link from "next/link";
 
 import ApplicationEmployerDropdownAction from "@/components/applications/ApplicationEmployerDropdownAction";
+import PercentageCircle from "@/components/ui/ratingCircle";
+import { useCompanySubscriptionLevel } from "@/context/CompanySubscriptionLevelProvider";
 interface ApplicantGridViewProps {
   applicantData: JobApplicationEmployer[];
 }
 const ApplicantGridView = ({ applicantData }: ApplicantGridViewProps) => {
   const hasApplicants = applicantData.length > 0;
+  const subLevel = useCompanySubscriptionLevel();
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -74,13 +77,21 @@ const ApplicantGridView = ({ applicantData }: ApplicantGridViewProps) => {
               </div>
             </CardHeader>
             <CardContent className="p-6 space-y-3">
-              <ApplicationStatusBadge status={applicant.status} />
-              {applicant.jobSeeker.JobSeekerProfile?.location && (
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <MapPin className="mr-1 h-4 w-4" />
-                  {applicant.jobSeeker.JobSeekerProfile?.location}
-                </div>
-              )}
+              <div className="flex items-center justify-between">
+                <ApplicationStatusBadge status={applicant.status} />
+                <PercentageCircle
+                  percentage={applicant.rating || 0}
+                  isBlur={subLevel === "FREE"}
+                  size={50}
+                />
+
+                {applicant.jobSeeker.JobSeekerProfile?.location && (
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <MapPin className="mr-1 h-4 w-4" />
+                    {applicant.jobSeeker.JobSeekerProfile?.location}
+                  </div>
+                )}
+              </div>
               <div className="mb-4 flex items-center text-sm text-muted-foreground">
                 <Calendar className="mr-1 h-4 w-4" />
                 Applied {formatDate(applicant.createdAt)}

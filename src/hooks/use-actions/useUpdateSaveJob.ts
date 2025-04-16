@@ -31,6 +31,7 @@ export const useUpdateSaveJob = (jobId: string, saveJobInfo: SaveJobInfo) => {
     },
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["saved-job"] });
+      queryClient.invalidateQueries({ queryKey: ["job-seeker-card"] });
     },
 
     onError(error, variables, context) {

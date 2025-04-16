@@ -73,7 +73,7 @@ export async function generateJobDescription(input: JobSchemaType) {
       temperature: 1,
       topP: 0.95,
       topK: 40,
-      maxOutputTokens: 8192,
+      maxOutputTokens: 1000,
       responseMimeType: "text/plain",
     },
   });

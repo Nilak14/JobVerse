@@ -394,3 +394,58 @@ export const LinkedInRedirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/call
 
 export const JobVerseLogoUrl =
   "https://utfs.io/f/AxbCfMURBwL11wIuavQdKomzIhEBq659AJPs84VuLCUlgMRc";
+
+export function jobSeekerProfileCompletionPercentage(
+  jobSeekerProfile: JobSeekerProfileApplication
+): { percentage: number; message: string } {
+  const { JOB_SEEKER } = jobSeekerProfile;
+
+  if (!JOB_SEEKER) {
+    return { percentage: 0, message: "Profile not found" };
+  }
+
+  let score = 0;
+  const totalSections = 5; // Updated count includes Certifications
+
+  // Section 1: Resume
+  if (
+    JOB_SEEKER.createdResumes.length > 0 ||
+    JOB_SEEKER.uploadedResumes.length > 0
+  ) {
+    score++;
+  }
+
+  const { JobSeekerProfile: profile } = JOB_SEEKER;
+  if (!profile) {
+    const percentage = Math.round((score / totalSections) * 100);
+    return {
+      percentage,
+      message: `Only resume information is available. Completion: ${percentage}%`,
+    };
+  }
+
+  // Section 2: Skills
+  if (profile.skills && profile.skills.length > 0) {
+    score++;
+  }
+
+  // Section 3: Work Experience
+  if (profile.WorkExperience && profile.WorkExperience.length > 0) {
+    score++;
+  }
+
+  // Section 4: Education
+  if (profile.Education && profile.Education.length > 0) {
+    score++;
+  }
+
+  // Section 5: Certifications
+  if (profile.Certification && profile.Certification.length > 0) {
+    score++;
+  }
+
+  const percentage = Math.round((score / totalSections) * 100);
+  const message = `${percentage}% completed`;
+
+  return { percentage, message };
+}

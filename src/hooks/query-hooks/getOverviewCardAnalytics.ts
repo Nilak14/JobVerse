@@ -16,3 +16,19 @@ export const useQueryJobCardAnalytics = () => {
     refetchOnWindowFocus: false,
   });
 };
+export const useQueryEmployerCardAnalytics = (companyId: string) => {
+  return useQuery({
+    queryKey: ["employerCard", companyId],
+    queryFn: async () =>
+      await JVRequest.get(`/api/analytics/employer/card-data`),
+    refetchOnWindowFocus: false,
+  });
+};
+export const useQueryJobSeekerCardAnalytics = () => {
+  return useQuery({
+    queryKey: ["job-seeker-card"],
+    queryFn: async () =>
+      await JVRequest.get(`/api/analytics/job-seeker/card-data`),
+    refetchOnWindowFocus: false,
+  });
+};
