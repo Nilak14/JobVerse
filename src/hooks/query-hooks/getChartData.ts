@@ -87,3 +87,11 @@ export const useQueryEmployerApplicationDistribution = (companyId: string) => {
     refetchOnWindowFocus: false,
   });
 };
+export const useQueryJobSeekerApplicationDistribution = () => {
+  return useQuery({
+    queryKey: ["job-seeker-application-distribution"],
+    queryFn: async () =>
+      await JVRequest.get(`/api/analytics/job-seeker/application-distribution`),
+    refetchOnWindowFocus: false,
+  });
+};

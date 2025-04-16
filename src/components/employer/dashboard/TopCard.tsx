@@ -2,14 +2,7 @@
 import { useQueryEmployerCardAnalytics } from "@/hooks/query-hooks/getOverviewCardAnalytics";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { NumberTicker } from "@/components/ui/number-ticker";
-import {
-  Briefcase,
-  CreditCard,
-  DollarSign,
-  Hourglass,
-  SquarePlus,
-  Users,
-} from "lucide-react";
+import { Briefcase, Hourglass, SquarePlus, Users } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 interface TopCardProps {

@@ -17,12 +17,14 @@ const SaveJobButton = ({
   withText = false,
 }: SaveJobButtonProps) => {
   const { data, isLoading } = getSavedJobInfo(jobId, initialState);
-  const { mutate, error, isError } = useUpdateSaveJob(jobId, data!);
+  const { mutate } = useUpdateSaveJob(jobId, data!);
 
   return (
     <button
       disabled={isLoading}
-      onClick={() => mutate()}
+      onClick={() => {
+        mutate();
+      }}
       className={cn(
         "flex justify-center items-center gap-2 hover:text-red-500 disabled:animate-pulse",
         className

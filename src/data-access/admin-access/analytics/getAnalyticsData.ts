@@ -3,6 +3,7 @@ import {
   getCompanyInterview,
   getCompanyRecentPendingApplication,
   getCompanyWithHighestJob,
+  getJobSeekerInterview,
   getRecentUser,
   RecentPendingApplication,
 } from "@/lib/prisma-types/Analytics";
@@ -67,3 +68,14 @@ export const getRecentPendingApplication = cache(
     return pendingApplication || [];
   }
 );
+
+export const getJobSeekerScheduledInterview = cache((jobSeekerId: string) => {
+  const scheduledInterview = prisma.application.findMany({
+    where: {
+      jobSeekerId: jobSeekerId,
+      status: "INTERVIEW",
+    },
+    select: getJobSeekerInterview(),
+  });
+  return scheduledInterview || [];
+});
