@@ -100,3 +100,30 @@ export function getCompanyRecentPendingApplication() {
 export type RecentPendingApplication = Prisma.ApplicationGetPayload<{
   select: ReturnType<typeof getCompanyRecentPendingApplication>;
 }>;
+
+export function getJobSeekerInterview() {
+  return {
+    job: {
+      select: {
+        company: {
+          select: {
+            logoUrl: true,
+            name: true,
+          },
+        },
+      },
+    },
+
+    Interview: {
+      select: {
+        interviewDate: true,
+        interviewTime: true,
+        interviewType: true,
+        note: true,
+      },
+    },
+  } satisfies Prisma.ApplicationSelect;
+}
+export type JobSeekerInterview = Prisma.ApplicationGetPayload<{
+  select: ReturnType<typeof getJobSeekerInterview>;
+}>;

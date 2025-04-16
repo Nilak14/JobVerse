@@ -159,7 +159,6 @@ const InviteMemberModal = ({ open, setOpen }: InviteMemberModalProps) => {
         </section>
         <ResponsiveModalFooter>
           <div className="text-center w-full space-y-5 ">
-            <LinkButtonAnimated>Or Create Code</LinkButtonAnimated>
             <p className="text-xs text-muted-foreground">
               You are inviting new Member to{" "}
               <span className="font-bold">{activeCompany.name}</span>

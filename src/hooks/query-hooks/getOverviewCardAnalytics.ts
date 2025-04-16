@@ -24,3 +24,11 @@ export const useQueryEmployerCardAnalytics = (companyId: string) => {
     refetchOnWindowFocus: false,
   });
 };
+export const useQueryJobSeekerCardAnalytics = () => {
+  return useQuery({
+    queryKey: ["job-seeker-card"],
+    queryFn: async () =>
+      await JVRequest.get(`/api/analytics/job-seeker/card-data`),
+    refetchOnWindowFocus: false,
+  });
+};
