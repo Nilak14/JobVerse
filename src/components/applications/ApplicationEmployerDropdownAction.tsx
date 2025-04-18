@@ -1,8 +1,6 @@
 import { Button } from "../ui/button";
 import {
   CheckCircle,
-  Cross,
-  File,
   FileClock,
   FileUser,
   MoreHorizontal,
@@ -34,7 +32,6 @@ import { toast } from "sonner";
 import LoadingButton from "../ui/loading-button";
 import { useRouter } from "next/navigation";
 import ScheduledInterviewModal from "./ScheduleInterviewModal";
-import JobSeekerProfileSheet from "./JobSeekerProfileSheet";
 
 interface ApplicationEmployerDropdownActionProps {
   application: JobApplicationEmployer;
@@ -49,7 +46,7 @@ const ApplicationEmployerDropdownAction = ({
   const [openAcceptModal, setOpenAcceptModal] = useState(false);
   const [openScheduledInterviewModal, setOpenScheduledInterviewModal] =
     useState(false);
-  const [openProfileSheet, setOpenProfileSheet] = useState(false);
+
   return (
     <>
       <DropdownMenu>
@@ -60,9 +57,13 @@ const ApplicationEmployerDropdownAction = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           {application.jobSeeker.JobSeekerProfile?.profileVisibility && (
-            <DropdownMenuItem onClick={() => setOpenProfileSheet(true)}>
-              <User />
-              <span>View Profile</span>
+            <DropdownMenuItem asChild>
+              <Link
+                href={`/profile/job-seeker/${application.jobSeeker.user.id}`}
+              >
+                <User />
+                <span>View Profile</span>
+              </Link>
             </DropdownMenuItem>
           )}
           {application.resumeId && (
@@ -128,13 +129,6 @@ const ApplicationEmployerDropdownAction = ({
         onClose={() => setOpenScheduledInterviewModal(false)}
         application={application}
       />
-      {openProfileSheet && (
-        <JobSeekerProfileSheet
-          open={openProfileSheet}
-          onClose={() => setOpenProfileSheet(false)}
-          jobSeekerId={application.jobSeeker.id}
-        />
-      )}
     </>
   );
 };
