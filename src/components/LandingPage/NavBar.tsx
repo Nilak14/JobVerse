@@ -102,7 +102,7 @@ export function Logo({
 }) {
   return (
     <Link
-      href="#"
+      href="/"
       className={cn("flex items-center gap-2 ", classname)}
       prefetch={false}
     >

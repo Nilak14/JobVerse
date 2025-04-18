@@ -6,6 +6,7 @@ enum NotificationCategory {
     NEW_MEMBER_JOINED
     JOB_STATUS
     PROMOTION
+    PROFILE_VIEW
 }
 
 model Notifications {

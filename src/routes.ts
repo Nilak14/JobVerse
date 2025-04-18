@@ -27,6 +27,7 @@ export const publicContentRoute = [
   "/job/description",
   "/resume/preview",
   "/job",
+  "/profile",
 ];
 export const publicSEORoute = ["/sitemap.xml", "/robots.txt", "/skills.json"];
 

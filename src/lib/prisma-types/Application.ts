@@ -67,6 +67,7 @@ export const JobApplicationSelectEmployer = () => {
         },
         user: {
           select: {
+            id: true,
             name: true,
             image: true,
             email: true,
