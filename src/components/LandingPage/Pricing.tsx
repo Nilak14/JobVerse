@@ -38,7 +38,7 @@ export const JOB_SEEKER_PLANS = [
     ],
     btn: {
       text: "Start For Free",
-      href: "/auth/sign-up?plan=free",
+      href: "/register/job_seeker",
       variant: "default",
     },
   },
@@ -57,7 +57,7 @@ export const JOB_SEEKER_PLANS = [
     ],
     btn: {
       text: "Upgrade to Pro",
-      href: "/auth/sign-up?plan=pro",
+      href: "/register/job_seeker",
       variant: "default",
     },
   },
@@ -76,7 +76,7 @@ export const JOB_SEEKER_PLANS = [
     ],
     btn: {
       text: "Upgrade to Elite",
-      href: "/auth/sign-up?plan=elite",
+      href: "/register/job_seeker",
       variant: "orange",
     },
   },
@@ -97,7 +97,7 @@ export const EMPLOYER_PLANS = [
     ],
     btn: {
       text: "Start For Free",
-      href: "/auth/sign-up?plan=free",
+      href: "/register/employer",
       variant: "default",
     },
   },
@@ -116,7 +116,7 @@ export const EMPLOYER_PLANS = [
     ],
     btn: {
       text: "Upgrade to Pro",
-      href: "/auth/sign-up?plan=pro",
+      href: "/register/employer",
       variant: "default",
     },
   },
@@ -135,7 +135,7 @@ export const EMPLOYER_PLANS = [
     ],
     btn: {
       text: "Upgrade to Elite",
-      href: "/auth/sign-up?plan=elite",
+      href: "/register/employer",
       variant: "orange",
     },
   },
