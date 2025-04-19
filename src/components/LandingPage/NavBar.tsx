@@ -21,6 +21,7 @@ import AnimateWrapper from "../Global/AnimateWrapper";
 
 import { cn } from "@/lib/utils";
 import GetStartedButton from "../ui/get-started-button";
+import { ThemeToggler } from "../Global/SmallThemeToggler";
 
 export const NavBar = () => {
   return (
@@ -76,7 +77,10 @@ export const NavBar = () => {
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
-            <AuthButtons />
+            <div>
+              <AuthButtons />
+              {/* <ThemeToggler /> */}
+            </div>
           </div>
         </Container>
       </AnimateWrapper>

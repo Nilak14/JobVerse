@@ -19,7 +19,10 @@ const LoginPage = async ({
 
   return (
     <main className="relative">
-      <BackButton className="bg-primary dark:bg-black dark:border hover:bg-primary/80 dark:border-gray-700 absolute text-white hover:dark:bg-black/80 top-10 left-10 z-10" />
+      <BackButton
+        href="/"
+        className="bg-primary dark:bg-black dark:border hover:bg-primary/80 dark:border-gray-700 absolute text-white hover:dark:bg-black/80 top-10 left-10 z-10"
+      />
       <Light className="invisible lg:visible" />
       <section className="grid grid-cols-1 lg:grid-cols-2  h-dvh ">
         <article className="relative hidden lg:block  ">

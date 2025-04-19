@@ -11,12 +11,11 @@ export const NavLinks: LandingPageNavLinks[] = [
     name: "Jobs",
     href: "/job",
   },
-  { name: "Pricing", href: "#" },
-
   {
-    name: "About",
-    href: "#",
+    name: "Features",
+    href: "/#features",
   },
+  { name: "Pricing", href: "/#pricing" },
 
   {
     name: "Contact",
