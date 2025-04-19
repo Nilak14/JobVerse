@@ -5,8 +5,8 @@ import { LucideIcon } from "lucide-react";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  startIcon?: LucideIcon | React.ElementType;
-  endIcon?: LucideIcon | React.ElementType;
+  startIcon?: LucideIcon | React.JSX.ElementType;
+  endIcon?: LucideIcon | React.JSX.ElementType;
   endIconAction?: () => void;
   startIconAction?: () => void;
   endIconClassName?: React.ComponentProps<"button">["className"];

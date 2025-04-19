@@ -26,6 +26,7 @@ model User {
     subscriptions         UserSubscription?
     stripeCustomerId      String?
     Notifications         Notifications[]
+    JobSeekerProfileView  JobSeekerProfileView[]
 
     @@map("users")
 }
@@ -63,6 +64,7 @@ model JOB_SEEKER {
     applications          Application[]
     MockInterview         MockInterview[]
     MockInterviewFeedback MockInterviewFeedback[]
+    JobSeekerProfileView  JobSeekerProfileView[]
 
     @@map("job_seekers")
 }
@@ -98,6 +100,7 @@ model JobSeekerProfile {
     location                      String?
     designation                   String?
     profileVisibility             Boolean                   @default(true)
+    activeResume                  String?
     showNearByJobs                Boolean                   @default(true)
     nearByJobRadius               String                    @default("25")
     openToWork                    Boolean                   @default(true)
@@ -113,6 +116,19 @@ model JobSeekerProfile {
     Certification                 JobSeekerCertification[]
 
     @@map("job_seeker_profiles")
+}
+
+model JobSeekerProfileView {
+    id           String     @id @default(cuid())
+    jobSeekerId  String
+    jobSeeker    JOB_SEEKER @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+    viewedBy     String?
+    viewedByUser User?      @relation(fields: [viewedBy], references: [id], onDelete: Cascade)
+    viewedAt     DateTime   @default(now())
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+
+    @@map("job_seeker_profile_views")
 }
 
 model JobSeekerWorkExperience {

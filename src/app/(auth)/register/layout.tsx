@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 const RegisterLayout = ({ children }: LayoutProps) => {
   return (
     <main className="relative">
-      <BackButton className=" bg-primary dark:bg-black dark:border hover:bg-primary/80 dark:border-gray-700 absolute text-white hover:dark:bg-black/80 top-4 left-5 lg:top-10 lg:left-10 z-20" />
+      <BackButton
+        href="/"
+        className=" bg-primary dark:bg-black dark:border hover:bg-primary/80 dark:border-gray-700 absolute text-white hover:dark:bg-black/80 top-4 left-5 lg:top-10 lg:left-10 z-20"
+      />
       <Light className="invisible lg:visible z-10 " />
       <section className="grid grid-cols-1 lg:grid-cols-2  h-dvh ">
         {children}
