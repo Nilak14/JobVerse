@@ -71,7 +71,7 @@ const JobCard = ({ job, loading }: JobCardProps) => {
         <CardHeader>
           <div className="flex justify-between flex-row mb-3">
             <div className="flex gap-4 items-center">
-              <Link href={`/company/${job.company.id}`}>
+              <Link href={`/profile/company/${job.company.id}`}>
                 <Image
                   src={job.company.logoUrl!}
                   alt={job.company.name}
@@ -85,7 +85,7 @@ const JobCard = ({ job, loading }: JobCardProps) => {
                 <LinkButtonAnimated lineClassName="bg-muted-foreground">
                   <Link
                     className="text-xs text-muted-foreground"
-                    href={`/company/${job.company.id}`}
+                    href={`/profile/company/${job.company.id}`}
                   >
                     {job.company.name}
                   </Link>
