@@ -14,7 +14,7 @@ export const storeUserLocation = async () => {
     }
     const user = await getUserById(session.user.id);
     if (!user) {
-      await signOut();
+      throw new Error("Unauthorized");
     }
     if (user?.latitude && user.longitude) {
       return { success: true, message: "Already Saved" };

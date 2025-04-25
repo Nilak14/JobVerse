@@ -28,9 +28,8 @@ const CompanyProfileJob = ({ companyId }: CompanyProfileJobProps) => {
 
   return (
     <div>
-      <JobNotFound mainText="No jobs posted by this company" subText="" />
       {status === "success" && jobs.length === 0 && !hasNextPage && (
-        <JobNotFound />
+        <JobNotFound mainText="No jobs posted by this company" subText="" />
       )}
       <div>
         <InfiniteScrollContainer

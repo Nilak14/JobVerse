@@ -3,18 +3,29 @@ import { getJobDataIncludeBrowse } from "@/lib/prisma-types/Job";
 import { cache } from "react";
 
 export const getRecommendedJob = cache(async (jobSeekerId: string) => {
-  const jobSeeker = await prisma.jobSeekerProfile.findFirst({
+  const jobSeeker = await prisma.jOB_SEEKER.findFirst({
     where: {
-      userId: jobSeekerId,
+      id: jobSeekerId,
     },
     select: {
-      skills: true,
+      followedCompany: {
+        select: {
+          id: true,
+        },
+      },
+      JobSeekerProfile: {
+        select: {
+          skills: true,
+        },
+      },
     },
   });
 
   if (!jobSeeker) return [];
 
-  const normalizedSkills = jobSeeker.skills.map((skill) => skill.toLowerCase());
+  const normalizedSkills = jobSeeker.JobSeekerProfile?.skills.map((skill) =>
+    skill.toLowerCase()
+  );
 
   const recommendedJobs = await prisma.job.findMany({
     where: {
@@ -30,11 +41,15 @@ export const getRecommendedJob = cache(async (jobSeekerId: string) => {
             hasSome: normalizedSkills,
           },
         },
+        {
+          companyId: {
+            in: jobSeeker.followedCompany.map((company) => company.id),
+          },
+        },
       ],
     },
     take: 20,
     select: getJobDataIncludeBrowse(),
-
     orderBy: {
       createdAt: "desc",
     },

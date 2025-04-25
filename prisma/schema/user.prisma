@@ -213,6 +213,7 @@ model CompanySubscription {
 }
 
 model Follow {
+    id          String     @id @default(cuid())
     jobSeekerId String
     jobSeeker   JOB_SEEKER @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
     companyId   String

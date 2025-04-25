@@ -32,6 +32,8 @@ import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import ContentViewer from "@/components/tiptap/ContentViewer";
 import CompanyProfileJob from "@/components/Company/CompanyProfileJob";
+import CompanyFollowButton from "@/components/Company/CompanyFollowButton";
+import { FollowerResponse } from "@/lib/prisma-types/Company";
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
@@ -165,9 +167,27 @@ const CompanyProfileSkeleton = () => {
 
 const CompanyProfileDataLoader = async ({ slug }: { slug: string }) => {
   const company = await getCompanyProfileData(slug);
+  const session = await auth();
+
   if (!company) {
     return notFound();
   }
+  let followerInfo: FollowerResponse | null;
+  if (session && session.jobSeekerId) {
+    followerInfo = {
+      message: "",
+      success: true,
+      data: {
+        data: {
+          followers: company._count.followers,
+          isFollowedByUser: company.followers.some(
+            ({ jobSeekerId }) => jobSeekerId === session?.jobSeekerId
+          ),
+        },
+      },
+    };
+  }
+
   return (
     <div className="space-y-8 py-6">
       <div className="flex flex-col md:flex-row gap-6 items-start">
@@ -205,10 +225,12 @@ const CompanyProfileDataLoader = async ({ slug }: { slug: string }) => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <Button className="w-full md:w-auto">
-              <Heart className="mr-2 h-4 w-4" />
-              Follow
-            </Button>
+            {session?.jobSeekerId && (
+              <CompanyFollowButton
+                initialState={followerInfo!}
+                companyId={company.id}
+              />
+            )}
             <Badge variant="secondary" className="px-3 py-1">
               <Building className="mr-1 h-4 w-4" />
               {company._count.jobPosted} Jobs Posted
