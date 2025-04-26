@@ -23,16 +23,17 @@ import { ExtendedUser } from "@/next-auth";
 import CreateCompanyModal from "@/components/Company/CreateCompanyModal";
 import CompanySwitchDialog from "@/components/Company/CompanySwitchDialog";
 import { useActiveCompany } from "@/store/useActiveCompany";
-import { Badge } from "../ui/badge";
 
 export function CompanySwitcher({
   companies,
   activeCompanyId,
   user,
+  userSubType,
 }: {
   companies: EmployerCompany[];
   user: ExtendedUser;
   activeCompanyId?: string | null;
+  userSubType?: "FREE" | "PRO" | "ELITE";
 }) {
   const { isMobile } = useSidebar();
   const { setActiveCompany: setActiveCompanyStore } = useActiveCompany();
@@ -80,7 +81,9 @@ export function CompanySwitcher({
                 <div className="grid flex-1 text-left text-sm leading-tight relative">
                   <span className="truncate font-semibold">
                     JobVerse
-                    <span className=" text-amber-400 text-xs absolute ml-1 -top-[6px]  ">{`${"Pro"}`}</span>
+                    {userSubType && userSubType !== "FREE" && (
+                      <span className=" text-amber-400 text-xs absolute ml-1 -top-[6px] ">{`${userSubType}`}</span>
+                    )}
                   </span>
                   <span className="truncate text-xs relative">
                     {activeCompany.name}

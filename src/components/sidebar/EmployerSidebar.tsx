@@ -43,6 +43,7 @@ const EmployerSidebar = ({
             activeCompanyId={activeCompanyId}
             user={user}
             companies={companies}
+            userSubType={companySubscription}
           />
         )}
       </SidebarHeader>

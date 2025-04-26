@@ -14,18 +14,31 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useSearchParams } from "next/navigation";
+import { getSubscriptionValuedFromPriceId } from "@/lib/utils";
 const BillingSuccess = () => {
+  const searchParams = useSearchParams();
+  const priceId = searchParams.get("priceId");
+  const planName = getSubscriptionValuedFromPriceId(priceId as string);
   const purchaseDetails = {
-    plan: "Premium Pro",
-    orderId: "ORD-" + "2222",
-    date: "July 12, 2021",
-    amount: "$49.99",
-    features: [
-      "Unlimited access to all premium content",
-      "Priority customer support",
-      "Advanced analytics dashboard",
-      "Custom export options",
-    ],
+    plan: planName.name || "Premium",
+    date: new Date().toLocaleDateString(),
+    amount: planName.price || "$0.00",
+    features: planName.name
+      ? planName.name === "Pro"
+        ? [
+            "Create Job Post Upto 10",
+            "All AI Features Avaliable",
+            "Can Generate Job Embeddings",
+          ]
+        : [
+            "Crate Unlimited Job Post",
+            "All AI Features Avaliable",
+            "Can Generate Job Embeddings",
+            "Can Customize Job Embeddings",
+            "Applicant Matching Rating",
+          ]
+      : [],
   };
   useEffect(() => {
     const confetti = async () => {
@@ -79,10 +92,6 @@ const BillingSuccess = () => {
             >
               <div className="bg-muted p-4 rounded-lg space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Order ID</span>
-                  <span className="font-medium">{purchaseDetails.orderId}</span>
-                </div>
-                <div className="flex justify-between">
                   <span className="text-muted-foreground">Date</span>
                   <span className="font-medium">{purchaseDetails.date}</span>
                 </div>
@@ -131,17 +140,6 @@ const BillingSuccess = () => {
               <Button className="w-full gap-2" asChild>
                 <Link href="/dashboard">
                   Go to Dashboard <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full"
-            >
-              <Button variant="outline" className="w-full gap-2" asChild>
-                <Link href="/receipt">
-                  Download Receipt <Download className="h-4 w-4" />
                 </Link>
               </Button>
             </motion.div>

@@ -14,18 +14,30 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { getSubscriptionValuedFromPriceId } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
 const BillingSuccess = () => {
+  const searchParams = useSearchParams();
+  const priceId = searchParams.get("priceId");
+  const planName = getSubscriptionValuedFromPriceId(priceId as string);
   const purchaseDetails = {
-    plan: "Premium Pro",
-    orderId: "ORD-" + "2222",
-    date: "July 12, 2021",
-    amount: "$49.99",
-    features: [
-      "Unlimited access to all premium content",
-      "Priority customer support",
-      "Advanced analytics dashboard",
-      "Custom export options",
-    ],
+    plan: planName.name || "Premium",
+    date: new Date().toLocaleDateString(),
+    amount: planName.price || "$0.00",
+    features: planName.name
+      ? planName.name === "Pro"
+        ? [
+            "Unlimited Job Apply",
+            "Create Resume Upto 5",
+            "All AI Features Avaliable",
+          ]
+        : [
+            "Unlimited Job Apply",
+            "Create Unlimited Resume ",
+            "Can Customize Resume",
+            "AI-Mock voice interview",
+          ]
+      : [],
   };
   useEffect(() => {
     const confetti = async () => {
@@ -78,10 +90,6 @@ const BillingSuccess = () => {
               transition={{ delay: 0.4 }}
             >
               <div className="bg-muted p-4 rounded-lg space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Order ID</span>
-                  <span className="font-medium">{purchaseDetails.orderId}</span>
-                </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Date</span>
                   <span className="font-medium">{purchaseDetails.date}</span>

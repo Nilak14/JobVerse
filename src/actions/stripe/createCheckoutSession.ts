@@ -24,8 +24,8 @@ export const createCheckoutSession = async (priceId: string) => {
   }
 
   const success_url = session.activeCompanyId
-    ? `${process.env.NEXT_PUBLIC_BASE_URL}/employer/billing/success`
-    : `${process.env.NEXT_PUBLIC_BASE_URL}/job-seeker/billing/success`;
+    ? `${process.env.NEXT_PUBLIC_BASE_URL}/employer/billing/success?priceId=${priceId}`
+    : `${process.env.NEXT_PUBLIC_BASE_URL}/job-seeker/billing/success?priceId=${priceId}`;
   const cancel_url = session.activeCompanyId
     ? `${process.env.NEXT_PUBLIC_BASE_URL}/employer/billing`
     : `${process.env.NEXT_PUBLIC_BASE_URL}/job-seeker/billing`;
