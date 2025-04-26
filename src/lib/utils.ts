@@ -69,6 +69,7 @@ export const handleError = ({
   errorIn,
 }: HandleError): { success: false; message: string } => {
   console.error(errorIn, error);
+  console.log(error instanceof Error ? error.message : "Error message");
 
   if (error instanceof Error) {
     return { success: false, message: error.message };

@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "./lib/prisma";
 import { cookies } from "next/headers";
 import { UserType } from "@prisma/client";
+import { discordNewUserRegisterBot } from "./actions/discord_bot/bot";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -39,6 +40,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
           });
         }
+      });
+      await discordNewUserRegisterBot({
+        name: user.name || "Anonyms User",
+        email: user.email || "anonyms@email.com",
+        role: userType,
       });
       cookieStore.delete("type");
     },

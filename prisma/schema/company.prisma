@@ -23,6 +23,7 @@ model Company {
     subscriptions    CompanySubscription?
     stripeCustomerId String?
     LinkedInToken    LinkedInToken?
+    followers        Follow[]
 
     @@map("companies")
 }

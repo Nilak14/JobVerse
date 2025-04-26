@@ -196,6 +196,7 @@ async function main() {
   });
   console.log("✅ Created admin with default email and password");
 }
+
 main()
   .catch((e) => {
     console.error(e);
