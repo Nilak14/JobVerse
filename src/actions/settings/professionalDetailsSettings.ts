@@ -51,10 +51,10 @@ export const professionalDetailsSettings = async (
         Certification: {
           deleteMany: {},
           create: data.certifications.map((cert) => ({
-            ...cert,
             instituteName: cert.institute,
             completionDate: cert.completionDate || "",
             order: cert.order || 0,
+            title: cert.title,
           })),
         },
       },
@@ -62,6 +62,7 @@ export const professionalDetailsSettings = async (
     revalidatePath(
       "/job-seeker/settings/account-settings?tab=professional-details"
     );
+
     return { success: true, message: "Professional details updated" };
   } catch (error) {
     return handleError({ error, errorIn: "profileSettings" });

@@ -65,3 +65,16 @@ export const getAllCompanyInclude = () => {
 export type AllCompanyInclude = Prisma.CompanyGetPayload<{
   include: ReturnType<typeof getAllCompanyInclude>;
 }>;
+
+export type FollowerInfo = {
+  followers: number;
+  isFollowedByUser: boolean;
+};
+
+export type FollowerResponse = {
+  success: boolean;
+  message: string;
+  data?: {
+    data: FollowerInfo;
+  };
+};

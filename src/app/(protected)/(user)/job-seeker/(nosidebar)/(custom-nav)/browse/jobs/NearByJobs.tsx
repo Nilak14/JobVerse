@@ -10,6 +10,7 @@ import JobCard from "@/components/Job/JobCard";
 import JobCardSkeleton from "@/components/skeletons/JobCardSkeleton";
 import { createArray } from "@/lib/utils";
 import { useNearByJobs } from "@/hooks/query-hooks/useNearByJobs";
+import { EmptyState } from "@/components/Global/EmptyState";
 
 const NearByJobs = () => {
   const { data, isLoading } = useNearByJobs();
@@ -39,6 +40,15 @@ const NearByJobs = () => {
             {data?.map((job) => <JobCard key={job.id} job={job} />)}
           </div>
         )}
+        <>
+          {!isLoading && data?.length === 0 && (
+            <EmptyState
+              title="No jobs found nearby"
+              description="Try changing your location or search for jobs in a different area."
+              icon={<MapPin />}
+            />
+          )}
+        </>
       </CardContent>
     </Card>
   );
