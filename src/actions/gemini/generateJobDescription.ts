@@ -73,7 +73,7 @@ export async function generateJobDescription(input: JobSchemaType) {
       temperature: 1,
       topP: 0.95,
       topK: 40,
-      maxOutputTokens: 1000,
+      maxOutputTokens: 8192,
       responseMimeType: "text/plain",
     },
   });
@@ -90,6 +90,5 @@ export async function generateJobDescription(input: JobSchemaType) {
   if (trimmed.endsWith("```")) {
     trimmed = trimmed.replace(/```$/, "");
   }
-
   return trimmed.trim();
 }
