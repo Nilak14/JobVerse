@@ -11,6 +11,7 @@ import { fileRouter } from "./api/uploadthing/core";
 import ReactQueryProvider from "@/context/ReactQueryProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { PostHogProvider } from "@/context/PH_Provider";
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = METADATA_CONFIG;
@@ -43,21 +44,23 @@ export default function RootLayout({
       <meta name="apple-mobile-web-app-title" content="JobVerse" />
       <link rel="manifest" href="/favicon/site.webmanifest" />
       <body className={`${font.className} antialiased`}>
-        <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
-        <ReactQueryProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <NextTopLoader height={5} color="#e9590c" />
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </ReactQueryProvider>
-        <Analytics />
-        <SpeedInsights />
+        <PostHogProvider>
+          <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
+          <ReactQueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <NextTopLoader height={5} color="#e9590c" />
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </ReactQueryProvider>
+          <Analytics />
+          <SpeedInsights />
+        </PostHogProvider>
       </body>
     </html>
   );
