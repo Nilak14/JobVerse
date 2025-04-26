@@ -8,6 +8,7 @@ export const authRoutes = [
   "/verify-email",
   "/password-reset",
   "/forget-password",
+  "/sentry-example-page",
 ];
 
 export const apiAuthPrefix = "/api/auth";

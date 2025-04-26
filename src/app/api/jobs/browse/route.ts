@@ -11,7 +11,6 @@ export const GET = async (req: NextRequest) => {
     const url = req.nextUrl;
     const cursor = url.searchParams.get("cursor") || undefined;
     const PAGE_SIZE = 10 as const;
-
     //todo: not sure it user need to be authenticated to browse jobs or not
 
     // retrieve filter status
