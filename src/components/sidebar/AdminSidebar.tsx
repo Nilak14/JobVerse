@@ -21,6 +21,7 @@ const AdminSidebar = ({ user }: { user: ExtendedUser }) => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMainNav
+          user={user}
           subscriptionLevel="ELITE"
           type="admin"
           items={sidebarLinks}

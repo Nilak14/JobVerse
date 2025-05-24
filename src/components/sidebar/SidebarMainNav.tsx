@@ -22,20 +22,57 @@ import { SidebarNavLinks } from "@/lib/types";
 import Link from "next/link";
 import useCompanyPremiumModal from "@/store/useCompanyPremiumModal";
 import usePremiumModal from "@/store/usePremiumModal";
+import { useEffect } from "react";
+import { storeUserLocation } from "@/actions/user/storeLoc";
+import { ExtendedUser } from "@/next-auth";
 
 export function SidebarMainNav({
   items,
   subscriptionLevel,
   type,
+  user,
 }: {
   items: SidebarNavLinks[];
   subscriptionLevel: "FREE" | "PRO" | "ELITE";
   type: "job-seeker" | "employer" | "admin";
+  user: ExtendedUser;
 }) {
   const levelRank = { FREE: 0, PRO: 1, ELITE: 2 };
   const pathname = usePathname();
   const { setOpenCompanyPremiumModal } = useCompanyPremiumModal();
   const { setOpenPremiumModal } = usePremiumModal();
+
+  useEffect(() => {
+    const locationExists = localStorage.getItem("location");
+    if (locationExists) {
+      return;
+    }
+    const fetchLocation = async () => {
+      const res = await fetch("https://ipwhois.app/json/");
+      const data = await res.json();
+      if (!data) {
+        console.log("Location Not Found");
+      } else {
+        localStorage.setItem("location", JSON.stringify(data));
+      }
+    };
+    fetchLocation();
+  }, []);
+
+  useEffect(() => {
+    const storeLocation = async () => {
+      const location = localStorage.getItem("location");
+      if (location) {
+        const locationData = JSON.parse(location);
+        const { latitude, longitude } = locationData;
+        await storeUserLocation({ latitude, longitude, userId: user.id! });
+      } else {
+        return;
+      }
+    };
+    storeLocation();
+  }, [user.id]);
+
   return (
     <SidebarGroup>
       <SidebarMenu>
