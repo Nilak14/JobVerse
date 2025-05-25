@@ -1,6 +1,5 @@
 "use client";
-import { Share2 } from "lucide-react";
-import { Button } from "../ui/button";
+
 import { JobDataDescription } from "@/lib/prisma-types/Job";
 import SaveJobButton from "../Global/SaveJobButton";
 import { Session } from "next-auth";
@@ -26,7 +25,7 @@ const JobDescriptionDetailButton = ({
           jobId={job.id}
           initialState={{
             isSavedByUser: job.saved.some(
-              (s) => s.userId === session.jobSeekerId
+              (s) => s.user.userId === session.user.id
             ),
           }}
           withText

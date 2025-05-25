@@ -23,6 +23,7 @@ const AdminSidebarLayout = async ({
   if (user.type !== "ADMIN") {
     redirect("/login");
   }
+
   return (
     <SidebarProvider>
       <AdminSidebar user={user} />

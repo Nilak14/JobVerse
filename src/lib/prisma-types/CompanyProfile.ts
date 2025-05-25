@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { JobStatus, Prisma } from "@prisma/client";
 
 export function getCompanyProfile() {
   return {
@@ -14,7 +14,13 @@ export function getCompanyProfile() {
     description: true,
     _count: {
       select: {
-        jobPosted: true,
+        jobPosted: {
+          where: {
+            status: {
+              in: [JobStatus.ACTIVE, JobStatus.EXPIRED],
+            },
+          },
+        },
         followers: true,
       },
     },
