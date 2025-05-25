@@ -42,6 +42,8 @@ interface JobCardProps {
 const JobCard = ({ job, loading }: JobCardProps) => {
   const daysLeft = getTimeDifference(job.deadline!);
   const { session } = getClientSession();
+  console.log(job.saved);
+  console.log(session);
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
@@ -100,7 +102,7 @@ const JobCard = ({ job, loading }: JobCardProps) => {
                   jobId={job.id}
                   initialState={{
                     isSavedByUser: job.saved.some(
-                      (s) => s.userId === session.jobSeekerId
+                      (s) => s.user.userId === session.user.id
                     ),
                   }}
                   className="hover:bg-transparent"

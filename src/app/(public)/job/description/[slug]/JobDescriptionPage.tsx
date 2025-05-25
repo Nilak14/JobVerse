@@ -27,6 +27,7 @@ import BackButton from "@/components/Global/BackButton";
 import { Session } from "next-auth";
 import UnauthorizedApplyButton from "@/components/Global/UnauthorizedApplyButton";
 import JobShareButton from "@/components/Global/JobShareButton";
+import Link from "next/link";
 interface JobDescriptionPageContentProps {
   job: JobDataDescription;
   containerVariants: Variants;
@@ -313,8 +314,10 @@ const JobDescriptionPageContent = ({
                       <h3 className="text-lg font-semibold text-center">
                         {job.company.name}
                       </h3>
-                      <Button variant="outline" className="w-full">
-                        View Company Profile
+                      <Button asChild variant="outline" className="w-full">
+                        <Link href={`/profile/company/${job.company.id}`}>
+                          View Company Profile
+                        </Link>
                       </Button>
                     </div>
                   </CardContent>

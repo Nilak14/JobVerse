@@ -89,7 +89,11 @@ export function getJobDataIncludeBrowse() {
     createdAt: true,
     isUrgent: true,
     deadline: true,
-    saved: true,
+    saved: {
+      include: {
+        user: true,
+      },
+    },
     resumeRequired: true,
     experienceLevel: true,
     latitude: true,
@@ -163,7 +167,11 @@ export function getJobDataIncludeDescription() {
         rate: true,
       },
     },
-    saved: true,
+    saved: {
+      include: {
+        user: true,
+      },
+    },
   } satisfies Prisma.JobSelect;
 }
 

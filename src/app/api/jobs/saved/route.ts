@@ -14,6 +14,11 @@ export const GET = async (req: NextRequest) => {
         userId: session.jobSeekerId,
       },
       include: {
+        user: {
+          select: {
+            id: true,
+          },
+        },
         job: {
           select: getJobDataIncludeBrowse(),
         },
