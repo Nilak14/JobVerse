@@ -18,6 +18,7 @@ const SaveJobButton = ({
 }: SaveJobButtonProps) => {
   const { data, isLoading } = getSavedJobInfo(jobId, initialState);
   const { mutate } = useUpdateSaveJob(jobId, data!);
+  console.log(initialState);
 
   return (
     <button

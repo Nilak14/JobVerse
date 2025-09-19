@@ -30,6 +30,7 @@ export default function JobSeekerSidebar({ user }: { user: ExtendedUser }) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMainNav
+          user={user}
           type="job-seeker"
           subscriptionLevel={subscriptionLevel}
           items={sidebarLinks}

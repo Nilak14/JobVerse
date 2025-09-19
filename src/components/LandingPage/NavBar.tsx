@@ -21,7 +21,6 @@ import AnimateWrapper from "../Global/AnimateWrapper";
 
 import { cn } from "@/lib/utils";
 import GetStartedButton from "../ui/get-started-button";
-import { ThemeToggler } from "../Global/SmallThemeToggler";
 
 export const NavBar = () => {
   return (

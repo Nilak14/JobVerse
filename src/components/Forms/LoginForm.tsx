@@ -68,6 +68,23 @@ const LoginForm = ({ error }: LoginFormProps) => {
     }
   }, [authError]);
 
+  useEffect(() => {
+    const locationExists = localStorage.getItem("location");
+    if (locationExists) {
+      return;
+    }
+    const fetchLocation = async () => {
+      const res = await fetch("https://ipwhois.app/json/");
+      const data = await res.json();
+      if (!data) {
+        console.log("Location Not Found");
+      } else {
+        localStorage.setItem("location", JSON.stringify(data));
+      }
+    };
+    fetchLocation();
+  }, []);
+
   const { execute, status, isTransitioning } = useAction(login, {
     onSuccess: ({ data, input }) => {
       if (data?.error) {
@@ -89,13 +106,27 @@ const LoginForm = ({ error }: LoginFormProps) => {
         setShowTwoFactor(true);
       }
     },
-    onError: () => {
+    onError: (err) => {
+      console.log(err);
       setAuthError("Something went wrong, Please try again later");
     },
   });
 
   const onSubmit = (data: LoginSchemaType) => {
-    execute(data);
+    const location = localStorage.getItem("location") || "";
+    let latitude = null;
+    let longitude = null;
+
+    if (location) {
+      try {
+        const locationData = JSON.parse(location);
+        latitude = locationData.latitude.toString();
+        longitude = locationData.longitude.toString();
+      } catch (e) {
+        console.log("Error parsing location data");
+      }
+    }
+    execute({ ...data, latitude, longitude });
   };
   return (
     <>
