@@ -21,7 +21,7 @@ export const sendEmailVerificationLink = async ({
   const emailVerificationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}`;
 
   const { error } = await resend.emails.send({
-    from: "JobVerse@jobverse.me",
+    from: "jobverse@mail.nilak14.com.np",
     to: email,
     subject: "JobVerse Email Verification",
     react: VerifyEmailTemplate({ name, link: emailVerificationLink }),
@@ -38,7 +38,7 @@ export const sendResetPasswordLink = async ({
 }) => {
   const resetPasswordLink = `${process.env.NEXT_PUBLIC_BASE_URL}/password-reset?token=${token}`;
   const { error } = await resend.emails.send({
-    from: "JobVerse@jobverse.me",
+    from: "jobverse@mail.nilak14.com.np",
     to: email,
     subject: "Reset Your JobVerse Password",
     react: ResetPasswordTemplate({ link: resetPasswordLink }),
@@ -54,7 +54,7 @@ export const sendTwoFactorCode = async ({
   email: string;
 }) => {
   const { error } = await resend.emails.send({
-    from: "JobVerse@jobverse.me",
+    from: "jobverse@mail.nilak14.com.np",
     to: email,
     subject: `Your JobVerse Two Factor Code: ${token}`,
     react: TwoFactorEmailTemplate({ token }),
@@ -71,7 +71,7 @@ export const sendApplicationUpdateEmail = async ({
   email,
 }: ApplicationStatusTemplateProps) => {
   const { error } = await resend.emails.send({
-    from: "JobVerse@jobverse.me",
+    from: "jobverse@mail.nilak14.com.np",
     to: email!,
     subject: `Application Update: ${status}`,
     react: ApplicationStatusTemplate({
